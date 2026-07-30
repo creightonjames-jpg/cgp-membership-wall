@@ -9,6 +9,7 @@
 #   tools/process-assets.sh attendees <input-dir> [-n]
 #   tools/process-assets.sh graphs    <input-dir> [-n]
 #   tools/process-assets.sh resources <input-dir> [-n]
+#   tools/process-assets.sh brand     <input-dir> [-n]
 #
 #   -n   Dry run. Report what would happen and write nothing.
 #
@@ -16,6 +17,10 @@
 #   attendees   400x400 square, center cropped, JPG  -> assets/attendees/{slug}.jpg
 #   graphs      max 1600px wide, aspect kept, PNG    -> assets/graphs/{slug}.png
 #   resources   max 1600px wide, aspect kept, PNG    -> assets/resources/{slug}.png
+#   brand       max 1600px wide, aspect kept, JPG    -> assets/brand/{slug}.jpg
+#
+# Use `brand` for photographs, never `resources`. PNG is right for a chart and
+# badly wrong for a photo, where it can run ten times the size for no gain.
 #
 # Naming. Files are renamed to a slug: lowercase, hyphens, nothing else.
 #   "Mike Akeroyd.JPG"       -> mike-akeroyd.jpg
@@ -59,6 +64,7 @@ Asset intake for the Live Wall.
   tools/process-assets.sh attendees <input-dir> [-n]   400x400 square JPG
   tools/process-assets.sh graphs    <input-dir> [-n]   max 1600px wide PNG
   tools/process-assets.sh resources <input-dir> [-n]   max 1600px wide PNG
+  tools/process-assets.sh brand     <input-dir> [-n]   max 1600px wide JPG
 
   -n   Dry run. Report what would happen and write nothing.
 
@@ -132,7 +138,8 @@ convert_attendee() {
   return $rc
 }
 
-# Max 1600px wide PNG, aspect ratio kept. Never upscales.
+# Max 1600px wide, aspect ratio kept, never upscales. Output format follows
+# OUT_EXT: png for charts and line art, jpg for photographs.
 convert_wide() {
   local src="$1" out="$2" w="$3" work rc
   work="$(mktemp -t mm26asset).${src##*.}"
@@ -142,7 +149,11 @@ convert_wide() {
     sips --resampleWidth "$WIDE_MAX_PX" "$work" >/dev/null 2>&1 || { rm -f "$work"; return 1; }
   fi
 
-  sips -s format png "$work" --out "$out" >/dev/null 2>&1
+  if [[ "$OUT_EXT" == "jpg" ]]; then
+    sips -s format jpeg -s formatOptions "$JPEG_QUALITY" "$work" --out "$out" >/dev/null 2>&1
+  else
+    sips -s format png "$work" --out "$out" >/dev/null 2>&1
+  fi
   rc=$?
   rm -f "$work"
   return $rc
@@ -156,7 +167,7 @@ for arg in "$@"; do
   case "$arg" in
     -n|--dry-run) DRY_RUN=1 ;;
     -h|--help)    usage ;;
-    attendees|graphs|resources)
+    attendees|graphs|resources|brand)
       [[ -z "$KIND" ]] || die "Only one kind at a time. Got '$KIND' and '$arg'."
       KIND="$arg" ;;
     *)
@@ -175,6 +186,7 @@ case "$KIND" in
   attendees) OUT_DIR="$REPO_ROOT/assets/attendees"; OUT_EXT="jpg" ;;
   graphs)    OUT_DIR="$REPO_ROOT/assets/graphs";    OUT_EXT="png" ;;
   resources) OUT_DIR="$REPO_ROOT/assets/resources"; OUT_EXT="png" ;;
+  brand)     OUT_DIR="$REPO_ROOT/assets/brand";     OUT_EXT="jpg" ;;
 esac
 
 # ---------------------------------------------------------------- roster

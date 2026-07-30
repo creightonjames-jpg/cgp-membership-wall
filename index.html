@@ -279,11 +279,92 @@ button { font-family: inherit; }
 /* --------------------------------------------------------- welcome hero */
 .welcome {
   min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The band strip is full bleed at the top, so the welcome itself carries no
+   padding. .welcome__body takes it instead. */
+.welcome__body {
+  flex: 1 1 auto;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   text-align: center;
-  padding: calc(36px + var(--safe-t)) calc(20px + var(--safe-r))
+  padding: 20px calc(20px + var(--safe-r))
            calc(36px + var(--safe-b)) calc(20px + var(--safe-l));
+}
+
+/* ---------------------------------------------------------- band strip */
+/* The flier's own hero, four panels wide. Treated as a lit stage: the lights
+   come up on each band member in turn, the picture dissolves into the page,
+   and gold footlights run along the bottom lip.
+   Aspect ratio matches the source exactly, so nothing is cropped. */
+.band {
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: var(--safe-t);
+  aspect-ratio: 786 / 404;
+  overflow: hidden;
+}
+
+.band__img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 28%;   /* keeps the faces high in frame */
+}
+
+/* Knocks the bright whites back so cream text below stays the loudest thing
+   on the screen, and pulls the picture into the scarlet palette. */
+.band__grade {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(125% 85% at 50% 0%, rgba(200,16,46,0.26) 0%, transparent 68%),
+    linear-gradient(180deg,
+      rgba(23,22,26,0.42) 0%,
+      rgba(23,22,26,0.06) 26%,
+      rgba(23,22,26,0.34) 62%,
+      var(--stage) 93%);
+}
+
+/* Four shutters over four panels. Each lifts in turn, left to right. */
+.band__lights {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  pointer-events: none;
+}
+
+.band__lights span {
+  background: var(--stage);
+  opacity: 1;
+  animation: band-lights-up 700ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation-delay: calc(var(--i) * 180ms);
+}
+
+@keyframes band-lights-up {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* Footlights along the stage lip. Same bulb values as the marquee, so the
+   motif reads as one language rather than two. */
+.band__lip {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 7px;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--gold) 0 1.6px, rgba(0,0,0,0.45) 2px);
+  background-size: 13px 7px;
+  background-repeat: repeat-x;
+  background-position: center;
+  opacity: 0.85;
+}
+
+/* Lights snap on with no sequence for anyone who asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .band__lights span { animation: none; opacity: 0; }
 }
 
 .welcome__kicker {
@@ -300,7 +381,6 @@ button { font-family: inherit; }
 }
 
 .welcome__where { margin: 0; color: var(--dim); }
-.welcome__tag { margin: 14px 0 0; color: var(--gold); font-size: 14px; }
 
 /* countdown */
 .count { display: flex; gap: 8px; margin: 26px 0 4px; }
@@ -700,7 +780,9 @@ function BrandMark() {
   );
 }
 
-function Countdown({ now, synced }) {
+/* `now` arrives already corrected against the server clock by useServerNow.
+   The correction is not surfaced in the copy, it just always applies. */
+function Countdown({ now }) {
   const left = OPENS_AT - now;
   const open = left <= 0;
   const t = breakdown(left);
@@ -738,34 +820,54 @@ function Countdown({ now, synced }) {
           <div className="count__l">Sec</div>
         </div>
       </div>
-      <p className="count__note">
-        Until first tee, Tuesday August 25.
-        {synced ? " Clock checked against the server." : " Using this device clock for now."}
-      </p>
+      <p className="count__note">Until showtime, Tuesday August 25.</p>
     </div>
   );
 }
 
-function Welcome({ onEnter, now, synced }) {
+/* The flier's four panel hero. Lights come up on each member in turn. */
+function BandStrip() {
+  return (
+    <div className="band">
+      <img
+        className="band__img"
+        src="assets/brand/tour-band.jpg"
+        alt="Four Century Golf team members in full rock tour costume"
+      />
+      <div className="band__grade"></div>
+      <div className="band__lights" aria-hidden="true">
+        <span style={{ "--i": 0 }}></span>
+        <span style={{ "--i": 1 }}></span>
+        <span style={{ "--i": 2 }}></span>
+        <span style={{ "--i": 3 }}></span>
+      </div>
+      <div className="band__lip" aria-hidden="true"></div>
+    </div>
+  );
+}
+
+function Welcome({ onEnter, now }) {
   return (
     <div className="welcome">
-      <p className="welcome__kicker">Century Golf Partners</p>
-      <h1 className="welcome__title t-display">
-        2026 Private Clubs Meeting<span className="wall">The Live Wall</span>
-      </h1>
-      <div className="welcome__rule"></div>
-      <p className="welcome__where">Columbus, Ohio. August 25 to 28, 2026.</p>
-      <p className="welcome__tag">Just Birdies, Beers, and Broken Dreams.</p>
+      <BandStrip />
+      <div className="welcome__body">
+        <p className="welcome__kicker">Century Golf Partners</p>
+        <h1 className="welcome__title t-display">
+          2026 Private Clubs Meeting<span className="wall">The Live Wall</span>
+        </h1>
+        <div className="welcome__rule"></div>
+        <p className="welcome__where">Columbus, Ohio. August 25 to 28, 2026.</p>
 
-      <Countdown now={now} synced={synced} />
+        <Countdown now={now} />
 
-      <button className="enter" onClick={onEnter}>Get your wristband</button>
+        <button className="enter" onClick={onEnter}>Get your wristband</button>
 
-      <div className="qr">
-        <img src="assets/brand/qr-wall.svg" width="130" height="130"
-             alt="QR code that opens this wall" />
+        <div className="qr">
+          <img src="assets/brand/qr-wall.svg" width="130" height="130"
+               alt="QR code that opens this wall" />
+        </div>
+        <p className="qr__cap">Point a phone here to pass it on.</p>
       </div>
-      <p className="qr__cap">Point a phone here to pass it on.</p>
     </div>
   );
 }
@@ -1062,7 +1164,9 @@ function App() {
   const [showPin, setShowPin] = useState(false);
   const [dismissed, setDismissed] = useState(null);
 
-  const { now, synced } = useServerNow();
+  /* useServerNow also returns `synced` and `offset`. T2.3 needs them for the
+     Vault drops. The welcome screen does not surface either one. */
+  const { now } = useServerNow();
   const announcement = useAnnouncement();
 
   useEffect(() => {
@@ -1079,7 +1183,7 @@ function App() {
   }, [isAdmin]);
 
   if (!entered) {
-    return <Welcome onEnter={enter} now={now} synced={synced} />;
+    return <Welcome onEnter={enter} now={now} />;
   }
 
   const tab = TAB_BY_KEY[active] || TABS[0];
