@@ -61,12 +61,25 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Note:** `firebase.json` exists only to point the CLI at the rules file. Hosting is GitHub Pages, not
   Firebase Hosting. Do not add a `hosting` block to it.
 
-### `[ ]` T0.3 Design tokens
+### `[~]` T0.3 Design tokens
 - **Inputs:** spec Section 2, source flier
 - **Output:** CSS variable block and font loading in `index.html`
 - **Steps:** implement all twelve palette tokens. Load Anton, Alfa Slab One, and Inter from Google Fonts. Build the two gradients: radial stage glow and scarlet to oxblood linear
 - **Acceptance:** a test page renders every token as a labeled swatch and every font in a sample line. Verified on a phone, not desktop responsive mode
 - **Blocked by:** T0.1
+- **Built July 30. Waiting on the phone check before this goes to `[x]`.**
+  All twelve palette tokens, three font families, and both gradients live in `index.html`.
+  Type utilities: `.t-display` Anton, `.t-poster` Alfa Slab One, `.t-data` Inter tabular-nums for
+  leaderboard digits so scores do not jitter as they update.
+  Proof sheet at `tokens.html`: https://creightonjames-jpg.github.io/cgp-membership-wall/tokens.html
+- **The proof sheet generates its swatches from one array**, so a chip cannot drift from the palette.
+  It also reports whether each face actually loaded rather than fell back, because a fallback font is a
+  silent failure and T0.8 has to catch it. All three currently report loaded.
+- **Verified so far:** 12 swatches render, both gradients render, all three faces load, no horizontal
+  overflow at 380px, clean at desktop width, no console errors.
+- **Still needed from Jim:** open `tokens.html` on a physical phone. The acceptance criterion says a
+  phone, not desktop responsive mode, and font loading is exactly the thing that behaves differently
+  there. Check that the three font rows all read "loaded" in gold and none read "FELL BACK" in orange.
 
 ### `[ ]` T0.4 Motif primitives
 - **Inputs:** spec Section 2.3
