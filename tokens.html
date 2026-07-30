@@ -95,6 +95,9 @@ h2 {
 .sw__chip {
   flex: 0 0 84px;
   min-height: 66px;
+  /* The three darkest tokens sit close to the card behind them. Without this
+     edge, --stage, --riser, and --input read as one block. */
+  border-right: 1px solid var(--edge);
   /* Checkerboard shows through a translucent token so --glow is visible. */
   background-image:
     linear-gradient(45deg, #4a4550 25%, transparent 25%, transparent 75%, #4a4550 75%),
