@@ -20,12 +20,16 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 ## PHASE 0: Foundation
 **Window: July 30 to August 3. Goal: a deployed skeleton with working navigation and the full design system.**
 
-### `[ ]` T0.1 Repo and Pages
+### `[x]` T0.1 Repo and Pages
 - **Inputs:** none
 - **Output:** public GitHub repo with Pages enabled, serving from root
 - **Steps:** create repo `cgp-membership-wall`, add `index.html` stub, enable Pages, place `CLAUDE.md` and `ROADMAP.md` in root
 - **Acceptance:** the Pages URL returns the stub page in a mobile browser
 - **Parallel-safe:** yes
+- **Done July 30.** Repo `creightonjames-jpg/cgp-membership-wall`, public, Pages from `main` at root.
+  Live URL: https://creightonjames-jpg.github.io/cgp-membership-wall/
+  Verified: HTTP 200 serving the stub, renders at 380px with no horizontal overflow, no console errors.
+  `HANDOFF.md` and the spec are gitignored because the repo is public.
 
 ### `[ ]` T0.2 Firebase project and rules
 - **Inputs:** none
