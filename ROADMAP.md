@@ -156,12 +156,25 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
   on a mismatch. It is rendered dark on cream, never inverted, because plenty of scanners refuse a
   light on dark code. Scan testing on real phones is still T4.6.
 
-### `[ ]` T0.6 Tab scaffold
+### `[x]` T0.6 Tab scaffold
 - **Inputs:** spec Section 3
 - **Output:** ten stub components, wired to the tab bar
 - **Steps:** create empty components for The Setlist, The Band, Backstage Pass, Soundcheck, The Vault, Liner Notes, Crowd Vote, The Pit, The Cares Cup, Encore. Each renders its name and a placeholder line
 - **Acceptance:** every tab is reachable and renders without console errors
 - **Blocked by:** T0.5
+- **Done July 30.** Ten real components behind a `TAB_VIEWS` registry, not one component driven by a
+  data table. Phase 1 and Phase 2 fill each tab independently, so they must not share a body.
+  `SetlistTab`, `BandTab`, `BackstageTab`, `SoundcheckTab`, `VaultTab`, `LinerNotesTab`,
+  `CrowdVoteTab`, `PitTab`, `CaresCupTab`, `EncoreTab`. Shared chrome is `TabFrame`.
+- **Verified:** all 10 reachable, each heading matches its pill, 10 distinct empty states, every section
+  is `aria-labelledby` its own heading, no console errors.
+- **Empty state copy is real copy, not filler.** These are the words an attendee reads before any
+  content exists, so they are written to the flier's register: short, dry, never precious. The Pit uses
+  the line CLAUDE.md specifies. Replace them only with something better, not with something neutral.
+- **Build notes are gated behind the PIN.** Each tab carries a note naming its task and scope, visible
+  only when the crew panel is unlocked. Nothing reading "T1.1" can reach an attendee by construction
+  rather than by someone remembering to strip it before launch. Verified both directions: invisible to
+  an attendee on all ten, present on all ten once the PIN is entered.
 
 ### `[x]` T0.7 Asset intake pipeline
 - **Inputs:** naming conventions from spec Section 5.3
