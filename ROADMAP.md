@@ -31,13 +31,35 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
   Verified: HTTP 200 serving the stub, renders at 380px with no horizontal overflow, no console errors.
   `HANDOFF.md` and the spec are gitignored because the repo is public.
 
-### `[ ]` T0.2 Firebase project and rules
+### `[x]` T0.2 Firebase project and rules
 - **Inputs:** none
 - **Output:** Firebase Realtime Database with permanent open rules
 - **Steps:** create a new project, do not reuse the LC26 project. Create the Realtime Database. Immediately replace the default rules with `{ "rules": { ".read": true, ".write": true } }` and publish
 - **Acceptance:** the Rules tab shows no expiration timestamp and no date comparison. A test write from the browser console succeeds
 - **Critical:** the LC26 build went blank mid-event because the default test rule expired. Verify by reading the published rules back, not by assuming the paste worked
 - **Parallel-safe:** yes
+- **Done July 30.** New project `cgp-membership-wall-2026`, project number 986050588933. Separate from `lc26-wall`, which is still in the account.
+  Database: `cgp-membership-wall-2026-default-rtdb`, us-central1.
+  URL: `https://cgp-membership-wall-2026-default-rtdb.firebaseio.com`
+  Web app ID: `1:986050588933:web:51e8ca448798c817ee076c`. Regenerate the SDK config any time with
+  `firebase apps:sdkconfig WEB 1:986050588933:web:51e8ca448798c817ee076c`. Goes inline in `index.html` at T0.5.
+- **Rules are version controlled, not pasted.** They live in `database.rules.json` and ship with
+  `firebase deploy --only database`. This is deliberate. A paste into the console cannot be diffed or
+  re-run. A file can. T4.3 is now one command plus one read-back.
+- **How the acceptance was verified.**
+  1. Created the database in **locked mode**, never test mode. Firebase's own test mode text says
+     "you must update your security rules within 30 days." That clause is what blanked LC26. Locked
+     mode carries no date, so a mistake fails loudly at once instead of silently on day 30.
+  2. Deployed the permanent rules, then read the published rules back off the server. They read exactly
+     `{ "rules": { ".read": true, ".write": true } }`. No expiration timestamp. No date comparison.
+  3. Functional proof, unauthenticated from outside the app: `PUT` to `/_ruleprobe.json` succeeded,
+     `GET` returned the value, `DELETE` removed it, and the database read back `null` afterward. That
+     tests the behavior an attendee's phone actually hits, not the text of a rule.
+- **Note:** Gemini in Firebase and Google Analytics were both declined at project creation. Neither is
+  used by the wall, both would have bound the account to extra terms, and Analytics would have collected
+  behavioral data on about 90 named attendees.
+- **Note:** `firebase.json` exists only to point the CLI at the rules file. Hosting is GitHub Pages, not
+  Firebase Hosting. Do not add a `hosting` block to it.
 
 ### `[ ]` T0.3 Design tokens
 - **Inputs:** spec Section 2, source flier
@@ -59,6 +81,8 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Steps:** welcome hero with stage glow, event title, countdown to August 25, QR code, enter button. Header with brand mark, admin gear, Display Mode toggle. Horizontally scrolling tab bar with icon, name, and count badge slot. Marquee banner slot at the top of all tabs
 - **Acceptance:** navigation works between all ten tab stubs. Tab bar scrolls without clipping on a 380px viewport. Countdown shows correct time remaining
 - **Blocked by:** T0.4
+- **Added July 30, mobile app layer.** Approved scope beyond the spec. Web app manifest, scarlet app icon, `apple-touch-icon`, standalone display mode, and safe area insets for notch and home indicator. **No service worker.** Offline caching was considered and rejected: it fights the deploy loop and can serve a stale build to one phone mid-meeting while every other device has the current one
+- **Added acceptance:** Add to Home Screen produces the app icon, not a screenshot bookmark. Launched from the home screen the page opens without browser chrome. No content sits under the notch or the home indicator. Verified on a physical iPhone and a physical Android
 
 ### `[ ]` T0.6 Tab scaffold
 - **Inputs:** spec Section 3
