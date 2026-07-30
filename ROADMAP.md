@@ -91,12 +91,36 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Acceptance:** every tab is reachable and renders without console errors
 - **Blocked by:** T0.5
 
-### `[ ]` T0.7 Asset intake pipeline
+### `[x]` T0.7 Asset intake pipeline
 - **Inputs:** naming conventions from spec Section 5.3
 - **Output:** a script that processes incoming images
 - **Steps:** script accepts a folder of raw images, resizes attendee photos to 400x400 square, resizes graphs and resource images to max 1600px wide, compresses to reasonable file size, renames to the slug convention, and writes into the correct `/assets` subfolder. Report any file it could not match to a roster entry
 - **Acceptance:** run against five test images and confirm correct output paths, dimensions, and file sizes
 - **Parallel-safe:** yes
+- **Done July 30.** `tools/process-assets.sh`. Three modes: `attendees`, `graphs`, `resources`.
+  Built on `sips`, which ships with macOS, so there is nothing to install. ImageMagick is not on
+  this machine and the npm cache is root owned, so avoiding both was deliberate.
+- **Verified against five test images** of deliberately awkward shape and name, plus a `.txt` file
+  to prove it skips rather than crashes. All five wrote at exactly 400x400, 17KB to 55KB.
+  | Source | Output | What it proved |
+  |---|---|---|
+  | `Mike Akeroyd.jpg` 1400x900 | `mike-akeroyd.jpg` | Landscape, long edge cropped |
+  | `Darville, Donny.JPG` 700x1500 | `donny-darville.jpg` | "Last, First" flipped, portrait handled |
+  | `José Peña.heic` 2550x367 | `jose-pena.jpg` | Accents folded, HEIC converted |
+  | `Todd O'Keefer-Smith.jpeg` 260x154 | `todd-okeefer-smith.jpg` | Apostrophe dropped, real hyphen kept |
+  | `Jimmy  Han (Headshot) & Co.png` | `jimmy-han-headshot-and-co.jpg` | Did NOT guess `jimmy-han`, flagged it |
+- **Do not swap the slug builder back to `iconv`.** macOS stores filenames in decomposed Unicode and
+  macOS `iconv -t ASCII//TRANSLIT` truncates at the first combining mark. `José Peña.heic` came out as
+  `jose.jpg`, silently losing the surname. With about 90 real names that would have produced a wrong
+  or colliding filename nobody caught. The slug is built in Python with NFKD for this reason.
+- **It refuses to guess and refuses to overwrite.** Two sources that slugify the same are reported and
+  the second is not written. Exit code is 1 on any failure or collision, so a bad batch cannot pass
+  quietly. Files with no roster match and roster entries with no photo are both reported, in both
+  directions, once `data/roster.json` exists at T1.3.
+- **Known limit.** `sips` cannot quantize a PNG, so oversized graphs are flagged rather than fixed.
+  Threshold is 150KB for headshots and 600KB for graphs. If real club graphs come in over it, install
+  `pngquant`. Charts and line art should land well under.
+- **Note:** `-n` does a dry run. Use it first on any batch from Jeannette.
 
 ### `[ ]` T0.8 Deploy and verify
 - **Inputs:** all of Phase 0
