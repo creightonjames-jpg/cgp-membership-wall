@@ -339,10 +339,14 @@ button { font-family: inherit; }
   pointer-events: none;
 }
 
+/* Base state is transparent on purpose. If the animation never runs, on an old
+   browser or with animations disabled, the failure shows the picture rather
+   than hiding it behind four solid panels. `both` fill holds the shutter
+   opaque through its delay and lands it back at transparent. */
 .band__lights span {
   background: var(--stage);
-  opacity: 1;
-  animation: band-lights-up 700ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  opacity: 0;
+  animation: band-lights-up 700ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
   animation-delay: calc(var(--i) * 180ms);
 }
 
