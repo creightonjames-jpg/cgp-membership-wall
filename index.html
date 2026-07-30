@@ -446,6 +446,21 @@ button { font-family: inherit; }
 
 .stubnote code { color: var(--gold); font-size: 13px; }
 
+/* Build notes are crew only. Nothing that says "T1.1" should ever reach an
+   attendee, so it is gated on the PIN rather than on my memory. */
+.buildnote {
+  margin-top: 12px;
+  background: var(--input); border-left: 3px solid var(--scarlet);
+  border-radius: 6px; padding: 11px 13px;
+}
+
+.buildnote__tag {
+  font-family: var(--font-display); font-size: 10px;
+  letter-spacing: 0.14em; color: var(--scarlet); margin: 0 0 4px;
+}
+
+.buildnote__body { font-size: 13px; color: var(--dim); margin: 0; }
+
 /* Display Mode. The only place a viewport locked height is allowed. */
 body.display-mode .tabs,
 body.display-mode .marquee-slot { display: none; }
@@ -558,19 +573,23 @@ const LS = {
 };
 
 /* Ten tabs, spec section 3. Themed names only, no plain English subtitles.
-   `phase` is when the tab is meant to appear. T1.6 wires real visibility. */
+   `phase` is when the tab is meant to appear. T1.6 wires real visibility.
+   Each key has a matching component in TAB_VIEWS further down. */
 const TABS = [
-  { key: "setlist",   icon: "\u{1F3A4}", name: "The Setlist",     phase: "pre",  note: "Agenda with live session tracking. T1.1." },
-  { key: "band",      icon: "\u{1F3B8}", name: "The Band",        phase: "pre",  note: "Attendee roster and directory. T1.3." },
-  { key: "backstage", icon: "\u{1F39F}", name: "Backstage Pass",  phase: "pre",  note: "Venues, travel, logistics, contacts. T1.2." },
-  { key: "soundcheck",icon: "\u{1F399}", name: "Soundcheck",      phase: "pre",  note: "Q and A with upvoting. T1.4." },
-  { key: "vault",     icon: "\u{1F512}", name: "The Vault",       phase: "pre",  note: "Resources and the two timed drops. T2.1 to T2.3." },
-  { key: "liner",     icon: "\u{1F4DD}", name: "Liner Notes",     phase: "pre",  note: "Key takeaways board. T1.5." },
-  { key: "vote",      icon: "\u{1F4CA}", name: "Crowd Vote",      phase: "during", note: "Live polls, four types. T2.4." },
-  { key: "pit",       icon: "\u{1F4F7}", name: "The Pit",         phase: "during", note: "Photo gallery with likes. T2.5." },
-  { key: "cares",     icon: "\u{1F3C6}", name: "The Cares Cup",   phase: "during", note: "Shank Showdown II leaderboard. T2.6." },
-  { key: "encore",    icon: "⭐",    name: "Encore",          phase: "post", note: "Awards, Hall of Fame, Top Videos, Tenure. T2.7." }
+  { key: "setlist",    icon: "\u{1F3A4}", name: "The Setlist",    phase: "pre" },
+  { key: "band",       icon: "\u{1F3B8}", name: "The Band",       phase: "pre" },
+  { key: "backstage",  icon: "\u{1F39F}", name: "Backstage Pass", phase: "pre" },
+  { key: "soundcheck", icon: "\u{1F399}", name: "Soundcheck",     phase: "pre" },
+  { key: "vault",      icon: "\u{1F512}", name: "The Vault",      phase: "pre" },
+  { key: "liner",      icon: "\u{1F4DD}", name: "Liner Notes",    phase: "pre" },
+  { key: "vote",       icon: "\u{1F4CA}", name: "Crowd Vote",     phase: "during" },
+  { key: "pit",        icon: "\u{1F4F7}", name: "The Pit",        phase: "during" },
+  { key: "cares",      icon: "\u{1F3C6}", name: "The Cares Cup",  phase: "during" },
+  { key: "encore",     icon: "⭐",         name: "Encore",         phase: "post" }
 ];
+
+const TAB_BY_KEY = {};
+TABS.forEach(function (t) { TAB_BY_KEY[t.key] = t; });
 
 /* ------------------------------------------------------------- helpers */
 
@@ -849,23 +868,191 @@ function PinGate({ onPass, onClose }) {
   );
 }
 
-/* Placeholder tab body. T0.6 turns each of these into its own component. */
-function TabStub({ tab }) {
+/* ==========================================================================
+   T0.6 TAB SCAFFOLD.
+   Ten components, one per tab, each its own boundary to build into. Phase 1
+   and Phase 2 fill these independently, so they do not share a body.
+
+   Empty state copy is written to the flier's register: short, dry, a little
+   irreverent, never precious. These are the words an attendee reads before
+   any content exists, so they are real copy and not filler.
+   ========================================================================== */
+
+const PHASE_LINE = {
+  pre: "Live before the meeting",
+  during: "Opens during the meeting",
+  post: "Opens after the Awards Show"
+};
+
+function TabFrame({ tabKey, children }) {
+  const tab = TAB_BY_KEY[tabKey];
   return (
-    <div>
-      <h2 className="tabhead t-display">{tab.name}</h2>
-      <p className="tabhead__sub">
-        {tab.phase === "pre" ? "Live before the meeting"
-          : tab.phase === "during" ? "Opens during the meeting"
-          : "Opens after the Awards Show"}
-      </p>
-      <div className="stubnote">
-        <p style={{ margin: 0 }}>Nothing here yet. Load-in is still going.</p>
-        <p style={{ margin: "8px 0 0" }}><code>{tab.note}</code></p>
-      </div>
+    <section aria-labelledby={"head-" + tabKey}>
+      <h2 className="tabhead t-display" id={"head-" + tabKey}>{tab.name}</h2>
+      <p className="tabhead__sub">{PHASE_LINE[tab.phase]}</p>
+      {children}
+    </section>
+  );
+}
+
+function Empty({ children }) {
+  return <div className="stubnote"><p style={{ margin: 0 }}>{children}</p></div>;
+}
+
+/* Crew only. Keeps "T1.1" out of an attendee's hands by construction rather
+   than by remembering to strip it later. */
+function BuildNote({ isAdmin, task, children }) {
+  if (!isAdmin) return null;
+  return (
+    <div className="buildnote">
+      <p className="buildnote__tag">{task}</p>
+      <p className="buildnote__body">{children}</p>
     </div>
   );
 }
+
+function SetlistTab({ isAdmin }) {
+  return (
+    <TabFrame tabKey="setlist">
+      <Empty>No setlist yet. The running order is still being argued about.</Empty>
+      <BuildNote isAdmin={isAdmin} task="T1.1">
+        Agenda from the flier into data/agenda.json. Four day pills, sessions as
+        ticket stubs, ON AIR pulse, 30 minute countdown, four reactions per
+        session, attire tag per day.
+      </BuildNote>
+    </TabFrame>
+  );
+}
+
+function BandTab({ isAdmin }) {
+  return (
+    <TabFrame tabKey="band">
+      <Empty>No lineup posted. Nobody has been handed a laminate yet.</Empty>
+      <BuildNote isAdmin={isAdmin} task="T1.3">
+        Roster grid against 20 placeholder records. Search by name, club, and
+        title. FIRST TOUR guitar pick on newbies, visible in the grid. Real data
+        loads at T3.1.
+      </BuildNote>
+    </TabFrame>
+  );
+}
+
+function BackstageTab({ isAdmin }) {
+  return (
+    <TabFrame tabKey="backstage">
+      <Empty>Where you sleep, where you play, who to call. Going up shortly.</Empty>
+      <BuildNote isAdmin={isAdmin} task="T1.2">
+        Six ticket stub panels. Venue cards for Embassy Suites, The Medallion
+        Club, and Smash Park. Tappable phones, addresses that open maps, rental
+        codes, attire by day.
+      </BuildNote>
+    </TabFrame>
+  );
+}
+
+function SoundcheckTab({ isAdmin }) {
+  return (
+    <TabFrame tabKey="soundcheck">
+      <Empty>No questions yet. Somebody has to go first.</Empty>
+      <BuildNote isAdmin={isAdmin} task="T1.4">
+        Submission panel with optional name and club, six categories, anonymous
+        toggle. Top and New sorting, one upvote per device, Display Mode for the
+        projector, CSV export.
+      </BuildNote>
+    </TabFrame>
+  );
+}
+
+function VaultTab({ isAdmin }) {
+  return (
+    <TabFrame tabKey="vault">
+      <Empty>The vault is shut. Two sections open on a clock during the meeting.</Empty>
+      <BuildNote isAdmin={isAdmin} task="T2.1 to T2.3">
+        Five sections. Club graph picker. Timed drops for Scenarios on Wednesday
+        at 9:30 AM Eastern and Personas on Thursday at 10:30 AM, corrected
+        against the server clock, with admin override both directions.
+      </BuildNote>
+    </TabFrame>
+  );
+}
+
+function LinerNotesTab({ isAdmin }) {
+  return (
+    <TabFrame tabKey="liner">
+      <Empty>No takeaways yet. Somebody write something down.</Empty>
+      <BuildNote isAdmin={isAdmin} task="T1.5">
+        Day filter pills, submission panel with auto day tag, reverse
+        chronological cards, pinned items with a scarlet left border, Markdown
+        export for the recap.
+      </BuildNote>
+    </TabFrame>
+  );
+}
+
+function CrowdVoteTab({ isAdmin }) {
+  return (
+    <TabFrame tabKey="vote">
+      <Empty>No polls open. Nothing to vote on until the room warms up.</Empty>
+      <BuildNote isAdmin={isAdmin} task="T2.4">
+        Four poll types: multiple choice, knowledge check that reveals the split
+        on close, ranking by drag, and a live word cloud. One vote per device.
+      </BuildNote>
+    </TabFrame>
+  );
+}
+
+function PitTab({ isAdmin }) {
+  return (
+    <TabFrame tabKey="pit">
+      <Empty>No photos yet. Somebody go find the drummer.</Empty>
+      <BuildNote isAdmin={isAdmin} task="T2.5">
+        Both upload paths ship together, camera and library. Client side
+        compression to roughly 800px. Square grid, likes that sync, lightbox
+        with admin download and delete.
+      </BuildNote>
+    </TabFrame>
+  );
+}
+
+function CaresCupTab({ isAdmin }) {
+  return (
+    <TabFrame tabKey="cares">
+      <Empty>No scores posted. Nobody has shanked one yet.</Empty>
+      <BuildNote isAdmin={isAdmin} task="T2.6">
+        Leaderboard with position, team, score, thru. Gold, silver, bronze on the
+        top three. Century Golf Cares fundraising total on top. Admin only score
+        entry. Poster art use is still an open question, so build the solid
+        color fallback first.
+      </BuildNote>
+    </TabFrame>
+  );
+}
+
+function EncoreTab({ isAdmin }) {
+  return (
+    <TabFrame tabKey="encore">
+      <Empty>The encore comes last. Awards go up after the Thursday show.</Empty>
+      <BuildNote isAdmin={isAdmin} task="T2.7">
+        Four independently unlockable sections: Award Winners on a vinyl label,
+        Hall of Fame, Top Videos as embeds, Tenure by milestone. Full admin CRUD
+        so winners can be posted from the room on Thursday night.
+      </BuildNote>
+    </TabFrame>
+  );
+}
+
+const TAB_VIEWS = {
+  setlist:    SetlistTab,
+  band:       BandTab,
+  backstage:  BackstageTab,
+  soundcheck: SoundcheckTab,
+  vault:      VaultTab,
+  liner:      LinerNotesTab,
+  vote:       CrowdVoteTab,
+  pit:        PitTab,
+  cares:      CaresCupTab,
+  encore:     EncoreTab
+};
 
 function App() {
   const [entered, setEntered] = useState(() => readLS(LS.entered) === "1");
@@ -895,7 +1082,8 @@ function App() {
     return <Welcome onEnter={enter} now={now} synced={synced} />;
   }
 
-  const tab = TABS.filter((t) => t.key === active)[0] || TABS[0];
+  const tab = TAB_BY_KEY[active] || TABS[0];
+  const TabView = TAB_VIEWS[tab.key];
   const liveAnnouncement =
     announcement && announcement.id !== dismissed ? announcement : null;
 
@@ -947,7 +1135,7 @@ function App() {
           onDismiss={() => setDismissed(liveAnnouncement.id)}
         />
 
-        <TabStub tab={tab} />
+        <TabView isAdmin={isAdmin} />
       </main>
 
       {showPin ? (
