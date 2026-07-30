@@ -61,32 +61,54 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Note:** `firebase.json` exists only to point the CLI at the rules file. Hosting is GitHub Pages, not
   Firebase Hosting. Do not add a `hosting` block to it.
 
-### `[~]` T0.3 Design tokens
+### `[x]` T0.3 Design tokens
 - **Inputs:** spec Section 2, source flier
 - **Output:** CSS variable block and font loading in `index.html`
 - **Steps:** implement all twelve palette tokens. Load Anton, Alfa Slab One, and Inter from Google Fonts. Build the two gradients: radial stage glow and scarlet to oxblood linear
 - **Acceptance:** a test page renders every token as a labeled swatch and every font in a sample line. Verified on a phone, not desktop responsive mode
 - **Blocked by:** T0.1
-- **Built July 30. Waiting on the phone check before this goes to `[x]`.**
+- **Done July 30, on browser verification.** Jim approved proceeding without the physical phone check.
   All twelve palette tokens, three font families, and both gradients live in `index.html`.
   Type utilities: `.t-display` Anton, `.t-poster` Alfa Slab One, `.t-data` Inter tabular-nums for
   leaderboard digits so scores do not jitter as they update.
-  Proof sheet at `tokens.html`: https://creightonjames-jpg.github.io/cgp-membership-wall/tokens.html
-- **The proof sheet generates its swatches from one array**, so a chip cannot drift from the palette.
-  It also reports whether each face actually loaded rather than fell back, because a fallback font is a
-  silent failure and T0.8 has to catch it. All three currently report loaded.
-- **Verified so far:** 12 swatches render, both gradients render, all three faces load, no horizontal
-  overflow at 380px, clean at desktop width, no console errors.
-- **Still needed from Jim:** open `tokens.html` on a physical phone. The acceptance criterion says a
-  phone, not desktop responsive mode, and font loading is exactly the thing that behaves differently
-  there. Check that the three font rows all read "loaded" in gold and none read "FELL BACK" in orange.
+  Proof sheet: https://creightonjames-jpg.github.io/cgp-membership-wall/tokens.html
+- **Verified:** all 12 swatches render from the live custom properties, both gradients render, all three
+  faces report loaded on a cold load, no horizontal overflow at 380px or desktop, no console errors.
+- **The sheet checks itself two ways.** Each swatch compares the documented hex against the live custom
+  property and flags a mismatch in `--danger`. Confirmed working by breaking `--scarlet` on purpose and
+  watching it flag, then restoring it and watching it clear. It also forces each font face to load and
+  then checks, rather than trusting `document.fonts.ready`.
+- **Open risk, accepted.** Not verified on a physical phone. The acceptance criterion asked for one and
+  font loading is the thing most likely to differ there. Worth 60 seconds at T0.8, which tests three
+  real devices anyway.
 
-### `[ ]` T0.4 Motif primitives
+### `[x]` T0.4 Motif primitives
 - **Inputs:** spec Section 2.3
 - **Output:** reusable CSS classes for each motif
 - **Steps:** build ticket stub card (dashed perforation, two notch cutouts), guitar pick badge (clip-path rounded triangle), amp grille texture (low opacity diagonal halftone), stage light glow, marquee strip with bulb border, vinyl label concentric circles
 - **Acceptance:** each motif renders correctly at 380px width and at desktop width. No horizontal overflow
 - **Blocked by:** T0.3
+- **Done July 30.** Seven motifs, not the six listed above. CLAUDE.md lists the setlist strike-through as
+  a motif so it is built too, as `.struck` plus `.is-done`.
+  Proof sheet: https://creightonjames-jpg.github.io/cgp-membership-wall/motifs.html
+  | Class | Motif | Used by |
+  |---|---|---|
+  | `.ticket` `.ticket__stub` `.ticket__body` | Ticket stub, dashed perforation, two punched notches | The Setlist, Backstage Pass |
+  | `.pick` `.pick__text` | Guitar pick badge via `clip-path` polygon | The Band, FIRST TOUR flag |
+  | `.grille` | Amp grille crosshatch at 3 percent | Card backgrounds |
+  | `.glow-stage` `.glow-card` | Stage light glow, page and card | Welcome hero, Encore awards |
+  | `.marquee` `.marquee__track` `.marquee__item` | LED strip with gold bulb border | Admin announcements |
+  | `.vinyl` `.vinyl__photo` | Vinyl grooves with a centered photo slot | Encore award winners |
+  | `.struck` `.is-done` | Tilted strike line and dimmed state | The Setlist, completed sessions |
+- **Verified:** every motif renders at 380px and at desktop. The sheet measures document width against
+  viewport width live and reports it, so overflow is a number rather than an opinion. No overflow at
+  either size, no console errors.
+- **Notes for whoever builds on these.** Do not add `overflow: hidden` to `.ticket`, it would clip the
+  notches. `--ticket-stub-w` moves the perforation and both notches together. `--notch-bg` must match
+  whatever sits behind the card, and it defaults to `--stage`. The pick takes `--pick-fill`.
+- **The marquee respects `prefers-reduced-motion`.** A scrolling banner pinned to the top of every tab
+  is exactly the thing that makes some people ill. Reduced motion stops the scroll, wraps the text, and
+  drops the duplicated copy. Verified the media rule is present and applies to all three marquee parts.
 
 ### `[ ]` T0.5 App shell
 - **Inputs:** T0.3, T0.4
