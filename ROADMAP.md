@@ -110,7 +110,7 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
   is exactly the thing that makes some people ill. Reduced motion stops the scroll, wraps the text, and
   drops the duplicated copy. Verified the media rule is present and applies to all three marquee parts.
 
-### `[ ]` T0.5 App shell
+### `[x]` T0.5 App shell
 - **Inputs:** T0.3, T0.4
 - **Output:** welcome screen, header, tab bar, marquee banner
 - **Steps:** welcome hero with stage glow, event title, countdown to August 25, QR code, enter button. Header with brand mark, admin gear, Display Mode toggle. Horizontally scrolling tab bar with icon, name, and count badge slot. Marquee banner slot at the top of all tabs
@@ -118,6 +118,43 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Blocked by:** T0.4
 - **Added July 30, mobile app layer.** Approved scope beyond the spec. Web app manifest, scarlet app icon, `apple-touch-icon`, standalone display mode, and safe area insets for notch and home indicator. **No service worker.** Offline caching was considered and rejected: it fights the deploy loop and can serve a stale build to one phone mid-meeting while every other device has the current one
 - **Added acceptance:** Add to Home Screen produces the app icon, not a screenshot bookmark. Launched from the home screen the page opens without browser chrome. No content sits under the notch or the home indicator. Verified on a physical iPhone and a physical Android
+- **Done July 30.** React 18 and Firebase 10.12.2 from pinned CDNs, inline Babel, all in `index.html`.
+  Every CDN URL was checked for a 200 before use. Nothing floats on a `latest` tag.
+- **Verified, all on the live URL:**
+  | Acceptance criterion | Result |
+  |---|---|
+  | Navigation works between all ten tab stubs | All 10 navigate, heading and phase line match the pill |
+  | Tab bar scrolls without clipping at 380px | Scroller 1271px inside 380px, no pill vertically clipped, selected pill scrolls into view |
+  | Countdown shows correct time remaining | Matches an independent calculation to the second |
+  | No horizontal overflow | Document width equals viewport at 380px and at desktop |
+  | No console errors | None |
+- **Extra checks beyond the criteria.** PIN rejects a wrong code and accepts 2026, and the four
+  non-pre tabs show a padlock to admin only. Display Mode hides the tab bar and the marquee and scales
+  the heading. `mm26_entered` gates the welcome screen in both directions. Marquee slot was proved
+  end to end by writing an announcement straight to Firebase and watching it appear with no reload,
+  then deleting it. Database reads `null` again.
+- **The wall does not trust the device clock.** It reads `.info/serverTimeOffset` and corrects. The
+  countdown says which clock it is using. T2.3 reuses this, where a wrong clock drops content on the
+  wrong morning.
+- **If Firebase fails to start the shell still renders** and says live updates are off. A white screen
+  in front of the full private clubs group is the worst possible failure, so there is one boot path and
+  one place to fail.
+- **Countdown target is an assumption.** `OPENS_AT` is Tuesday August 25 2026, 12:00 PM Eastern, the
+  Shank Showdown tee-off, which is the first timed item on the flier. If it should run to hotel check-in
+  or Wednesday breakfast instead, change that one constant. Worth one line from Carol.
+- **Mobile layer shipped:** manifest, maskable 192 and 512 icons, `apple-touch-icon`, standalone
+  display, `apple-mobile-web-app-*` meta, and `--safe-t/-b/-l/-r` applied to the header, tab bar, and
+  content padding. No service worker, per the T0.5 note above.
+- **Still unverified, needs a device.** Safe area insets resolve to 0px in a desktop browser because
+  there is no cutout to inset from. Add to Home Screen and standalone launch also cannot be tested
+  here. All three belong to T0.8, which tests three physical devices.
+- **Brand assets are generated, not hand made.** `tools/make-brand.py` writes the icons and the QR into
+  `assets/brand/`. The pick silhouette is the same one as the CSS `.pick`, smoothed with a spline
+  because 16 straight segments read as a faceted gem at 512px.
+- **The QR is decode checked on every run.** A QR that encodes the wrong URL looks perfectly correct to
+  a human and would mean nobody reaches the wall. The script decodes its own output and exits non-zero
+  on a mismatch. It is rendered dark on cream, never inverted, because plenty of scanners refuse a
+  light on dark code. Scan testing on real phones is still T4.6.
 
 ### `[ ]` T0.6 Tab scaffold
 - **Inputs:** spec Section 3
