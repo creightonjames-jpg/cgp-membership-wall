@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#17161A">
 <title>The Live Wall</title>
+<meta name="description" content="The electronic hub for the Century Golf Partners 2026 Private Clubs Meeting. Columbus, Ohio, August 25 to 28, 2026.">
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Live Wall">
+<meta name="mobile-web-app-capable" content="yes">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +25,7 @@
    This block is the single source of truth. tokens.html and motifs.html read
    it straight out of this file rather than keeping a copy, so a proof sheet
    can never drift from what actually ships.
-   ROADMAP T0.3 tokens, T0.4 motifs. Spec sections 2.1 to 2.3.
+   ROADMAP T0.3 tokens, T0.4 motifs, T0.5 shell. Spec sections 2.1 to 2.3.
    ========================================================================== */
 
 /* -------------------------------------------------------- T0.3 tokens */
@@ -46,8 +55,14 @@
   --grad-primary: linear-gradient(180deg, var(--scarlet) 0%, var(--oxblood) 100%);
 
   /* Motif dials. Override per instance, not at the call site. */
-  --ticket-stub-w: 84px;   /* width of the tear-off on a ticket stub card */
-  --notch-bg: var(--stage); /* what shows through a ticket notch          */
+  --ticket-stub-w: 84px;    /* width of the tear-off on a ticket stub card */
+  --notch-bg: var(--stage); /* what shows through a ticket notch           */
+
+  /* Notch and home indicator. Zero on anything without a cutout. */
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
 }
 
 /* ------------------------------------------------------------- baseline */
@@ -64,7 +79,10 @@ body {
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
+
+button { font-family: inherit; }
 
 /* Display faces are all caps and tight. Never italic. */
 .t-display {
@@ -75,16 +93,14 @@ body {
   line-height: 0.94;
 }
 
-.t-poster {
-  font-family: var(--font-poster);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-}
+.t-poster { font-family: var(--font-poster); font-weight: 400; letter-spacing: 0.01em; }
 
 /* Leaderboard scores and counts. Digits must not jitter as they update. */
-.t-data {
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: 'tnum' 1;
+.t-data { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
 /* ==========================================================================
@@ -93,9 +109,7 @@ body {
    ========================================================================== */
 
 /* -------------------------------------------------- 1. ticket stub card */
-/* Setlist sessions and Backstage Pass panels. A tear-off on the left, a
-   dashed perforation, and two notches punched out at the perforation line.
-   Do not add overflow:hidden here. It would clip the notches. */
+/* Do not add overflow:hidden here. It would clip the notches. */
 .ticket {
   position: relative;
   display: flex;
@@ -107,11 +121,8 @@ body {
 
 .ticket__stub {
   flex: 0 0 var(--ticket-stub-w);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px;
   padding: 14px 8px;
   border-right: 2px dashed var(--edge);
   text-align: center;
@@ -123,13 +134,11 @@ body {
   padding: 14px 16px;
 }
 
-.ticket::before,
-.ticket::after {
+.ticket::before, .ticket::after {
   content: '';
   position: absolute;
   left: var(--ticket-stub-w);
-  width: 15px;
-  height: 15px;
+  width: 15px; height: 15px;
   background: var(--notch-bg);
   border-radius: 50%;
   transform: translateX(-50%);
@@ -139,14 +148,10 @@ body {
 .ticket::after  { bottom: calc(-15px / 2 - 1px); }
 
 /* ------------------------------------------------- 2. guitar pick badge */
-/* The FIRST TOUR flag on The Band. Rounded triangle via clip-path. Enough
-   vertices to read as a pick rather than a road sign. */
 .pick {
   --pick-fill: var(--gold);
-  display: grid;
-  place-items: center;
-  width: 68px;
-  aspect-ratio: 1 / 0.96;
+  display: grid; place-items: center;
+  width: 68px; aspect-ratio: 1 / 0.96;
   background: var(--pick-fill);
   clip-path: polygon(
     15% 8%, 28% 2%, 50% 0%, 72% 2%, 85% 8%,
@@ -160,39 +165,28 @@ body {
 .pick__text {
   font-family: var(--font-display);
   text-transform: uppercase;
-  font-size: 11px;
-  line-height: 1;
-  text-align: center;
-  color: #2A1408;
+  font-size: 11px; line-height: 1;
+  text-align: center; color: #2A1408;
   padding-bottom: 12%;      /* nudge off the tapered tip */
   letter-spacing: 0.02em;
 }
 
 /* ---------------------------------------------------- 3. amp grille texture */
-/* Crosshatched speaker cloth. Sits behind card content at very low opacity.
-   Put it on a positioned parent. It inherits the parent's corner radius. */
 .grille { position: relative; }
-
 .grille > * { position: relative; z-index: 1; }
 
 .grille::before {
   content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  border-radius: inherit;
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none; border-radius: inherit;
   background-image:
     repeating-linear-gradient( 45deg, rgba(247,243,234,0.030) 0 1px, transparent 1px 5px),
     repeating-linear-gradient(-45deg, rgba(247,243,234,0.030) 0 1px, transparent 1px 5px);
 }
 
 /* ------------------------------------------------------ 4. stage light glow */
-/* Welcome hero and Encore award cards. */
 .glow-stage {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
+  position: fixed; inset: 0; z-index: 0;
   pointer-events: none;
   background: var(--grad-stage);
 }
@@ -207,22 +201,16 @@ body {
 }
 
 /* ------------------------------------------------------- 5. marquee strip */
-/* Admin announcements. LED ticker with a scarlet and gold bulb border. */
 .marquee {
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
   background: linear-gradient(180deg, var(--oxblood) 0%, #6B0A18 100%);
   border-radius: 6px;
   padding: 6px 0;
 }
 
-.marquee::before,
-.marquee::after {
+.marquee::before, .marquee::after {
   content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 7px;
+  position: absolute; left: 0; right: 0; height: 7px;
   background-image: radial-gradient(circle, var(--gold) 0 1.6px, rgba(0,0,0,0.35) 2px);
   background-size: 13px 7px;
   background-repeat: repeat-x;
@@ -233,18 +221,13 @@ body {
 .marquee::after  { bottom: 0; }
 
 .marquee__track {
-  display: flex;
-  width: max-content;
-  padding: 5px 0;
+  display: flex; width: max-content; padding: 5px 0;
   animation: marquee-slide 22s linear infinite;
 }
 
 .marquee__item {
-  padding: 0 28px;
-  white-space: nowrap;
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--cream);
+  padding: 0 28px; white-space: nowrap;
+  font-weight: 600; font-size: 14px; color: var(--cream);
 }
 
 @keyframes marquee-slide {
@@ -254,123 +237,730 @@ body {
 
 /* A scrolling banner is exactly the thing that makes some people ill. */
 @media (prefers-reduced-motion: reduce) {
-  .marquee__track {
-    animation: none;
-    width: 100%;
-    flex-wrap: wrap;
-  }
+  .marquee__track { animation: none; width: 100%; flex-wrap: wrap; }
   .marquee__item { white-space: normal; padding: 0 14px; }
   .marquee__item + .marquee__item { display: none; }  /* drop the duplicate */
 }
 
 /* ---------------------------------------------------------- 6. vinyl label */
-/* Sits behind an award winner photo on Encore. Grooves, then the label. */
 .vinyl {
-  position: relative;
-  aspect-ratio: 1;
-  width: 100%;
+  position: relative; aspect-ratio: 1; width: 100%;
   border-radius: 50%;
   background:
     repeating-radial-gradient(circle at 50% 50%,
       rgba(247,243,234,0.055) 0 1px, transparent 1px 4px),
-    radial-gradient(circle at 50% 50%,
-      var(--oxblood) 0 33%, #0C0B0E 33.5% 100%);
-  display: grid;
-  place-items: center;
+    radial-gradient(circle at 50% 50%, var(--oxblood) 0 33%, #0C0B0E 33.5% 100%);
+  display: grid; place-items: center;
 }
 
 .vinyl__photo {
-  width: 56%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--gold);
-  background: var(--input);
+  width: 56%; aspect-ratio: 1; border-radius: 50%;
+  object-fit: cover; border: 3px solid var(--gold); background: var(--input);
 }
 
 /* ------------------------------------------------- 7. setlist strike-through */
-/* A completed session dims and gets struck. Drawn as a slightly tilted line
-   rather than text-decoration so it reads hand drawn. */
-.struck {
-  position: relative;
-  display: inline-block;
-}
+.struck { position: relative; display: inline-block; }
 
 .struck::after {
   content: '';
-  position: absolute;
-  left: -2%;
-  right: -2%;
-  top: 52%;
-  height: 2px;
-  background: var(--scarlet);
-  border-radius: 2px;
+  position: absolute; left: -2%; right: -2%; top: 52%;
+  height: 2px; background: var(--scarlet); border-radius: 2px;
   transform: rotate(-1.2deg);
 }
 
 .is-done { opacity: 0.55; }
 
 /* ==========================================================================
-   STUB SCREEN. Placeholder until T0.5 builds the real app shell.
+   T0.5 APP SHELL
    ========================================================================== */
-.stub {
-  position: relative;
-  z-index: 1;
+
+#root { position: relative; z-index: 1; }
+
+/* --------------------------------------------------------- welcome hero */
+.welcome {
   min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
   text-align: center;
-  padding: 32px 20px;
+  padding: calc(36px + var(--safe-t)) calc(20px + var(--safe-r))
+           calc(36px + var(--safe-b)) calc(20px + var(--safe-l));
 }
 
-.stub__kicker {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--dim);
-  margin: 0 0 14px;
+.welcome__kicker {
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--dim); margin: 0 0 14px;
 }
 
-.stub__title {
-  font-size: clamp(30px, 11vw, 52px);
-  margin: 0;
-  max-width: 15ch;
+.welcome__title { font-size: clamp(30px, 11vw, 52px); margin: 0; max-width: 15ch; }
+.welcome__title .wall { color: var(--scarlet); display: block; }
+
+.welcome__rule {
+  height: 3px; width: 56px; margin: 20px 0;
+  background: var(--grad-primary); border-radius: 2px;
 }
 
-.stub__title .wall { color: var(--scarlet); display: block; }
+.welcome__where { margin: 0; color: var(--dim); }
+.welcome__tag { margin: 14px 0 0; color: var(--gold); font-size: 14px; }
 
-.stub__rule {
-  height: 3px;
-  width: 56px;
-  margin: 22px 0;
-  background: var(--grad-primary);
-  border-radius: 2px;
+/* countdown */
+.count { display: flex; gap: 8px; margin: 26px 0 4px; }
+
+.count__cell {
+  background: var(--riser); border: 1px solid var(--edge);
+  border-radius: 8px; padding: 9px 12px; min-width: 62px;
 }
 
-.stub__line { margin: 0 0 8px; }
-.stub__where { margin: 0; color: var(--dim); }
-.stub__tag { margin: 18px 0 0; color: var(--gold); font-size: 14px; }
+.count__n {
+  font-family: var(--font-display); font-size: 26px; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
 
-.stub__fine { margin: 30px 0 0; font-size: 12px; color: var(--mute); }
-.stub__fine a { color: var(--dim); }
+.count__l {
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--mute); margin-top: 4px;
+}
+
+.count__note { font-size: 11px; color: var(--mute); margin: 0; }
+.count__live { color: var(--gold); font-weight: 600; }
+
+/* QR. Dark modules on a cream card. Never inverted, plenty of scanners
+   refuse a light on dark code. */
+.qr {
+  margin: 26px 0 0; background: var(--cream);
+  border-radius: 10px; padding: 10px; width: 150px;
+}
+
+.qr img { display: block; width: 100%; height: auto; }
+.qr__cap { font-size: 11px; color: var(--mute); margin: 8px 0 0; }
+
+.enter {
+  margin-top: 26px; width: 100%; max-width: 320px;
+  border: 0; border-radius: 10px; padding: 16px;
+  background: var(--grad-primary); color: var(--cream);
+  font-size: 17px; font-weight: 600; cursor: pointer;
+}
+
+.enter:active { background: var(--oxblood); }
+
+/* -------------------------------------------------------------- header */
+.hdr {
+  position: sticky; top: 0; z-index: 30;
+  background: rgba(23,22,26,0.92);
+  backdrop-filter: saturate(1.4) blur(8px);
+  -webkit-backdrop-filter: saturate(1.4) blur(8px);
+  border-bottom: 1px solid var(--edge);
+  padding-top: var(--safe-t);
+}
+
+.hdr__row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px calc(14px + var(--safe-r)) 10px calc(14px + var(--safe-l));
+}
+
+.hdr__mark { display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1 1 auto; }
+.hdr__pick { width: 26px; flex: 0 0 26px; }
+.hdr__pick .pick__text { font-size: 6px; }
+
+.hdr__name { font-size: 15px; line-height: 1; margin: 0; }
+.hdr__sub {
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--mute); margin: 3px 0 0;
+}
+
+.iconbtn {
+  flex: 0 0 auto;
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  background: var(--input); border: 1px solid var(--edge);
+  border-radius: 9px; color: var(--dim);
+  font-size: 16px; cursor: pointer; padding: 0;
+}
+
+.iconbtn:active { background: var(--edge); }
+.iconbtn--on { background: var(--glow); border-color: var(--scarlet); color: var(--cream); }
+
+/* ------------------------------------------------------------- tab bar */
+.tabs {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(23,22,26,0.92);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--edge);
+}
+
+.tabs__scroll {
+  display: flex; gap: 6px;
+  overflow-x: auto; overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 9px calc(12px + var(--safe-r)) 9px calc(12px + var(--safe-l));
+}
+
+.tabs__scroll::-webkit-scrollbar { display: none; }
+
+.tab {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 7px;
+  background: var(--input); border: 1px solid var(--edge);
+  border-radius: 999px; padding: 8px 14px;
+  color: var(--dim); font-size: 13px; font-weight: 500;
+  white-space: nowrap; cursor: pointer;
+}
+
+.tab[aria-selected="true"] {
+  background: var(--glow); border-color: var(--scarlet); color: var(--cream);
+}
+
+.tab__icon { font-size: 14px; line-height: 1; }
+
+.tab__badge {
+  background: var(--scarlet); color: var(--cream);
+  border-radius: 999px; min-width: 19px; padding: 1px 6px;
+  font-size: 11px; font-weight: 700; text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.tab__lock { color: var(--gold); font-size: 11px; }
+
+/* ------------------------------------------------------------- content */
+.sheet {
+  padding: 14px calc(16px + var(--safe-r)) calc(48px + var(--safe-b))
+           calc(16px + var(--safe-l));
+}
+
+.marquee-slot { margin-bottom: 16px; display: flex; align-items: stretch; gap: 8px; }
+.marquee-slot .marquee { flex: 1 1 auto; min-width: 0; }
+
+.marquee-x {
+  flex: 0 0 auto; width: 34px;
+  background: var(--input); border: 1px solid var(--edge);
+  border-radius: 6px; color: var(--dim); cursor: pointer; font-size: 14px;
+}
+
+.tabhead { margin: 0 0 4px; font-size: clamp(26px, 8vw, 34px); }
+.tabhead__sub { color: var(--dim); font-size: 14px; margin: 0 0 18px; }
+
+.stubnote {
+  background: var(--riser); border: 1px dashed var(--edge);
+  border-radius: 10px; padding: 18px 16px; color: var(--dim);
+}
+
+.stubnote code { color: var(--gold); font-size: 13px; }
+
+/* Display Mode. The only place a viewport locked height is allowed. */
+body.display-mode .tabs,
+body.display-mode .marquee-slot { display: none; }
+
+body.display-mode .sheet { padding-top: 20px; }
+body.display-mode .tabhead { font-size: clamp(34px, 6vw, 60px); }
+body.display-mode .stubnote { font-size: 20px; }
+
+/* -------------------------------------------------------------- admin */
+.adminbar {
+  background: var(--glow); border: 1px solid var(--scarlet);
+  border-radius: 10px; padding: 12px 14px; margin-bottom: 16px;
+}
+
+.adminbar__t { font-size: 13px; font-weight: 600; margin: 0 0 4px; }
+.adminbar__p { font-size: 12px; color: var(--dim); margin: 0; }
+
+.pinwrap {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(10,9,12,0.86);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+
+.pin {
+  background: var(--riser); border: 1px solid var(--edge);
+  border-radius: 12px; padding: 20px; width: 100%; max-width: 320px;
+}
+
+.pin__t { margin: 0 0 12px; font-size: 20px; }
+
+.pin__in {
+  width: 100%; background: var(--input); border: 1px solid var(--edge);
+  border-radius: 8px; padding: 13px; color: var(--cream);
+  font-family: var(--font-body); font-size: 20px;
+  letter-spacing: 0.4em; text-align: center;
+}
+
+.pin__err { color: var(--danger); font-size: 13px; margin: 10px 0 0; }
+.pin__row { display: flex; gap: 8px; margin-top: 14px; }
+
+.pin__btn {
+  flex: 1 1 0; border: 0; border-radius: 8px; padding: 13px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  background: var(--grad-primary); color: var(--cream);
+}
+
+.pin__btn--ghost { background: var(--input); color: var(--dim); }
+
+/* -------------------------------------------------------------- offline */
+.bootfail {
+  margin: 0 0 16px; background: var(--riser);
+  border: 1px solid var(--danger); border-radius: 10px;
+  padding: 12px 14px; font-size: 13px; color: var(--cream);
+}
 </style>
 </head>
 <body>
 <div class="glow-stage"></div>
+<div id="root"></div>
 
-<main class="stub">
-  <p class="stub__kicker">Century Golf Partners</p>
-  <h1 class="stub__title t-display">2026 Private Clubs Meeting<span class="wall">The Live Wall</span></h1>
-  <div class="stub__rule"></div>
-  <p class="stub__line">Load-in has started. Nothing to see yet.</p>
-  <p class="stub__where">Columbus, Ohio. August 25 to 28, 2026.</p>
-  <p class="stub__tag">Just Birdies, Beers, and Broken Dreams.</p>
-  <p class="stub__fine">
-    Stub page. Build sheets:
-    <a href="tokens.html">tokens</a> and <a href="motifs.html">motifs</a>
-  </p>
-</main>
+<noscript>
+  <div style="padding:28px;font-family:sans-serif;color:#F7F3EA">
+    <h1>The Live Wall</h1>
+    <p>This needs JavaScript switched on. Everything on the wall updates live.</p>
+  </div>
+</noscript>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+/* ==========================================================================
+   THE LIVE WALL. ROADMAP T0.5, app shell.
+   Welcome hero, header, tab bar, marquee slot, ten tab stubs.
+   Tab bodies land in T0.6. Admin panel lands in T1.6.
+   ========================================================================== */
+
+const { useState, useEffect, useRef, useCallback } = React;
+
+/* -------------------------------------------------------------- config */
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAZZfeJWyq7HVHlSEuucquCLHyXTmtrXco",
+  authDomain: "cgp-membership-wall-2026.firebaseapp.com",
+  databaseURL: "https://cgp-membership-wall-2026-default-rtdb.firebaseio.com",
+  projectId: "cgp-membership-wall-2026",
+  storageBucket: "cgp-membership-wall-2026.firebasestorage.app",
+  messagingSenderId: "986050588933",
+  appId: "1:986050588933:web:51e8ca448798c817ee076c"
+};
+
+/* The PIN is not a security boundary. It ships in readable client code and
+   the database is open by design, so treat it as a guard against a stray tap.
+   Real protection is that the URL only travels by QR code. */
+const ADMIN_PIN = "2026";
+
+/* Tuesday August 25 2026, 12:00 PM Eastern. EDT is UTC-4 in August.
+   This is the first timed item on the flier, the Shank Showdown tee-off.
+   ASSUMPTION worth one line of confirmation from Carol. If the countdown
+   should run to hotel check-in or to Wednesday breakfast instead, change
+   this one constant. */
+const OPENS_AT = Date.parse("2026-08-25T12:00:00-04:00");
+
+const LS = {
+  entered: "mm26_entered"
+};
+
+/* Ten tabs, spec section 3. Themed names only, no plain English subtitles.
+   `phase` is when the tab is meant to appear. T1.6 wires real visibility. */
+const TABS = [
+  { key: "setlist",   icon: "\u{1F3A4}", name: "The Setlist",     phase: "pre",  note: "Agenda with live session tracking. T1.1." },
+  { key: "band",      icon: "\u{1F3B8}", name: "The Band",        phase: "pre",  note: "Attendee roster and directory. T1.3." },
+  { key: "backstage", icon: "\u{1F39F}", name: "Backstage Pass",  phase: "pre",  note: "Venues, travel, logistics, contacts. T1.2." },
+  { key: "soundcheck",icon: "\u{1F399}", name: "Soundcheck",      phase: "pre",  note: "Q and A with upvoting. T1.4." },
+  { key: "vault",     icon: "\u{1F512}", name: "The Vault",       phase: "pre",  note: "Resources and the two timed drops. T2.1 to T2.3." },
+  { key: "liner",     icon: "\u{1F4DD}", name: "Liner Notes",     phase: "pre",  note: "Key takeaways board. T1.5." },
+  { key: "vote",      icon: "\u{1F4CA}", name: "Crowd Vote",      phase: "during", note: "Live polls, four types. T2.4." },
+  { key: "pit",       icon: "\u{1F4F7}", name: "The Pit",         phase: "during", note: "Photo gallery with likes. T2.5." },
+  { key: "cares",     icon: "\u{1F3C6}", name: "The Cares Cup",   phase: "during", note: "Shank Showdown II leaderboard. T2.6." },
+  { key: "encore",    icon: "⭐",    name: "Encore",          phase: "post", note: "Awards, Hall of Fame, Top Videos, Tenure. T2.7." }
+];
+
+/* ------------------------------------------------------------- helpers */
+
+function readLS(key) {
+  try { return window.localStorage.getItem(key); } catch (e) { return null; }
+}
+
+function writeLS(key, value) {
+  try { window.localStorage.setItem(key, value); } catch (e) { /* private mode */ }
+}
+
+/* Splits a millisecond span into whole days, hours, minutes, seconds. */
+function breakdown(ms) {
+  if (ms < 0) ms = 0;
+  const s = Math.floor(ms / 1000);
+  return {
+    days:    Math.floor(s / 86400),
+    hours:   Math.floor((s % 86400) / 3600),
+    minutes: Math.floor((s % 3600) / 60),
+    seconds: s % 60
+  };
+}
+
+function pad(n) { return n < 10 ? "0" + n : String(n); }
+
+/* ------------------------------------------------------- firebase boot */
+/* One place to fail. If Firebase cannot start, the shell still renders and
+   says so, rather than throwing a white screen at a full ballroom. */
+function bootFirebase() {
+  try {
+    if (!window.firebase || !firebase.database) {
+      return { ok: false, reason: "The Firebase library did not load." };
+    }
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    return { ok: true, db: firebase.database() };
+  } catch (err) {
+    return { ok: false, reason: (err && err.message) || String(err) };
+  }
+}
+
+const FB = bootFirebase();
+
+/* Device clocks drift and attendees fly in from several time zones, so the
+   wall never trusts the device clock on its own. Firebase publishes the
+   offset between this device and the server at .info/serverTimeOffset.
+   T2.3 reuses this for the Vault drops, where getting it wrong means content
+   lands on the wrong morning. */
+function useServerNow() {
+  const [offset, setOffset] = useState(0);
+  const [synced, setSynced] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref(".info/serverTimeOffset");
+    const handler = (snap) => {
+      setOffset(snap.val() || 0);
+      setSynced(true);
+    };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  return { now: now + offset, offset, synced };
+}
+
+/* Marquee announcements. Admin posts them in T1.6. Until then this is a
+   live slot that stays out of the way when there is nothing to say. */
+function useAnnouncement() {
+  const [item, setItem] = useState(null);
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("announcements");
+    const handler = (snap) => {
+      const all = snap.val() || {};
+      const live = Object.keys(all)
+        .map((id) => Object.assign({ id: id }, all[id]))
+        .filter((a) => a && a.on && a.text)
+        .sort((a, b) => (b.ts || 0) - (a.ts || 0));
+      setItem(live.length ? live[0] : null);
+    };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return item;
+}
+
+/* ---------------------------------------------------------- components */
+
+function BrandMark() {
+  return (
+    <div className="hdr__mark">
+      <div className="pick hdr__pick" aria-hidden="true">
+        <span className="pick__text">MM<br />26</span>
+      </div>
+      <div style={{ minWidth: 0 }}>
+        <p className="hdr__name t-display">The Live Wall</p>
+        <p className="hdr__sub">Private Clubs 2026</p>
+      </div>
+    </div>
+  );
+}
+
+function Countdown({ now, synced }) {
+  const left = OPENS_AT - now;
+  const open = left <= 0;
+  const t = breakdown(left);
+
+  if (open) {
+    return (
+      <div>
+        <div className="count">
+          <div className="count__cell" style={{ minWidth: "auto", padding: "12px 18px" }}>
+            <div className="count__n t-display">Doors are open</div>
+          </div>
+        </div>
+        <p className="count__note count__live">The tour is on. See you at The Medallion Club.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="count">
+        <div className="count__cell">
+          <div className="count__n t-display">{t.days}</div>
+          <div className="count__l">Days</div>
+        </div>
+        <div className="count__cell">
+          <div className="count__n t-display">{pad(t.hours)}</div>
+          <div className="count__l">Hours</div>
+        </div>
+        <div className="count__cell">
+          <div className="count__n t-display">{pad(t.minutes)}</div>
+          <div className="count__l">Min</div>
+        </div>
+        <div className="count__cell">
+          <div className="count__n t-display">{pad(t.seconds)}</div>
+          <div className="count__l">Sec</div>
+        </div>
+      </div>
+      <p className="count__note">
+        Until first tee, Tuesday August 25.
+        {synced ? " Clock checked against the server." : " Using this device clock for now."}
+      </p>
+    </div>
+  );
+}
+
+function Welcome({ onEnter, now, synced }) {
+  return (
+    <div className="welcome">
+      <p className="welcome__kicker">Century Golf Partners</p>
+      <h1 className="welcome__title t-display">
+        2026 Private Clubs Meeting<span className="wall">The Live Wall</span>
+      </h1>
+      <div className="welcome__rule"></div>
+      <p className="welcome__where">Columbus, Ohio. August 25 to 28, 2026.</p>
+      <p className="welcome__tag">Just Birdies, Beers, and Broken Dreams.</p>
+
+      <Countdown now={now} synced={synced} />
+
+      <button className="enter" onClick={onEnter}>Get your wristband</button>
+
+      <div className="qr">
+        <img src="assets/brand/qr-wall.svg" width="130" height="130"
+             alt="QR code that opens this wall" />
+      </div>
+      <p className="qr__cap">Point a phone here to pass it on.</p>
+    </div>
+  );
+}
+
+function TabBar({ tabs, active, onPick, isAdmin }) {
+  const scroller = useRef(null);
+
+  /* Keep the selected pill in view. On a 380px screen most of the ten tabs
+     sit off the right edge, so tapping one near the edge should not leave it
+     half cut off. */
+  useEffect(() => {
+    const box = scroller.current;
+    if (!box) return;
+    const el = box.querySelector('[aria-selected="true"]');
+    if (el && el.scrollIntoView) {
+      el.scrollIntoView({ inline: "nearest", block: "nearest" });
+    }
+  }, [active]);
+
+  return (
+    <nav className="tabs" aria-label="Sections">
+      <div className="tabs__scroll" ref={scroller} role="tablist">
+        {tabs.map((tab) => (
+          <button
+            key={tab.key}
+            role="tab"
+            aria-selected={active === tab.key}
+            className="tab"
+            onClick={() => onPick(tab.key)}
+          >
+            <span className="tab__icon" aria-hidden="true">{tab.icon}</span>
+            <span>{tab.name}</span>
+            {isAdmin && tab.phase !== "pre" ? (
+              <span className="tab__lock" title="Hidden from the room">
+                {"\u{1F512}"}
+              </span>
+            ) : null}
+          </button>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
+function MarqueeSlot({ item, onDismiss }) {
+  if (!item) return null;
+  return (
+    <div className="marquee-slot">
+      <div className="marquee">
+        <div className="marquee__track">
+          <span className="marquee__item">{item.text}</span>
+          <span className="marquee__item">{item.text}</span>
+        </div>
+      </div>
+      <button className="marquee-x" onClick={onDismiss} aria-label="Dismiss announcement">
+        {"✕"}
+      </button>
+    </div>
+  );
+}
+
+function PinGate({ onPass, onClose }) {
+  const [value, setValue] = useState("");
+  const [error, setError] = useState("");
+  const input = useRef(null);
+
+  useEffect(() => { if (input.current) input.current.focus(); }, []);
+
+  function submit(e) {
+    e.preventDefault();
+    if (value === ADMIN_PIN) {
+      onPass();
+    } else {
+      setError("That is not the PIN.");
+      setValue("");
+    }
+  }
+
+  return (
+    <div className="pinwrap" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <form className="pin" onSubmit={submit}>
+        <h2 className="pin__t t-display">Crew only</h2>
+        <input
+          ref={input}
+          className="pin__in t-data"
+          inputMode="numeric"
+          autoComplete="off"
+          maxLength={4}
+          placeholder="0000"
+          value={value}
+          onChange={(e) => { setValue(e.target.value.replace(/\D/g, "")); setError(""); }}
+        />
+        {error ? <p className="pin__err">{error}</p> : null}
+        <div className="pin__row">
+          <button type="button" className="pin__btn pin__btn--ghost" onClick={onClose}>Back</button>
+          <button type="submit" className="pin__btn">Unlock</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+/* Placeholder tab body. T0.6 turns each of these into its own component. */
+function TabStub({ tab }) {
+  return (
+    <div>
+      <h2 className="tabhead t-display">{tab.name}</h2>
+      <p className="tabhead__sub">
+        {tab.phase === "pre" ? "Live before the meeting"
+          : tab.phase === "during" ? "Opens during the meeting"
+          : "Opens after the Awards Show"}
+      </p>
+      <div className="stubnote">
+        <p style={{ margin: 0 }}>Nothing here yet. Load-in is still going.</p>
+        <p style={{ margin: "8px 0 0" }}><code>{tab.note}</code></p>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [entered, setEntered] = useState(() => readLS(LS.entered) === "1");
+  const [active, setActive] = useState(TABS[0].key);
+  const [displayMode, setDisplayMode] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showPin, setShowPin] = useState(false);
+  const [dismissed, setDismissed] = useState(null);
+
+  const { now, synced } = useServerNow();
+  const announcement = useAnnouncement();
+
+  useEffect(() => {
+    document.body.classList.toggle("display-mode", displayMode);
+  }, [displayMode]);
+
+  const enter = useCallback(() => {
+    writeLS(LS.entered, "1");
+    setEntered(true);
+  }, []);
+
+  const gear = useCallback(() => {
+    if (isAdmin) { setIsAdmin(false); } else { setShowPin(true); }
+  }, [isAdmin]);
+
+  if (!entered) {
+    return <Welcome onEnter={enter} now={now} synced={synced} />;
+  }
+
+  const tab = TABS.filter((t) => t.key === active)[0] || TABS[0];
+  const liveAnnouncement =
+    announcement && announcement.id !== dismissed ? announcement : null;
+
+  return (
+    <div>
+      <header className="hdr">
+        <div className="hdr__row">
+          <BrandMark />
+          <button
+            className={"iconbtn" + (displayMode ? " iconbtn--on" : "")}
+            onClick={() => setDisplayMode(!displayMode)}
+            aria-pressed={displayMode}
+            title="Display Mode, for the projector"
+          >
+            {"\u{1F4FA}"}
+          </button>
+          <button
+            className={"iconbtn" + (isAdmin ? " iconbtn--on" : "")}
+            onClick={gear}
+            aria-pressed={isAdmin}
+            title={isAdmin ? "Lock the crew panel" : "Crew panel"}
+          >
+            {"⚙"}
+          </button>
+        </div>
+      </header>
+
+      <TabBar tabs={TABS} active={active} onPick={setActive} isAdmin={isAdmin} />
+
+      <main className="sheet">
+        {!FB.ok ? (
+          <p className="bootfail">
+            Live updates are off. {FB.reason} The wall still works, but questions,
+            polls, and photos will not sync until this is sorted.
+          </p>
+        ) : null}
+
+        {isAdmin ? (
+          <div className="adminbar">
+            <p className="adminbar__t">Crew panel unlocked</p>
+            <p className="adminbar__p">
+              Tabs the room cannot see yet carry a padlock. The full panel arrives at T1.6.
+            </p>
+          </div>
+        ) : null}
+
+        <MarqueeSlot
+          item={liveAnnouncement}
+          onDismiss={() => setDismissed(liveAnnouncement.id)}
+        />
+
+        <TabStub tab={tab} />
+      </main>
+
+      {showPin ? (
+        <PinGate
+          onPass={() => { setIsAdmin(true); setShowPin(false); }}
+          onClose={() => setShowPin(false)}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
 </body>
 </html>
