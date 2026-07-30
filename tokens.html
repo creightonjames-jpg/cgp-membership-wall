@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17161A">
+<title>Token sheet</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Alfa+Slab+One&family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+/* Token proof sheet. ROADMAP T0.3 acceptance.
+   Every palette token as a labeled swatch, every font in a sample line, both
+   gradients rendered. Open this on a phone after any change to the tokens.
+   This page is a build tool. It is not part of the attendee experience. */
+:root {
+  --stage:   #17161A;
+  --riser:   #201E24;
+  --input:   #2A272E;
+  --scarlet: #C8102E;
+  --oxblood: #8A0E1F;
+  --gold:    #D9A94C;
+  --cream:   #F7F3EA;
+  --dim:     #A39B92;
+  --mute:    #6E6862;
+  --edge:    #332F38;
+  --danger:  #FF6B4A;
+  --glow:    rgba(200, 16, 46, 0.12);
+
+  --font-display: 'Anton', Impact, 'Haettenschweiler', sans-serif;
+  --font-poster:  'Alfa Slab One', Georgia, serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --grad-stage:   radial-gradient(62% 42% at 50% 20%, #2A1418 0%, var(--stage) 72%);
+  --grad-primary: linear-gradient(180deg, var(--scarlet) 0%, var(--oxblood) 100%);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--stage);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  padding: 28px 18px 60px;
+}
+
+.wrap { max-width: 720px; margin: 0 auto; }
+
+h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(28px, 9vw, 40px);
+  line-height: 0.94;
+  margin: 0 0 6px;
+}
+
+.sub { color: var(--dim); margin: 0 0 34px; font-size: 14px; }
+
+h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 15px;
+  letter-spacing: 0.14em;
+  color: var(--scarlet);
+  margin: 40px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--edge);
+}
+
+/* ------------------------------------------------------------- swatches */
+.swatches {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.sw {
+  display: flex;
+  align-items: stretch;
+  background: var(--riser);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sw__chip {
+  flex: 0 0 84px;
+  min-height: 66px;
+  /* Checkerboard shows through a translucent token so --glow is visible. */
+  background-image:
+    linear-gradient(45deg, #4a4550 25%, transparent 25%, transparent 75%, #4a4550 75%),
+    linear-gradient(45deg, #4a4550 25%, transparent 25%, transparent 75%, #4a4550 75%);
+  background-size: 12px 12px;
+  background-position: 0 0, 6px 6px;
+  position: relative;
+}
+
+.sw__chip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--chip);
+}
+
+.sw__meta {
+  padding: 10px 12px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sw__name {
+  font-weight: 600;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.sw__hex {
+  color: var(--dim);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+
+.sw__use { color: var(--mute); font-size: 12px; margin-top: 3px; }
+
+/* ------------------------------------------------------------- gradients */
+.grad {
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.grad__art { height: 120px; }
+.grad__art--stage { background: var(--grad-stage); }
+.grad__art--primary { background: var(--grad-primary); }
+
+.grad__label {
+  background: var(--riser);
+  padding: 9px 12px;
+  font-size: 12px;
+  color: var(--dim);
+  border-top: 1px solid var(--edge);
+}
+
+.grad__label b { color: var(--cream); font-weight: 600; }
+
+/* ------------------------------------------------------------- type */
+.type-row {
+  background: var(--riser);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.type-row__tag {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin: 0 0 10px;
+}
+
+.type-row__sample { margin: 0; overflow-wrap: break-word; }
+
+.s-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(26px, 8vw, 38px);
+  line-height: 0.96;
+}
+
+.s-poster {
+  font-family: var(--font-poster);
+  font-weight: 400;
+  font-size: clamp(20px, 6vw, 28px);
+  color: var(--gold);
+  line-height: 1.15;
+}
+
+.s-body { font-size: 16px; }
+
+.s-data {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.s-data span { color: var(--gold); }
+
+/* Loud warning if a face fell back to a system font. */
+.fontcheck {
+  margin-top: 14px;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.fontcheck__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--riser);
+  border-bottom: 1px solid var(--edge);
+  font-size: 14px;
+}
+
+.fontcheck__row:last-child { border-bottom: 0; }
+.ok   { color: var(--gold); font-weight: 600; }
+.fail { color: var(--danger); font-weight: 600; }
+
+/* ------------------------------------------------------------- in context */
+.demo {
+  background: var(--riser);
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  padding: 14px;
+  background: var(--grad-primary);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:active { background: var(--oxblood); }
+
+.btn--ghost {
+  background: var(--input);
+  color: var(--dim);
+  margin-top: 10px;
+}
+
+.btn--danger { background: none; background-color: var(--danger); color: #2A0E06; margin-top: 10px; }
+
+.field {
+  width: 100%;
+  margin-top: 10px;
+  background: var(--input);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 13px;
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 16px;
+}
+
+.field::placeholder { color: var(--mute); }
+
+.pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+.pill {
+  border: 1px solid var(--edge);
+  background: var(--input);
+  color: var(--dim);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+}
+
+.pill--on {
+  background: var(--glow);
+  border-color: var(--scarlet);
+  color: var(--cream);
+}
+
+.meta { color: var(--mute); font-size: 12px; margin: 12px 0 0; }
+
+.foot {
+  margin-top: 44px;
+  padding-top: 16px;
+  border-top: 1px solid var(--edge);
+  color: var(--mute);
+  font-size: 12px;
+}
+
+.foot a { color: var(--dim); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Token sheet</h1>
+  <p class="sub">Every token, every font, both gradients. Open it on a phone after any change here.</p>
+
+  <h2>Palette</h2>
+  <div class="swatches" id="swatches"></div>
+
+  <h2>Gradients</h2>
+  <div class="grad">
+    <div class="grad__art grad__art--stage"></div>
+    <div class="grad__label"><b>--grad-stage</b> radial, #2A1418 center out to --stage. Welcome hero and Encore award cards.</div>
+  </div>
+  <div class="grad">
+    <div class="grad__art grad__art--primary"></div>
+    <div class="grad__label"><b>--grad-primary</b> linear, --scarlet to --oxblood. Primary buttons.</div>
+  </div>
+
+  <h2>Type</h2>
+  <div class="type-row">
+    <p class="type-row__tag">Anton, display, all caps</p>
+    <p class="type-row__sample s-display">The Setlist</p>
+  </div>
+  <div class="type-row">
+    <p class="type-row__tag">Alfa Slab One, poster accent, rationed to awards and Encore</p>
+    <p class="type-row__sample s-poster">Video of the Year</p>
+  </div>
+  <div class="type-row">
+    <p class="type-row__tag">Inter, body and UI</p>
+    <p class="type-row__sample s-body">Just Birdies, Beers, and Broken Dreams. Tap a session to see the room, the presenter, and anything you should read first.</p>
+  </div>
+  <div class="type-row">
+    <p class="type-row__tag">Inter tabular-nums, leaderboard and counts</p>
+    <p class="type-row__sample s-data">1. Team Total Consciousness <span>68</span> &nbsp;thru 18<br>2. Spalding&rsquo;s Revenge Team <span>71</span> &nbsp;thru 18</p>
+  </div>
+
+  <div class="fontcheck" id="fontcheck"></div>
+
+  <h2>In context</h2>
+  <div class="demo">
+    <p class="type-row__tag" style="margin-bottom:12px">Card on --riser, border --edge</p>
+    <button class="btn">Submit a question</button>
+    <button class="btn btn--ghost">Cancel</button>
+    <button class="btn btn--danger">Reset everything</button>
+    <input class="field" placeholder="Your name, if you want the credit">
+    <div class="pill-row">
+      <span class="pill pill--on">Top</span>
+      <span class="pill">New</span>
+      <span class="pill">Membership Sales</span>
+      <span class="pill">Retention</span>
+    </div>
+    <p class="meta">Posted 4 minutes ago</p>
+  </div>
+
+  <p class="foot">
+    ROADMAP T0.3. <a href="index.html">Back to the wall</a>
+  </p>
+
+</div>
+
+<script>
+// One row per token so a swatch can never drift from the palette.
+var TOKENS = [
+  ['--stage',   '#17161A',                  'Page background, near black with a warm cast'],
+  ['--riser',   '#201E24',                  'Card and panel background'],
+  ['--input',   '#2A272E',                  'Form fields, inactive pills'],
+  ['--scarlet', '#C8102E',                  'Primary accent, headers, active states, buttons'],
+  ['--oxblood', '#8A0E1F',                  'Pressed and hover, deep borders, gradients'],
+  ['--gold',    '#D9A94C',                  'Awards, trophies, poster moments'],
+  ['--cream',   '#F7F3EA',                  'Body text'],
+  ['--dim',     '#A39B92',                  'Secondary text, metadata'],
+  ['--mute',    '#6E6862',                  'Timestamps, disabled text, fine print'],
+  ['--edge',    '#332F38',                  'Card borders, dividers'],
+  ['--danger',  '#FF6B4A',                  'Delete and destructive admin actions'],
+  ['--glow',    'rgba(200,16,46,0.12)',     'Scarlet tint for hover and selected']
+];
+
+var host = document.getElementById('swatches');
+TOKENS.forEach(function (t) {
+  var name = t[0], hex = t[1], use = t[2];
+  var row = document.createElement('div');
+  row.className = 'sw';
+  row.innerHTML =
+    '<div class="sw__chip" style="--chip: var(' + name + ')"></div>' +
+    '<div class="sw__meta">' +
+      '<div class="sw__name">' + name + '</div>' +
+      '<div class="sw__hex">' + hex + '</div>' +
+      '<div class="sw__use">' + use + '</div>' +
+    '</div>';
+  host.appendChild(row);
+});
+
+// A fallback font is a silent failure. Say so out loud.
+var FACES = ['Anton', 'Alfa Slab One', 'Inter'];
+function renderFontCheck() {
+  var box = document.getElementById('fontcheck');
+  box.innerHTML = FACES.map(function (f) {
+    var loaded = document.fonts.check('16px "' + f + '"');
+    return '<div class="fontcheck__row"><span>' + f + '</span>' +
+           '<span class="' + (loaded ? 'ok' : 'fail') + '">' +
+           (loaded ? 'loaded' : 'FELL BACK') + '</span></div>';
+  }).join('');
+}
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(renderFontCheck);
+} else {
+  renderFontCheck();
+}
+</script>
+</body>
+</html>

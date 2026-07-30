@@ -5,73 +5,155 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#17161A">
 <title>The Live Wall</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Alfa+Slab+One&family=Inter:wght@400;500;600;700&display=swap">
+
 <style>
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  body {
-    min-height: 100vh;
-    background: #17161A;
-    color: #F7F3EA;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 20px;
-  }
-  .glow {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(60% 40% at 50% 22%, #2A1418 0%, #17161A 70%);
-    z-index: 0;
-  }
-  main {
-    position: relative;
-    z-index: 1;
-    max-width: 420px;
-    width: 100%;
-    text-align: center;
-  }
-  .kicker {
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #A39B92;
-    margin: 0 0 14px;
-  }
-  h1 {
-    font-size: clamp(30px, 11vw, 46px);
-    line-height: 0.94;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
-    margin: 0;
-    font-weight: 800;
-  }
-  h1 .wall { color: #C8102E; display: block; }
-  .rule {
-    height: 3px;
-    width: 56px;
-    margin: 22px auto;
-    background: linear-gradient(90deg, #C8102E, #8A0E1F);
-  }
-  p { margin: 0 0 10px; font-size: 15px; line-height: 1.5; }
-  .stub { color: #F7F3EA; }
-  .where { color: #A39B92; }
-  .fine {
-    margin-top: 26px;
-    font-size: 12px;
-    color: #6E6862;
-  }
+/* ==========================================================================
+   Design tokens. ROADMAP T0.3, spec section 2.
+   Palette is drawn from the meeting flier and the Shank Showdown posters.
+   Change a value here, not at the call site.
+   ========================================================================== */
+:root {
+  /* Palette. Twelve tokens, spec 2.1. */
+  --stage:   #17161A;  /* page background, near black with a warm cast     */
+  --riser:   #201E24;  /* card and panel background                        */
+  --input:   #2A272E;  /* form fields, inactive pills                      */
+  --scarlet: #C8102E;  /* primary accent, headers, active, primary buttons */
+  --oxblood: #8A0E1F;  /* pressed and hover, deep borders, gradients       */
+  --gold:    #D9A94C;  /* secondary accent, awards, trophies, posters      */
+  --cream:   #F7F3EA;  /* body text                                       */
+  --dim:     #A39B92;  /* secondary text, metadata                        */
+  --mute:    #6E6862;  /* timestamps, disabled text, fine print           */
+  --edge:    #332F38;  /* card borders, dividers                          */
+  --danger:  #FF6B4A;  /* delete and destructive admin actions            */
+  --glow:    rgba(200, 16, 46, 0.12); /* scarlet tint, hover and selected  */
+
+  /* Type, spec 2.2. Anton for display. Alfa Slab One is rationed to awards
+     and Encore cards. Everywhere else it reads as a novelty font. */
+  --font-display: 'Anton', Impact, 'Haettenschweiler', sans-serif;
+  --font-poster:  'Alfa Slab One', Georgia, serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* The two gradients that carry the stage feel, spec 2.1. */
+  --grad-stage:   radial-gradient(62% 42% at 50% 20%, #2A1418 0%, var(--stage) 72%);
+  --grad-primary: linear-gradient(180deg, var(--scarlet) 0%, var(--oxblood) 100%);
+}
+
+/* --------------------------------------------------------------- baseline */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100svh;
+  background: var(--stage);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Anton and Alfa Slab One are display faces. All caps, tight, never italic. */
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.94;
+}
+
+.t-poster {
+  font-family: var(--font-poster);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Leaderboard scores and counts. Digits must not jitter as they update. */
+.t-data {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* ------------------------------------------------------------ stub screen */
+/* Placeholder until T0.5 builds the real app shell. */
+.stage-glow {
+  position: fixed;
+  inset: 0;
+  background: var(--grad-stage);
+  z-index: 0;
+}
+
+.stub {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 20px;
+  gap: 4px;
+}
+
+.stub__kicker {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 0 0 14px;
+}
+
+.stub__title {
+  font-size: clamp(30px, 11vw, 52px);
+  margin: 0;
+  max-width: 15ch;
+}
+
+.stub__title .wall { color: var(--scarlet); display: block; }
+
+.stub__rule {
+  height: 3px;
+  width: 56px;
+  margin: 22px 0;
+  background: var(--grad-primary);
+  border-radius: 2px;
+}
+
+.stub__line { margin: 0 0 8px; }
+.stub__where { margin: 0; color: var(--dim); }
+
+.stub__tag {
+  margin: 18px 0 0;
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.stub__fine {
+  margin: 30px 0 0;
+  font-size: 12px;
+  color: var(--mute);
+}
+
+.stub__fine a { color: var(--dim); }
 </style>
 </head>
 <body>
-<div class="glow"></div>
-<main>
-  <p class="kicker">Century Golf Partners</p>
-  <h1>2026 Private Clubs Meeting<span class="wall">The Live Wall</span></h1>
-  <div class="rule"></div>
-  <p class="stub">Load-in has started. Nothing to see yet.</p>
-  <p class="where">Columbus, Ohio. August 25 to 28, 2026.</p>
-  <p class="fine">Stub page. T0.1.</p>
+<div class="stage-glow"></div>
+
+<main class="stub">
+  <p class="stub__kicker">Century Golf Partners</p>
+  <h1 class="stub__title t-display">2026 Private Clubs Meeting<span class="wall">The Live Wall</span></h1>
+  <div class="stub__rule"></div>
+  <p class="stub__line">Load-in has started. Nothing to see yet.</p>
+  <p class="stub__where">Columbus, Ohio. August 25 to 28, 2026.</p>
+  <p class="stub__tag">Just Birdies, Beers, and Broken Dreams.</p>
+  <p class="stub__fine">Stub page. T0.3 tokens are live. <a href="tokens.html">Token sheet</a></p>
 </main>
 </body>
 </html>
