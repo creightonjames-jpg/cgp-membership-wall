@@ -130,21 +130,34 @@ function renderSwatches() {
 }
 
 var FACES = ['Anton', 'Alfa Slab One', 'Inter'];
+
+// Do not check on document.fonts.ready alone. A browser reports ready before a
+// face that nothing has used yet is loaded, which made all three read FELL BACK
+// on a cold load. Force each face to load, then ask.
 function renderFontCheck() {
-  document.getElementById('fontcheck').innerHTML = FACES.map(function (f) {
-    var loaded = document.fonts.check('16px "' + f + '"');
-    return '<div class="fontcheck__row"><span>' + f + '</span>' +
-           '<span class="' + (loaded ? 'ok' : 'fail') + '">' +
-           (loaded ? 'loaded' : 'FELL BACK') + '</span></div>';
-  }).join('');
+  var host = document.getElementById('fontcheck');
+  host.innerHTML = '<div class="fontcheck__row"><span>Checking fonts</span></div>';
+
+  Promise.all(FACES.map(function (face) {
+    var spec = '16px "' + face + '"';
+    return document.fonts.load(spec)
+      .then(function (matched) {
+        return { face: face, ok: matched.length > 0 && document.fonts.check(spec) };
+      })
+      .catch(function () { return { face: face, ok: false }; });
+  })).then(function (results) {
+    host.innerHTML = results.map(function (r) {
+      return '<div class="fontcheck__row"><span>' + r.face + '</span>' +
+             '<span class="' + (r.ok ? 'ok' : 'fail') + '">' +
+             (r.ok ? 'loaded' : 'FELL BACK') + '</span></div>';
+    }).join('');
+  });
 }
 
-document.addEventListener('wall-css-ready', renderSwatches);
-if (document.fonts && document.fonts.ready) {
-  document.fonts.ready.then(renderFontCheck);
-} else {
+document.addEventListener('wall-css-ready', function () {
+  renderSwatches();
   renderFontCheck();
-}
+});
 </script>
 </body>
 </html>
