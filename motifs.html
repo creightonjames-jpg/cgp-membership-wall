@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-sheet-loading>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17161A">
+<title>Motif sheet</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Alfa+Slab+One&family=Inter:wght@400;500;600;700&display=swap">
+
+<!-- The design system is read out of index.html at runtime. See build-sheet.js. -->
+<script src="build-sheet.js"></script>
+<link rel="stylesheet" href="build-sheet.css">
+</head>
+<body>
+<div class="wrap">
+
+  <h1 class="sheet-h1">Motif sheet</h1>
+  <p class="sheet-sub">
+    Seven motifs from spec 2.3, all CSS, no custom illustration. Read live out of
+    <code>index.html</code>. ROADMAP T0.4.
+  </p>
+
+  <!-- 1 -->
+  <h2 class="sheet-h2">1. Ticket stub card</h2>
+  <p class="tag">.ticket &middot; Setlist sessions and Backstage Pass panels</p>
+  <div class="demo">
+    <div class="ticket" style="margin-bottom:18px">
+      <div class="ticket__stub">
+        <div class="stub-time t-data">8:00</div>
+        <div class="stub-meridiem">AM</div>
+      </div>
+      <div class="ticket__body">
+        <span class="onair t-display">On Air</span>
+        <h3 class="sess-title">Breakfast</h3>
+        <p class="sess-meta">The Medallion Club</p>
+      </div>
+    </div>
+
+    <div class="ticket is-done">
+      <div class="ticket__stub">
+        <div class="stub-time t-data">12:00</div>
+        <div class="stub-meridiem">PM</div>
+      </div>
+      <div class="ticket__body">
+        <h3 class="sess-title"><span class="struck">Shank Showdown II</span></h3>
+        <p class="sess-meta">The Medallion Club Golf Course</p>
+      </div>
+    </div>
+    <p class="note">Second card also shows motif 7, the strike-through, and the dimmed done state.</p>
+  </div>
+
+  <!-- 2 -->
+  <h2 class="sheet-h2">2. Guitar pick badge</h2>
+  <p class="tag">.pick &middot; the FIRST TOUR flag on The Band</p>
+  <div class="demo">
+    <div class="pick-row">
+      <div class="pick">
+        <span class="pick__text">First<br>Tour</span>
+      </div>
+      <div class="pick" style="width:52px">
+        <span class="pick__text" style="font-size:9px">First<br>Tour</span>
+      </div>
+      <div class="pick" style="width:40px; --pick-fill: var(--scarlet)">
+        <span class="pick__text" style="font-size:7px; color: var(--cream)">First<br>Tour</span>
+      </div>
+    </div>
+    <p class="note">Three sizes, because the badge has to stay legible in the card grid, not just on the detail view.</p>
+  </div>
+
+  <!-- 3 -->
+  <h2 class="sheet-h2">3. Amp grille texture</h2>
+  <p class="tag">.grille &middot; crosshatched speaker cloth behind card content</p>
+  <div class="demo">
+    <div class="grille grille-demo">
+      <h3 class="sess-title">Membership Programming</h3>
+      <p class="sess-meta">Texture sits at 3 percent behind the content. It should read as cloth, not as a pattern you notice.</p>
+    </div>
+    <div class="grille-demo" style="margin-top:12px">
+      <h3 class="sess-title">Same card, no grille</h3>
+      <p class="sess-meta">Side by side so you can confirm the texture is present but not loud.</p>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <h2 class="sheet-h2">4. Stage light glow</h2>
+  <p class="tag">.glow-stage full page &middot; .glow-card for Encore awards</p>
+  <div class="demo">
+    <div class="glow-card" style="padding:22px 16px; text-align:center">
+      <p class="tag" style="margin-bottom:8px">Award</p>
+      <p class="s-poster" style="font-size:24px">Video of the Year</p>
+      <p class="sess-meta" style="margin-top:6px">Lit from above, like a stage wash.</p>
+    </div>
+    <p class="note">The full page version is live behind the wall itself. Open index.html to see it.</p>
+  </div>
+
+  <!-- 5 -->
+  <h2 class="sheet-h2">5. Marquee strip</h2>
+  <p class="tag">.marquee &middot; admin announcements at the top of every tab</p>
+  <div class="demo">
+    <div class="marquee">
+      <div class="marquee__track">
+        <span class="marquee__item">Dress-Up Day photos go in The Pit. Today only, denim is allowed.</span>
+        <span class="marquee__item">Dress-Up Day photos go in The Pit. Today only, denim is allowed.</span>
+      </div>
+    </div>
+    <p class="note">Content is duplicated once so the loop is seamless. Reduced motion stops the scroll and wraps the text instead.</p>
+  </div>
+
+  <!-- 6 -->
+  <h2 class="sheet-h2">6. Vinyl label</h2>
+  <p class="tag">.vinyl &middot; behind an award winner photo on Encore</p>
+  <div class="demo">
+    <div class="vinyl-hold">
+      <div class="vinyl">
+        <div class="vinyl__photo"></div>
+      </div>
+    </div>
+    <p class="note">Photo slot is empty on purpose. Layout has to hold with a missing headshot.</p>
+  </div>
+
+  <!-- 7 -->
+  <h2 class="sheet-h2">7. Setlist strike-through</h2>
+  <p class="tag">.struck and .is-done &middot; a completed session</p>
+  <div class="demo">
+    <h3 class="sess-title" style="margin-bottom:10px">
+      <span class="struck">Opening Act Welcome Mixer</span>
+    </h3>
+    <h3 class="sess-title is-done">
+      <span class="struck">Rock N&rsquo; Roll Team Dress-Up Day</span>
+    </h3>
+    <p class="note">Line is tilted slightly so it reads drawn by hand rather than typeset.</p>
+  </div>
+
+  <h2 class="sheet-h2">Overflow check</h2>
+  <div class="card">
+    <p class="tag">Live measurement</p>
+    <p class="s-body" id="overflow">Measuring.</p>
+  </div>
+
+  <p class="sheet-foot">
+    ROADMAP T0.4. <a href="tokens.html">Token sheet</a> &middot; <a href="index.html">Back to the wall</a>
+  </p>
+
+</div>
+
+<script>
+// The acceptance criterion is no horizontal overflow, so measure it here
+// rather than eyeballing it. Reports on load and on every resize.
+function checkOverflow() {
+  var el = document.getElementById('overflow');
+  var doc = document.documentElement;
+  var over = doc.scrollWidth > doc.clientWidth;
+  el.innerHTML = 'Viewport ' + doc.clientWidth + 'px. Document ' + doc.scrollWidth + 'px. ' +
+    '<span class="' + (over ? 'fail' : 'ok') + '">' +
+    (over ? 'HORIZONTAL OVERFLOW' : 'No horizontal overflow') + '</span>';
+}
+document.addEventListener('wall-css-ready', checkOverflow);
+window.addEventListener('resize', checkOverflow);
+window.addEventListener('load', checkOverflow);
+</script>
+</body>
+</html>

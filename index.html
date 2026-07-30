@@ -10,12 +10,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Alfa+Slab+One&family=Inter:wght@400;500;600;700&display=swap">
 
-<style>
+<style id="wall-css">
 /* ==========================================================================
-   Design tokens. ROADMAP T0.3, spec section 2.
-   Palette is drawn from the meeting flier and the Shank Showdown posters.
-   Change a value here, not at the call site.
+   THE LIVE WALL. Design system.
+   This block is the single source of truth. tokens.html and motifs.html read
+   it straight out of this file rather than keeping a copy, so a proof sheet
+   can never drift from what actually ships.
+   ROADMAP T0.3 tokens, T0.4 motifs. Spec sections 2.1 to 2.3.
    ========================================================================== */
+
+/* -------------------------------------------------------- T0.3 tokens */
 :root {
   /* Palette. Twelve tokens, spec 2.1. */
   --stage:   #17161A;  /* page background, near black with a warm cast     */
@@ -31,8 +35,8 @@
   --danger:  #FF6B4A;  /* delete and destructive admin actions            */
   --glow:    rgba(200, 16, 46, 0.12); /* scarlet tint, hover and selected  */
 
-  /* Type, spec 2.2. Anton for display. Alfa Slab One is rationed to awards
-     and Encore cards. Everywhere else it reads as a novelty font. */
+  /* Type, spec 2.2. Alfa Slab One is rationed to awards and Encore cards.
+     Anywhere else it reads as a novelty font. */
   --font-display: 'Anton', Impact, 'Haettenschweiler', sans-serif;
   --font-poster:  'Alfa Slab One', Georgia, serif;
   --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -40,9 +44,13 @@
   /* The two gradients that carry the stage feel, spec 2.1. */
   --grad-stage:   radial-gradient(62% 42% at 50% 20%, #2A1418 0%, var(--stage) 72%);
   --grad-primary: linear-gradient(180deg, var(--scarlet) 0%, var(--oxblood) 100%);
+
+  /* Motif dials. Override per instance, not at the call site. */
+  --ticket-stub-w: 84px;   /* width of the tear-off on a ticket stub card */
+  --notch-bg: var(--stage); /* what shows through a ticket notch          */
 }
 
-/* --------------------------------------------------------------- baseline */
+/* ------------------------------------------------------------- baseline */
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body { margin: 0; padding: 0; }
@@ -58,7 +66,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Anton and Alfa Slab One are display faces. All caps, tight, never italic. */
+/* Display faces are all caps and tight. Never italic. */
 .t-display {
   font-family: var(--font-display);
   font-weight: 400;
@@ -79,15 +87,232 @@ body {
   font-feature-settings: 'tnum' 1;
 }
 
-/* ------------------------------------------------------------ stub screen */
-/* Placeholder until T0.5 builds the real app shell. */
-.stage-glow {
-  position: fixed;
-  inset: 0;
-  background: var(--grad-stage);
-  z-index: 0;
+/* ==========================================================================
+   T0.4 MOTIF PRIMITIVES. Spec 2.3.
+   Each one is a reusable class. No custom illustration, all CSS.
+   ========================================================================== */
+
+/* -------------------------------------------------- 1. ticket stub card */
+/* Setlist sessions and Backstage Pass panels. A tear-off on the left, a
+   dashed perforation, and two notches punched out at the perforation line.
+   Do not add overflow:hidden here. It would clip the notches. */
+.ticket {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  background: var(--riser);
+  border: 1px solid var(--edge);
+  border-radius: 10px;
 }
 
+.ticket__stub {
+  flex: 0 0 var(--ticket-stub-w);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 14px 8px;
+  border-right: 2px dashed var(--edge);
+  text-align: center;
+}
+
+.ticket__body {
+  flex: 1 1 auto;
+  min-width: 0;           /* lets long titles wrap instead of pushing wide */
+  padding: 14px 16px;
+}
+
+.ticket::before,
+.ticket::after {
+  content: '';
+  position: absolute;
+  left: var(--ticket-stub-w);
+  width: 15px;
+  height: 15px;
+  background: var(--notch-bg);
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+.ticket::before { top: calc(-15px / 2 - 1px); }
+.ticket::after  { bottom: calc(-15px / 2 - 1px); }
+
+/* ------------------------------------------------- 2. guitar pick badge */
+/* The FIRST TOUR flag on The Band. Rounded triangle via clip-path. Enough
+   vertices to read as a pick rather than a road sign. */
+.pick {
+  --pick-fill: var(--gold);
+  display: grid;
+  place-items: center;
+  width: 68px;
+  aspect-ratio: 1 / 0.96;
+  background: var(--pick-fill);
+  clip-path: polygon(
+    15% 8%, 28% 2%, 50% 0%, 72% 2%, 85% 8%,
+    95% 25%, 98% 42%,
+    88% 68%, 68% 88%, 55% 98%, 50% 100%,
+    45% 98%, 32% 88%, 12% 68%,
+    2% 42%, 5% 25%
+  );
+}
+
+.pick__text {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 11px;
+  line-height: 1;
+  text-align: center;
+  color: #2A1408;
+  padding-bottom: 12%;      /* nudge off the tapered tip */
+  letter-spacing: 0.02em;
+}
+
+/* ---------------------------------------------------- 3. amp grille texture */
+/* Crosshatched speaker cloth. Sits behind card content at very low opacity.
+   Put it on a positioned parent. It inherits the parent's corner radius. */
+.grille { position: relative; }
+
+.grille > * { position: relative; z-index: 1; }
+
+.grille::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image:
+    repeating-linear-gradient( 45deg, rgba(247,243,234,0.030) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(-45deg, rgba(247,243,234,0.030) 0 1px, transparent 1px 5px);
+}
+
+/* ------------------------------------------------------ 4. stage light glow */
+/* Welcome hero and Encore award cards. */
+.glow-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--grad-stage);
+}
+
+.glow-card {
+  position: relative;
+  background:
+    radial-gradient(80% 62% at 50% 0%, rgba(200,16,46,0.20) 0%, transparent 70%),
+    var(--riser);
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+}
+
+/* ------------------------------------------------------- 5. marquee strip */
+/* Admin announcements. LED ticker with a scarlet and gold bulb border. */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--oxblood) 0%, #6B0A18 100%);
+  border-radius: 6px;
+  padding: 6px 0;
+}
+
+.marquee::before,
+.marquee::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background-image: radial-gradient(circle, var(--gold) 0 1.6px, rgba(0,0,0,0.35) 2px);
+  background-size: 13px 7px;
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+.marquee::before { top: 0; }
+.marquee::after  { bottom: 0; }
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  padding: 5px 0;
+  animation: marquee-slide 22s linear infinite;
+}
+
+.marquee__item {
+  padding: 0 28px;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--cream);
+}
+
+@keyframes marquee-slide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }   /* content is duplicated once */
+}
+
+/* A scrolling banner is exactly the thing that makes some people ill. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .marquee__item { white-space: normal; padding: 0 14px; }
+  .marquee__item + .marquee__item { display: none; }  /* drop the duplicate */
+}
+
+/* ---------------------------------------------------------- 6. vinyl label */
+/* Sits behind an award winner photo on Encore. Grooves, then the label. */
+.vinyl {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle at 50% 50%,
+      rgba(247,243,234,0.055) 0 1px, transparent 1px 4px),
+    radial-gradient(circle at 50% 50%,
+      var(--oxblood) 0 33%, #0C0B0E 33.5% 100%);
+  display: grid;
+  place-items: center;
+}
+
+.vinyl__photo {
+  width: 56%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--gold);
+  background: var(--input);
+}
+
+/* ------------------------------------------------- 7. setlist strike-through */
+/* A completed session dims and gets struck. Drawn as a slightly tilted line
+   rather than text-decoration so it reads hand drawn. */
+.struck {
+  position: relative;
+  display: inline-block;
+}
+
+.struck::after {
+  content: '';
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  top: 52%;
+  height: 2px;
+  background: var(--scarlet);
+  border-radius: 2px;
+  transform: rotate(-1.2deg);
+}
+
+.is-done { opacity: 0.55; }
+
+/* ==========================================================================
+   STUB SCREEN. Placeholder until T0.5 builds the real app shell.
+   ========================================================================== */
 .stub {
   position: relative;
   z-index: 1;
@@ -98,7 +323,6 @@ body {
   justify-content: center;
   text-align: center;
   padding: 32px 20px;
-  gap: 4px;
 }
 
 .stub__kicker {
@@ -127,24 +351,14 @@ body {
 
 .stub__line { margin: 0 0 8px; }
 .stub__where { margin: 0; color: var(--dim); }
+.stub__tag { margin: 18px 0 0; color: var(--gold); font-size: 14px; }
 
-.stub__tag {
-  margin: 18px 0 0;
-  color: var(--gold);
-  font-size: 14px;
-}
-
-.stub__fine {
-  margin: 30px 0 0;
-  font-size: 12px;
-  color: var(--mute);
-}
-
+.stub__fine { margin: 30px 0 0; font-size: 12px; color: var(--mute); }
 .stub__fine a { color: var(--dim); }
 </style>
 </head>
 <body>
-<div class="stage-glow"></div>
+<div class="glow-stage"></div>
 
 <main class="stub">
   <p class="stub__kicker">Century Golf Partners</p>
@@ -153,7 +367,10 @@ body {
   <p class="stub__line">Load-in has started. Nothing to see yet.</p>
   <p class="stub__where">Columbus, Ohio. August 25 to 28, 2026.</p>
   <p class="stub__tag">Just Birdies, Beers, and Broken Dreams.</p>
-  <p class="stub__fine">Stub page. T0.3 tokens are live. <a href="tokens.html">Token sheet</a></p>
+  <p class="stub__fine">
+    Stub page. Build sheets:
+    <a href="tokens.html">tokens</a> and <a href="motifs.html">motifs</a>
+  </p>
 </main>
 </body>
 </html>
