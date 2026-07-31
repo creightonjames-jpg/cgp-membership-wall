@@ -249,6 +249,72 @@ that will be in the room. `tokens.html` still reports exactly twelve.
 **Verified:** no horizontal overflow at 380px, tab bar still scrolls, no console
 errors, badge contrast measured.
 
+### July 30, band strip on the welcome hero
+**From:** Jim, who supplied the flier's four panel band image.
+
+Full bleed at the top of the welcome screen, treated as a lit stage. Lights come
+up on each panel in turn 180ms apart, the picture dissolves into `--stage`, and
+gold footlights run along the bottom lip using the marquee bulb values.
+
+The flier's embedded copy has the scarlet title banner baked in, which would have
+duplicated the page heading, so it is cropped off. Source is only 786px wide, so
+it is slightly soft on a high density screen. If Jeannette has larger original
+artwork, drop it in and rerun `tools/process-assets.sh brand`.
+
+Needed a `brand` mode on the asset pipeline. Wide photographs have to be JPG and
+the existing wide modes only emitted PNG.
+
+**Shutters default to transparent, not opaque.** An animation that fails to start
+would otherwise hide the hero behind four solid panels.
+
+### July 30, QR button in the header
+**From:** Jim. The welcome screen was a dead end after the first visit, because
+`mm26_entered` skips it forever.
+
+A QR button now sits in the header on every tab and pulls the welcome screen back
+up. It deliberately does **not** clear `mm26_entered`. The real use is holding the
+phone up so a colleague can scan it, and wiping your own state to do that would be
+wrong. Returns you to the tab you were on. The button underneath reads "Back to
+the wall" rather than pretending to admit you again.
+
+Glyph is an inline SVG QR mark. No emoji reads as a QR code at 17px and every
+candidate collided with a tab icon.
+
+This also removes the need for a private tab when demoing the welcome screen at
+T3.8.
+
+### July 30, ground flares and stage pyro
+**From:** Jim. Picked Standard from `flares.html`, then asked for a sparkler and
+Roman candle effect as well.
+
+**Live now:** Standard ground flares plus stage pyro. Five blooms breathing on
+separate clocks at the floor, and three gerb fountains across the stage front,
+each throwing seven sparks that rise, drift, and burn out, plus a Roman candle
+ball that climbs higher and dies. Candles fire in rotation 1.8s apart using a long
+duration with a dead second half, so there is a real pause between shots.
+
+**Dials:** `--flare-max` on `.band--flares` sets flare brightness, currently 0.70.
+Drop `band--flares` or `band--pyro` from the band element to switch either off.
+Four strengths remain previewable at `flares.html`.
+
+**Timings live in the CSS, not in JS.** The first pass generated particles in
+React, which would have forced `flares.html` to duplicate the generator in order
+to preview it, the same drift hazard as the duplicated palette. Positions and
+timings are now `nth-child` rules in the shared stylesheet and both pages write
+plain markup with no numbers in it.
+
+**Performance.** Transform and opacity only, no blur filters, and deliberately no
+`will-change`. Two dozen promoted layers is a real cost on an older phone. One
+`box-shadow` allowance, on the three candles only.
+
+**Reduced motion.** Flares hold a lit floor with no pulsing. Pyro is dropped
+entirely, because frozen sparks read as dust on the lens.
+
+**Design tension worth remembering.** The strip fades to `--stage` so the picture
+dissolves into the page and the headline emerges from the dark. Flares brighten
+that same area, so the two work against each other. Standard keeps both. Bold
+trades the dissolve for the glow.
+
 ---
 
 ## PHASE 1: Static and text tabs
