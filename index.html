@@ -308,6 +308,12 @@ button { font-family: inherit; }
            calc(36px + var(--safe-b)) calc(20px + var(--safe-l));
 }
 
+.welcome__text,
+.welcome__aside {
+  display: flex; flex-direction: column; align-items: center;
+  min-width: 0;
+}
+
 /* ---------------------------------------------------------- band strip */
 /* The flier's own hero, four panels wide. Treated as a lit stage: the lights
    come up on each band member in turn, the picture dissolves into the page,
@@ -861,6 +867,21 @@ body.display-mode .stubnote { font-size: 20px; }
     margin-right: auto;
   }
 
+  /* QR beside the text rather than under it, which is what pushed it below the
+     fold on a 1280 by 800 laptop. */
+  .welcome__body {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 44px;
+    text-align: left;
+  }
+
+  .welcome__text { align-items: flex-start; }
+  .welcome__aside { flex: 0 0 auto; }
+  .welcome__title { max-width: 20ch; }
+  .welcome__rule { margin: 18px 0; }
+
   /* No touchscreen, so a swipe only tab bar is the wrong control. Let all ten
      pills wrap onto two rows where they can just be clicked. */
   .tabs__scroll {
@@ -1191,24 +1212,30 @@ function Welcome({ onEnter, now, returning }) {
     <div className="welcome">
       <BandStrip />
       <div className="welcome__body">
-        <p className="welcome__kicker">Century Golf Partners</p>
-        <h1 className="welcome__title t-display">
-          2026 Private Clubs Meeting<span className="wall">The Live Wall</span>
-        </h1>
-        <div className="welcome__rule"></div>
-        <p className="welcome__where">Columbus, Ohio. August 25 to 28, 2026.</p>
+        {/* Two wrappers so a wide screen can put the QR beside the text
+            instead of below the fold. Stacked on a phone. */}
+        <div className="welcome__text">
+          <p className="welcome__kicker">Century Golf Partners</p>
+          <h1 className="welcome__title t-display">
+            2026 Private Clubs Meeting<span className="wall">The Live Wall</span>
+          </h1>
+          <div className="welcome__rule"></div>
+          <p className="welcome__where">Columbus, Ohio. August 25 to 28, 2026.</p>
 
-        <Countdown now={now} />
+          <Countdown now={now} />
 
-        <button className="enter" onClick={onEnter}>
-          {returning ? "Back to the wall" : "Get your wristband"}
-        </button>
-
-        <div className="qr">
-          <img src="assets/brand/qr-wall.svg" width="130" height="130"
-               alt="QR code that opens this wall" />
+          <button className="enter" onClick={onEnter}>
+            {returning ? "Back to the wall" : "Get your wristband"}
+          </button>
         </div>
-        <p className="qr__cap">Point a phone here to pass it on.</p>
+
+        <div className="welcome__aside">
+          <div className="qr">
+            <img src="assets/brand/qr-wall.svg" width="130" height="130"
+                 alt="QR code that opens this wall" />
+          </div>
+          <p className="qr__cap">Point a phone here to pass it on.</p>
+        </div>
       </div>
     </div>
   );
