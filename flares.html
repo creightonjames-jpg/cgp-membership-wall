@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en" data-sheet-loading>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17161A">
+<title>Ground flares preview</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Alfa+Slab+One&family=Inter:wght@400;500;600;700&display=swap">
+
+<!-- Reads the real design system out of index.html. See build-sheet.js. -->
+<script src="build-sheet.js"></script>
+<link rel="stylesheet" href="build-sheet.css">
+
+<style>
+/* Preview chrome only. The flare CSS itself lives in index.html so what you
+   see here is exactly what would ship. */
+body { padding: 24px 0 60px; }
+.wrap { padding: 0 18px; }
+
+.strip { margin: 0 -18px 8px; }
+
+.opt {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; padding: 0 18px; margin: 0 0 26px;
+}
+
+.opt__name { font-family: var(--font-display); font-size: 15px; letter-spacing: .1em; margin: 0; }
+.opt__note { color: var(--mute); font-size: 12px; margin: 0; text-align: right; }
+
+.subtle { --flare-max: 0.42; }
+.bold   { --flare-max: 1.00; }
+
+.pick-me {
+  background: var(--riser); border: 1px solid var(--edge);
+  border-radius: 10px; padding: 14px 16px; margin-top: 8px;
+}
+.pick-me p { margin: 0 0 8px; }
+.pick-me p:last-child { margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1 class="sheet-h1">Ground flares</h1>
+  <p class="sheet-sub">
+    Light blooming up off the stage floor at the base of the band strip. Three
+    strengths, all animating. Nothing here is on the live wall yet.
+  </p>
+</div>
+
+<!-- 1. as it ships today -->
+<div class="opt">
+  <p class="opt__name">1. Off</p>
+  <p class="opt__note">What the wall shows now</p>
+</div>
+<div class="strip">
+  <div class="band">
+    <img class="band__img" src="assets/brand/tour-band.jpg" alt="">
+    <div class="band__grade"></div>
+    <div class="band__lip"></div>
+  </div>
+</div>
+
+<!-- 2. subtle -->
+<div class="opt">
+  <p class="opt__name">2. Subtle</p>
+  <p class="opt__note">Warmth at the floor, easy to miss</p>
+</div>
+<div class="strip">
+  <div class="band band--flares subtle">
+    <img class="band__img" src="assets/brand/tour-band.jpg" alt="">
+    <div class="band__grade"></div>
+    <div class="band__flares">
+      <span style="--x:10%; --dur:4.3s; --delay:0s"></span>
+      <span style="--x:31%; --dur:3.4s; --delay:-1.1s"></span>
+      <span style="--x:50%; --dur:5.1s; --delay:-2.4s"></span>
+      <span style="--x:69%; --dur:3.8s; --delay:-0.6s"></span>
+      <span style="--x:90%; --dur:4.7s; --delay:-1.8s"></span>
+    </div>
+    <div class="band__lip"></div>
+  </div>
+</div>
+
+<!-- 3. standard -->
+<div class="opt">
+  <p class="opt__name">3. Standard</p>
+  <p class="opt__note">My pick. Reads as footlights, not as an effect</p>
+</div>
+<div class="strip">
+  <div class="band band--flares">
+    <img class="band__img" src="assets/brand/tour-band.jpg" alt="">
+    <div class="band__grade"></div>
+    <div class="band__flares">
+      <span style="--x:10%; --dur:4.3s; --delay:0s"></span>
+      <span style="--x:31%; --dur:3.4s; --delay:-1.1s"></span>
+      <span style="--x:50%; --dur:5.1s; --delay:-2.4s"></span>
+      <span style="--x:69%; --dur:3.8s; --delay:-0.6s"></span>
+      <span style="--x:90%; --dur:4.7s; --delay:-1.8s"></span>
+    </div>
+    <div class="band__lip"></div>
+  </div>
+</div>
+
+<!-- 4. bold -->
+<div class="opt">
+  <p class="opt__name">4. Bold</p>
+  <p class="opt__note">Full pyro. Starts to fight the headline below it</p>
+</div>
+<div class="strip">
+  <div class="band band--flares bold">
+    <img class="band__img" src="assets/brand/tour-band.jpg" alt="">
+    <div class="band__grade"></div>
+    <div class="band__flares">
+      <span style="--x:10%; --dur:4.3s; --delay:0s"></span>
+      <span style="--x:31%; --dur:3.4s; --delay:-1.1s"></span>
+      <span style="--x:50%; --dur:5.1s; --delay:-2.4s"></span>
+      <span style="--x:69%; --dur:3.8s; --delay:-0.6s"></span>
+      <span style="--x:90%; --dur:4.7s; --delay:-1.8s"></span>
+    </div>
+    <div class="band__lip"></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <h2 class="sheet-h2">How it works</h2>
+  <div class="pick-me">
+    <p>Five blooms along the floor, each breathing on its own clock between 3.4
+      and 5.1 seconds, started mid cycle so they never pulse in unison.</p>
+    <p>Gold core falling off through ember orange into scarlet, laid on in screen
+      blend so it reads as light rather than paint on the picture.</p>
+    <p>Opacity and transform only, no blur filters, so it stays cheap on an
+      older phone.</p>
+    <p>Anyone who asked their phone for less motion gets a lit floor with no
+      pulsing.</p>
+  </div>
+
+  <h2 class="sheet-h2">To ship one</h2>
+  <div class="pick-me">
+    <p>Tell me the number. Switching it on is adding one class to the band
+      element on the welcome screen, and the strength is one value.</p>
+  </div>
+
+  <p class="sheet-foot">
+    <a href="index.html">Back to the wall</a> &middot;
+    <a href="motifs.html">Motif sheet</a> &middot;
+    <a href="tokens.html">Token sheet</a>
+  </p>
+</div>
+
+</body>
+</html>

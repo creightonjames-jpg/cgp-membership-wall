@@ -365,6 +365,76 @@ button { font-family: inherit; }
   to   { opacity: 0; }
 }
 
+/* ------------------------------------------- ground illumination flares */
+/* Light blooming up off the stage floor. OFF by default. Add .band--flares to
+   the .band element to switch it on. Preview at flares.html before committing
+   this to the welcome screen.
+   Uses mix-blend-mode screen so the blooms read as light rather than as paint
+   laid over the picture. Animates opacity and transform only, no filters, so
+   it stays cheap on an older phone. */
+.band__flares { display: none; }
+
+.band--flares .band__flares {
+  display: block;
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 62%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Low haze sitting on the floor, so the flares have something to sit in. */
+.band--flares .band__flares::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 36%;
+  background: linear-gradient(0deg, rgba(217,169,76,0.17) 0%, transparent 100%);
+  mix-blend-mode: screen;
+  animation: flare-haze 6.5s ease-in-out infinite alternate;
+}
+
+.band__flares span {
+  position: absolute;
+  bottom: -12%;
+  left: var(--x);
+  width: 42%;
+  aspect-ratio: 1 / 1.25;
+  transform: translateX(-50%);
+  transform-origin: 50% 100%;
+  mix-blend-mode: screen;
+  background: radial-gradient(48% 50% at 50% 100%,
+    rgba(217,169,76,0.62) 0%,
+    rgba(226,116,58,0.34) 26%,
+    rgba(200,16,46,0.26) 52%,
+    transparent 76%);
+  animation: flare-breathe var(--dur) ease-in-out var(--delay) infinite alternate;
+}
+
+/* Negative delays start each flare mid cycle, so they never pulse in unison. */
+@keyframes flare-breathe {
+  from {
+    opacity: calc(var(--flare-max, 0.7) * 0.42);
+    transform: translateX(-50%) scale(0.90, 0.86);
+  }
+  to {
+    opacity: var(--flare-max, 0.7);
+    transform: translateX(-50%) scale(1.06, 1.14);
+  }
+}
+
+@keyframes flare-haze {
+  from { opacity: 0.5; }
+  to   { opacity: 1; }
+}
+
+/* Hold a lit state, lose the pulsing. */
+@media (prefers-reduced-motion: reduce) {
+  .band__flares span,
+  .band--flares .band__flares::before { animation: none; }
+  .band__flares span { opacity: calc(var(--flare-max, 0.7) * 0.72); }
+}
+
 /* Footlights along the stage lip. Same bulb values as the marquee, so the
    motif reads as one language rather than two. */
 .band__lip {
@@ -457,12 +527,17 @@ button { font-family: inherit; }
 .hdr__pick { width: 26px; flex: 0 0 26px; }
 .hdr__pick .pick__text { font-size: 6px; }
 
-.hdr__name { font-size: 15px; line-height: 1; margin: 0; }
+/* Three buttons sit to the right now. The brand text gives way before they do. */
+.hdr__name {
+  font-size: 15px; line-height: 1; margin: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 /* Gold, not mute grey. Small enough that it warms the header without
    spending gold on anything that matters. */
 .hdr__sub {
   font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--gold); margin: 3px 0 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
 .iconbtn {
@@ -826,6 +901,27 @@ function useAnnouncement() {
 
 /* ---------------------------------------------------------- components */
 
+/* Reads as a QR code at 17px, which no emoji does, and it cannot collide with
+   any of the tab icons. */
+function QrGlyph() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 17 17" aria-hidden="true" focusable="false">
+      <g fill="currentColor">
+        <path d="M0 0h7v7H0V0zm2 2v3h3V2H2z" />
+        <path d="M10 0h7v7h-7V0zm2 2v3h3V2h-3z" />
+        <path d="M0 10h7v7H0v-7zm2 2v3h3v-3H2z" />
+        <rect x="9" y="9" width="2" height="2" />
+        <rect x="13" y="9" width="2" height="2" />
+        <rect x="11" y="11" width="2" height="2" />
+        <rect x="15" y="11" width="2" height="2" />
+        <rect x="9" y="13" width="2" height="2" />
+        <rect x="13" y="13" width="2" height="2" />
+        <rect x="15" y="15" width="2" height="2" />
+      </g>
+    </svg>
+  );
+}
+
 function BrandMark() {
   return (
     <div className="hdr__mark">
@@ -895,6 +991,14 @@ function BandStrip() {
         alt="Four Century Golf team members in full rock tour costume"
       />
       <div className="band__grade"></div>
+      {/* Hidden unless .band carries band--flares. Preview at flares.html. */}
+      <div className="band__flares" aria-hidden="true">
+        <span style={{ "--x": "10%", "--dur": "4.3s", "--delay": "0s" }}></span>
+        <span style={{ "--x": "31%", "--dur": "3.4s", "--delay": "-1.1s" }}></span>
+        <span style={{ "--x": "50%", "--dur": "5.1s", "--delay": "-2.4s" }}></span>
+        <span style={{ "--x": "69%", "--dur": "3.8s", "--delay": "-0.6s" }}></span>
+        <span style={{ "--x": "90%", "--dur": "4.7s", "--delay": "-1.8s" }}></span>
+      </div>
       <div className="band__lights" aria-hidden="true">
         <span style={{ "--i": 0 }}></span>
         <span style={{ "--i": 1 }}></span>
@@ -906,7 +1010,10 @@ function BandStrip() {
   );
 }
 
-function Welcome({ onEnter, now }) {
+/* `returning` is true when somebody taps the QR button in the header to pull
+   this screen back up. They have already entered, so the button underneath
+   sends them back rather than pretending to admit them again. */
+function Welcome({ onEnter, now, returning }) {
   return (
     <div className="welcome">
       <BandStrip />
@@ -920,7 +1027,9 @@ function Welcome({ onEnter, now }) {
 
         <Countdown now={now} />
 
-        <button className="enter" onClick={onEnter}>Get your wristband</button>
+        <button className="enter" onClick={onEnter}>
+          {returning ? "Back to the wall" : "Get your wristband"}
+        </button>
 
         <div className="qr">
           <img src="assets/brand/qr-wall.svg" width="130" height="130"
@@ -1223,6 +1332,9 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showPin, setShowPin] = useState(false);
   const [dismissed, setDismissed] = useState(null);
+  /* Pulling the welcome screen back up does NOT clear mm26_entered. Somebody
+     showing the QR to a colleague should not have their own state reset. */
+  const [showWelcome, setShowWelcome] = useState(false);
 
   /* useServerNow also returns `synced` and `offset`. T2.3 needs them for the
      Vault drops. The welcome screen does not surface either one. */
@@ -1246,6 +1358,10 @@ function App() {
     return <Welcome onEnter={enter} now={now} />;
   }
 
+  if (showWelcome) {
+    return <Welcome onEnter={() => setShowWelcome(false)} now={now} returning />;
+  }
+
   const tab = TAB_BY_KEY[active] || TABS[0];
   const TabView = TAB_VIEWS[tab.key];
   const liveAnnouncement =
@@ -1256,6 +1372,14 @@ function App() {
       <header className="hdr">
         <div className="hdr__row">
           <BrandMark />
+          <button
+            className="iconbtn"
+            onClick={() => setShowWelcome(true)}
+            title="Pull up the QR code"
+            aria-label="Show the QR code"
+          >
+            <QrGlyph />
+          </button>
           <button
             className={"iconbtn" + (displayMode ? " iconbtn--on" : "")}
             onClick={() => setDisplayMode(!displayMode)}
