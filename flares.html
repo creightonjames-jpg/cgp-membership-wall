@@ -20,7 +20,9 @@
 body { padding: 24px 0 60px; }
 .wrap { padding: 0 18px; }
 
-.strip { margin: 0 -18px 8px; }
+/* Body carries no side padding, so the strip is already full bleed. A negative
+   margin here pushed the document 18px wider than the viewport. */
+.strip { margin: 0 0 8px; }
 
 .opt {
   display: flex; align-items: baseline; justify-content: space-between;

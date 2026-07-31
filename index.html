@@ -374,6 +374,11 @@ button { font-family: inherit; }
    it stays cheap on an older phone. */
 .band__flares { display: none; }
 
+/* Peak brightness lives on .band--flares, not on the inner container. Put it
+   on the container and it shadows any override set alongside .band--flares,
+   because the span resolves the variable from its nearest ancestor. */
+.band--flares { --flare-max: 0.70; }
+
 .band--flares .band__flares {
   display: block;
   position: absolute;
