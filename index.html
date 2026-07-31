@@ -68,6 +68,10 @@
   --warm-edge: rgba(200, 16, 46, 0.38);
   --gold-rule: rgba(217, 169, 76, 0.42);
 
+  /* Reading column on a wide screen. Mobile ignores it, the shell is already
+     narrower than this. */
+  --shell-max: 780px;
+
   /* Notch and home indicator. Zero on anything without a cutout. */
   --safe-t: env(safe-area-inset-top, 0px);
   --safe-b: env(safe-area-inset-bottom, 0px);
@@ -832,6 +836,43 @@ body.display-mode .stubnote { font-size: 20px; }
 }
 
 .pin__btn--ghost { background: var(--input); color: var(--dim); }
+
+/* ==========================================================================
+   DESKTOP AND LAPTOP
+   The wall is mobile first and 380px stays the design baseline. This block
+   exists because the regional team, Carol, Lisa, and Jeannette all review on a
+   laptop, and because uncapped mobile layout is genuinely broken on a wide
+   screen rather than merely plain.
+   ========================================================================== */
+@media (min-width: 700px) {
+
+  /* The strip is a 2:1 image at 100% width, so at 1280px it stood 658px tall
+     and pushed the countdown, the enter button, and the QR below the fold.
+     Cap the height and let object-fit crop instead of scaling. */
+  .band { max-height: 32vh; }
+
+  /* One centred reading column. Header, tabs, and content all share an edge. */
+  .hdr__row,
+  .tabs__scroll,
+  .sheet,
+  .welcome__body {
+    max-width: var(--shell-max);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* No touchscreen, so a swipe only tab bar is the wrong control. Let all ten
+     pills wrap onto two rows where they can just be clicked. */
+  .tabs__scroll {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    row-gap: 7px;
+  }
+
+  /* Display Mode is the projector view. It wants the whole screen, not a
+     reading column. */
+  body.display-mode .sheet { max-width: none; }
+}
 
 /* -------------------------------------------------------------- offline */
 .bootfail {
