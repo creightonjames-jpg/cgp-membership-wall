@@ -315,6 +315,39 @@ dissolves into the page and the headline emerges from the dark. Flares brighten
 that same area, so the two work against each other. Standard keeps both. Bold
 trades the dissolve for the glow.
 
+### July 30, desktop browser layout
+**From:** Jim. "I'm not worried about the phone graphics. My focus is on the web
+browser version."
+
+**The welcome screen was broken on a laptop, not merely plain.** The band strip is
+a 2:1 image at full width, so at 1280 by 800 it stood 658px tall, 82 percent of
+the viewport, and pushed the countdown, the enter button, and the QR code below
+the fold. Opening the wall on a laptop showed a photo and nothing to act on.
+
+**Fixed above a 700px breakpoint:**
+- Band strip capped at `32vh`, cropping via `object-fit` instead of scaling.
+- A centred 780px reading column shared by the header row, the tab bar, and the
+  content, so text stops sprawling the full width.
+- Welcome body splits into a text column and an aside, putting the QR beside the
+  headline rather than under it. This is what finally got everything above the
+  fold.
+- **Tab bar wraps instead of scrolling.** A swipe only control is the wrong thing
+  on a machine with no touchscreen. All ten pills sit on two rows and can be
+  clicked.
+- Display Mode keeps the full width, since it is the projector view.
+
+**Verified:** whole welcome screen fits with no scrolling at 1280 by 800 and at
+1920 by 1080. All ten pills reachable without scrolling. No horizontal overflow at
+380, 699, 700, 1280, or 1920. Mobile confirmed unchanged: still stacked, still
+centred, band still uncapped at its natural 195px, tab bar still scrolls, sheet
+still full width.
+
+**Note on priority.** 380px remains the design baseline per spec 1.1, and the
+delivery path is still a QR code onto a phone. This work is additive rather than a
+change of emphasis. T0.8 still needs real phones, but for things that are not
+graphics: camera capture, the maps handoff, whether `tel:` actually dials, and
+whether the fonts load rather than fall back.
+
 ---
 
 ## PHASE 1: Static and text tabs
