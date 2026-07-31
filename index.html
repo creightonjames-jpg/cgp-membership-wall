@@ -54,9 +54,19 @@
   --grad-stage:   radial-gradient(62% 42% at 50% 20%, #2A1418 0%, var(--stage) 72%);
   --grad-primary: linear-gradient(180deg, var(--scarlet) 0%, var(--oxblood) 100%);
 
-  /* Motif dials. Override per instance, not at the call site. */
+  /* Motif dials. Override per instance, not at the call site.
+     These are not palette tokens. The palette is the twelve above and stays
+     twelve, so tokens.html keeps telling the truth. Everything here is mixed
+     from those twelve. */
   --ticket-stub-w: 84px;    /* width of the tear-off on a ticket stub card */
   --notch-bg: var(--stage); /* what shows through a ticket notch           */
+
+  /* Chrome warmth. Oxblood laid over --input as a flat overlay rather than
+     color-mix, which is not safe on every phone that will be in the room. */
+  --warm-fill: rgba(138, 14, 31, 0.22);
+  --warm-fill-strong: rgba(138, 14, 31, 0.40);
+  --warm-edge: rgba(200, 16, 46, 0.38);
+  --gold-rule: rgba(217, 169, 76, 0.42);
 
   /* Notch and home indicator. Zero on anything without a cutout. */
   --safe-t: env(safe-area-inset-top, 0px);
@@ -434,7 +444,7 @@ button { font-family: inherit; }
   background: rgba(23,22,26,0.92);
   backdrop-filter: saturate(1.4) blur(8px);
   -webkit-backdrop-filter: saturate(1.4) blur(8px);
-  border-bottom: 1px solid var(--edge);
+  border-bottom: 1px solid var(--warm-edge);
   padding-top: var(--safe-t);
 }
 
@@ -448,29 +458,56 @@ button { font-family: inherit; }
 .hdr__pick .pick__text { font-size: 6px; }
 
 .hdr__name { font-size: 15px; line-height: 1; margin: 0; }
+/* Gold, not mute grey. Small enough that it warms the header without
+   spending gold on anything that matters. */
 .hdr__sub {
   font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--mute); margin: 3px 0 0;
+  color: var(--gold); margin: 3px 0 0;
 }
 
 .iconbtn {
   flex: 0 0 auto;
   width: 38px; height: 38px;
   display: grid; place-items: center;
-  background: var(--input); border: 1px solid var(--edge);
-  border-radius: 9px; color: var(--dim);
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge);
+  border-radius: 9px; color: var(--cream);
   font-size: 16px; cursor: pointer; padding: 0;
 }
 
-.iconbtn:active { background: var(--edge); }
-.iconbtn--on { background: var(--glow); border-color: var(--scarlet); color: var(--cream); }
+.iconbtn:active {
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+}
+
+.iconbtn--on {
+  background-color: transparent;
+  background-image: var(--grad-primary);
+  border-color: var(--gold);
+  color: var(--cream);
+}
 
 /* ------------------------------------------------------------- tab bar */
+/* Group asked for more red and gold, and the tab bar is where it earns its
+   keep, because it is on screen on every tab all week. Red does the work.
+   Gold is a hairline and a badge, so the Encore award cards keep their claim
+   on it. */
 .tabs {
   position: sticky; top: 0; z-index: 20;
   background: rgba(23,22,26,0.92);
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--edge);
+  border-bottom: 0;
+}
+
+/* Scarlet rule under the whole bar with a gold hairline sitting on it. Reads
+   as a poster rule, and ties the bar to the footlights on the welcome hero. */
+.tabs::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background:
+    linear-gradient(180deg, var(--gold-rule) 0 1px, transparent 1px),
+    var(--grad-primary);
 }
 
 .tabs__scroll {
@@ -483,23 +520,40 @@ button { font-family: inherit; }
 
 .tabs__scroll::-webkit-scrollbar { display: none; }
 
+/* Resting tab is warm, not grey. Oxblood over --input so it still recedes
+   behind the selected one but stops looking like a system control. */
 .tab {
   flex: 0 0 auto;
   display: flex; align-items: center; gap: 7px;
-  background: var(--input); border: 1px solid var(--edge);
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge);
   border-radius: 999px; padding: 8px 14px;
-  color: var(--dim); font-size: 13px; font-weight: 500;
+  color: var(--cream); font-size: 13px; font-weight: 500;
   white-space: nowrap; cursor: pointer;
+  transition: background-image 120ms ease, border-color 120ms ease;
 }
 
+.tab:active {
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+}
+
+/* Selected tab is a lit scarlet pill with a gold ring. This is the poster
+   move: gold rule on scarlet, straight off the Shank Showdown art. */
 .tab[aria-selected="true"] {
-  background: var(--glow); border-color: var(--scarlet); color: var(--cream);
+  background-color: transparent;
+  background-image: var(--grad-primary);
+  border-color: var(--gold);
+  color: var(--cream);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px rgba(217,169,76,0.22), 0 3px 12px rgba(200,16,46,0.34);
 }
 
 .tab__icon { font-size: 14px; line-height: 1; }
 
+/* Gold badge, dark text. Scarlet on a now scarlet pill would vanish. */
 .tab__badge {
-  background: var(--scarlet); color: var(--cream);
+  background: var(--gold); color: #2A1408;
   border-radius: 999px; min-width: 19px; padding: 1px 6px;
   font-size: 11px; font-weight: 700; text-align: center;
   font-variant-numeric: tabular-nums;
