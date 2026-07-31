@@ -440,6 +440,109 @@ button { font-family: inherit; }
   .band__flares span { opacity: calc(var(--flare-max, 0.7) * 0.72); }
 }
 
+/* ---------------------------------------------------------- stage pyro */
+/* Gerb fountains at the front of the stage. Fine sparks crackling upward, plus
+   a Roman candle ball that climbs, drifts, and dies. OFF unless .band--pyro.
+   Transform and opacity only. Screen blend so sparks read as light. */
+.band__pyro { display: none; }
+
+.band--pyro .band__pyro {
+  display: block;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Every timing lives here rather than in JS, so the welcome screen and
+   flares.html both write plain markup and cannot drift apart. Three gerbs,
+   seven sparks and one candle each. */
+.band__pyro .gerb {
+  position: absolute;
+  bottom: 5%;
+  left: var(--x);
+  width: 0; height: 0;
+  --gerb-offset: 0s;
+}
+
+.band__pyro .gerb:nth-child(1) { --x: 18%; --gerb-offset: 0s;   }
+.band__pyro .gerb:nth-child(2) { --x: 50%; --gerb-offset: 0.7s; }
+.band__pyro .gerb:nth-child(3) { --x: 82%; --gerb-offset: 1.3s; }
+
+.band__pyro .spark,
+.band__pyro .candle {
+  position: absolute;
+  left: 0; bottom: 0;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  transform: translate(-50%, 0);
+  /* Deliberately no will-change. Two dozen promoted layers is a real cost on
+     an older phone, and transform and opacity are already fast paths. */
+}
+
+.band__pyro .spark {
+  width: var(--size); height: var(--size);
+  background: radial-gradient(circle,
+    #FFF7E4 0 30%, var(--gold) 58%, rgba(226,116,58,0) 100%);
+  animation: pyro-spark var(--dur) linear
+             calc(var(--delay) - var(--gerb-offset)) infinite;
+}
+
+/* Scatter. Uneven on purpose, so no two sparks trace the same arc. */
+.band__pyro .spark:nth-child(1) { --drift:  -9px; --rise: 52px; --dur: 1.55s; --delay: -0.20s; --size: 3px; }
+.band__pyro .spark:nth-child(2) { --drift:   7px; --rise: 41px; --dur: 1.90s; --delay: -0.75s; --size: 2px; }
+.band__pyro .spark:nth-child(3) { --drift:  -4px; --rise: 66px; --dur: 1.40s; --delay: -1.10s; --size: 2px; }
+.band__pyro .spark:nth-child(4) { --drift:  11px; --rise: 48px; --dur: 2.05s; --delay: -0.45s; --size: 3px; }
+.band__pyro .spark:nth-child(5) { --drift:  -7px; --rise: 58px; --dur: 1.70s; --delay: -1.55s; --size: 2px; }
+.band__pyro .spark:nth-child(6) { --drift:   4px; --rise: 37px; --dur: 1.30s; --delay: -0.95s; --size: 4px; }
+.band__pyro .spark:nth-child(7) { --drift: -11px; --rise: 62px; --dur: 2.20s; --delay: -1.35s; --size: 2px; }
+
+/* One glow allowance, on three elements only. Cheap enough, and the candle
+   needs to read as brighter than the crackle around it. */
+.band__pyro .candle {
+  width: 7px; height: 7px;
+  --dur: 5.4s; --rise: 112px; --drift: 0px; --delay: 0s;
+  background: radial-gradient(circle,
+    #FFFDF6 0 34%, var(--gold) 62%, rgba(200,16,46,0) 100%);
+  box-shadow: 0 0 10px 2px rgba(217,169,76,0.65);
+  animation: pyro-candle var(--dur) cubic-bezier(0.18, 0.62, 0.36, 1)
+             var(--delay) infinite;
+}
+
+/* Offset so the three candles fire in rotation, never together. */
+.band__pyro .gerb:nth-child(1) .candle { --delay:  0.0s; --drift:  -9px; }
+.band__pyro .gerb:nth-child(2) .candle { --delay: -1.8s; --drift:   0px; --rise: 128px; }
+.band__pyro .gerb:nth-child(3) .candle { --delay: -3.6s; --drift:   9px; }
+
+/* Up fast, apex, then drift and fall back a little as it burns out. */
+@keyframes pyro-spark {
+  0%   { transform: translate(-50%, 0) scale(1); opacity: 0; }
+  10%  { opacity: 1; }
+  62%  { transform: translate(calc(-50% + var(--drift)),
+                              calc(var(--rise) * -1)) scale(0.7); opacity: 0.9; }
+  100% { transform: translate(calc(-50% + var(--drift) * 1.4),
+                              calc(var(--rise) * -0.7)) scale(0.2); opacity: 0; }
+}
+
+/* The action sits in the first half of the timeline. The dead second half is
+   what makes it read as a candle firing in rotation instead of a hose. */
+@keyframes pyro-candle {
+  0%   { transform: translate(-50%, 0) scale(0.45); opacity: 0; }
+  4%   { transform: translate(-50%, -4px) scale(1); opacity: 1; }
+  30%  { opacity: 0.95; }
+  42%  { transform: translate(calc(-50% + var(--drift)),
+                              calc(var(--rise) * -1)) scale(0.8); opacity: 0.45; }
+  50%  { transform: translate(calc(-50% + var(--drift)),
+                              calc(var(--rise) * -1.06)) scale(0.22); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Pyro is motion and nothing else. Frozen sparks read as dust on the lens, so
+   for anyone who asked for less motion it goes away entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .band--pyro .band__pyro { display: none; }
+}
+
 /* Footlights along the stage lip. Same bulb values as the marquee, so the
    motif reads as one language rather than two. */
 .band__lip {
@@ -986,17 +1089,40 @@ function Countdown({ now }) {
   );
 }
 
+/* Stage pyro. Three gerbs, seven sparks and one candle each. Every position and
+   timing lives in the CSS via nth-child, so this markup carries no numbers and
+   flares.html can render the identical thing without duplicating a generator. */
+function Gerb() {
+  return (
+    <span className="gerb">
+      <i className="spark" /><i className="spark" /><i className="spark" />
+      <i className="spark" /><i className="spark" /><i className="spark" />
+      <i className="spark" />
+      <i className="candle" />
+    </span>
+  );
+}
+
+function StagePyro() {
+  return (
+    <div className="band__pyro" aria-hidden="true">
+      <Gerb /><Gerb /><Gerb />
+    </div>
+  );
+}
+
 /* The flier's four panel hero. Lights come up on each member in turn. */
 function BandStrip() {
   return (
-    <div className="band">
+    <div className="band band--flares band--pyro">
       <img
         className="band__img"
         src="assets/brand/tour-band.jpg"
         alt="Four Century Golf team members in full rock tour costume"
       />
       <div className="band__grade"></div>
-      {/* Hidden unless .band carries band--flares. Preview at flares.html. */}
+      {/* Ground flares at Standard strength, approved July 30. Retune with
+          --flare-max, or drop band--flares to switch them off. */}
       <div className="band__flares" aria-hidden="true">
         <span style={{ "--x": "10%", "--dur": "4.3s", "--delay": "0s" }}></span>
         <span style={{ "--x": "31%", "--dur": "3.4s", "--delay": "-1.1s" }}></span>
@@ -1004,6 +1130,7 @@ function BandStrip() {
         <span style={{ "--x": "69%", "--dur": "3.8s", "--delay": "-0.6s" }}></span>
         <span style={{ "--x": "90%", "--dur": "4.7s", "--delay": "-1.8s" }}></span>
       </div>
+      <StagePyro />
       <div className="band__lights" aria-hidden="true">
         <span style={{ "--i": 0 }}></span>
         <span style={{ "--i": 1 }}></span>
