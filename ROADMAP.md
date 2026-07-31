@@ -217,6 +217,40 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 
 ---
 
+## Change log, post Phase 0
+
+Changes made after a task was marked complete. Logged so the reason survives.
+
+### July 30, more red and gold in the chrome
+**From:** the group, relayed by Jim. "Can we add more red and gold? Maybe to the tabs?"
+
+**Done.** Selected tab is a scarlet gradient pill with a gold ring and a soft
+scarlet glow. Resting tabs carry oxblood over `--input` so they read warm rather
+than like a system control. A scarlet rule with a gold hairline runs under the
+whole tab bar and ties it to the footlights on the welcome hero. Header icon
+buttons follow the same two states. "Private Clubs 2026" in the header is gold.
+
+**Count badges moved from scarlet to gold with dark text.** This is also a bug
+fix. A scarlet badge on a now scarlet selected pill would have been invisible.
+Measured at 8.09 to 1 contrast.
+
+**Gold was deliberately not used as a fill.** Spec 2.1 reserves `--gold` for
+awards, trophies, and poster moments, and CLAUDE.md rations Alfa Slab One for the
+same reason. If gold goes everywhere, the Encore award cards stop reading as a
+trophy plate. So gold here is a hairline, a ring, and a badge. If the group wants
+it louder, say so and it is a one line change, but the trade should be a decision
+rather than a drift.
+
+**The twelve palette tokens are untouched.** The new values are motif dials mixed
+from those twelve, in the same category as `--ticket-stub-w`. They are applied as
+flat overlay gradients rather than `color-mix`, which is not safe on every phone
+that will be in the room. `tokens.html` still reports exactly twelve.
+
+**Verified:** no horizontal overflow at 380px, tab bar still scrolls, no console
+errors, badge contrast measured.
+
+---
+
 ## PHASE 1: Static and text tabs
 **Window: August 3 to August 10. Goal: every tab that does not depend on Jeannette's assets is finished.**
 
