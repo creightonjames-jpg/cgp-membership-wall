@@ -332,7 +332,49 @@ button { font-family: inherit; }
   display: block;
   width: 100%; height: 100%;
   object-fit: cover;
-  object-position: center 28%;   /* keeps the faces high in frame */
+  /* Lisa asked to pull the picture down so faces read better. A lower number
+     shows more of the top of the source, which drops the subjects in frame and
+     stops the crop cutting the tops of heads. */
+  object-position: center 12%;
+}
+
+/* ------------------------------------------------------------- masthead */
+/* Lisa asked for the banner on every page, with a scarlet title bar under it,
+   which is the flier's own masthead. Compact on the tab pages so it does not
+   eat a phone screen, full height on the welcome hero. Scrolls away. The
+   controls and the tab bar stay stuck to the top. */
+.masthead { position: relative; }
+
+/* Scoped with :not so the compact rules can never leak onto the tall hero,
+   which sits at equal specificity. */
+.masthead:not(.masthead--tall) .band {
+  height: 112px;
+  aspect-ratio: auto;
+  max-height: none;
+}
+
+/* Pyro needs vertical room to read as a fountain. In a 112px strip it is just
+   flecks, so the compact masthead keeps the flares and drops the sparks. */
+.masthead:not(.masthead--tall) .band__pyro { display: none; }
+
+.masthead__banner {
+  background: var(--grad-primary);
+  border-top: 1px solid var(--gold-rule);
+  border-bottom: 1px solid var(--gold-rule);
+  padding: 7px calc(14px + var(--safe-r)) 8px calc(14px + var(--safe-l));
+  text-align: center;
+}
+
+.masthead__banner span {
+  display: block;
+  font-size: clamp(15px, 4.4vw, 22px);
+  letter-spacing: 0.05em;
+  color: var(--cream);
+  line-height: 1.06;
+}
+
+.masthead--tall .masthead__banner span {
+  font-size: clamp(17px, 5.2vw, 30px);
 }
 
 /* Knocks the bright whites back so cream text below stays the loudest thing
@@ -576,8 +618,7 @@ button { font-family: inherit; }
   color: var(--dim); margin: 0 0 14px;
 }
 
-.welcome__title { font-size: clamp(30px, 11vw, 52px); margin: 0; max-width: 15ch; }
-.welcome__title .wall { color: var(--scarlet); display: block; }
+.welcome__title { font-size: clamp(34px, 13vw, 60px); margin: 0; max-width: 15ch; }
 
 .welcome__rule {
   height: 3px; width: 56px; margin: 20px 0;
@@ -855,7 +896,10 @@ body.display-mode .stubnote { font-size: 20px; }
   /* The strip is a 2:1 image at 100% width, so at 1280px it stood 658px tall
      and pushed the countdown, the enter button, and the QR below the fold.
      Cap the height and let object-fit crop instead of scaling. */
-  .band { max-height: 32vh; }
+  .masthead--tall .band { max-height: 32vh; }
+
+  /* A little more room for the compact masthead on a wider screen. */
+  .masthead:not(.masthead--tall) .band { height: 140px; }
 
   /* One centred reading column. Header, tabs, and content all share an edge. */
   .hdr__row,
@@ -1098,9 +1142,10 @@ function BrandMark() {
       <div className="pick hdr__pick" aria-hidden="true">
         <span className="pick__text">MM<br />26</span>
       </div>
+      {/* No subtitle here. The masthead banner directly above already says
+          "2026 Private Clubs Meeting". */}
       <div style={{ minWidth: 0 }}>
         <p className="hdr__name t-display">The Live Wall</p>
-        <p className="hdr__sub">Private Clubs 2026</p>
       </div>
     </div>
   );
@@ -1204,21 +1249,34 @@ function BandStrip() {
   );
 }
 
+/* The flier's masthead: band strip with the scarlet title bar under it. `tall`
+   is the welcome hero treatment. Everything else gets the compact strip. */
+function Masthead({ tall }) {
+  return (
+    <div className={"masthead" + (tall ? " masthead--tall" : "")}>
+      <BandStrip />
+      <div className="masthead__banner">
+        <span className="t-display">2026 Private Clubs Meeting</span>
+      </div>
+    </div>
+  );
+}
+
 /* `returning` is true when somebody taps the QR button in the header to pull
    this screen back up. They have already entered, so the button underneath
    sends them back rather than pretending to admit them again. */
 function Welcome({ onEnter, now, returning }) {
   return (
     <div className="welcome">
-      <BandStrip />
+      <Masthead tall />
       <div className="welcome__body">
         {/* Two wrappers so a wide screen can put the QR beside the text
             instead of below the fold. Stacked on a phone. */}
         <div className="welcome__text">
           <p className="welcome__kicker">Century Golf Partners</p>
-          <h1 className="welcome__title t-display">
-            2026 Private Clubs Meeting<span className="wall">The Live Wall</span>
-          </h1>
+          {/* The masthead banner above now carries "2026 Private Clubs
+              Meeting", so the headline no longer repeats it. */}
+          <h1 className="welcome__title t-display">The Live Wall</h1>
           <div className="welcome__rule"></div>
           <p className="welcome__where">Columbus, Ohio. August 25 to 28, 2026.</p>
 
@@ -1569,6 +1627,10 @@ function App() {
 
   return (
     <div>
+      {/* Masthead on every page, per Lisa. Scrolls away. The controls and the
+          tab bar below it stay stuck to the top. */}
+      <Masthead />
+
       <header className="hdr">
         <div className="hdr__row">
           <BrandMark />
