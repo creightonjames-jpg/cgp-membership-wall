@@ -668,8 +668,15 @@ button { font-family: inherit; }
 .enter:active { background: var(--oxblood); }
 
 /* -------------------------------------------------------------- header */
+/* The header and the tab bar stick as one unit. They used to be two separate
+   sticky elements both pinned to top: 0, which meant that the moment the
+   masthead scrolled away they landed on top of each other and the brand mark
+   sat over the first row of tab pills. Found while building T1.1, because The
+   Setlist is the first tab with enough content to scroll. */
+.stickytop { position: sticky; top: 0; z-index: 30; }
+
 .hdr {
-  position: sticky; top: 0; z-index: 30;
+  position: relative; z-index: 2;
   background: rgba(23,22,26,0.92);
   backdrop-filter: saturate(1.4) blur(8px);
   -webkit-backdrop-filter: saturate(1.4) blur(8px);
@@ -727,7 +734,7 @@ button { font-family: inherit; }
    Gold is a hairline and a badge, so the Encore award cards keep their claim
    on it. */
 .tabs {
-  position: sticky; top: 0; z-index: 20;
+  position: relative; z-index: 1;
   background: rgba(23,22,26,0.92);
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   border-bottom: 0;
@@ -959,6 +966,258 @@ body.display-mode .stubnote { font-size: 20px; }
   border: 1px solid var(--danger); border-radius: 10px;
   padding: 12px 14px; font-size: 13px; color: var(--cream);
 }
+
+/* ==========================================================================
+   T1.1 THE SETLIST
+   Day pills, ticket stub session cards, ON AIR pulse, reactions.
+   No new motifs. Ticket, grille, glow-card, struck and is-done all come from
+   T0.4. Everything below is layout and chrome mixed from the same dials the
+   tab bar uses, so the palette is still twelve tokens.
+   ========================================================================== */
+
+/* ---------------------------------------------------------- day pills */
+/* Same warm chrome language as the tab bar, one notch quieter, because the tab
+   bar has to stay the loudest control on the page. */
+.dayrow {
+  display: flex; gap: 7px; margin: 0 0 16px;
+  overflow-x: auto; overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.dayrow::-webkit-scrollbar { display: none; }
+
+.daypill {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 8px;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge);
+  border-radius: 999px; padding: 7px 14px;
+  color: var(--cream); cursor: pointer; text-align: left;
+  white-space: nowrap; font-family: inherit;
+  transition: background-image 120ms ease, border-color 120ms ease;
+}
+
+.daypill:active {
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+}
+
+.daypill[aria-selected="true"] {
+  background-color: transparent;
+  background-image: var(--grad-primary);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px rgba(217,169,76,0.22), 0 3px 12px rgba(200,16,46,0.34);
+}
+
+.daypill__d { display: block; font-size: 11px; letter-spacing: 0.1em; color: var(--gold); }
+.daypill[aria-selected="true"] .daypill__d { color: var(--cream); }
+.daypill__n { display: block; font-size: 14px; line-height: 1.15; }
+
+/* Today's dot. Scarlet on a resting pill reads fine, but the selected pill is
+   itself a scarlet gradient, so the dot carries a cream ring and stays a
+   scarlet dot in both states. */
+.daypill__dot {
+  flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--scarlet);
+  box-shadow: 0 0 0 2px rgba(247,243,234,0.88);
+}
+
+/* ------------------------------------------------------- day header card */
+.dayhead { padding: 15px 16px; margin: 0 0 14px; }
+.dayhead__t { margin: 0; font-size: clamp(22px, 6.6vw, 30px); }
+.dayhead__note { margin: 9px 0 0; color: var(--dim); font-size: 14px; }
+
+.dayhead__attire { margin: 13px 0 0; display: flex; flex-direction: column; gap: 7px; }
+
+.attire { display: flex; gap: 9px; align-items: baseline; font-size: 13px; }
+
+.attire__k {
+  flex: 0 0 auto;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+.attire__v { margin: 0; color: var(--cream); }
+
+/* ---------------------------------------------------- session cards */
+.set-list { display: flex; flex-direction: column; gap: 16px; }
+.set-card { --ticket-stub-w: 78px; }
+
+/* The whole ticket is the toggle, so it is a button. Strip the UA chrome and
+   let .ticket keep the motif. Reactions and links sit outside it, because a
+   button cannot hold another button. */
+.set-ticket {
+  width: 100%; padding: 0; margin: 0;
+  font: inherit; color: inherit; text-align: left;
+  -webkit-appearance: none; appearance: none;
+  cursor: pointer;
+}
+
+.set-ticket:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+.set-stub__t { font-family: var(--font-display); font-size: 20px; line-height: 1; }
+.set-stub__m { font-size: 10px; letter-spacing: 0.16em; color: var(--dim); }
+
+.set-stub__lab {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 13px; line-height: 1.05; letter-spacing: 0.06em;
+  color: var(--gold);
+}
+
+.set-row {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin: 0 0 7px;
+}
+
+.set-kicker {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.16em; color: var(--dim);
+}
+
+/* These are spans, not paragraphs, because their parent is a button. */
+.set-title { display: block; margin: 0; font-size: 17px; font-weight: 600; line-height: 1.28; }
+.set-meta { display: block; margin: 6px 0 0; font-size: 13px; color: var(--dim); }
+
+.set-more {
+  display: block; margin: 9px 0 0;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.16em; color: var(--mute);
+}
+
+/* ON AIR. Scarlet gradient, gold bulb, and a ring that breathes outward. */
+.onair {
+  display: inline-flex; align-items: center; gap: 6px;
+  background-image: var(--grad-primary);
+  border: 1px solid var(--gold-rule); border-radius: 999px;
+  padding: 3px 10px; color: var(--cream);
+  font-family: var(--font-display); font-size: 11px; letter-spacing: 0.14em;
+  animation: onair-pulse 1.7s ease-in-out infinite;
+}
+
+.onair__dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--gold);
+}
+
+@keyframes onair-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200,16,46,0.55); }
+  55%      { box-shadow: 0 0 0 7px rgba(200,16,46,0); }
+}
+
+/* A badge that throbs on every card is exactly the thing to switch off for
+   anyone who asked for less motion. It still reads as ON AIR standing still. */
+@media (prefers-reduced-motion: reduce) {
+  .onair { animation: none; }
+}
+
+/* Starts within 30 minutes. */
+.soon {
+  display: inline-flex; align-items: center; gap: 6px;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge); border-radius: 999px;
+  padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--gold);
+}
+
+/* ------------------------------------------------------------- detail */
+/* Sits under the ticket with a gap rather than flush, because .ticket punches
+   its notches half outside its own bottom edge and a flush panel would show a
+   --stage circle sitting on top of it. */
+.set-detail {
+  margin: 11px 0 0 12px;
+  background: var(--riser);
+  border: 1px solid var(--edge); border-left: 3px solid var(--scarlet);
+  border-radius: 8px; padding: 13px 15px;
+}
+
+.set-detail__d { margin: 0 0 12px; font-size: 14px; }
+.set-detail__d:last-child { margin-bottom: 0; }
+
+.set-dl {
+  margin: 0; display: grid; grid-template-columns: auto 1fr;
+  gap: 6px 12px; font-size: 13px; align-items: baseline;
+}
+
+.set-dl dt {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+.set-dl dd { margin: 0; color: var(--cream); min-width: 0; }
+
+.set-fine { margin: 12px 0 0; font-size: 11px; color: var(--mute); }
+
+/* Sub items inside one session. The seven Core Fundamentals breakouts. */
+.set-items { margin: 0 0 12px; }
+
+.set-items__k {
+  margin: 0 0 6px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+.set-items__l { margin: 0; padding-left: 18px; font-size: 13px; }
+.set-items__l li { margin: 0 0 3px; }
+.set-items__l li::marker { color: var(--scarlet); }
+
+/* Link chips. Maps, phones, mail, websites. Shared with T1.2. */
+.chiprow { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+
+.linkchip {
+  display: inline-flex; align-items: center; gap: 7px;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge); border-radius: 999px;
+  padding: 8px 13px; color: var(--cream); font-size: 13px;
+  text-decoration: none;
+}
+
+.linkchip:active {
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+}
+
+.linkchip__i { font-size: 13px; line-height: 1; }
+
+/* ---------------------------------------------------------- reactions */
+.reacts { display: flex; flex-wrap: wrap; gap: 8px; margin: 11px 0 0 12px; }
+
+.react {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--input); border: 1px solid var(--edge);
+  border-radius: 999px; padding: 6px 12px;
+  color: var(--dim); font-size: 14px; cursor: pointer;
+}
+
+.react__n { font-size: 12px; font-weight: 600; min-width: 1ch; }
+
+.react.is-cast {
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+  border-color: var(--warm-edge); color: var(--cream);
+}
+
+.react:disabled { cursor: default; opacity: 0.55; }
+
+/* --------------------------------------------------------- placeholder */
+/* The running order for Wednesday and Thursday is not on the flier. This card
+   says so out loud rather than being quietly filled in with a guess. */
+.set-card--tba .ticket { border-style: dashed; background: transparent; }
+.set-card--tba .ticket__stub { border-right-style: dashed; }
+
+/* ------------------------------------------------------------- notices */
+.setnote {
+  margin: 0 0 16px; background: var(--riser);
+  border: 1px solid var(--gold-rule); border-radius: 10px;
+  padding: 11px 13px; font-size: 12px; color: var(--dim);
+}
+
+@media (min-width: 700px) {
+  .dayrow { flex-wrap: wrap; overflow-x: visible; row-gap: 7px; }
+  .set-card { --ticket-stub-w: 96px; }
+  .set-stub__t { font-size: 23px; }
+  .set-title { font-size: 19px; }
+  .dayhead { padding: 18px 20px; }
+}
 </style>
 </head>
 <body>
@@ -1012,7 +1271,55 @@ const ADMIN_PIN = "2026";
 const OPENS_AT = Date.parse("2026-08-25T12:00:00-04:00");
 
 const LS = {
-  entered: "mm26_entered"
+  entered: "mm26_entered",
+  reacted: "mm26_reacted"
+};
+
+/* Venue and contact facts, verbatim off the flier. One table, because The
+   Setlist links to these venues and Backstage Pass lists them in full, and two
+   copies of a phone number is one copy too many. Nothing here is inferred.
+   `addr` is what gets handed to the maps app. `phone` is printed exactly as the
+   flier prints it and normalised only for the tel: href. */
+const VENUES = {
+  hotel: {
+    name: "Embassy Suites by Hilton Columbus",
+    addr: "2700 Corporate Exchange Drive, Columbus, Ohio 43231",
+    phone: "(614) 890-8600"
+  },
+  club: {
+    name: "The Medallion Club",
+    addr: "5000 Club Drive, Westerville, Ohio 43082",
+    phone: "(614) 794-6999"
+  },
+  smashpark: {
+    name: "Smash Park Westerville",
+    addr: "495 Polaris Parkway, Westerville, Ohio 43082",
+    phone: "(614) 502-6993"
+  },
+  /* The flier names the airport and nothing else, so there is no street
+     address here to invent. The maps link searches the name. */
+  cmh: {
+    name: "John Glenn Columbus International",
+    addr: "",
+    phone: ""
+  }
+};
+
+const CONTACTS = {
+  carol: {
+    name: "Carol",
+    forWhat: "Meeting questions",
+    phone: "281.804.6719",
+    email: "",
+    how: "Call or text"
+  },
+  yolanda: {
+    name: "Yolanda",
+    forWhat: "Flights and rental cars",
+    phone: "214.952.8269",
+    email: "ynuncio@centurygolf.com",
+    how: "Call, text, or email"
+  }
 };
 
 /* Ten tabs, spec section 3. Themed names only, no plain English subtitles.
@@ -1058,6 +1365,100 @@ function breakdown(ms) {
 
 function pad(n) { return n < 10 ? "0" + n : String(n); }
 
+function readJSON(key) {
+  const raw = readLS(key);
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function writeJSON(key, value) {
+  try { writeLS(key, JSON.stringify(value)); } catch (e) { /* nothing to do */ }
+}
+
+/* ------------------------------------------------------- links out */
+
+/* Strip a printed number down to a dialable one. The flier prints three
+   different formats and none of them dial. */
+function telHref(printed) {
+  const digits = String(printed || "").replace(/\D/g, "");
+  if (!digits) return null;
+  return "tel:+1" + (digits.length === 11 && digits[0] === "1" ? digits.slice(1) : digits);
+}
+
+function mailHref(address) { return address ? "mailto:" + address : null; }
+
+/* Apple platforms hand maps.apple.com straight to Maps. Android hands the
+   Google search URL straight to the Maps app. Sending one link to both gets a
+   web page on one of them, so the platform decides. */
+const IS_APPLE = /iPhone|iPad|iPod|Macintosh/.test(
+  (window.navigator && window.navigator.userAgent) || ""
+);
+
+function mapHref(query) {
+  if (!query) return null;
+  const q = encodeURIComponent(query);
+  return IS_APPLE
+    ? "https://maps.apple.com/?q=" + q
+    : "https://www.google.com/maps/search/?api=1&query=" + q;
+}
+
+/* The whole address if there is one, the venue name if there is not. */
+function venueMapQuery(v) {
+  if (!v) return null;
+  return v.addr ? v.name + ", " + v.addr : v.name;
+}
+
+/* ------------------------------------------------------- eastern clock */
+/* The meeting is in Ohio and attendees fly in from several time zones, so every
+   label the wall prints is Eastern regardless of where the phone thinks it is.
+   Intl does the DST work rather than an offset constant. */
+const ET = "America/New_York";
+
+function etParts(ms) {
+  try {
+    const f = new Intl.DateTimeFormat("en-US", {
+      timeZone: ET, hour: "numeric", minute: "2-digit", hour12: true
+    });
+    const out = { hhmm: "", ap: "" };
+    f.formatToParts(ms).forEach((p) => {
+      if (p.type === "hour") out.hhmm = p.value;
+      if (p.type === "minute") out.hhmm += ":" + p.value;
+      if (p.type === "dayPeriod") out.ap = p.value.toUpperCase();
+    });
+    return out;
+  } catch (e) {
+    const d = new Date(ms);
+    return { hhmm: d.getHours() + ":" + pad(d.getMinutes()), ap: "" };
+  }
+}
+
+/* Calendar date in Eastern, as YYYY-MM-DD, so it can be compared to the date
+   strings in agenda.json without any timezone arithmetic. */
+function etDate(ms) {
+  try {
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: ET, year: "numeric", month: "2-digit", day: "2-digit"
+    }).format(ms);
+  } catch (e) {
+    const d = new Date(ms);
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+}
+
+/* mm:ss for a countdown under an hour, h:mm:ss over one. */
+function clock(ms) {
+  const t = breakdown(ms);
+  const h = t.days * 24 + t.hours;
+  return h > 0
+    ? h + ":" + pad(t.minutes) + ":" + pad(t.seconds)
+    : t.minutes + ":" + pad(t.seconds);
+}
+
 /* ------------------------------------------------------- firebase boot */
 /* One place to fail. If Firebase cannot start, the shell still renders and
    says so, rather than throwing a white screen at a full ballroom. */
@@ -1080,13 +1481,29 @@ const FB = bootFirebase();
    offset between this device and the server at .info/serverTimeOffset.
    T2.3 reuses this for the Vault drops, where getting it wrong means content
    lands on the wrong morning. */
+/* Test hook, not a feature. `?clock=2026-08-26T09:15:00-04:00` makes this one
+   device believe it is that moment, and the belief flows through the same
+   corrected clock every timed thing on the wall already reads. That is how ON
+   AIR, the dimming, the 30 minute countdown, and the Vault drops at T2.3 get
+   tested on the live URL without touching a machine clock. It changes nothing
+   for anyone who does not pass the parameter, and any device using it says so
+   on screen so nobody is fooled by a card that is lying about the time. */
+const SIM_CLOCK = (function () {
+  try {
+    const raw = new URLSearchParams(window.location.search).get("clock");
+    if (!raw) return null;
+    const at = Date.parse(raw);
+    return isNaN(at) ? null : at;
+  } catch (e) { return null; }
+})();
+
 function useServerNow() {
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState(() => (SIM_CLOCK ? SIM_CLOCK - Date.now() : 0));
   const [synced, setSynced] = useState(false);
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    if (!FB.ok) return;
+    if (!FB.ok || SIM_CLOCK) return;
     const ref = FB.db.ref(".info/serverTimeOffset");
     const handler = (snap) => {
       setOffset(snap.val() || 0);
@@ -1101,7 +1518,7 @@ function useServerNow() {
     return () => window.clearInterval(id);
   }, []);
 
-  return { now: now + offset, offset, synced };
+  return { now: now + offset, offset, synced, simulated: SIM_CLOCK !== null };
 }
 
 /* Marquee announcements. Admin posts them in T1.6. Until then this is a
@@ -1454,14 +1871,431 @@ function BuildNote({ isAdmin, task, children }) {
   );
 }
 
-function SetlistTab({ isAdmin }) {
+/* ==========================================================================
+   T1.1 THE SETLIST. Spec 3.1.
+   Four day pills, sessions as ticket stubs, ON AIR on the live one, completed
+   ones dimmed and struck, a countdown inside 30 minutes, tap to expand, four
+   reactions per session against Firebase.
+
+   Every clock decision reads the server corrected `now` handed down from
+   useServerNow. Nothing in here calls Date.now(). Attendees fly in from several
+   time zones and a phone an hour out would otherwise put ON AIR on the wrong
+   card in front of the whole room.
+   ========================================================================== */
+
+/* Four per session, counts at reactions/{eventKey}/{emoji}. One cast per emoji
+   per session per device, held in mm26_reacted. Somebody determined can clear
+   their own storage and cast again. That is fine. This is applause, not a
+   ballot. */
+const REACTIONS = [
+  { key: "fire",      glyph: "\u{1F525}", label: "Fire" },
+  { key: "horns",     glyph: "\u{1F918}", label: "Horns up" },
+  { key: "lightbulb", glyph: "\u{1F4A1}", label: "Good idea" },
+  { key: "bullseye",  glyph: "\u{1F3AF}", label: "Nailed it" }
+];
+
+const HALF_HOUR = 30 * 60 * 1000;
+
+function useAgenda() {
+  const [state, setState] = useState({ status: "loading", data: null, reason: "" });
+
+  useEffect(() => {
+    let live = true;
+    fetch("data/agenda.json", { cache: "no-cache" })
+      .then((res) => {
+        if (!res.ok) throw new Error("The file returned " + res.status + ".");
+        return res.json();
+      })
+      .then((data) => { if (live) setState({ status: "ready", data: data, reason: "" }); })
+      .catch((err) => {
+        if (live) setState({ status: "failed", data: null, reason: (err && err.message) || String(err) });
+      });
+    return () => { live = false; };
+  }, []);
+
+  return state;
+}
+
+/* One listener for the whole reactions node. Four counters across a dozen
+   sessions is a few hundred bytes, so this is cheaper than a listener per
+   session and it keeps every count live with no reload. */
+function useReactions() {
+  const [counts, setCounts] = useState({});
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("reactions");
+    const handler = (snap) => setCounts(snap.val() || {});
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return counts;
+}
+
+/* A transaction rather than a set, because two people tapping the same button
+   in the same second must both be counted. */
+function castReaction(eventKey, emoji) {
+  if (!FB.ok) return;
+  FB.db.ref("reactions/" + eventKey + "/" + emoji)
+    .transaction((current) => (current || 0) + 1);
+}
+
+/* Where a session sits against the corrected clock.
+   `open` kind has a start and no end, so it runs until the day is out. Every
+   day of this meeting falls in EDT, which is UTC-4, so the day boundary is
+   written out rather than computed. */
+function sessionState(sess, day, now) {
+  /* `aside` is pinned at a time but is not a session. The Stop n Go break
+     station is available across the whole breakout block, so it neither goes
+     ON AIR nor strikes itself out at 10:31. */
+  if (sess.kind === "placeholder" || sess.kind === "allday" || sess.kind === "aside") {
+    return { phase: "static" };
+  }
+
+  const start = sess.start ? Date.parse(sess.start) : NaN;
+  if (isNaN(start)) return { phase: "static" };
+
+  if (now < start) {
+    const left = start - now;
+    return { phase: "next", left: left, soon: left <= HALF_HOUR };
+  }
+
+  if (sess.kind === "instant") return { phase: "done" };
+
+  const end = sess.end
+    ? Date.parse(sess.end)
+    : Date.parse(day.date + "T23:59:59-04:00");
+
+  return now < end ? { phase: "live" } : { phase: "done" };
+}
+
+function LinkChip({ href, glyph, children }) {
+  if (!href) return null;
+  const external = /^https?:/.test(href);
+  return (
+    <a
+      className="linkchip"
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+    >
+      <span className="linkchip__i" aria-hidden="true">{glyph}</span>
+      <span>{children}</span>
+    </a>
+  );
+}
+
+/* Everything inside the ticket is a span, because the ticket itself is a
+   button and a button may not hold a p or a div. Reactions and links sit
+   outside it for the same reason. */
+function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle }) {
+  const st = sessionState(sess, day, now);
+  const venue = sess.venue ? VENUES[sess.venue] : null;
+  const clocked = !!sess.start;
+  const at = clocked ? etParts(Date.parse(sess.start)) : null;
+  const panelId = "sess-" + sess.key;
+  const where = [venue ? venue.name : "", sess.room].filter(Boolean).join(", ");
+  const mine = counts[sess.key] || {};
+
+  const badges = (
+    <span className="set-row">
+      {st.phase === "live" ? (
+        <span className="onair">
+          <span className="onair__dot" aria-hidden="true"></span>On Air
+        </span>
+      ) : null}
+      {st.phase === "next" && st.soon ? (
+        <span className="soon">
+          Starts in <span className="t-data">{clock(st.left)}</span>
+        </span>
+      ) : null}
+      {sess.subtitle ? <span className="set-kicker">{sess.subtitle}</span> : null}
+    </span>
+  );
+
+  const showBadges = st.phase === "live" || (st.phase === "next" && st.soon) || sess.subtitle;
+
+  const stub = clocked ? (
+    <span className="ticket__stub">
+      <span className="set-stub__t">{at.hhmm}</span>
+      <span className="set-stub__m">{at.ap}</span>
+    </span>
+  ) : (
+    <span className="ticket__stub">
+      <span className="set-stub__lab">{sess.stubLabel}</span>
+    </span>
+  );
+
+  const body = (
+    <span className="ticket__body">
+      {showBadges ? badges : null}
+      <span className="set-title">
+        {st.phase === "done" ? <span className="struck">{sess.title}</span> : sess.title}
+      </span>
+      {sess.presenter || where ? (
+        <span className="set-meta">
+          {[sess.presenter, where].filter(Boolean).join(" · ")}
+        </span>
+      ) : null}
+      <span className="set-more">{open ? "Close ▴" : "Detail ▾"}</span>
+    </span>
+  );
+
+  if (sess.kind === "placeholder") {
+    return (
+      <article className="set-card set-card--tba">
+        <div className="ticket">
+          {stub}
+          <span className="ticket__body">
+            <span className="set-row">
+              <span className="set-kicker">Running order to come</span>
+            </span>
+            <span className="set-title">{sess.title}</span>
+            <span className="set-meta">{sess.description}</span>
+          </span>
+        </div>
+      </article>
+    );
+  }
+
+  const anyDetail = sess.description || where || sess.presenter || sess.preread
+    || (sess.items && sess.items.length);
+
+  return (
+    <article className={"set-card" + (st.phase === "done" ? " is-done" : "")}>
+      <button
+        className="ticket set-ticket"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={onToggle}
+      >
+        {stub}
+        {body}
+      </button>
+
+      {open ? (
+        <div className="set-detail" id={panelId}>
+          {sess.description ? (
+            <p className="set-detail__d">{sess.description}</p>
+          ) : null}
+
+          {!anyDetail ? (
+            <p className="set-detail__d">Nothing else on the flier for this one.</p>
+          ) : null}
+
+          {/* The seven Core Fundamentals breakouts sit under one session, so
+              they are a list inside that session rather than seven cards that
+              would each claim their own start time. */}
+          {sess.items && sess.items.length ? (
+            <div className="set-items">
+              <p className="set-items__k">{sess.itemsLabel || "Includes"}</p>
+              <ul className="set-items__l">
+                {sess.items.map((it) => <li key={it}>{it}</li>)}
+              </ul>
+            </div>
+          ) : null}
+
+          {where || sess.presenter || sess.preread ? (
+            <dl className="set-dl">
+              {sess.presenter ? (
+                <React.Fragment><dt>Who</dt><dd>{sess.presenter}</dd></React.Fragment>
+              ) : null}
+              {where ? (
+                <React.Fragment><dt>Where</dt><dd>{where}</dd></React.Fragment>
+              ) : null}
+              {sess.preread ? (
+                <React.Fragment>
+                  <dt>Pre-read</dt>
+                  <dd>
+                    <a href={sess.preread.url} target="_blank" rel="noopener noreferrer">
+                      {sess.preread.label}
+                    </a>
+                  </dd>
+                </React.Fragment>
+              ) : null}
+            </dl>
+          ) : null}
+
+          {venue || (sess.links && sess.links.length) ? (
+            <div className="chiprow">
+              {venue ? (
+                <LinkChip href={mapHref(venueMapQuery(venue))} glyph={"\u{1F4CD}"}>
+                  {venue.name}
+                </LinkChip>
+              ) : null}
+              {venue && venue.phone ? (
+                <LinkChip href={telHref(venue.phone)} glyph={"\u{1F4DE}"}>
+                  {venue.phone}
+                </LinkChip>
+              ) : null}
+              {(sess.links || []).map((l) => (
+                <LinkChip
+                  key={l.kind + l.value}
+                  href={l.kind === "mail" ? mailHref(l.value)
+                      : l.kind === "tel" ? telHref(l.value)
+                      : l.value}
+                  glyph={l.kind === "mail" ? "✉" : l.kind === "tel" ? "\u{1F4DE}" : "\u{1F517}"}
+                >
+                  {l.label}
+                </LinkChip>
+              ))}
+            </div>
+          ) : null}
+
+          {sess.endSource === "next" ? (
+            <p className="set-fine">
+              The agenda gives a start time only. The end used here is the next
+              item's start, so the live badge is a derivation.
+            </p>
+          ) : null}
+
+          {sess.kind === "open" ? (
+            <p className="set-fine">No end time on the agenda. It runs until the night is done.</p>
+          ) : null}
+        </div>
+      ) : null}
+
+      <div className="reacts">
+        {REACTIONS.map((r) => {
+          const n = mine[r.key] || 0;
+          const cast = !!castMap[sess.key + ":" + r.key];
+          return (
+            <button
+              key={r.key}
+              className={"react" + (cast ? " is-cast" : "")}
+              disabled={!FB.ok || cast}
+              onClick={() => onCast(sess.key, r.key)}
+              title={cast ? "Already counted" : r.label}
+            >
+              <span aria-hidden="true">{r.glyph}</span>
+              <span className="react__n t-data">{FB.ok ? n : "–"}</span>
+              <span className="sr-only">{r.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </article>
+  );
+}
+
+function SetlistTab({ isAdmin, now }) {
+  const agenda = useAgenda();
+  const counts = useReactions();
+  const [castMap, setCastMap] = useState(() => readJSON(LS.reacted));
+  const [dayKey, setDayKey] = useState(null);
+  const [open, setOpen] = useState({});
+
+  const days = (agenda.data && agenda.data.days) || [];
+  const today = etDate(now);
+
+  /* Land on today if the meeting is running, otherwise on the next day that
+     has not happened yet. Runs once, when the file arrives. After that the
+     pills belong to whoever is tapping them. */
+  useEffect(() => {
+    if (!days.length || dayKey) return;
+    const onToday = days.filter((d) => d.date === today)[0];
+    const ahead = days.filter((d) => d.date >= today)[0];
+    setDayKey((onToday || ahead || days[0]).key);
+  }, [agenda.status]);
+
+  const onCast = useCallback((sessKey, emoji) => {
+    const id = sessKey + ":" + emoji;
+    /* Read storage rather than state, so a second tab on the same phone cannot
+       double cast through a stale copy. */
+    const held = readJSON(LS.reacted);
+    if (held[id]) return;
+    held[id] = 1;
+    writeJSON(LS.reacted, held);
+    setCastMap(held);
+    castReaction(sessKey, emoji);
+  }, []);
+
+  const day = days.filter((d) => d.key === dayKey)[0] || days[0];
+
   return (
     <TabFrame tabKey="setlist">
-      <Empty>No setlist yet. The running order is still being argued about.</Empty>
+      {agenda.status === "loading" ? (
+        <Empty>Pulling the running order.</Empty>
+      ) : null}
+
+      {agenda.status === "failed" ? (
+        <Empty>
+          The running order did not load. {agenda.reason} Everything else on the
+          wall still works.
+        </Empty>
+      ) : null}
+
+      {day ? (
+        <div>
+          <div className="dayrow" role="tablist" aria-label="Days">
+            {days.map((d) => (
+              <button
+                key={d.key}
+                role="tab"
+                className="daypill"
+                aria-selected={d.key === dayKey}
+                onClick={() => setDayKey(d.key)}
+              >
+                <span>
+                  <span className="daypill__d t-display">{d.pillDate}</span>
+                  <span className="daypill__n">{d.pill}</span>
+                </span>
+                {d.date === today ? (
+                  <span className="daypill__dot" title="Today"></span>
+                ) : null}
+              </button>
+            ))}
+          </div>
+
+          <div className="dayhead glow-card grille">
+            <h3 className="dayhead__t t-display">{day.title}</h3>
+            {day.note ? <p className="dayhead__note">{day.note}</p> : null}
+            <div className="dayhead__attire">
+              {day.attire.length ? (
+                day.attire.map((a) => (
+                  <div className="attire" key={a.k}>
+                    <span className="attire__k">{a.k}</span>
+                    <p className="attire__v">{a.v}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="attire">
+                  <span className="attire__k">Attire</span>
+                  <p className="attire__v">Nothing specified for today.</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="set-list">
+            {day.sessions.map((sess) => (
+              <SessionCard
+                key={sess.key}
+                sess={sess}
+                day={day}
+                now={now}
+                counts={counts}
+                castMap={castMap}
+                onCast={onCast}
+                open={!!open[sess.key]}
+                onToggle={() => setOpen((prev) => {
+                  const next = Object.assign({}, prev);
+                  next[sess.key] = !prev[sess.key];
+                  return next;
+                })}
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       <BuildNote isAdmin={isAdmin} task="T1.1">
-        Agenda from the flier into data/agenda.json. Four day pills, sessions as
-        ticket stubs, ON AIR pulse, 30 minute countdown, four reactions per
-        session, attire tag per day.
+        Running order is the official agenda, which replaces the flier. Wednesday
+        evening is at the hotel, not Smash Park, and that conflict is still open
+        with Carol. No rooms, because the agenda names none. Append
+        ?clock=2026-08-26T09:15:00-04:00 to any URL to test On Air, the dimming,
+        and the 30 minute countdown.
       </BuildNote>
     </TabFrame>
   );
@@ -1610,7 +2444,7 @@ function App() {
 
   /* useServerNow also returns `synced` and `offset`. T2.3 needs them for the
      Vault drops. The welcome screen does not surface either one. */
-  const { now } = useServerNow();
+  const { now, simulated } = useServerNow();
   const announcement = useAnnouncement();
 
   useEffect(() => {
@@ -1645,6 +2479,9 @@ function App() {
           tab bar below it stay stuck to the top. */}
       <Masthead />
 
+      {/* Header and tab bar stick together. Two separate sticky elements both
+          pinned to the top overlapped once the masthead scrolled off. */}
+      <div className="stickytop">
       <header className="hdr">
         <div className="hdr__row">
           <BrandMark />
@@ -1676,6 +2513,7 @@ function App() {
       </header>
 
       <TabBar tabs={TABS} active={active} onPick={setActive} isAdmin={isAdmin} />
+      </div>
 
       <main className="sheet">
         {!FB.ok ? (
@@ -1694,12 +2532,22 @@ function App() {
           </div>
         ) : null}
 
+        {/* A device running the clock override is lying about the time on
+            purpose. It says so, so nobody reads a test as the truth. */}
+        {simulated ? (
+          <p className="setnote">
+            Clock override is on. This device is pretending it is{" "}
+            {new Date(now).toLocaleString("en-US", { timeZone: ET })} Eastern.
+            Drop the clock parameter from the URL to go back to the real time.
+          </p>
+        ) : null}
+
         <MarqueeSlot
           item={liveAnnouncement}
           onDismiss={() => setDismissed(liveAnnouncement.id)}
         />
 
-        <TabView isAdmin={isAdmin} />
+        <TabView isAdmin={isAdmin} now={now} />
       </main>
 
       {showPin ? (

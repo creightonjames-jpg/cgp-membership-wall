@@ -1,0 +1,515 @@
+{
+  "meta": {
+    "task": "ROADMAP T1.1, rebuilt from the official agenda on Aug 11.",
+    "source": "The official agenda supplied by Jim. It supersedes the flier for the running order. Every title, time, presenter, and note below is the official agenda's own wording. Nothing here is inferred.",
+    "timezone": "America/New_York",
+    "smashPark": "The flier had a 6:00 PM Wednesday outing at Smash Park Westerville. The official agenda puts Wednesday evening at the hotel instead. This file follows the official agenda. The conflict is unresolved and logged in ROADMAP.md. The Smash Park venue card stays in Backstage Pass because the address and phone are still facts.",
+    "rooms": "The official agenda names no rooms. Room fields are empty on purpose. Do not fill them in from memory.",
+    "presenters": "Three people are named in the source and only three: Jim Hinckley, Doug Howe, and Gene. Nobody else gets a presenter.",
+    "venueKeys": "venue points at the VENUES table in index.html, so an address and a phone number live in exactly one place.",
+    "kinds": {
+      "timed": "Has a start and an end. Goes ON AIR between the two.",
+      "open": "Has a start, no end. Runs ON AIR until the day is out.",
+      "instant": "A moment, not a block. No ON AIR. Dims once it has passed.",
+      "aside": "Pinned at a time but not a session, so it never goes ON AIR and never dims. The break station.",
+      "allday": "No clock at all.",
+      "placeholder": "A known block with an unknown running order. Inert on purpose. Nothing needs one now that the official agenda is in, and the code path stays for the next partial agenda."
+    },
+    "endSource": {
+      "stated": "The agenda states the end time.",
+      "next": "The agenda states a start only. The end is the next item's start time, which is a derivation, not a fact. The card says so."
+    }
+  },
+  "days": [
+    {
+      "key": "tue",
+      "date": "2026-08-25",
+      "pill": "Roadie Stop",
+      "pillDate": "Tue 8/25",
+      "title": "Roadie Stop",
+      "note": "Tour bus and all roadies check into the hotel.",
+      "attire": [
+        { "k": "Attire", "v": "Country Club Casual and Appropriate Length Shorts (no denim)." }
+      ],
+      "sessions": [
+        {
+          "key": "tue-check-in",
+          "kind": "allday",
+          "stubLabel": "Check In",
+          "title": "Roadies Check In",
+          "presenter": "",
+          "venue": "hotel",
+          "room": "",
+          "description": "Tour bus and all roadies check into the hotel. If arriving Monday, make sure Yolanda knows so she can save you a spot.",
+          "links": [
+            { "kind": "mail", "label": "Email Yolanda", "value": "ynuncio@centurygolf.com" }
+          ]
+        },
+        {
+          "key": "tue-shank-showdown",
+          "kind": "timed",
+          "start": "2026-08-25T12:00:00-04:00",
+          "end": "2026-08-25T17:00:00-04:00",
+          "endSource": "next",
+          "subtitle": "Tee-Off",
+          "title": "The Shank Showdown II Golf Tournament",
+          "presenter": "",
+          "venue": "club",
+          "room": "Golf Course",
+          "description": "Proudly benefiting Century Golf Cares. Already in town? Come cheer on your favorite team. Members will be out on the course too, so keep it respectful, no disruptions."
+        },
+        {
+          "key": "tue-welcome-mixer",
+          "kind": "timed",
+          "start": "2026-08-25T17:00:00-04:00",
+          "end": "2026-08-25T20:00:00-04:00",
+          "endSource": "stated",
+          "title": "Opening Act Welcome Mixer",
+          "presenter": "",
+          "venue": "club",
+          "room": "On the Patio",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "key": "wed",
+      "date": "2026-08-26",
+      "pill": "Takes the Stage",
+      "pillDate": "Wed 8/26",
+      "title": "Rock n' Roll Takes the Stage",
+      "note": "",
+      "attire": [
+        { "k": "Attire", "v": "Rock N' Roll Team Dress-Up Day. Today only, denim is allowed for costumes." },
+        { "k": "Evening", "v": "Casual, denim allowed." }
+      ],
+      "sessions": [
+        {
+          "key": "wed-0730-breakfast",
+          "kind": "timed",
+          "start": "2026-08-26T07:30:00-04:00",
+          "end": "2026-08-26T08:20:00-04:00",
+          "endSource": "next",
+          "title": "Breakfast and Photo Op",
+          "presenter": "",
+          "venue": "club",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-0820-cowbell",
+          "kind": "timed",
+          "start": "2026-08-26T08:20:00-04:00",
+          "end": "2026-08-26T08:45:00-04:00",
+          "endSource": "next",
+          "subtitle": "Opening Cowbell",
+          "title": "Welcome and Tenure Awards Presentation",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-0845-opening-remarks",
+          "kind": "timed",
+          "start": "2026-08-26T08:45:00-04:00",
+          "end": "2026-08-26T09:15:00-04:00",
+          "endSource": "next",
+          "title": "Opening Remarks",
+          "presenter": "Jim Hinckley, Founder and CEO Century Golf Partners. Doug Howe, COO Century Golf Partners",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-0915-core-fundamentals",
+          "kind": "timed",
+          "start": "2026-08-26T09:15:00-04:00",
+          "end": "2026-08-26T09:45:00-04:00",
+          "endSource": "next",
+          "title": "The Century Core Fundamentals Reignited",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-0945-breakouts",
+          "kind": "timed",
+          "start": "2026-08-26T09:45:00-04:00",
+          "end": "2026-08-26T12:00:00-04:00",
+          "endSource": "next",
+          "title": "Core Fundamentals Breakouts Session",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": "",
+          "itemsLabel": "Breakouts",
+          "items": [
+            "Backstage Reality Check Scenarios",
+            "Friends Inviting Friends Environment",
+            "Sponsorship Culture",
+            "Enrollment Process",
+            "Retention Strategy",
+            "Ambassador Committee",
+            "Operational Excellence"
+          ]
+        },
+        {
+          "key": "wed-1030-stop-n-go",
+          "kind": "aside",
+          "start": "2026-08-26T10:30:00-04:00",
+          "subtitle": "Break station",
+          "title": "Stop n Go break station available during breakouts",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-1200-lunch",
+          "kind": "timed",
+          "start": "2026-08-26T12:00:00-04:00",
+          "end": "2026-08-26T13:00:00-04:00",
+          "endSource": "next",
+          "title": "Lunch",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-1300-breakouts-cont",
+          "kind": "timed",
+          "start": "2026-08-26T13:00:00-04:00",
+          "end": "2026-08-26T14:30:00-04:00",
+          "endSource": "next",
+          "title": "Core Fundamentals Breakouts Session continued",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-1430-wrap-up",
+          "kind": "timed",
+          "start": "2026-08-26T14:30:00-04:00",
+          "end": "2026-08-26T15:00:00-04:00",
+          "endSource": "next",
+          "title": "Core Fundamentals Wrap-up",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-1500-break",
+          "kind": "timed",
+          "start": "2026-08-26T15:00:00-04:00",
+          "end": "2026-08-26T15:15:00-04:00",
+          "endSource": "next",
+          "title": "Break Time",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-1515-culture-story",
+          "kind": "timed",
+          "start": "2026-08-26T15:15:00-04:00",
+          "end": "2026-08-26T17:15:00-04:00",
+          "endSource": "next",
+          "title": "Your Club's Culture Story",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-1715-programming-ends",
+          "kind": "instant",
+          "start": "2026-08-26T17:15:00-04:00",
+          "title": "Membership Programming ends",
+          "presenter": "",
+          "venue": "hotel",
+          "room": "",
+          "description": "Take a bow, you earned it. Head back to the hotel to change out of your Rock n' Roll costumes and meet at the hotel bar. Casual attire, denim allowed."
+        },
+        {
+          "key": "wed-1800-cocktails",
+          "kind": "timed",
+          "start": "2026-08-26T18:00:00-04:00",
+          "end": "2026-08-26T18:30:00-04:00",
+          "endSource": "next",
+          "title": "Cocktails at Hotel Bar",
+          "presenter": "",
+          "venue": "hotel",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-1830-dinner",
+          "kind": "timed",
+          "start": "2026-08-26T18:30:00-04:00",
+          "end": "2026-08-26T19:00:00-04:00",
+          "endSource": "next",
+          "title": "Dinner Served at Hotel",
+          "presenter": "",
+          "venue": "hotel",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-1900-karaoke",
+          "kind": "timed",
+          "start": "2026-08-26T19:00:00-04:00",
+          "end": "2026-08-26T21:00:00-04:00",
+          "endSource": "stated",
+          "title": "Karaoke, Corn Hole, Cards and Beer Pong",
+          "presenter": "",
+          "venue": "hotel",
+          "room": "",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "key": "thu",
+      "date": "2026-08-27",
+      "pill": "Backstage Pass",
+      "pillDate": "Thu 8/27",
+      "title": "Backstage Pass",
+      "note": "No early departures before Friday morning.",
+      "attire": [
+        { "k": "Attire", "v": "Country Club Casual (no denim)." }
+      ],
+      "sessions": [
+        {
+          "key": "thu-0800-breakfast",
+          "kind": "timed",
+          "start": "2026-08-27T08:00:00-04:00",
+          "end": "2026-08-27T08:45:00-04:00",
+          "endSource": "next",
+          "title": "Welcome Breakfast and Photo Op",
+          "presenter": "",
+          "venue": "club",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-0845-pinning",
+          "kind": "timed",
+          "start": "2026-08-27T08:45:00-04:00",
+          "end": "2026-08-27T09:15:00-04:00",
+          "endSource": "next",
+          "subtitle": "Welcome",
+          "title": "FWWL Pinning Ceremonies",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-0915-invitation-pathway",
+          "kind": "timed",
+          "start": "2026-08-27T09:15:00-04:00",
+          "end": "2026-08-27T09:30:00-04:00",
+          "endSource": "next",
+          "title": "Leads to the Invitation Pathway",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-0930-behaviors",
+          "kind": "timed",
+          "start": "2026-08-27T09:30:00-04:00",
+          "end": "2026-08-27T10:00:00-04:00",
+          "endSource": "next",
+          "title": "What behaviors create leads?",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1000-leads-development",
+          "kind": "timed",
+          "start": "2026-08-27T10:00:00-04:00",
+          "end": "2026-08-27T10:30:00-04:00",
+          "endSource": "next",
+          "title": "Leads Development Meeting with Gene",
+          "presenter": "Gene",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1030-break",
+          "kind": "timed",
+          "start": "2026-08-27T10:30:00-04:00",
+          "end": "2026-08-27T10:45:00-04:00",
+          "endSource": "next",
+          "title": "Break Time",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1045-rotations",
+          "kind": "timed",
+          "start": "2026-08-27T10:45:00-04:00",
+          "end": "2026-08-27T12:00:00-04:00",
+          "endSource": "next",
+          "title": "Leads to the Invitation Pathway Breakout Rotations",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1200-lunch",
+          "kind": "timed",
+          "start": "2026-08-27T12:00:00-04:00",
+          "end": "2026-08-27T13:00:00-04:00",
+          "endSource": "next",
+          "title": "Lunch",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1300-rotations-cont",
+          "kind": "timed",
+          "start": "2026-08-27T13:00:00-04:00",
+          "end": "2026-08-27T14:30:00-04:00",
+          "endSource": "next",
+          "title": "Leads to the Invitation Pathway Breakout Rotations continue",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1430-wrap-up",
+          "kind": "timed",
+          "start": "2026-08-27T14:30:00-04:00",
+          "end": "2026-08-27T15:00:00-04:00",
+          "endSource": "next",
+          "title": "Wrap-Up and Follow-Up",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1500-break",
+          "kind": "timed",
+          "start": "2026-08-27T15:00:00-04:00",
+          "end": "2026-08-27T15:15:00-04:00",
+          "endSource": "next",
+          "title": "Break",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1515-palmer-advantage",
+          "kind": "timed",
+          "start": "2026-08-27T15:15:00-04:00",
+          "end": "2026-08-27T15:40:00-04:00",
+          "endSource": "next",
+          "title": "Palmer Advantage",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1540-business-development",
+          "kind": "timed",
+          "start": "2026-08-27T15:40:00-04:00",
+          "end": "2026-08-27T16:00:00-04:00",
+          "endSource": "next",
+          "title": "Business Development",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1600-fireside",
+          "kind": "timed",
+          "start": "2026-08-27T16:00:00-04:00",
+          "end": "2026-08-27T17:00:00-04:00",
+          "endSource": "next",
+          "title": "Specific Group Fireside Chat",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": "General Managers, Enrollment Directors, Golf Professionals."
+        },
+        {
+          "key": "thu-1700-cocktail-hour",
+          "kind": "timed",
+          "start": "2026-08-27T17:00:00-04:00",
+          "end": "2026-08-27T18:00:00-04:00",
+          "endSource": "next",
+          "title": "Cocktail Hour at Club",
+          "presenter": "",
+          "venue": "club",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1800-dinner",
+          "kind": "timed",
+          "start": "2026-08-27T18:00:00-04:00",
+          "end": "2026-08-27T19:00:00-04:00",
+          "endSource": "next",
+          "title": "Dinner at Club",
+          "presenter": "",
+          "venue": "club",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "thu-1900-awards",
+          "kind": "open",
+          "start": "2026-08-27T19:00:00-04:00",
+          "title": "Awards and Presentations",
+          "presenter": "",
+          "venue": "",
+          "room": "",
+          "description": "This All-Teams event is the grand finale and every band member needs to be there."
+        }
+      ]
+    },
+    {
+      "key": "fri",
+      "date": "2026-08-28",
+      "pill": "Departures",
+      "pillDate": "Fri 8/28",
+      "title": "Departures",
+      "note": "",
+      "attire": [],
+      "sessions": [
+        {
+          "key": "fri-departures",
+          "kind": "allday",
+          "stubLabel": "Early",
+          "title": "Fond Farewells and Safe Travels",
+          "presenter": "",
+          "venue": "cmh",
+          "room": "",
+          "description": "Early morning departures out of CMH airport."
+        }
+      ]
+    }
+  ]
+}

@@ -378,16 +378,94 @@ whether the fonts load rather than fall back.
 
 ---
 
+### Aug 11, the header and the tab bar stopped overlapping
+**Found while building T1.1.** `.hdr` and `.tabs` were two separate sticky
+elements both pinned to `top: 0`. At scroll zero the masthead held them apart so
+it looked fine, which is why T0.5 passed. The moment there was enough content to
+scroll, the masthead left the screen and both stuck to the top of the viewport at
+once. The brand mark and the three icon buttons landed on top of the first row of
+tab pills.
+
+The Setlist is the first tab with enough content to scroll, so it is the first
+tab where this was visible. It would have hit every tab.
+
+**Fixed** by wrapping the header and the tab bar in one `.stickytop` element and
+making both children static. Measured after: header occupies 0 to 59px, tab bar
+59 to 112px at 380px and 59 to 153px at 1280px, no overlap at any scroll
+position. Display Mode still hides the tab bar.
+
+---
+
 ## PHASE 1: Static and text tabs
 **Window: August 3 to August 10. Goal: every tab that does not depend on Jeannette's assets is finished.**
 
-### `[ ]` T1.1 The Setlist
+### `[x]` T1.1 The Setlist
 - **Inputs:** source flier agenda, spec Section 3.1
 - **Output:** complete agenda tab
 - **Steps:** build the agenda data file at `/data/agenda.json` from the flier. Four day pills (Tue 8/25 Roadie Stop, Wed 8/26 Takes the Stage, Thu 8/27 Backstage Pass, Fri 8/28 Departures). Session cards as ticket stubs. Live session ON AIR pulse, completed sessions dimmed and struck through, 30 minute countdown. Tap to expand for description, presenter, room. Four reactions per session with Firebase counters and local storage single-cast tracking. Attire tag per day. Inline links to Smash Park, hotel, and club on the relevant sessions
 - **Acceptance:** all four days render. Reactions increment in Firebase and lock per device. Set the system clock forward to test the ON AIR state and the dimming
 - **Note:** replace agenda content when Jeannette's final agenda arrives (T3.x)
 - **Blocked by:** T0.8
+- **Done Aug 11, built against the official agenda rather than the flier.** The official
+  agenda arrived mid-build, so `data/agenda.json` is the official running order and not the
+  flier's. 36 cards across four days: 3 Tuesday, 15 Wednesday, 17 Thursday, 1 Friday. **T3.4
+  is therefore mostly spent.** What remains for it is the two open questions below.
+- **Verified on the live URL:**
+  | Acceptance criterion | Result |
+  |---|---|
+  | All four days render | 4 day pills, 4 day headers, 36 session cards, every title and time read back against the source |
+  | Reactions increment in Firebase | `reactions/tue-shank-showdown/fire` went to 1 on a tap, read back over plain HTTPS |
+  | Reactions lock per device | Two more taps left it at 1. Button disabled, `mm26_reacted` holds `{"tue-shank-showdown:fire":1}`, lock survived a reload |
+  | ON AIR state | At Wed 9:20 AM: On Air on the 9:15, three cards dimmed and struck, "Starts in 24:54" on the 9:45 |
+  | Dimming and strike-through | 3 dimmed at 9:20 AM, 5 at Thu 7:30 PM, matches the clock every time |
+  | Today's pill carries a scarlet dot | Dot on Tue 8/25 only when the clock says Tue 8/25, and it moves with the clock |
+  | No horizontal overflow | Document width equals viewport at 380px and at 1280px |
+  | No console errors | None |
+- **The clock is tested with a URL parameter, not by moving the machine clock.** Append
+  `?clock=2026-08-26T09:15:00-04:00` and that one device believes it is that moment. The
+  belief flows through the same server corrected `now` that every timed thing on the wall
+  reads, so it exercises the real code path rather than a test double. Any device using it
+  says so on screen, so a test can never be mistaken for the truth. T2.3 and T3.7 should use
+  this instead of touching a laptop's system clock.
+- **Nothing in The Setlist calls `Date.now()`.** Every ON AIR, dim, strike, and countdown
+  reads the corrected clock from `useServerNow`. Attendees fly in from several time zones and
+  a phone an hour out would otherwise put ON AIR on the wrong card in front of the room.
+- **End times are mostly derived, and each card says so.** The agenda gives an end time for
+  exactly two items, the Tuesday mixer and Wednesday's 7:00 to 9:00 PM games. Everything else
+  gives a start only, so the end used is the next item's start and the expanded card prints
+  "the end used here is the next item's start, so the live badge is a derivation." Two items
+  have no next item, the Thursday awards and the Tuesday tee-off, and they run until the day
+  is out. This was worth being explicit about rather than silently inventing durations.
+- **Rooms are empty because the agenda names none.** The `room` field exists and renders, so
+  real rooms are a drop-in. Presenters likewise: only the three the source names are in there,
+  Jim Hinckley, Doug Howe, and Gene. Nobody else got one.
+- **`?clock` and the reaction lock share one rule.** Reaction state is read out of local
+  storage at cast time, not out of React state, so a second tab on the same phone cannot
+  double cast through a stale copy.
+
+### `[!]` T1.1a Smash Park versus the hotel, Wednesday evening
+The flier has a 6:00 PM Wednesday Evening Outing at Smash Park Westerville, "Put on Your
+Game Face", with axe throwing, karaoke and dinner. The official agenda has Wednesday evening
+at the hotel: 6:00 PM cocktails at the hotel bar, 6:30 PM dinner served at the hotel, 7:00 to
+9:00 PM karaoke, corn hole, cards and beer pong.
+
+These cannot both be true. **The Setlist follows the official agenda.** Smash Park is not on
+the agenda anywhere.
+
+**Backstage Pass keeps the Smash Park venue card**, with its address and phone. The venue
+information is factual either way, and putting a card back is harder than leaving one in. No
+attendee-facing copy mentions the change.
+
+**Needs one line from Carol.** If Smash Park is back on, the fix is four session records in
+`data/agenda.json` and nothing else.
+
+### `[ ]` T1.1b Attire wording, second source
+Attire now uses the official agenda's wording, not the flier's. Tuesday reads "Country Club
+Casual and Appropriate Length Shorts (no denim)" rather than the flier's "Country Club Casual
+and Shorts (no denim)". Thursday reads "Country Club Casual (no denim)". Wednesday carries
+two lines, the Dress-Up Day for the day and "Casual, denim allowed" for the evening. Friday
+has no attire call in either source and says so. Worth confirming with Carol at the same time
+as T1.1a, since the printed flier in the welcome packet will say something different.
 
 ### `[ ]` T1.2 Backstage Pass
 - **Inputs:** source flier logistics, spec Section 3.3
@@ -516,11 +594,17 @@ whether the fonts load rather than fall back.
 - **Acceptance:** all sections render real content. Locked sections still show the correct countdown
 - **Blocked by:** T2.3, content delivery
 
-### `[ ]` T3.4 Final agenda swap
+### `[~]` T3.4 Final agenda swap
 - **Inputs:** Jeannette's final agenda
 - **Output:** updated `/data/agenda.json`
 - **Acceptance:** every session matches the final agenda for title, time, presenter, and room
 - **Blocked by:** T1.1, asset delivery
+- **Mostly done at T1.1, Aug 11.** The official agenda arrived during the T1.1 build, so
+  `data/agenda.json` was written from it rather than from the flier. Titles, times, and the
+  three named presenters match the source.
+- **Still open, which is why this is `[~]` and not `[x]`:** the Smash Park conflict at T1.1a,
+  the attire wording at T1.1b, and rooms. The agenda names no rooms at all, so every `room`
+  field is empty. If rooms exist, they are a drop-in.
 
 ### `[ ]` T3.5 Poll library and Cares Cup seed
 - **Inputs:** poll questions from organizers, confirmed team names
