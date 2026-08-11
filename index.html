@@ -898,8 +898,22 @@ body.display-mode .stubnote { font-size: 20px; }
      Cap the height and let object-fit crop instead of scaling. */
   .masthead--tall .band { max-height: 32vh; }
 
-  /* A little more room for the compact masthead on a wider screen. */
-  .masthead:not(.masthead--tall) .band { height: 140px; }
+  /* The compact masthead shares the reading column rather than going full
+     bleed. At 1280px wide a full bleed strip scales the picture to 658px tall,
+     so a 140px frame is a 9:1 slice of a 2:1 photo and you see foreheads.
+     Held to 780px, the same 140px frame lands on the faces. */
+  .masthead:not(.masthead--tall) {
+    max-width: var(--shell-max);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .masthead:not(.masthead--tall) .band { height: 150px; }
+
+  /* Bottom corners only. The top sits against the browser chrome. */
+  .masthead:not(.masthead--tall) .masthead__banner {
+    border-radius: 0 0 10px 10px;
+  }
 
   /* One centred reading column. Header, tabs, and content all share an edge. */
   .hdr__row,
