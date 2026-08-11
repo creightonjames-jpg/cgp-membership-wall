@@ -8,6 +8,34 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 
 ---
 
+## SCHEDULE REALITY, as of Aug 11 2026
+
+The windows below were written on July 30. **Today is August 11.** The meeting opens
+in 14 days, not 26. Phase 0 finished today except for T0.8. Read the windows as the
+original plan, not as where the build is.
+
+Gates from HANDOFF section 5 that have already come and gone:
+
+| Gate | Due | Status |
+|---|---|---|
+| Unlock times confirmed in writing | Aug 5 | **Passed.** Not confirmed to me |
+| All assets from Jeannette | Aug 10 | **Passed.** None received |
+| Verified roster from Carol and Lisa | Aug 10 | **Passed.** Not received |
+| Scenarios and Personas content | Aug 14 | 3 days out |
+| Feature freeze | Aug 21 | 10 days out |
+| QR print test | Aug 24 | 13 days out |
+
+The risk register rated "assets slip past August 10" as high likelihood and high
+impact. That risk has landed. Every container is built against placeholders exactly
+so real data is a drop-in, which is the mitigation working, but Phase 3 cannot start
+without content.
+
+**Earlier entries in this file were stamped July 30 in error.** The build ran in one
+session on Aug 11. The stamp came from the spec's own "today is July 30" line being
+taken at face value. Corrected.
+
+---
+
 ## Status legend
 
 - `[ ]` not started
@@ -26,7 +54,7 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Steps:** create repo `cgp-membership-wall`, add `index.html` stub, enable Pages, place `CLAUDE.md` and `ROADMAP.md` in root
 - **Acceptance:** the Pages URL returns the stub page in a mobile browser
 - **Parallel-safe:** yes
-- **Done July 30.** Repo `creightonjames-jpg/cgp-membership-wall`, public, Pages from `main` at root.
+- **Done Aug 11.** Repo `creightonjames-jpg/cgp-membership-wall`, public, Pages from `main` at root.
   Live URL: https://creightonjames-jpg.github.io/cgp-membership-wall/
   Verified: HTTP 200 serving the stub, renders at 380px with no horizontal overflow, no console errors.
   `HANDOFF.md` and the spec are gitignored because the repo is public.
@@ -38,7 +66,7 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Acceptance:** the Rules tab shows no expiration timestamp and no date comparison. A test write from the browser console succeeds
 - **Critical:** the LC26 build went blank mid-event because the default test rule expired. Verify by reading the published rules back, not by assuming the paste worked
 - **Parallel-safe:** yes
-- **Done July 30.** New project `cgp-membership-wall-2026`, project number 986050588933. Separate from `lc26-wall`, which is still in the account.
+- **Done Aug 11.** New project `cgp-membership-wall-2026`, project number 986050588933. Separate from `lc26-wall`, which is still in the account.
   Database: `cgp-membership-wall-2026-default-rtdb`, us-central1.
   URL: `https://cgp-membership-wall-2026-default-rtdb.firebaseio.com`
   Web app ID: `1:986050588933:web:51e8ca448798c817ee076c`. Regenerate the SDK config any time with
@@ -67,7 +95,7 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Steps:** implement all twelve palette tokens. Load Anton, Alfa Slab One, and Inter from Google Fonts. Build the two gradients: radial stage glow and scarlet to oxblood linear
 - **Acceptance:** a test page renders every token as a labeled swatch and every font in a sample line. Verified on a phone, not desktop responsive mode
 - **Blocked by:** T0.1
-- **Done July 30, on browser verification.** Jim approved proceeding without the physical phone check.
+- **Done Aug 11, on browser verification.** Jim approved proceeding without the physical phone check.
   All twelve palette tokens, three font families, and both gradients live in `index.html`.
   Type utilities: `.t-display` Anton, `.t-poster` Alfa Slab One, `.t-data` Inter tabular-nums for
   leaderboard digits so scores do not jitter as they update.
@@ -88,7 +116,7 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Steps:** build ticket stub card (dashed perforation, two notch cutouts), guitar pick badge (clip-path rounded triangle), amp grille texture (low opacity diagonal halftone), stage light glow, marquee strip with bulb border, vinyl label concentric circles
 - **Acceptance:** each motif renders correctly at 380px width and at desktop width. No horizontal overflow
 - **Blocked by:** T0.3
-- **Done July 30.** Seven motifs, not the six listed above. CLAUDE.md lists the setlist strike-through as
+- **Done Aug 11.** Seven motifs, not the six listed above. CLAUDE.md lists the setlist strike-through as
   a motif so it is built too, as `.struck` plus `.is-done`.
   Proof sheet: https://creightonjames-jpg.github.io/cgp-membership-wall/motifs.html
   | Class | Motif | Used by |
@@ -116,9 +144,9 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Steps:** welcome hero with stage glow, event title, countdown to August 25, QR code, enter button. Header with brand mark, admin gear, Display Mode toggle. Horizontally scrolling tab bar with icon, name, and count badge slot. Marquee banner slot at the top of all tabs
 - **Acceptance:** navigation works between all ten tab stubs. Tab bar scrolls without clipping on a 380px viewport. Countdown shows correct time remaining
 - **Blocked by:** T0.4
-- **Added July 30, mobile app layer.** Approved scope beyond the spec. Web app manifest, scarlet app icon, `apple-touch-icon`, standalone display mode, and safe area insets for notch and home indicator. **No service worker.** Offline caching was considered and rejected: it fights the deploy loop and can serve a stale build to one phone mid-meeting while every other device has the current one
+- **Added Aug 11, mobile app layer.** Approved scope beyond the spec. Web app manifest, scarlet app icon, `apple-touch-icon`, standalone display mode, and safe area insets for notch and home indicator. **No service worker.** Offline caching was considered and rejected: it fights the deploy loop and can serve a stale build to one phone mid-meeting while every other device has the current one
 - **Added acceptance:** Add to Home Screen produces the app icon, not a screenshot bookmark. Launched from the home screen the page opens without browser chrome. No content sits under the notch or the home indicator. Verified on a physical iPhone and a physical Android
-- **Done July 30.** React 18 and Firebase 10.12.2 from pinned CDNs, inline Babel, all in `index.html`.
+- **Done Aug 11.** React 18 and Firebase 10.12.2 from pinned CDNs, inline Babel, all in `index.html`.
   Every CDN URL was checked for a 200 before use. Nothing floats on a `latest` tag.
 - **Verified, all on the live URL:**
   | Acceptance criterion | Result |
@@ -162,7 +190,7 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Steps:** create empty components for The Setlist, The Band, Backstage Pass, Soundcheck, The Vault, Liner Notes, Crowd Vote, The Pit, The Cares Cup, Encore. Each renders its name and a placeholder line
 - **Acceptance:** every tab is reachable and renders without console errors
 - **Blocked by:** T0.5
-- **Done July 30.** Ten real components behind a `TAB_VIEWS` registry, not one component driven by a
+- **Done Aug 11.** Ten real components behind a `TAB_VIEWS` registry, not one component driven by a
   data table. Phase 1 and Phase 2 fill each tab independently, so they must not share a body.
   `SetlistTab`, `BandTab`, `BackstageTab`, `SoundcheckTab`, `VaultTab`, `LinerNotesTab`,
   `CrowdVoteTab`, `PitTab`, `CaresCupTab`, `EncoreTab`. Shared chrome is `TabFrame`.
@@ -182,7 +210,7 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 - **Steps:** script accepts a folder of raw images, resizes attendee photos to 400x400 square, resizes graphs and resource images to max 1600px wide, compresses to reasonable file size, renames to the slug convention, and writes into the correct `/assets` subfolder. Report any file it could not match to a roster entry
 - **Acceptance:** run against five test images and confirm correct output paths, dimensions, and file sizes
 - **Parallel-safe:** yes
-- **Done July 30.** `tools/process-assets.sh`. Three modes: `attendees`, `graphs`, `resources`.
+- **Done Aug 11.** `tools/process-assets.sh`. Three modes: `attendees`, `graphs`, `resources`.
   Built on `sips`, which ships with macOS, so there is nothing to install. ImageMagick is not on
   this machine and the npm cache is root owned, so avoiding both was deliberate.
 - **Verified against five test images** of deliberately awkward shape and name, plus a `.txt` file
@@ -221,7 +249,7 @@ Mark tasks complete by editing this file. Do not mark a task complete until its 
 
 Changes made after a task was marked complete. Logged so the reason survives.
 
-### July 30, more red and gold in the chrome
+### Aug 11, more red and gold in the chrome
 **From:** the group, relayed by Jim. "Can we add more red and gold? Maybe to the tabs?"
 
 **Done.** Selected tab is a scarlet gradient pill with a gold ring and a soft
@@ -249,7 +277,7 @@ that will be in the room. `tokens.html` still reports exactly twelve.
 **Verified:** no horizontal overflow at 380px, tab bar still scrolls, no console
 errors, badge contrast measured.
 
-### July 30, band strip on the welcome hero
+### Aug 11, band strip on the welcome hero
 **From:** Jim, who supplied the flier's four panel band image.
 
 Full bleed at the top of the welcome screen, treated as a lit stage. Lights come
@@ -267,7 +295,7 @@ the existing wide modes only emitted PNG.
 **Shutters default to transparent, not opaque.** An animation that fails to start
 would otherwise hide the hero behind four solid panels.
 
-### July 30, QR button in the header
+### Aug 11, QR button in the header
 **From:** Jim. The welcome screen was a dead end after the first visit, because
 `mm26_entered` skips it forever.
 
@@ -283,7 +311,7 @@ candidate collided with a tab icon.
 This also removes the need for a private tab when demoing the welcome screen at
 T3.8.
 
-### July 30, ground flares and stage pyro
+### Aug 11, ground flares and stage pyro
 **From:** Jim. Picked Standard from `flares.html`, then asked for a sparkler and
 Roman candle effect as well.
 
@@ -315,7 +343,7 @@ dissolves into the page and the headline emerges from the dark. Flares brighten
 that same area, so the two work against each other. Standard keeps both. Bold
 trades the dissolve for the glow.
 
-### July 30, desktop browser layout
+### Aug 11, desktop browser layout
 **From:** Jim. "I'm not worried about the phone graphics. My focus is on the web
 browser version."
 
