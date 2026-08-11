@@ -4,5 +4,10 @@ files/
 HANDOFF.md
 CGP_Membership_LiveWall_Spec.docx
 
+# Confidential, never commit. The repo is public and the Firebase rules are
+# open by design, so anything tracked here is world readable at a guessable
+# URL. Award and tenure winners get typed in from the admin panel at the show.
+confidential/
+
 # macOS
 .DS_Store
