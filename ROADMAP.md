@@ -592,12 +592,50 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 - **Note:** poster art use is an open question. Build with a solid color fallback so the tab ships either way
 - **Blocked by:** T1.6
 
-### `[ ]` T2.7 Encore
+### `[~]` T2.7 Encore
 - **Inputs:** spec Section 3.10
 - **Output:** recognition tab, scaffolded and admin editable
 - **Steps:** four sections, each independently unlockable: Award Winners (winner photo on vinyl label background, award name in Alfa Slab One, club, citation), Hall of Fame (inductee cards with photo, club, year, citation), Top Videos (YouTube or Vimeo embeds), Tenure Recognition (grouped by milestone with photo, name, club, years). Full admin create, edit, and delete on every section so content can be posted live from the Awards Show
 - **Acceptance:** admin can create an award entry with a photo and citation from a phone in under a minute. Video embeds play inline. Each section unlocks independently. Tenure can go live while awards stay hidden
 - **Blocked by:** T1.6
+- **Part one done Aug 11: Tenure Recognition only. This task stays open.** Award Winners, Hall
+  of Fame, and Top Videos are still stubs with real empty-state copy and no CRUD.
+- **Why Tenure came out of order.** The official agenda puts the Tenure Awards at **Wednesday
+  8:20 AM**, at the Opening Cowbell, not at the Thursday night awards show. So Tenure has to be
+  able to go live two days before the other three, on a client request, and it is built and
+  unlockable on its own.
+- **Verified on the live URL, with two browser contexts as two devices:**
+  | Criterion | Result |
+  |---|---|
+  | Tenure unlocks independently | Flag lives at `encore/tenure/unlocked`. The other three sections are unaffected because they hold no unlock state yet |
+  | Publish propagates to a second device | 104ms from the publish tap to the second device rendering the list. Budget was two seconds |
+  | Re-lock propagates | 26ms, and the second device's DOM went back to holding no trace |
+  | Attendees see nothing while locked | Rendered `#root` contains zero occurrences of any entry name or any milestone label. Only the locked message |
+  | The read is gated, not just the render | Proved on the wire. With Firebase's own logging on, remounting the tab while locked and not admin produced 4 references to `encore/tenure/unlocked` and **zero** to `encore/tenure/entries`. Entering the PIN produced 5 |
+  | Admin sees a padlock badge | "The room cannot see this yet", shown only while locked and only to crew |
+  | Admin create, edit, delete | All three exercised against `encore/tenure/entries` and read back over plain HTTPS. Delete asks first, by name |
+  | Grouped by milestone | Groups sort by the number in the label, longest tenure first, which is the order they get read out. Names sort alphabetically inside a group |
+  | Layout holds with no photo and no club | Names only is the normal case, not a card with empty holes. Verified at 380px and 1280px |
+  | No horizontal overflow | Document width equals viewport at both. Zero elements past the edge |
+  | No console errors | None |
+- **The locked state does not ship the data.** `useTenureEntries(enabled)` returns early before
+  it ever builds a ref, so the listener is never attached. This is the whole point: a render
+  guard would leave the confidential list sitting in the page for anyone who opened dev tools.
+  If anybody refactors this, the test is the wire log, not the screen.
+- **Names only, per Jim, Aug 11.** No club, no photo. Both stay in the data shape and render
+  when present, and the row is built so a bare name is the normal case.
+- **Every name in the database right now is a placeholder.** Four of them, obviously fake:
+  Placeholder One, Placeholder Two, Placeholder Three Edited, Placeholder Five. They are there
+  so the layout can be reviewed. **T4.2 must clear them.** The real tenure list is handled
+  outside this repo, which is public with an open database, and no real name from it has been
+  written into any tracked file.
+- **The section is locked as of the end of this session.** `encore/tenure/unlocked` reads
+  `false`, so the room sees the locked message and nothing else.
+- **Still to do for T2.7:** Award Winners on a vinyl label with citation and photo, Hall of
+  Fame cards, Top Videos embeds, and an independent unlock flag for each of those three. The
+  Tenure section is the pattern to copy: gate the read, not the render.
+- **Alfa Slab One appears here and nowhere else,** on the four section headings and the
+  milestone labels. That is the whole ration CLAUDE.md allows it.
 
 ### `[ ]` T2.8 Admin panel, v2
 - **Inputs:** T2.3, T2.6, T2.7
@@ -691,6 +729,9 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 ### `[ ]` T4.2 Clear test data
 - Run Reset Everything. Confirm every Firebase node is empty and all `mm26_` keys are cleared
 - **Acceptance:** the wall looks like nobody has ever touched it
+- **Known test data sitting in the database as of Aug 11:** four placeholder tenure entries
+  under `encore/tenure/entries`, and one reaction count at `reactions/tue-shank-showdown/fire`.
+  Both were left deliberately so the layouts can be reviewed. Neither may survive this task.
 
 ### `[ ]` T4.3 Re-verify Firebase rules
 - Read the published rules back. Confirm no expiration and no date comparison
@@ -725,13 +766,18 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 
 ### `[ ]` T5.2 Wednesday August 26
 - Reveal Crowd Vote, The Pit, and The Cares Cup
+- **8:20 AM: Tenure Awards Presentation, at the Opening Cowbell.** Publish the Encore Tenure
+  section once the names have been read out. Encore, Tenure Recognition, "Publish to the room".
+  One tap, and it lands on every phone in about a tenth of a second. The other three Encore
+  sections stay hidden until Thursday night
 - **9:30 AM: Core Fundamental Scenarios unlock. Verify it fired**
 - Marquee: Dress-Up Day photo prompt, pointing people to The Pit
 - Marquee later: Smash Park departure reminder, denim allowed
 
 ### `[ ]` T5.3 Thursday August 27
 - **10:30 AM: Membership Funnel Personas unlock. Verify it fired**
-- Reveal Tenure section if tenure is presented today
+- ~~Reveal Tenure section if tenure is presented today~~ **Tenure is Wednesday, not Thursday.**
+  The official agenda puts the Tenure Awards Presentation at Wednesday 8:20 AM. See T5.2
 - After the 7 PM Awards Show: post award winners, Hall of Fame, and Top Videos to Encore. Reveal those sections
 - Marquee: no early departures before Friday morning
 

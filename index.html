@@ -1292,6 +1292,114 @@ body.display-mode .stubnote { font-size: 20px; }
   font-size: 10px; letter-spacing: 0.14em; color: var(--dim);
 }
 
+/* ==========================================================================
+   T2.7 ENCORE, TENURE ONLY
+   Alfa Slab One earns its keep here and nowhere else. On a section heading and
+   a milestone it reads as a trophy plate. CLAUDE.md rations it to exactly this.
+   ========================================================================== */
+
+.enc-list { display: flex; flex-direction: column; gap: 16px; }
+
+.enc { padding: 16px 16px 18px; }
+.enc--stub { background: var(--riser); border: 1px dashed var(--edge); border-radius: 12px; }
+
+.enc__head {
+  display: flex; align-items: center; gap: 10px;
+  flex-wrap: wrap; margin: 0 0 4px;
+}
+
+.enc__h { margin: 0; font-size: clamp(17px, 4.8vw, 21px); }
+.enc__head .enc__h { margin: 0; }
+
+/* Crew only. Says out loud that the room is not seeing this. */
+.enc__hidden {
+  display: inline-flex; align-items: center; gap: 6px;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+  border: 1px solid var(--gold-rule); border-radius: 999px;
+  padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--gold);
+}
+
+.enc__locked { margin: 8px 0 0; font-size: 14px; color: var(--dim); }
+
+.enc__crew {
+  margin: 12px 0 6px; padding: 12px 13px;
+  background: var(--input); border-left: 3px solid var(--scarlet);
+  border-radius: 6px;
+}
+
+.enc__note { margin: 9px 0 0; font-size: 12px; color: var(--dim); }
+
+/* ----------------------------------------------------------- milestones */
+.ten-group { margin-top: 18px; }
+
+.ten-group__h {
+  margin: 0 0 8px; padding-bottom: 6px;
+  font-size: 15px; color: var(--gold);
+  border-bottom: 1px solid var(--gold-rule);
+}
+
+/* Names only is the normal case, so the row is a name with nothing missing
+   rather than a card with two empty holes in it. Club and years appear inline
+   after the name when they exist. */
+.ten-list { list-style: none; margin: 0; padding: 0; }
+
+.ten-row {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  padding: 8px 0;
+}
+
+.ten-row + .ten-row { border-top: 1px solid var(--edge); }
+
+.ten-row__ph {
+  flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--gold); background: var(--input);
+}
+
+.ten-row__n { font-size: 16px; font-weight: 600; }
+.ten-row__c { font-size: 13px; color: var(--dim); }
+.ten-row__y { font-size: 13px; color: var(--mute); }
+.ten-row__admin { margin-left: auto; display: flex; gap: 6px; }
+
+/* --------------------------------------------------------- admin form */
+.tf { margin: 12px 0 0; }
+
+.tf__l { display: block; margin: 0 0 9px; }
+
+.tf__l > span {
+  display: block; margin-bottom: 4px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--dim);
+}
+
+.tf__in {
+  width: 100%; background: var(--riser); border: 1px solid var(--edge);
+  border-radius: 8px; padding: 11px 12px;
+  color: var(--cream); font-family: var(--font-body); font-size: 16px;
+}
+
+.tf__in:focus { outline: none; border-color: var(--warm-edge); }
+
+.tf__row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.btn {
+  border: 1px solid var(--warm-edge); border-radius: 8px;
+  padding: 10px 14px; cursor: pointer;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  color: var(--cream); font-family: inherit; font-size: 14px; font-weight: 600;
+}
+
+.btn:active {
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+}
+
+.btn--go { background-color: transparent; background-image: var(--grad-primary); border-color: var(--gold); }
+.btn--kill { border-color: var(--danger); color: var(--danger); background-image: none; }
+.btn--quiet { color: var(--dim); font-weight: 500; }
+.btn--tiny { padding: 6px 10px; font-size: 12px; font-weight: 500; }
+.btn:disabled { opacity: 0.55; cursor: default; }
+
 @media (min-width: 700px) {
   .dayrow { flex-wrap: wrap; overflow-x: visible; row-gap: 7px; }
   .set-card { --ticket-stub-w: 96px; }
@@ -2650,14 +2758,347 @@ function CaresCupTab({ isAdmin }) {
   );
 }
 
+/* ==========================================================================
+   T2.7, PART ONE. ENCORE, TENURE RECOGNITION ONLY.
+   Award Winners, Hall of Fame, and Top Videos are still stubs and T2.7 stays
+   open. Tenure is built early and on its own because the Tenure Awards are
+   Wednesday at 8:20 AM, two days before the Thursday awards show, so it has to
+   be able to go live without dragging the other three with it.
+
+   The content is confidential until it is read out on stage. That has one hard
+   consequence: while the section is locked and the viewer is not admin, the
+   wall does not fetch the entries at all. The listener is never attached. A
+   render guard would not be enough, because the data would already be sitting
+   in the page for anyone who opened dev tools.
+
+   Every name in here is a placeholder. The real list is handled outside this
+   repo, which is public.
+   ========================================================================== */
+
+/* The unlock flag is a bare boolean, so it is safe to listen to always. */
+function useTenureUnlocked() {
+  const [unlocked, setUnlocked] = useState(false);
+  const [ready, setReady] = useState(!FB.ok);
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("encore/tenure/unlocked");
+    const handler = (snap) => { setUnlocked(snap.val() === true); setReady(true); };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return { unlocked, ready };
+}
+
+/* `enabled` gates the read, not the render. Called with false, this never
+   touches encore/tenure/entries. */
+function useTenureEntries(enabled) {
+  const [entries, setEntries] = useState([]);
+
+  useEffect(() => {
+    if (!FB.ok || !enabled) {
+      setEntries([]);
+      return;
+    }
+    const ref = FB.db.ref("encore/tenure/entries");
+    const handler = (snap) => {
+      const all = snap.val() || {};
+      setEntries(Object.keys(all).map((id) => Object.assign({ id: id }, all[id])));
+    };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, [enabled]);
+
+  return entries;
+}
+
+/* Milestones sort by the number in them, longest tenure first, because that is
+   the order they get read out in. Anything without a number falls to the end. */
+function milestoneRank(label) {
+  const m = String(label || "").match(/\d+/);
+  return m ? -parseInt(m[0], 10) : 1e6;
+}
+
+function groupByMilestone(entries) {
+  const groups = {};
+  entries.forEach((e) => {
+    const key = (e.milestone || "Unsorted").trim() || "Unsorted";
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(e);
+  });
+
+  return Object.keys(groups)
+    .sort((a, b) => {
+      const d = milestoneRank(a) - milestoneRank(b);
+      return d !== 0 ? d : a.localeCompare(b);
+    })
+    .map((k) => ({
+      milestone: k,
+      people: groups[k].slice().sort((a, b) =>
+        String(a.name || "").localeCompare(String(b.name || "")))
+    }));
+}
+
+const BLANK_ENTRY = { milestone: "", name: "", club: "", years: "", photo: "" };
+
+/* Two fields and a button by default. Anything else is behind a disclosure,
+   because this gets typed on a phone while somebody is walking to the stage.
+   The milestone stays filled after a save so a whole group goes in as a list of
+   names rather than as five identical forms. */
+function TenureForm({ initial, onSave, onCancel, busy }) {
+  const [form, setForm] = useState(() => Object.assign({}, BLANK_ENTRY, initial || {}));
+  const [more, setMore] = useState(false);
+  const nameRef = useRef(null);
+
+  const editing = !!(initial && initial.id);
+
+  function set(k, v) { setForm((prev) => Object.assign({}, prev, { [k]: v })); }
+
+  function submit(e) {
+    e.preventDefault();
+    const clean = {
+      milestone: form.milestone.trim(),
+      name: form.name.trim(),
+      club: form.club.trim(),
+      years: form.years.trim(),
+      photo: form.photo.trim()
+    };
+    if (!clean.name || !clean.milestone) return;
+    onSave(clean);
+    if (!editing) {
+      setForm({ milestone: clean.milestone, name: "", club: "", years: "", photo: "" });
+      if (nameRef.current) nameRef.current.focus();
+    }
+  }
+
+  return (
+    <form className="tf" onSubmit={submit}>
+      <label className="tf__l">
+        <span>Milestone</span>
+        <input
+          className="tf__in"
+          value={form.milestone}
+          placeholder="20 Years"
+          onChange={(e) => set("milestone", e.target.value)}
+        />
+      </label>
+
+      <label className="tf__l">
+        <span>Name</span>
+        <input
+          ref={nameRef}
+          className="tf__in"
+          value={form.name}
+          placeholder="Placeholder One"
+          onChange={(e) => set("name", e.target.value)}
+        />
+      </label>
+
+      {more ? (
+        <div>
+          <label className="tf__l">
+            <span>Club, optional</span>
+            <input className="tf__in" value={form.club}
+                   onChange={(e) => set("club", e.target.value)} />
+          </label>
+          <label className="tf__l">
+            <span>Years, optional</span>
+            <input className="tf__in" value={form.years}
+                   onChange={(e) => set("years", e.target.value)} />
+          </label>
+          <label className="tf__l">
+            <span>Photo path, optional</span>
+            <input className="tf__in" value={form.photo}
+                   placeholder="assets/attendees/slug.jpg"
+                   onChange={(e) => set("photo", e.target.value)} />
+          </label>
+        </div>
+      ) : null}
+
+      <div className="tf__row">
+        <button type="submit" className="btn btn--go" disabled={busy}>
+          {editing ? "Save" : "Add"}
+        </button>
+        {editing ? (
+          <button type="button" className="btn" onClick={onCancel}>Cancel</button>
+        ) : null}
+        <button type="button" className="btn btn--quiet" onClick={() => setMore(!more)}>
+          {more ? "Fewer fields" : "Club, years, photo"}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+/* Names only, per Jim. Club and photo stay in the shape and render when they
+   are there, and the row is built so that a name on its own is the normal case
+   rather than a card with two holes in it. */
+function TenureRow({ e, isAdmin, onEdit, onDelete }) {
+  return (
+    <li className="ten-row">
+      {e.photo ? (
+        <img className="ten-row__ph" src={e.photo} alt="" />
+      ) : null}
+      <span className="ten-row__n">{e.name}</span>
+      {e.club ? <span className="ten-row__c">{e.club}</span> : null}
+      {e.years ? <span className="ten-row__y t-data">{e.years}</span> : null}
+      {isAdmin ? (
+        <span className="ten-row__admin">
+          <button className="btn btn--tiny" onClick={() => onEdit(e)}>Edit</button>
+          <button className="btn btn--tiny btn--kill" onClick={() => onDelete(e)}>Delete</button>
+        </span>
+      ) : null}
+    </li>
+  );
+}
+
+function TenureSection({ isAdmin }) {
+  const { unlocked, ready } = useTenureUnlocked();
+  const canRead = unlocked || isAdmin;
+  const entries = useTenureEntries(canRead);
+  const [editing, setEditing] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  const groups = groupByMilestone(entries);
+
+  const save = useCallback((clean) => {
+    if (!FB.ok) return;
+    setBusy(true);
+    const ref = editing && editing.id
+      ? FB.db.ref("encore/tenure/entries/" + editing.id)
+      : FB.db.ref("encore/tenure/entries").push();
+    ref.update(Object.assign({}, clean, { ts: Date.now() }))
+      .then(() => { setBusy(false); setEditing(null); })
+      .catch(() => setBusy(false));
+  }, [editing]);
+
+  const remove = useCallback((e) => {
+    if (!FB.ok) return;
+    if (!window.confirm("Delete " + e.name + " from tenure?")) return;
+    FB.db.ref("encore/tenure/entries/" + e.id).remove();
+  }, []);
+
+  const setUnlocked = useCallback((next) => {
+    if (!FB.ok) return;
+    FB.db.ref("encore/tenure/unlocked").set(next);
+  }, []);
+
+  /* Locked and not crew. Render the message and nothing else. No headings, no
+     names, no milestones, nothing in the DOM to dig out. */
+  if (!canRead) {
+    return (
+      <section className="enc glow-card" aria-labelledby="enc-tenure">
+        <h3 className="enc__h t-poster" id="enc-tenure">Tenure Recognition</h3>
+        <p className="enc__locked">
+          {ready
+            ? "Locked until it is read out on stage. Wednesday morning, Opening Cowbell."
+            : "Checking."}
+        </p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="enc glow-card" aria-labelledby="enc-tenure">
+      <div className="enc__head">
+        <h3 className="enc__h t-poster" id="enc-tenure">Tenure Recognition</h3>
+        {isAdmin && !unlocked ? (
+          <span className="enc__hidden">{"\u{1F512}"} The room cannot see this yet</span>
+        ) : null}
+      </div>
+
+      {isAdmin ? (
+        <div className="enc__crew">
+          <div className="tf__row">
+            {unlocked ? (
+              <button className="btn btn--kill" onClick={() => setUnlocked(false)}>
+                Lock it again
+              </button>
+            ) : (
+              <button className="btn btn--go" onClick={() => setUnlocked(true)}>
+                Publish to the room
+              </button>
+            )}
+          </div>
+          <p className="enc__note">
+            {unlocked
+              ? "Live on every phone in the room right now."
+              : "Only crew can see the list. Publishing reaches every phone in about a second."}
+          </p>
+
+          <TenureForm
+            key={editing ? editing.id : "new"}
+            initial={editing}
+            onSave={save}
+            onCancel={() => setEditing(null)}
+            busy={busy}
+          />
+        </div>
+      ) : null}
+
+      {!groups.length ? (
+        <p className="enc__locked">
+          {isAdmin
+            ? "Nothing typed in yet. Milestone, name, Add. Repeat."
+            : "Nothing here yet."}
+        </p>
+      ) : null}
+
+      {groups.map((g) => (
+        <div className="ten-group" key={g.milestone}>
+          <h4 className="ten-group__h t-poster">{g.milestone}</h4>
+          <ul className="ten-list">
+            {g.people.map((e) => (
+              <TenureRow
+                key={e.id}
+                e={e}
+                isAdmin={isAdmin}
+                onEdit={setEditing}
+                onDelete={remove}
+              />
+            ))}
+          </ul>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function EncoreStub({ title, children }) {
+  return (
+    <section className="enc enc--stub">
+      <h3 className="enc__h t-poster">{title}</h3>
+      <p className="enc__locked">{children}</p>
+    </section>
+  );
+}
+
 function EncoreTab({ isAdmin }) {
   return (
     <TabFrame tabKey="encore">
-      <Empty>The encore comes last. Awards go up after the Thursday show.</Empty>
-      <BuildNote isAdmin={isAdmin} task="T2.7">
-        Four independently unlockable sections: Award Winners on a vinyl label,
-        Hall of Fame, Top Videos as embeds, Tenure by milestone. Full admin CRUD
-        so winners can be posted from the room on Thursday night.
+      {/* Tenure first, because it is the one that works and the first to go
+          live. Wednesday morning, not Thursday night. */}
+      <div className="enc-list">
+        <TenureSection isAdmin={isAdmin} />
+        <EncoreStub title="Award Winners">
+          Nothing yet. The envelopes are still sealed.
+        </EncoreStub>
+        <EncoreStub title="Hall of Fame">
+          Nothing yet. The plaques are still at the engraver.
+        </EncoreStub>
+        <EncoreStub title="Top Videos">
+          Nothing yet. Still in the edit.
+        </EncoreStub>
+      </div>
+
+      <BuildNote isAdmin={isAdmin} task="T2.7, part one">
+        Tenure only. It unlocks on its own at encore/tenure/unlocked, because the
+        Tenure Awards are Wednesday 8:20 AM and the other three are Thursday
+        night. While it is locked the wall does not fetch the entries at all, so
+        nothing confidential is sitting in an attendee's page. Every name in there
+        is a placeholder. Award Winners, Hall of Fame, and Top Videos are still
+        stubs and T2.7 is still open.
       </BuildNote>
     </TabFrame>
   );
