@@ -1211,12 +1211,97 @@ body.display-mode .stubnote { font-size: 20px; }
   padding: 11px 13px; font-size: 12px; color: var(--dim);
 }
 
+/* ==========================================================================
+   T1.2 BACKSTAGE PASS
+   Seven ticket stub panels. Same ticket motif as The Setlist, same link chips.
+   Nothing here is interactive except the links, so these are plain sections
+   rather than buttons.
+   ========================================================================== */
+
+.bs-list { display: flex; flex-direction: column; gap: 18px; }
+.bs-panel { --ticket-stub-w: 72px; }
+
+.bs-stub {
+  font-size: 14px; line-height: 1.05; color: var(--gold);
+  letter-spacing: 0.04em;
+}
+
+.bs-h { margin: 0 0 10px; font-size: clamp(18px, 5.4vw, 22px); }
+
+.bs-p { margin: 0 0 10px; font-size: 14px; }
+.bs-p:last-child { margin-bottom: 0; }
+
+.bs-fine { margin: 10px 0 0; font-size: 12px; color: var(--mute); }
+
+.bs-ul { margin: 0; padding-left: 18px; font-size: 14px; }
+.bs-ul li { margin: 0 0 5px; }
+.bs-ul li::marker { color: var(--scarlet); }
+
+/* One venue or one contact inside a panel. */
+.venue + .venue {
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid var(--edge);
+}
+
+.venue__n { margin: 0; font-size: 15px; font-weight: 600; }
+.venue__note { margin: 4px 0 0; font-size: 13px; color: var(--dim); }
+.venue .chiprow { margin-top: 10px; }
+
+/* An address chip carries a whole line of text, so it wraps rather than
+   pushing the panel wider than the phone. */
+.venue .linkchip, .chiprow .linkchip { max-width: 100%; }
+.linkchip > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+
+/* Rental codes. Tabular figures, because a mistyped code is a lost booking. */
+.bs-codes {
+  margin: 0; display: grid; grid-template-columns: auto 1fr;
+  gap: 6px 14px; align-items: baseline;
+}
+
+.bs-codes dt {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 11px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+.bs-codes dd {
+  margin: 0; font-size: 16px; font-weight: 700;
+  letter-spacing: 0.08em;
+  -webkit-user-select: all; user-select: all;
+}
+
+/* Attire, day by day. A real table overflows at 380px, so this is a two column
+   grid that collapses to stacked rows on a narrow phone. */
+.bs-day { display: flex; gap: 12px; align-items: baseline; }
+
+.bs-day + .bs-day {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--edge);
+}
+
+.bs-day__d {
+  flex: 0 0 58px; margin: 0;
+  font-size: 12px; letter-spacing: 0.06em; color: var(--gold);
+}
+
+.bs-day__v { flex: 1 1 auto; min-width: 0; }
+.bs-day__line { margin: 0 0 4px; font-size: 13px; }
+.bs-day__line:last-child { margin-bottom: 0; }
+
+.bs-day__k {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--dim);
+}
+
 @media (min-width: 700px) {
   .dayrow { flex-wrap: wrap; overflow-x: visible; row-gap: 7px; }
   .set-card { --ticket-stub-w: 96px; }
   .set-stub__t { font-size: 23px; }
   .set-title { font-size: 19px; }
   .dayhead { padding: 18px 20px; }
+
+  .bs-panel { --ticket-stub-w: 96px; }
+  .bs-stub { font-size: 16px; }
+  .bs-day__d { flex-basis: 72px; }
 }
 </style>
 </head>
@@ -2314,14 +2399,174 @@ function BandTab({ isAdmin }) {
   );
 }
 
+/* ==========================================================================
+   T1.2 BACKSTAGE PASS. Spec 3.3.
+   Six ticket stub panels plus attire. Static all the way through: no Firebase,
+   no admin controls, nothing that can be edited from a phone. Venues and
+   contacts come out of the VENUES and CONTACTS tables at the top of this file,
+   so an address lives in exactly one place and The Setlist links to the same
+   one.
+
+   Attire is read out of data/agenda.json rather than typed again here. Two
+   copies of a dress code is how you end up telling half the room denim is fine
+   and the other half it is not.
+   ========================================================================== */
+
+function Panel({ stub, title, children }) {
+  return (
+    <section className="ticket bs-panel">
+      <div className="ticket__stub">
+        <span className="bs-stub t-display">{stub}</span>
+      </div>
+      <div className="ticket__body">
+        <h3 className="bs-h t-display">{title}</h3>
+        {children}
+      </div>
+    </section>
+  );
+}
+
+/* Address is the map link, because "tap the address" is what people do. */
+function Venue({ v, note }) {
+  return (
+    <div className="venue">
+      <p className="venue__n">{v.name}</p>
+      {note ? <p className="venue__note">{note}</p> : null}
+      <div className="chiprow">
+        {v.addr ? (
+          <LinkChip href={mapHref(venueMapQuery(v))} glyph={"\u{1F4CD}"}>
+            {v.addr}
+          </LinkChip>
+        ) : (
+          <LinkChip href={mapHref(v.name)} glyph={"\u{1F4CD}"}>
+            Find it on the map
+          </LinkChip>
+        )}
+        {v.phone ? (
+          <LinkChip href={telHref(v.phone)} glyph={"\u{1F4DE}"}>{v.phone}</LinkChip>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function Contact({ c }) {
+  return (
+    <div className="venue">
+      <p className="venue__n">{c.name}</p>
+      <p className="venue__note">{c.forWhat}. {c.how}.</p>
+      <div className="chiprow">
+        {c.phone ? (
+          <LinkChip href={telHref(c.phone)} glyph={"\u{1F4DE}"}>{c.phone}</LinkChip>
+        ) : null}
+        {c.email ? (
+          <LinkChip href={mailHref(c.email)} glyph={"✉"}>{c.email}</LinkChip>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 function BackstageTab({ isAdmin }) {
+  const agenda = useAgenda();
+  const days = (agenda.data && agenda.data.days) || [];
+
   return (
     <TabFrame tabKey="backstage">
-      <Empty>Where you sleep, where you play, who to call. Going up shortly.</Empty>
+      <div className="bs-list">
+
+        <Panel stub="Sleep" title="Where You Sleep">
+          <Venue v={VENUES.hotel} />
+        </Panel>
+
+        <Panel stub="Play" title="Where You Play">
+          <Venue v={VENUES.club} note="Golf course and the Patio." />
+          <Venue v={VENUES.smashpark} />
+        </Panel>
+
+        <Panel stub="Eat" title="Where You Eat">
+          <ul className="bs-ul">
+            <li>Tuesday, the Opening Act Welcome Mixer is on the Patio at The Medallion Club.</li>
+            <li>Breakfast is at The Medallion Club both mornings.</li>
+            <li>Wednesday night, dinner is at Smash Park Westerville.</li>
+            <li>Thursday night, cocktails and dinner are at The Medallion Club.</li>
+          </ul>
+          <p className="bs-fine">
+            Lunch is on the agenda both days. It does not say where. Ask Carol if
+            you need to know before you get there.
+          </p>
+        </Panel>
+
+        <Panel stub="Fly" title="Getting Here">
+          <p className="bs-p">
+            All airline flights into and out of CMH, John Glenn Columbus
+            International, should already be booked. Confirmations get emailed to
+            Yolanda.
+          </p>
+          <div className="chiprow">
+            <LinkChip href={mailHref(CONTACTS.yolanda.email)} glyph={"✉"}>
+              {CONTACTS.yolanda.email}
+            </LinkChip>
+            <LinkChip href={mapHref(VENUES.cmh.name + " Airport, Columbus, Ohio")} glyph={"\u{1F4CD}"}>
+              CMH airport
+            </LinkChip>
+          </div>
+        </Panel>
+
+        <Panel stub="Drive" title="Getting Around">
+          <p className="bs-p">
+            One rental car per team. Road-trip together. Reserve now.
+          </p>
+          <p className="bs-p">Best rates:</p>
+          <dl className="bs-codes">
+            <dt>AVIS</dt><dd className="t-data">Q357518</dd>
+            <dt>National</dt><dd className="t-data">SMB727V</dd>
+          </dl>
+          <p className="bs-fine">
+            Other online deals are out there too. Use whichever comes in cheaper.
+          </p>
+        </Panel>
+
+        <Panel stub="Call" title="Who To Call">
+          <Contact c={CONTACTS.carol} />
+          <Contact c={CONTACTS.yolanda} />
+        </Panel>
+
+        <Panel stub="Dress" title="What To Wear">
+          {agenda.status === "failed" ? (
+            <p className="bs-p">
+              The dress code did not load. {agenda.reason} It is on The Setlist too.
+            </p>
+          ) : null}
+          {agenda.status === "loading" ? <p className="bs-p">Checking.</p> : null}
+          {days.map((d) => (
+            <div className="bs-day" key={d.key}>
+              <p className="bs-day__d t-display">{d.pillDate}</p>
+              <div className="bs-day__v">
+                {d.attire.length ? (
+                  d.attire.map((a) => (
+                    <p className="bs-day__line" key={a.k}>
+                      <span className="bs-day__k">{a.k}</span> {a.v}
+                    </p>
+                  ))
+                ) : (
+                  <p className="bs-day__line">Nothing specified. Travel clothes.</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </Panel>
+
+      </div>
+
       <BuildNote isAdmin={isAdmin} task="T1.2">
-        Six ticket stub panels. Venue cards for Embassy Suites, The Medallion
-        Club, and Smash Park. Tappable phones, addresses that open maps, rental
-        codes, attire by day.
+        Static, no Firebase. Venues and contacts come from the VENUES and
+        CONTACTS tables so The Setlist links to the same addresses. Attire is read
+        out of data/agenda.json rather than typed twice. The Video of the Year
+        panel is not here: its deadline was August 1 and it is retired, per the
+        ROADMAP note. Smash Park stays as a venue card even though the official
+        agenda moved Wednesday evening to the hotel, because the address is a fact
+        either way. No website links anywhere, because no source gives a URL.
       </BuildNote>
     </TabFrame>
   );

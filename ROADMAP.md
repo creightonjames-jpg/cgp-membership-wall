@@ -443,21 +443,22 @@ position. Display Mode still hides the tab bar.
   storage at cast time, not out of React state, so a second tab on the same phone cannot
   double cast through a stale copy.
 
-### `[!]` T1.1a Smash Park versus the hotel, Wednesday evening
-The flier has a 6:00 PM Wednesday Evening Outing at Smash Park Westerville, "Put on Your
-Game Face", with axe throwing, karaoke and dinner. The official agenda has Wednesday evening
+### `[x]` T1.1a Smash Park versus the hotel, Wednesday evening. Resolved
+The flier and the official agenda disagreed about Wednesday evening. The flier had a 6:00 PM
+Evening Outing at Smash Park Westerville, "Put on Your Game Face". The official agenda had it
 at the hotel: 6:00 PM cocktails at the hotel bar, 6:30 PM dinner served at the hotel, 7:00 to
 9:00 PM karaoke, corn hole, cards and beer pong.
 
-These cannot both be true. **The Setlist follows the official agenda.** Smash Park is not on
-the agenda anywhere.
+**Jim resolved it on Aug 11 in favour of Smash Park.** The Setlist carries the flier's
+Wednesday evening. **The official agenda's hotel bar block is not used at all.** Everything
+else on Wednesday stays the official agenda: 7:30 AM breakfast, 8:20 AM Tenure Awards, every
+daytime session, and the 5:15 PM end.
 
-**Backstage Pass keeps the Smash Park venue card**, with its address and phone. The venue
-information is factual either way, and putting a card back is harder than leaving one in. No
-attendee-facing copy mentions the change.
+The 5:15 PM card now reads "drive rental cars over to the Evening Outing" rather than the
+official agenda's "meet at the hotel bar", and Wednesday's evening attire line reads "Casual,
+and yes you can wear denim here."
 
-**Needs one line from Carol.** If Smash Park is back on, the fix is four session records in
-`data/agenda.json` and nothing else.
+Backstage Pass keeps the Smash Park venue card, which is now unambiguously right.
 
 ### `[ ]` T1.1b Attire wording, second source
 Attire now uses the official agenda's wording, not the flier's. Tuesday reads "Country Club
@@ -467,12 +468,49 @@ two lines, the Dress-Up Day for the day and "Casual, denim allowed" for the even
 has no attire call in either source and says so. Worth confirming with Carol at the same time
 as T1.1a, since the printed flier in the welcome packet will say something different.
 
-### `[ ]` T1.2 Backstage Pass
+### `[x]` T1.2 Backstage Pass
 - **Inputs:** source flier logistics, spec Section 3.3
 - **Output:** complete logistics tab
 - **Steps:** ticket stub panels for Where You Sleep, Where You Play, Where You Eat, Getting Here, Getting Around, Who To Call. Venue cards for Embassy Suites Columbus (2700 Corporate Exchange Drive, 614-890-8600), The Medallion Club (5000 Club Drive Westerville, 614-794-6999), Smash Park Westerville (495 Polaris Parkway, 614-502-6993). Travel panel with CMH flight confirmations to Yolanda, AVIS code Q357518, National code SMB727V, one car per team. Contacts: Carol 281-804-6719 for meeting questions, Yolanda 214-952-8269 for flights and cars. Attire table by day. Video of the Year reminder panel, August 1 deadline to Jeannette
 - **Acceptance:** every phone number is tappable and dials. Every address opens the device maps app. Every website link opens in a new tab. Verified on iOS and Android
 - **Parallel-safe with:** T1.1
+- **Done Aug 11.** Seven ticket stub panels, not six. The six named above plus What To Wear,
+  because the attire table was listed in the steps without a panel of its own.
+  Sleep, Play, Eat, Fly, Drive, Call, Dress.
+- **Verified on the live URL:**
+  | Acceptance criterion | Result |
+  |---|---|
+  | Every phone number is tappable | All five are `tel:` links. `(614) 890-8600`, `(614) 794-6999`, `(614) 502-6993`, `281.804.6719`, `214.952.8269`, each normalised to `tel:+1` and ten digits |
+  | Every address opens the maps app | Four map links. The address itself is the link, because tapping the address is what people actually do |
+  | Every website link opens in a new tab | The four map links are the only external links. All carry `target="_blank"` and `rel="noopener noreferrer"` |
+  | Email addresses are mailto links | Two, both to `ynuncio@centurygolf.com` |
+  | No horizontal overflow | Document width equals viewport at 380px and 1280px. Zero elements extend past the viewport edge |
+  | No console errors | None |
+- **Not verified, needs a device.** Whether `tel:` actually dials and whether the maps handoff
+  actually opens the app. Both belong to T0.8, which tests three physical phones. The hrefs are
+  correct, which is as far as a desktop browser can go.
+- **Maps links are platform aware.** Apple platforms get `maps.apple.com`, everything else gets
+  the Google Maps search URL. One link for both would open a web page on one of the two
+  instead of the app. Verified the Android branch live. The Apple branch is verified only by
+  the user agent test, which is the other thing T0.8 should confirm.
+- **No website links anywhere, because no source gives a URL.** Not for the hotel, the club,
+  Smash Park, AVIS, or National. Inventing a URL is how somebody ends up at the wrong Smash
+  Park. The link chip already handles external links correctly, proved by the map links, so
+  real URLs are a drop-in when somebody supplies them.
+- **Facts live in one place.** `VENUES` and `CONTACTS` sit at the top of `index.html` and both
+  The Setlist and Backstage Pass read them, so an address cannot say two different things on
+  two tabs. Attire is read out of `data/agenda.json` for the same reason. Two copies of a
+  dress code is how half the room hears denim is fine and the other half hears it is not.
+- **Video of the Year panel is retired, not forgotten.** The spec asks for a reminder panel
+  with an August 1 deadline to send videos to Jeannette, pinned before the meeting and retired
+  after the deadline. Today is August 11. The deadline is ten days gone, so the panel would
+  only tell about ninety people they have missed something they can no longer do. It is not
+  built. If videos are still being accepted, say so and it is a small panel.
+- **Lunch has no venue.** The official agenda puts lunch on both Wednesday and Thursday and
+  does not say where. The Eat panel says that rather than guessing the club.
+- **Fully static.** No Firebase, no admin controls, nothing editable from a phone. The only
+  network read is `data/agenda.json` for the attire, and a failure there says so and points at
+  The Setlist.
 
 ### `[ ]` T1.3 The Band, container
 - **Inputs:** spec Section 3.2
