@@ -548,6 +548,19 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
   values pointing at files that do not exist were set to `""`. An empty string makes no request
   at all and renders the tile deliberately, which is exactly the state the spec said the live
   URL should show. Result is 20 tiles, zero requests, clean console.
+- **Revisited at T3.1, Aug 12. Two things changed on purpose.**
+  **The pill row became pills plus selects.** All and Newbies stay pills. Club is a `select` and so
+  is region. 29 clubs is roughly 1400px of pills, which is four swipes on a 380px phone to reach
+  Wynstone. A native select hands the long list to the phone's own picker, which scrolls itself, so
+  nothing in the page needs a scroll container to hold it. Appearance is left alone deliberately:
+  the platform draws its own caret and there is no thirteenth colour to invent for one. The region
+  select only renders if any record carries a region, which none do today, so it is invisible until
+  somebody types one.
+  **The filters now stack, which reverses the behaviour recorded above.** A region pill used to
+  replace the newbie filter. Newbies, club and region are now three independent filters, because
+  "first timers at Chenal" is a question somebody will actually ask and 29 clubs makes it hard to
+  answer by eye. Verified: Newbies alone returned 21, Newbies plus Anthem returned 0 and said "No
+  first timers from Anthem.", and All cleared all three.
 - **This is load bearing for T3.1 and is written into `data/roster.json`'s own `_note`.**
   **Only put a path in `photo` if the file is actually in `assets/attendees/`.** A wrong path
   degrades to a blank square, not to the initials tile, and nothing in the page can detect it.
@@ -1017,6 +1030,12 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
   declarations with one name means the second silently wins, which would have broken the Vault
   tab's own crew block. The panel's copy is now `AdminVaultDropRow`. A duplicate-declaration scan
   across the whole script block now returns **zero** duplicates.
+- **A sixth section landed at T3.1, Aug 12: Roster.** It sits second, directly under Vault Drops,
+  so Vault Drops is still the first thing in the panel and still two taps from the gear. Confirmed
+  on the live URL: the section order reads Vault Drops, Roster, Marquee, Tab visibility, Reset by
+  section, Clear this device, Reset everything. The duplicate-declaration scan still returns zero.
+  Reset Everything's card now says roster edits survive it, because they do and the crew should not
+  have to find that out by testing it. Full detail under T3.1.
 
 **Phase 2 definition of done:** every feature in the spec is built and working against placeholder content. No feature work remains.
 
@@ -1025,12 +1044,97 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 ## PHASE 3: Content load and test
 **Window: August 17 to August 21. Goal: real content in, everything tested on real devices.**
 
-### `[ ]` T3.1 Load roster and photos
+### `[~]` T3.1 Load roster and photos
 - **Inputs:** Jeannette's headshots, Carol and Lisa's verified roster
 - **Output:** real `/data/roster.json` and populated `/assets/attendees/`
 - **Steps:** run T0.7 pipeline over the headshots. Build the roster file. Cross-check every roster entry against a photo file and every photo against a roster entry
 - **Acceptance:** zero unmatched records in either direction, or a documented list of known-missing photos with placeholders in place. Every title matches the verified list
 - **Blocked by:** T1.3, asset delivery
+- **Photos and file, Aug 12.** 143 headshots in `assets/attendees/`, 400x400 through the
+  T0.7 pipeline, and `data/roster.json` written from them.
+  | Acceptance criterion | Result |
+  |---|---|
+  | Zero unmatched records in either direction | **Passes.** 143 records, 143 jpg files. Every record's `photo` resolves to a file that exists, every file has a record, every `photo` is exactly `assets/attendees/{slug}.jpg`, and no record carries an empty `photo`. `_counts` matches the data it describes: people 143, newbie 21, withClub 23, needsReview 120 |
+  | Every title matches the verified list | **Cannot pass, and it is not a code problem.** There is no verified list. All 143 titles are empty and 120 names came off a filename. This stays `[~]` until Carol and Lisa hand over real names, titles and clubs, or until the crew works the panel below through the 120 |
+- **Why this is `[~]` and not `[x]`.** The mechanism is done and the content is not. Nothing in
+  the repo invents a title, a club or a region to close the gap.
+
+**The roster is now two layers, and that is a deliberate change to the spec.**
+The spec had the roster as a static repo file because it loads fast and never changed during the
+event. That second assumption died when the client asked to fix names and add people live. So:
+- **BASE.** `data/roster.json`, static, in the repo. Ships fast and renders with Firebase flat.
+- **OVERRIDE.** Firebase `roster/{slug}`, written by the crew panel, merged on top of the base
+  **field by field**. A write only carries the fields that changed, and the merge only applies
+  fields that are present and non-empty.
+- **ADDED.** A `roster/{slug}` with no base counterpart is somebody the crew added at the meeting.
+- **Base records cannot be deleted.** You cannot take a line out of a static file from a phone, so
+  they carry `hidden: true` and come off the wall instead. Added records delete for real.
+- **`roster` is NOT in `RESET_NODES`.** Reset Everything spares it on purpose. A name somebody
+  fixed in August is not test data, and the card in the panel says so.
+
+**Crew panel, Roster section.** Second in the panel, under Vault Drops, because 120 names need
+checking before the meeting.
+- Searchable list of everybody with a thumbnail, name, club and state, sorted by what needs
+  attention: flagged first, then anybody with no club, then alphabetical. A counter reads
+  "120 names still to check" so there is a sense of progress through them.
+- Inline edit for name, title, club, region and the newbie flag. One row open at a time and the
+  list pages 24 at a time, so 143 rows never becomes 143 open forms and never needs an inner
+  scroll container.
+- Club is an input plus a `datalist`. The suggestions are `data/graphs.json`'s 29 real club names
+  unioned with whatever clubs are on the roster right now. **No club name is hardcoded anywhere in
+  index.html.** Typing a new one is allowed, which is the point of a combo.
+- Every changed field says what the file says and offers "Put it back", which removes that one
+  field from Firebase and lets the base value come back on every phone.
+- Add A Person: name, title, club, region, newbie, and an optional headshot from camera or
+  library. Slug is generated by the same rule as `tools/process-assets.sh` and a slug that already
+  exists is **refused**, not resolved.
+- Headshots for added people ride on the record as compressed base64. It reuses The Pit's
+  `pitCompress` through a new `opts` argument rather than a second compressor: `{ edges: [400,
+  340, 300], qualities: [...], maxB64: 90000, square: true }`. Defaults are unchanged, so The Pit
+  behaves exactly as before. `square` centre crops at full resolution before any scaling, which is
+  what the pipeline does to every headshot.
+
+**Verified on the live URL, Aug 12, with two browser contexts:**
+| Check | Result |
+|---|---|
+| An edit reaches The Band on a second context within two seconds, no reload | **36ms**, measured Save click to DOM change against a shared clock, with the second tab fronted so nothing was throttled. Navigation type stayed `navigate`, single entry, so it was not a reload |
+| Field level merge, not record replacement | Set Adair's club, then changed the name. Club survived. Then changed the club. Name survived. The stored record read exactly `{"club":..., "name":..., "reviewed":true}`. No title, no region, no newbie, no photo. Verified at the database over plain HTTPS, not just on screen |
+| Per-field revert | "Put it back" on the name dropped only `name` from Firebase, the file's value came back, the club override stayed, and the row tag went from "Edited: name, club" to "Edited: club" |
+| Adding somebody with a photo shows up in The Band with their photo | 1200x800 source compressed to a **400 by 400** square, 15 KB in, 6 KB out. Appeared on the second context in **37ms** with the data URL as its headshot, decoding at 400x400 in both the grid and the one-person view. Head count went 146 to 147 |
+| A colliding slug is refused | "ZZ Testcase Rig" against the record just added, and "Cole Clearman", "Clearman, Cole" and "  COLE   CLEARMAN  " against the base file, all three landed on `cole-clearman` and all were refused with the Add button disabled. `José Núñez-O’Brien` slugged to `jose-nunez-obrien`, matching the pipeline |
+| The club filter includes a newly added club | Yes, on the second context, unlocked, with a live count: "ZZ Test Club (1)". Option count went 22 to 23 |
+| The newbie filter returns exactly the newbie records | 21 cards, 21 FIRST TOUR picks, and the 21 names matched `roster.json`'s own newbie list **name for name**, not just in count |
+| A person with an empty photo renders the fallback and fires no image request | Added somebody with no headshot. Their card rendered the initials tile "ZR". Zero `img` tags in the grid, **zero new image requests**, zero failed requests |
+| A base person's photo can be replaced, and put back | Upload won over the repo file, row tag read "Edited: headshot", thumbnail became the data URL. "Use the file's headshot" then dropped the override and the repo path came back |
+| Hiding a base record | Took them off The Band on the second context inside the same paint, left them in the panel tagged "Off the wall", and "Put back on the wall" returned them |
+| Deleting an added record | Gone from Firebase and from both contexts |
+| 380px | Zero horizontal overflow on The Band and on the panel, `scrollWidth` equal to `clientWidth`. Club select 348px, one column. Editor stacks, both upload buttons present |
+| 1280px | Zero overflow. Editor goes to two columns, 330px each, inside the 748px reading column |
+| No inner scroll containers | Zero elements inside the panel with `overflow-y` auto or scroll and content taller than their box, at both widths. CLAUDE.md rule holds |
+| No console errors | None, across entering, unlocking, the panel, six saves, two adds, two deletes, a hide, an unhide, three reverts and two photo uploads |
+| Firebase down, The Band still lists everybody | Served index.html with the Firebase script tags stripped, which is the `FB.ok === false` branch. **143 cards, "143 on the tour, 21 first timers", 21 clubs still in the filter, newbie filter still exact, zero console errors,** and a note reading "Live updates are off, so this is the roster as it shipped. Any name the crew has fixed since is not on this phone yet." |
+
+**Two bugs found in this work and fixed, `da0a5fe`:**
+- **"Put it back" reverted the record and left the open input holding the old value,** so the next
+  Save quietly put the edit back. Caught by reading the input after the revert rather than trusting
+  the row heading, which had updated correctly. Revert now resets the form field and the record in
+  one action.
+- **Adding somebody said nothing.** The confirmation renders on the closed form and `add()` never
+  closed it, so the crew had to go hunting in the list to find out whether it worked.
+
+**Not verified, and it needs a physical phone.** Both upload paths exist in the DOM with the right
+attributes, camera carrying `capture="environment"` and library carrying none, and the compressor
+was driven with a real `File` through the library input. Whether iOS and Android actually open the
+camera and the photo library from those two controls is a T3.6 device test. Desktop cannot answer
+it. The same applies to the club `datalist`: it behaves as a combo on desktop Chrome and degrades
+to a plain text input if a phone browser ignores it, which still lets the crew type a club.
+
+**Found along the way, worth knowing.** A stale tab caught `assets/attendees/cole.jpg` returning
+404 after that record was pruned from the file mid-session, and the card rendered as a blank square
+rather than an initials tile. That is exactly the hazard T1.3 documents: a lazily loaded image that
+404s fires no `error` event, so nothing in the page can detect it. The current deploy is clean, and
+`tools/remove-attendee.py` keeps the file and the folder moving together. **The rule stands: never
+put a path in `photo` unless the file is in `assets/attendees/`.**
 
 ### `[ ]` T3.2 Load club graphs
 - **Inputs:** Jeannette's graph files
