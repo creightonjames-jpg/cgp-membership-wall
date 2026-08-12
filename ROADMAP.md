@@ -1287,6 +1287,61 @@ answering.** Do not explain a limitation without checking whether it is real.
 Duane Malinowski, James Hinckley, Jim Hinckley, Jim Creighton, Todd Keefer. The two Hinckleys are
 partly the held photo question below, not only a delivery gap.
 
+**Framing fixed on 38 photos, Aug 12. This closes Lisa's crop complaint.** She reported heads cut
+off and photos zoomed too far but named nobody, so it sat. Jim named two and that made it
+actionable: Molly Dunn had no head in frame at all, Tom Pyeatt was a 15 percent face jammed
+against the top edge.
+
+**Root cause is in the intake pipeline, not in the photos.** `process-assets.sh` scales the short
+edge to 400 and takes a **centred** square. Correct for a studio portrait. Wrong for a full-body
+phone snap, where the middle of the frame is somebody's waist.
+
+**Why the first fix was reverted and this one was not.** The first tried a fixed top bias. It cut
+foreheads on photos that were already tight, and on EXIF-rotated sources it pulled the crop toward
+the wrong edge, so all 143 files went back. **There is no single offset that suits both a
+full-body snap and a tight close-up.** The lesson was to stop guessing at geometry and find the
+actual face.
+
+- **`tools/facefind.swift`.** macOS Vision face detection, one JSON object per line. Vision is
+  already installed, needs no model download, and beats Haar badly on the angled, bespectacled,
+  outdoor phone photos that make up most of this set. The `cv2` build on this Mac is headless and
+  ships no cascade XML at all, so Haar was not even an option.
+- **`tools/recrop-headshots.py`.** Places the square on the face box. Face height 40 percent of
+  the finished crop, face centre at 44 percent so there is headroom above.
+- **The guard that makes it safe: every output is re-detected and graded, and a crop that does not
+  come out well is discarded with the original left untouched.** The previous attempt shipped a
+  regression across 143 files. This one cannot make a photo worse without printing why.
+- **Orientation is normalized before detection, once.** Mixing a rotated source with an unrotated
+  face box is exactly what broke the first attempt.
+
+| Check | Result |
+|---|---|
+| Graded clean | **148 of 151**, up from 112 |
+| Re-cut | 38 files, every one landing at 39 to 47 percent face |
+| Of those, actually on the roster | 29 |
+| Identity | All 38 eyeballed against their previous version on a before and after sheet. A framing test cannot catch an identity swap, so a human had to look |
+| Integrity | All 151 still valid 400x400 JPEG, 5.4MB total |
+| Bonus | James Jordan and Matt Saggio were **sideways** before and are upright now, from normalizing EXIF first |
+
+- **The 3 that still grade `tight` are correct as-is.** angela-morabito 62 percent, doug-hoffort 66
+  percent, howe 59 percent. Their sources are close-ups, so no crop can zoom out past the edge of
+  the file. Only `howe` is on the roster, and his crown is no longer clipped, which was the actual
+  defect. **Do not "fix" these by upscaling.**
+- **Tied sources are tried and the best kept, not refused.** Five people had two source files
+  (`Kasey.png` and `Kasey O'Connor.JPG`, two frames from one 2023 studio session). Both were
+  verified to be the same person before this was allowed. **This is not a way to assign a face to
+  somebody who has none. That is the Hinckley trap, and their photo is still held back.**
+- **Intake now runs the framing check on whatever it just wrote.** Advisory, never blocks, never
+  edits, skipped quietly when `tools/facefind` is not built. Molly Dunn shipped headless and
+  nobody caught it until a human said so out loud twice, which is not a process.
+
+**Build the face finder before using either tool:**
+
+```
+swiftc -O tools/facefind.swift -o tools/facefind
+python3 tools/recrop-headshots.py --audit
+```
+
 ### `[ ]` T3.2 Load club graphs
 - **Inputs:** Jeannette's graph files
 - **Output:** populated `/assets/graphs/`
