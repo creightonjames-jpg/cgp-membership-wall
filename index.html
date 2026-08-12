@@ -2416,6 +2416,31 @@ body.display-mode .ln-when { font-size: 15px; }
   gap: 10px;
 }
 
+/* ------------------------------------------------------- club groups */
+/* Lisa asked for club order rather than alphabetical, so the grid is broken
+   into one section per club with a heading. No new motif: Anton in caps like
+   every other heading, and the same gold count badge the tab bar and the filter
+   pills already use.
+
+   Not sticky and no scroll container. Twenty seven headings down a phone is a
+   long page and that is correct, because the club select is the shortcut for
+   anybody who does not want to scroll.
+
+   The rule sits under the heading rather than around it, so a two line club
+   name on a 320px screen still reads as one label. */
+.bnd-group { margin: 0 0 6px; }
+.bnd-group + .bnd-group { margin-top: 22px; }
+
+.bnd-group__h {
+  display: flex; align-items: baseline; gap: 8px;
+  margin: 0 0 10px; padding-bottom: 6px;
+  font-size: 16px; line-height: 1.15; letter-spacing: 0.02em;
+  color: var(--cream);
+  border-bottom: 1px solid var(--gold-rule);
+}
+
+.bnd-group__n { min-width: 0; overflow-wrap: break-word; }
+
 /* The whole card is the toggle, so it is a button. Everything inside it is a
    span for the same reason The Setlist's ticket is: a button may not hold a p
    or a div.
@@ -2516,6 +2541,8 @@ body.display-mode .ln-when { font-size: 15px; }
      contact sheet, four 176px ones read as a lineup. */
   .bnd-grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 14px; }
   .bnd-card__n { font-size: 15px; }
+  .bnd-group + .bnd-group { margin-top: 28px; }
+  .bnd-group__h { font-size: 19px; }
 
   .bnd-detail__card { padding: 20px; }
   .bnd-detail__grid { flex-direction: row; align-items: flex-start; gap: 22px; }
@@ -4769,6 +4796,44 @@ function bandKeeps(rec, tokens, f) {
   return true;
 }
 
+/* Century Golf corporate staff sort after every club, because they are not a
+   club. Read off the record rather than named here: any club value that starts
+   "Century Golf" is corporate. That is the value the roster file carries today,
+   and matching the prefix means "Century Golf Partners" lands in the same place
+   if somebody spells it out in the crew panel.
+
+   Rank 0 clubs, 1 corporate, 2 nobody with a club at all. Two people in the
+   same rank sort by club name, so 27 clubs stay alphabetical. */
+function bandClubRank(club) {
+  if (!club) return 2;
+  return /^century golf\b/i.test(club) ? 1 : 0;
+}
+
+/* Lisa asked for club order instead of alphabetical, so the grid is grouped
+   rather than sorted differently. People inside a group keep the roster's own
+   name order, which is what makes a club heading scannable.
+
+   Grouping only, no filtering. Whatever list arrives is the list that comes
+   back out, so nobody can go missing between the filter and the heading. */
+function bandByClub(list) {
+  const bag = {};
+  const order = [];
+  list.forEach((r) => {
+    const club = r.club || "";
+    if (!bag[club]) { bag[club] = []; order.push(club); }
+    bag[club].push(r);
+  });
+
+  return order
+    .map((club) => ({
+      club: club,
+      label: club || "No club on the roster",
+      rank: bandClubRank(club),
+      people: bag[club]
+    }))
+    .sort((a, b) => (a.rank - b.rank) || a.club.localeCompare(b.club));
+}
+
 function bandNothing(query, f) {
   if (query.trim()) return "Nobody by that name. Try fewer letters.";
   if (f.newbie && f.club) return "No first timers from " + f.club + ".";
@@ -4905,6 +4970,14 @@ function BandTab({ isAdmin }) {
   const tokens = bandNorm(query).split(/\s+/).filter(Boolean);
   const shown = list.filter((r) => bandKeeps(r, tokens, filter));
   const person = selected ? list.filter((r) => r.key === selected)[0] || null : null;
+
+  /* The club select already says which club you are looking at, and every
+     heading would then be the same word. So the headings come off when a club
+     filter is on and the grid goes flat. Newbies and search keep the headings,
+     because both cut across clubs and the heading is the only thing telling you
+     the two first timers you can see are not from the same place. */
+  const grouped = !club;
+  const groups = grouped ? bandByClub(shown) : [];
 
   /* A club that stops existing, because the crew corrected the last record that
      carried it, would otherwise leave the select pointing at nothing and the
@@ -5077,6 +5150,26 @@ function BandTab({ isAdmin }) {
 
           {!shown.length ? (
             <Empty>{bandNothing(query, filter)}</Empty>
+          ) : grouped ? (
+            groups.map((g) => (
+              <section className="bnd-group" key={g.club || "no-club"}>
+                <h3 className="bnd-group__h t-display">
+                  <span className="bnd-group__n">{g.label}</span>
+                  <span className="tab__badge">{g.people.length}</span>
+                </h3>
+                <div className="bnd-grid">
+                  {g.people.map((r) => (
+                    <BandCard
+                      key={r.key}
+                      rec={r}
+                      broken={!!broken[r.key]}
+                      onBroken={markBroken}
+                      onOpen={openPerson}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))
           ) : (
             <div className="bnd-grid">
               {shown.map((r) => (

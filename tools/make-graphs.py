@@ -142,11 +142,16 @@ ALIASES = {
     "huntington": "huntington-club",
 }
 
-# Genuinely a two club comparison, not a club. Kept, but not counted as a club.
+# Genuinely a two club comparison, not a club.
 COMBINED = {"pga-west-and-citrus"}
 
 # Roll-ups rather than clubs.
 NOT_A_CLUB = {"all-clubs"}
+
+# Dropped at the client's request. Lisa, Aug 12 2026: "Graphs, we need to remove
+# club 23 and remove pga and citrus combined at bottom." Nothing is generated for
+# these and no SVG is left on disk for them.
+DROP = {"club-23", "pga-west-and-citrus"}
 
 
 def slugify(s):
@@ -356,7 +361,7 @@ def main():
     os.makedirs(os.path.dirname(os.path.abspath(manifest_path)), exist_ok=True)
 
     charts = parse_charts(workbook)
-    written, skipped, entries = [], [], {}
+    written, skipped, entries, dropped = [], [], {}, []
 
     for c in charts:
         club, kind, unit, subtitle = classify(c["title"])
@@ -368,6 +373,9 @@ def main():
             skipped.append((c["title"], "no usable values"))
             continue
         slug = slugify(club)
+        if slug in DROP:
+            dropped.append(c["title"])
+            continue
         name = "%s--%s.svg" % (slug, kind)
         with open(os.path.join(outdir, name), "w", encoding="utf-8") as fh:
             fh.write(svg)
@@ -403,6 +411,11 @@ def main():
         json.dump(manifest, fh, indent=2)
         fh.write("\n")
 
+    if dropped:
+        print("dropped at the client's request: %d" % len(dropped))
+        for t in dropped:
+            print("    %s" % t[:70])
+        print()
     print("charts in workbook: %d" % len(charts))
     print("svg written:        %d" % len(written))
     print("svg dir:            %s" % outdir)

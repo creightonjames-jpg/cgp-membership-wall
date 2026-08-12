@@ -69,14 +69,6 @@
       }
     },
     {
-      "slug": "club-23",
-      "name": "Club 23",
-      "graphs": {
-        "members": "club-23--members.svg",
-        "dues": "club-23--dues.svg"
-      }
-    },
-    {
       "slug": "eagles-landing",
       "name": "Eagle's Landing",
       "graphs": {
@@ -273,13 +265,6 @@
       "graphs": {
         "members": "all-clubs--members.svg",
         "dues": "all-clubs--dues.svg"
-      }
-    },
-    {
-      "slug": "pga-west-and-citrus",
-      "name": "PGA WEST & Citrus",
-      "graphs": {
-        "rates": "pga-west-and-citrus--rates.svg"
       }
     }
   ]
