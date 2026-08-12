@@ -1,10 +1,10 @@
 {
   "_note": "REAL PHOTOS, DERIVED DETAILS. Names come from filenames and clubs from filenames where a real club name appeared. Titles and regions are empty because no source gives them. Nothing here is verified. Edit names, clubs and the newbie flag from the crew panel; those edits are stored in Firebase under roster/{slug} and override this file. T3.1.",
   "_counts": {
-    "people": 146,
+    "people": 143,
     "newbie": 21,
     "withClub": 23,
-    "needsReview": 123
+    "needsReview": 120
   },
   "attendees": [
     {
@@ -36,16 +36,6 @@
       "newbie": false,
       "photo": "assets/attendees/alvar-david.jpg",
       "needsReview": false
-    },
-    {
-      "slug": "alyssa-baker",
-      "name": "Alyssa Baker",
-      "title": "",
-      "club": "",
-      "region": "",
-      "newbie": false,
-      "photo": "assets/attendees/alyssa-baker.jpg",
-      "needsReview": true
     },
     {
       "slug": "anai-romero",
@@ -85,16 +75,6 @@
       "region": "",
       "newbie": false,
       "photo": "assets/attendees/angela-morabito.jpg",
-      "needsReview": true
-    },
-    {
-      "slug": "ashley-vaugh",
-      "name": "Ashley Vaugh",
-      "title": "",
-      "club": "",
-      "region": "",
-      "newbie": false,
-      "photo": "assets/attendees/ashley-vaugh.jpg",
       "needsReview": true
     },
     {
@@ -296,16 +276,6 @@
       "newbie": false,
       "photo": "assets/attendees/cole-clearman.jpg",
       "needsReview": false
-    },
-    {
-      "slug": "cole",
-      "name": "Cole",
-      "title": "",
-      "club": "",
-      "region": "",
-      "newbie": false,
-      "photo": "assets/attendees/cole.jpg",
-      "needsReview": true
     },
     {
       "slug": "cortese",

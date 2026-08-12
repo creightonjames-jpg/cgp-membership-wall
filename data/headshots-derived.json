@@ -1,6 +1,6 @@
 {
   "_note": "Photos are loaded. Names and clubs here are DERIVED FROM FILENAMES and are UNVERIFIED. Reconcile against the roster from Carol and Lisa, then rebuild data/roster.json. T3.1.",
-  "photos_loaded": 114,
+  "photos_loaded": 112,
   "newbie_from_folder": 21,
   "needs_a_name_before_it_can_be_loaded": [
     {
@@ -146,13 +146,6 @@
       "source_file": "Alvar David-The Nelson.JPG"
     },
     {
-      "slug": "alyssa-baker",
-      "name_from_filename": "Alyssa Baker",
-      "club_from_filename": "",
-      "newbie_from_folder": false,
-      "source_file": "Alyssa Baker.png"
-    },
-    {
       "slug": "anai-romero",
       "name_from_filename": "Anai Romero",
       "club_from_filename": "",
@@ -179,13 +172,6 @@
       "club_from_filename": "",
       "newbie_from_folder": false,
       "source_file": "Angela Morabito.png"
-    },
-    {
-      "slug": "ashley-vaugh",
-      "name_from_filename": "Ashley Vaugh",
-      "club_from_filename": "",
-      "newbie_from_folder": false,
-      "source_file": "Ashley Vaugh.jpg"
     },
     {
       "slug": "aubrey-de-matthaeis",
@@ -953,6 +939,20 @@
       "kept": "haley-scaman",
       "dropped": "haley-scaman2",
       "note": "Same person, kept the larger image."
+    }
+  ],
+  "removed": [
+    {
+      "slug": "alyssa-baker",
+      "why": "Removed by Jim, Aug 12 2026. Not attending, or a duplicate in Cole's case."
+    },
+    {
+      "slug": "ashley-vaugh",
+      "why": "Removed by Jim, Aug 12 2026. Not attending, or a duplicate in Cole's case."
+    },
+    {
+      "slug": "cole",
+      "why": "Removed by Jim, Aug 12 2026. Not attending, or a duplicate in Cole's case."
     }
   ]
 }
