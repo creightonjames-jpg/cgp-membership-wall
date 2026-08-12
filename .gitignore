@@ -11,3 +11,7 @@ confidential/
 
 # macOS
 .DS_Store
+
+# Raw headshot drops. Only the processed 400x400 versions get committed.
+incoming/headshots/*
+!incoming/headshots/README.md
