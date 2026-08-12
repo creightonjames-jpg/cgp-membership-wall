@@ -396,6 +396,110 @@ position. Display Mode still hides the tab bar.
 
 ---
 
+### Aug 12, Smash Park is cancelled. Wednesday night is at the hotel
+**From:** Lisa, relayed by Jim, Aug 12. "On day 2 we had to cancel smashpark. We
+are now going to have dinner and karaoke at the hotel. 6 will be drinks, 630
+dinner 7-9 karaoke." And: "We'll need to remove smashpark from backstage pass
+and update."
+
+**This reverses T1.1a.** The flier said Smash Park, Carol's official agenda said
+the hotel, Jim called it for Smash Park on Aug 11, and the wall was built that
+way. Lisa has now cancelled the outing, which means the official agenda was
+right the whole time. Wednesday evening is Carol's block, verbatim.
+
+**What moved:**
+- `data/agenda.json`. One `wed-1800-smash-park` card became three: 6:00 PM
+  Cocktails at Hotel Bar, 6:30 PM Dinner Served at Hotel, 7:00 to 9:00 PM
+  Karaoke, Corn Hole, Cards and Beer Pong. All three carry `venue: "hotel"`.
+  The seven Smash Park activities are gone with the card that held them.
+- The 5:15 PM card reads Carol's wording again. "Take a bow, you earned it. Head
+  back to the hotel to change out of your Rock n' Roll costumes and meet at the
+  hotel bar. Casual attire, denim allowed." It no longer sends anybody to a
+  rental car.
+- Wednesday's second attire line is now "Evening at the hotel. Casual attire,
+  denim allowed." The "At Smash Park" line is gone. Backstage Pass reads that
+  same line out of the same file, so the dress code moved on both tabs at once.
+- **`VENUES.smashpark` is deleted, not commented out.** That is the point of the
+  shared table: with the venue gone there is no way for a session, a panel, or a
+  future card to point at it. The address and phone survive in a comment where
+  the key used to be, in case it ever comes back.
+- Backstage Pass drops the Smash Park venue card. Where You Play now carries The
+  Medallion Club and the hotel, the hotel noted as Wednesday night's karaoke,
+  corn hole, cards and beer pong. Where You Eat reads "Wednesday night,
+  cocktails and dinner are at the hotel."
+- `data/polls.json`. The denim question hung off session `wed-1800-smash-park`,
+  a key that no longer exists, so it now hangs off `wed-1800-cocktails`. Its
+  explain said "fine at the Evening Outing" and now says "fine at the hotel that
+  evening". The crew note dropped the T1.1a caveat and kept the T1.1b one, which
+  is still real.
+
+**History is corrected, not deleted.** The `meta.smashPark` note in
+`agenda.json` now tells the whole sequence, flier to Jim to Lisa, and says
+outright that the venue is gone from `index.html` so nothing may point at it.
+T1.1a above is marked closed rather than rewritten.
+
+**Verified:** zero attendee-facing mentions of Smash Park anywhere in the repo.
+The four that remain are a JS comment, two crew-only BuildNotes behind the PIN,
+one crew-only note in `polls.json`, and the `agenda.json` meta block, which is
+never rendered. `grep -i smash` is the check.
+
+### Aug 12, Membership Buckets is now Invitation Sources
+**From:** Lisa, Aug 12. "We need to change the tab to Invitation Sources instead
+of membership buckets."
+
+Display name only. **The key stays `buckets`,** which is a deliberate call and
+worth the line: it is the child name in `data/vault.json`, the value already
+sitting in `mm26_vaultsection` on any phone that has opened the tab, and the id
+on the nav button. No Firebase path carries it, because the two Firebase drop
+nodes are `scenarios` and `personas`. Renaming the key would mean editing a data
+file and stranding the stored value on every phone, to change a string nobody
+reads. The name is what the room sees. The key is plumbing.
+
+Empty state rewritten: "Empty shelf. Tyler is sending the Invitation Sources
+artwork." It is still an empty state and not a broken image, because the
+artwork has not arrived. When it does, the files go under the `buckets` key in
+`data/vault.json`, which the Vault crew note now says out loud.
+
+### Aug 12, The Band organises by club instead of alphabetically
+**From:** Lisa, Aug 12. "Jim, can we organize by club instead of alphabetical?"
+
+One section per club with a heading and a gold count badge, clubs alphabetical,
+**Century Golf corporate after all of them** because they are not a club. People
+inside a club keep the roster's own name order.
+
+**Corporate is matched, not listed.** `bandClubRank` tests the club value for a
+"Century Golf" prefix. That is the string the roster file carries, and a prefix
+test means a fuller spelling typed into the crew panel still lands last instead
+of between Canyon Oaks and Chenal. It is the only club string matched in code
+anywhere on the tab.
+
+**A blank club groups last, under "No club on the roster".** Nobody in the file
+is in that state. It exists so a cleared club field in the crew panel cannot
+drop a person off the wall silently.
+
+**When the club select is set, the headings come off and the grid goes flat.**
+Every heading would otherwise repeat the word already sitting in the select.
+Newbies and search keep their headings, because both cut across clubs and the
+heading is the only thing telling you that the two first timers on screen are
+not from the same place.
+
+**Nothing regressed.** All, Newbies, the club select, the region select, and
+live search on name, club and title all still work, and Newbies still stacks
+with a club. Grouping is grouping only: it filters nothing, so nobody can go
+missing between the filter and the heading.
+
+**Every count is still counted off the file.** The header line, the pill badges,
+the "n of n showing" line, and the new per-club badges. `data/roster.json` is
+being regenerated, so the numbers below will move and that is correct.
+
+**No new token and no new motif.** Anton in caps like every other heading, the
+`--gold-rule` hairline the tab bar already uses, and the same `.tab__badge` as
+the filter pills. Not sticky, no scroll container. Twenty seven headings makes a
+long page on a phone, which is fine, because the club select is the shortcut for
+anybody who does not want to scroll it.
+
+---
+
 ## PHASE 1: Static and text tabs
 **Window: August 3 to August 10. Goal: every tab that does not depend on Jeannette's assets is finished.**
 
@@ -443,28 +547,25 @@ position. Display Mode still hides the tab bar.
   storage at cast time, not out of React state, so a second tab on the same phone cannot
   double cast through a stale copy.
 
-### `[x]` T1.1a Smash Park versus the hotel, Wednesday evening. Resolved
+### `[x]` T1.1a Smash Park versus the hotel, Wednesday evening. Closed, the hotel won
 The flier and the official agenda disagreed about Wednesday evening. The flier had a 6:00 PM
 Evening Outing at Smash Park Westerville, "Put on Your Game Face". The official agenda had it
 at the hotel: 6:00 PM cocktails at the hotel bar, 6:30 PM dinner served at the hotel, 7:00 to
 9:00 PM karaoke, corn hole, cards and beer pong.
 
-**Jim resolved it on Aug 11 in favour of Smash Park.** The Setlist carries the flier's
-Wednesday evening. **The official agenda's hotel bar block is not used at all.** Everything
-else on Wednesday stays the official agenda: 7:30 AM breakfast, 8:20 AM Tenure Awards, every
-daytime session, and the 5:15 PM end.
+Jim resolved it on Aug 11 in favour of Smash Park and the wall was built that way.
+**Lisa cancelled Smash Park on Aug 12.** The official agenda was right all along and the
+wall now carries it. See the change log entry for Aug 12 for what moved.
 
-The 5:15 PM card now reads "drive rental cars over to the Evening Outing" rather than the
-official agenda's "meet at the hotel bar", and Wednesday's evening attire line reads "Casual,
-and yes you can wear denim here."
-
-Backstage Pass keeps the Smash Park venue card, which is now unambiguously right.
+Everything else on Wednesday was always the official agenda: 7:30 AM breakfast, 8:20 AM
+Tenure Awards, every daytime session, and the 5:15 PM end.
 
 ### `[ ]` T1.1b Attire wording, second source
 Attire now uses the official agenda's wording, not the flier's. Tuesday reads "Country Club
 Casual and Appropriate Length Shorts (no denim)" rather than the flier's "Country Club Casual
 and Shorts (no denim)". Thursday reads "Country Club Casual (no denim)". Wednesday carries
-two lines, the Dress-Up Day for the day and "Casual, denim allowed" for the evening. Friday
+two lines, the Dress-Up Day for the day and "Casual attire, denim allowed" for the evening at
+the hotel, which is Carol's own wording. Friday
 has no attire call in either source and says so. Worth confirming with Carol at the same time
 as T1.1a, since the printed flier in the welcome packet will say something different.
 
@@ -1156,9 +1257,10 @@ put a path in `photo` unless the file is in `assets/attendees/`.**
 - **Mostly done at T1.1, Aug 11.** The official agenda arrived during the T1.1 build, so
   `data/agenda.json` was written from it rather than from the flier. Titles, times, and the
   three named presenters match the source.
-- **Still open, which is why this is `[~]` and not `[x]`:** the Smash Park conflict at T1.1a,
-  the attire wording at T1.1b, and rooms. The agenda names no rooms at all, so every `room`
-  field is empty. If rooms exist, they are a drop-in.
+- **Still open, which is why this is `[~]` and not `[x]`:** the attire wording at T1.1b, and
+  rooms. The agenda names no rooms at all, so every `room` field is empty. If rooms exist,
+  they are a drop-in. T1.1a is closed: Lisa cancelled Smash Park on Aug 12 and Wednesday
+  evening is the official agenda's hotel block.
 
 ### `[ ]` T3.5 Poll library and Cares Cup seed
 - **Inputs:** poll questions from organizers, confirmed team names
@@ -1267,7 +1369,8 @@ put a path in `photo` unless the file is in `assets/attendees/`.**
   sections stay hidden until Thursday night
 - **9:30 AM: Core Fundamental Scenarios unlock. Verify it fired**
 - Marquee: Dress-Up Day photo prompt, pointing people to The Pit
-- Marquee later: Smash Park departure reminder, denim allowed
+- Marquee later: 6:00 PM at the hotel bar, casual, denim allowed. Not a departure reminder.
+  Nobody is driving anywhere. Smash Park was cancelled on Aug 12
 
 ### `[ ]` T5.3 Thursday August 27
 - **10:30 AM: Membership Funnel Personas unlock. Verify it fired**
