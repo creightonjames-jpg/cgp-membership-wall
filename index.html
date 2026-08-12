@@ -70,7 +70,21 @@
 
   /* Reading column on a wide screen. Mobile ignores it, the shell is already
      narrower than this. */
-  --shell-max: 780px;
+  /* The frame every page sits in on a wide screen. 780px was a prose measure and
+     it starved the content: this wall is mostly card grids, ticket stubs, a
+     143 person roster and 380px-wide graphs, none of which are paragraphs.
+     Raise or lower this ONE value to change the whole app consistently. */
+  --shell-max: 1120px;
+
+  /* The masthead does NOT follow shell-max. It is a fixed height strip cut from
+     a 786x404 photo, so widening the frame crops it tighter and you get
+     foreheads instead of faces. Keep this near the width the 150px crop was
+     tuned against. */
+  --masthead-max: 820px;
+
+  /* Comfortable line length for actual prose, so running text does not stretch
+     to 1120px. Apply to paragraphs, never to grids. */
+  --measure: 68ch;
 
   /* Notch and home indicator. Zero on anything without a cutout. */
   --safe-t: env(safe-area-inset-top, 0px);
@@ -905,12 +919,12 @@ body.display-mode .stubnote { font-size: 20px; }
      Cap the height and let object-fit crop instead of scaling. */
   .masthead--tall .band { max-height: 32vh; }
 
-  /* The compact masthead shares the reading column rather than going full
-     bleed. At 1280px wide a full bleed strip scales the picture to 658px tall,
-     so a 140px frame is a 9:1 slice of a 2:1 photo and you see foreheads.
-     Held to 780px, the same 140px frame lands on the faces. */
+  /* Deliberately NOT shell-max. A full bleed strip at 1280px scales the picture
+     to 658px tall, so a 150px frame is a 9:1 slice of a 2:1 photo and you get
+     foreheads. This width is what the 150px crop was tuned against, so it stays
+     put when the content frame widens. */
   .masthead:not(.masthead--tall) {
-    max-width: var(--shell-max);
+    max-width: var(--masthead-max);
     margin-left: auto;
     margin-right: auto;
   }
