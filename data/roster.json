@@ -1,0 +1,199 @@
+{
+  "_note": "PLACEHOLDER DATA. Every name, club, and region below is invented so The Band (ROADMAP T1.3) can be built and reviewed before the verified roster arrives. Nothing here is a real person and nothing here is a real club. The whole file is replaced at T3.1, when Carol and Lisa's verified roster and Jeannette's headshots land. Do not correct a name in here. Replace the file. PHOTO CONVENTION, load bearing: leave `photo` as an empty string unless the file is actually in assets/attendees/. The wall lazy loads headshots, and a lazily loaded image that 404s fires no error event in Chrome, so a wrong path degrades to a blank square rather than to the initials tile. An empty string makes no request at all and renders the tile on purpose. All 20 paths were blanked on Aug 11 for exactly this reason.",
+  "meta": {
+    "task": "ROADMAP T1.3, container built against placeholders. Real data at T3.1.",
+    "fields": {
+      "slug": "Filename key. Matches assets/attendees/{slug}.jpg and is what tools/process-assets.sh cross-checks in both directions. It is the slugified name, so if a name changes the slug changes with it.",
+      "name": "Display name.",
+      "title": "Role. The only titles used here are the three the agenda itself names in the Thursday Fireside Chat, plus one deliberately long placeholder so the card layout gets tested. No real titles are invented.",
+      "club": "Club name. Never a real CGP club in this file.",
+      "region": "Grouping the filter pills use. Four here, so All plus Newbies plus four regions is six pills.",
+      "newbie": "Boolean. True gets the FIRST TOUR guitar pick in the grid.",
+      "photo": "Path string, relative to the repo root. Empty string means no headshot, which is a real case and has to render without a hole in the card."
+    },
+    "coverage": "20 records. 5 newbies. 4 regions. 7 clubs. 3 records with an empty photo. One long title and one long club name, both there so wrapping is exercised at 380px.",
+    "arrayKey": "The records sit under \"attendees\" because tools/process-assets.sh already reads either a bare array or data[\"attendees\"], and it was written before this file existed. Renaming this key silently loads zero records into the photo cross-check, which fails quietly rather than loudly. Leave it."
+  },
+  "attendees": [
+    {
+      "slug": "placeholder-one",
+      "name": "Placeholder One",
+      "title": "General Manager",
+      "club": "Placeholder Club North",
+      "region": "Region North",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-two",
+      "name": "Placeholder Two",
+      "title": "Enrollment Director",
+      "club": "Placeholder Club North",
+      "region": "Region North",
+      "newbie": true,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-three",
+      "name": "Placeholder Three",
+      "title": "Golf Professional",
+      "club": "Placeholder Club North",
+      "region": "Region North",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-four",
+      "name": "Placeholder Four",
+      "title": "General Manager",
+      "club": "Placeholder Club North Two",
+      "region": "Region North",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-five",
+      "name": "Placeholder Five",
+      "title": "Enrollment Director",
+      "club": "Placeholder Club North Two",
+      "region": "Region North",
+      "newbie": true,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-six",
+      "name": "Placeholder Six",
+      "title": "General Manager",
+      "club": "Placeholder Club South",
+      "region": "Region South",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-seven",
+      "name": "Placeholder Seven",
+      "title": "Enrollment Director",
+      "club": "Placeholder Club South",
+      "region": "Region South",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-eight",
+      "name": "Placeholder Eight",
+      "title": "Golf Professional",
+      "club": "Placeholder Club South",
+      "region": "Region South",
+      "newbie": true,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-nine",
+      "name": "Placeholder Nine",
+      "title": "General Manager",
+      "club": "Placeholder Club South Two",
+      "region": "Region South",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-ten",
+      "name": "Placeholder Ten",
+      "title": "Enrollment Director",
+      "club": "Placeholder Club South Two",
+      "region": "Region South",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-eleven",
+      "name": "Placeholder Eleven",
+      "title": "Golf Professional",
+      "club": "Placeholder Club South Two",
+      "region": "Region South",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-twelve",
+      "name": "Placeholder Twelve",
+      "title": "General Manager",
+      "club": "Placeholder Club West",
+      "region": "Region West",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-thirteen",
+      "name": "Placeholder Thirteen",
+      "title": "Enrollment Director",
+      "club": "Placeholder Club West",
+      "region": "Region West",
+      "newbie": true,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-fourteen",
+      "name": "Placeholder Fourteen",
+      "title": "Golf Professional",
+      "club": "Placeholder Club West",
+      "region": "Region West",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-fifteen",
+      "name": "Placeholder Fifteen",
+      "title": "General Manager",
+      "club": "Placeholder Club East",
+      "region": "Region East",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-sixteen",
+      "name": "Placeholder Sixteen",
+      "title": "Enrollment Director",
+      "club": "Placeholder Club East",
+      "region": "Region East",
+      "newbie": true,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-seventeen",
+      "name": "Placeholder Seventeen",
+      "title": "Placeholder Title That Runs Long So The Card Has To Wrap It",
+      "club": "Placeholder Club East",
+      "region": "Region East",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-eighteen",
+      "name": "Placeholder Eighteen",
+      "title": "General Manager",
+      "club": "Placeholder Club With A Deliberately Long Name",
+      "region": "Region West",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-nineteen",
+      "name": "Placeholder Nineteen",
+      "title": "Golf Professional",
+      "club": "Placeholder Club North Two",
+      "region": "Region North",
+      "newbie": false,
+      "photo": ""
+    },
+    {
+      "slug": "placeholder-twenty",
+      "name": "Placeholder Twenty",
+      "title": "Enrollment Director",
+      "club": "Placeholder Club East",
+      "region": "Region East",
+      "newbie": false,
+      "photo": ""
+    }
+  ]
+}

@@ -2228,6 +2228,155 @@ body.display-mode .ln-when { font-size: 15px; }
   .ln-card--pin { padding-left: 18px; }
   .ln-text { font-size: 17px; }
 }
+
+/* ==========================================================================
+   T1.3 THE BAND. Spec 3.2.
+   The roster grid, the search field, the filter pills, and the one-person
+   view. No new motifs: the FIRST TOUR badge is T0.4's .pick, the card texture
+   is .grille, the one-person panel is .glow-card, the filter pills are the
+   same .dayrow and .daypill The Setlist uses, the count badge is .tab__badge,
+   and the field and button patterns are .tf__in and .btn. Everything below is
+   layout, prefixed .bnd- so it cannot collide with another tab's work.
+   ========================================================================== */
+
+/* ------------------------------------------------------- the count line */
+.bnd-count { margin: 0 0 14px; font-size: 15px; color: var(--cream); }
+.bnd-count__n { color: var(--gold); font-weight: 700; }
+
+/* ------------------------------------------------------------- search */
+.bnd-find { margin: 0 0 14px; }
+.bnd-find .tf__l { margin-bottom: 6px; }
+.bnd-find__row { display: flex; gap: 8px; align-items: stretch; }
+/* min-width:0 so a long placeholder cannot push the row wider than the phone. */
+.bnd-find__row .tf__in { flex: 1 1 auto; min-width: 0; }
+.bnd-find__row .btn { flex: 0 0 auto; }
+
+/* Safari draws its own clear and cancel affordances on a search input. Both
+   fight the field chrome, and the Clear button next to it does the same job on
+   every platform rather than on one. */
+.bnd-find__row .tf__in::-webkit-search-decoration,
+.bnd-find__row .tf__in::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+.bnd-pills { margin-bottom: 14px; }
+.bnd-note { margin: 0 0 14px; font-size: 12px; color: var(--mute); }
+
+/* --------------------------------------------------------------- grid */
+/* auto-fill rather than a fixed column count, so the grid reflows on its own
+   from a 380px phone up to the reading column with no breakpoint doing the
+   work. 138px still holds two columns at 320px, which is the narrowest phone
+   that will be in the room. */
+.bnd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(138px, 1fr));
+  gap: 10px;
+}
+
+/* The whole card is the toggle, so it is a button. Everything inside it is a
+   span for the same reason The Setlist's ticket is: a button may not hold a p
+   or a div.
+   The flex column is not decoration. A grid item stretches to the tallest card
+   in its row, and a stretched button centres its own contents vertically, so
+   the shorter cards floated their headshot 18px down the card and the row
+   stopped lining up. An explicit column pins everything to the top. */
+.bnd-card {
+  display: flex; flex-direction: column; align-items: stretch;
+  justify-content: flex-start;
+  width: 100%; margin: 0; padding: 0 0 12px;
+  font: inherit; color: inherit; text-align: left;
+  background: var(--riser);
+  border: 1px solid var(--edge); border-radius: 12px;
+  -webkit-appearance: none; appearance: none;
+  cursor: pointer;
+}
+
+.bnd-card:active { border-color: var(--warm-edge); }
+.bnd-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+.bnd-card__b { display: block; padding: 10px 12px 0; min-width: 0; }
+
+.bnd-card__n {
+  display: block; font-size: 14px; font-weight: 600; line-height: 1.25;
+  overflow-wrap: break-word;
+}
+
+/* Club sits brighter than title. The club is how people find each other. */
+.bnd-card__t {
+  display: block; margin-top: 3px; font-size: 12px; line-height: 1.3;
+  color: var(--mute); overflow-wrap: break-word;
+}
+
+.bnd-card__c {
+  display: block; margin-top: 3px; font-size: 12px; line-height: 1.3;
+  color: var(--dim); overflow-wrap: break-word;
+}
+
+/* ---------------------------------------------------------- the headshot */
+/* No overflow:hidden here. It would clip the pick badge. The radius lives on
+   the image itself instead, the same reasoning as the notches on .ticket. */
+.bnd-shot { display: block; position: relative; flex: 0 0 auto; }
+
+.bnd-shot__img {
+  display: block; width: 100%; aspect-ratio: 1;
+  object-fit: cover; border: 0;
+  border-radius: 11px 11px 0 0;
+  background: var(--input);
+}
+
+/* Stands in for a missing headshot. A roster entry with no photo is a real
+   case, and today every record in the file is one, so this is built to look
+   deliberate rather than broken: initials on the amp grille, no icon, no
+   apology. It also catches a photo path that 404s, which is the same hole. */
+.bnd-shot__init { display: grid; place-items: center; }
+
+.bnd-shot__ini {
+  font-size: clamp(24px, 8vw, 38px); line-height: 1;
+  color: var(--mute); letter-spacing: 0.04em;
+}
+
+/* FIRST TOUR. The middle of the three pick sizes in motifs.html, 52px with 9px
+   text, which is the one that still reads in a grid cell. Bottom left, because
+   a 400x400 headshot puts a shoulder there and a face in the middle. */
+.bnd-pick {
+  position: absolute; left: 6px; bottom: 6px;
+  width: 52px; z-index: 2;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.60));
+}
+
+.bnd-pick .pick__text { font-size: 9px; }
+
+/* ------------------------------------------------------------ one person */
+/* The larger view replaces the grid instead of floating over it. No overlay,
+   no fixed height, nothing that traps scroll, and it reflows at every width
+   for free. Leaving it puts you back where you were in the grid. */
+.bnd-back { margin: 0 0 14px; }
+.bnd-detail__card { padding: 16px; }
+.bnd-detail__grid { display: flex; flex-direction: column; gap: 14px; }
+.bnd-detail__shot { width: 100%; max-width: 170px; }
+.bnd-detail__b { min-width: 0; }
+.bnd-detail__n { margin: 0 0 12px; font-size: clamp(24px, 7.4vw, 34px); }
+
+/* .set-dl is The Setlist's label and value grid, reused as is. Bigger type
+   here, because the whole point of this view is the full title and the full
+   club name. .set-dl dt sets its own size, so only the values grow. */
+.bnd-dl { font-size: 15px; }
+
+.bnd-detail__first { margin: 12px 0 0; font-size: 13px; color: var(--gold); }
+
+.bnd-shot--big .bnd-shot__img { border-radius: 12px; }
+.bnd-shot--big .bnd-pick { width: 62px; left: 8px; bottom: 8px; }
+.bnd-shot--big .bnd-pick .pick__text { font-size: 10px; }
+
+@media (min-width: 700px) {
+  /* Wider cells inside the 780px reading column. Five 148px columns read as a
+     contact sheet, four 176px ones read as a lineup. */
+  .bnd-grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 14px; }
+  .bnd-card__n { font-size: 15px; }
+
+  .bnd-detail__card { padding: 20px; }
+  .bnd-detail__grid { flex-direction: row; align-items: flex-start; gap: 22px; }
+  .bnd-detail__shot { flex: 0 0 200px; max-width: 200px; }
+  .bnd-detail__b { flex: 1 1 auto; }
+}
 </style>
 </head>
 <body>
@@ -3322,14 +3471,394 @@ function SetlistTab({ isAdmin, now }) {
   );
 }
 
+/* ==========================================================================
+   T1.3 THE BAND. Spec 3.2.
+   Search, filter pills, card grid, and a one-person view, over
+   data/roster.json.
+
+   The roster is static and read only during the event, so there is no Firebase
+   listener here and nothing that reads a clock. BandTab is still handed `now`
+   by App and ignores it on purpose: nothing in this tab is time sensitive, so
+   there is nothing for useServerNow to gate.
+
+   Every name, club, and region in the file today is invented. The whole file
+   is replaced at T3.1, so nothing below knows a count, a region name, or a
+   club name. It all comes off the file.
+   ========================================================================== */
+
+/* Fold accents and case, so a search for "jose" finds "José". macOS hands over
+   decomposed names, which is the same trap tools/process-assets.sh hit with
+   iconv, so this normalises both sides of the comparison. */
+function bandNorm(s) {
+  return String(s == null ? "" : s)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+/* Two letters for the tile that stands in for a missing headshot. First word
+   and last word, so "Placeholder One" reads PO. */
+function bandInitials(name) {
+  const words = String(name || "").trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return "?";
+  const last = words.length > 1 ? words[words.length - 1].charAt(0) : "";
+  return (words[0].charAt(0) + last).toUpperCase();
+}
+
+/* One record, normalised once at load. `hay` is what the search reads, so a
+   keystroke never re-normalises ninety names. */
+function bandRecord(raw, i) {
+  const r = raw || {};
+  const name = String(r.name || "").trim();
+  const title = String(r.title || "").trim();
+  const club = String(r.club || "").trim();
+  return {
+    key: String(r.slug || "").trim() || "row-" + i,
+    name: name,
+    title: title,
+    club: club,
+    region: String(r.region || "").trim(),
+    newbie: r.newbie === true,
+    photo: String(r.photo || "").trim(),
+    initials: bandInitials(name),
+    hay: bandNorm(name + " " + title + " " + club)
+  };
+}
+
+function useRoster() {
+  const [state, setState] = useState({ status: "loading", list: [], reason: "" });
+
+  useEffect(() => {
+    let live = true;
+    fetch("data/roster.json", { cache: "no-cache" })
+      .then((res) => {
+        if (!res.ok) throw new Error("The file returned " + res.status + ".");
+        return res.json();
+      })
+      .then((data) => {
+        if (!live) return;
+        /* A bare array or { attendees: [...] }. tools/process-assets.sh already
+           reads both shapes, so this reads both too. */
+        const raw = Array.isArray(data) ? data : (data && data.attendees) || [];
+        const list = raw
+          .map(bandRecord)
+          .filter((r) => r.name)
+          .sort((a, b) => a.name.localeCompare(b.name));
+        setState({ status: "ready", list: list, reason: "" });
+      })
+      .catch((err) => {
+        if (live) {
+          setState({
+            status: "failed", list: [],
+            reason: (err && err.message) || String(err)
+          });
+        }
+      });
+    return () => { live = false; };
+  }, []);
+
+  return state;
+}
+
+/* One pill per region, alphabetical, with a head count. A record with no region
+   still shows under All and just never gets a pill of its own. */
+function bandRegions(list) {
+  const counts = {};
+  list.forEach((r) => {
+    if (r.region) counts[r.region] = (counts[r.region] || 0) + 1;
+  });
+  return Object.keys(counts)
+    .sort((a, b) => a.localeCompare(b))
+    .map((name) => ({ name: name, n: counts[name] }));
+}
+
+/* Filter is "all", "newbies", or "region:" plus the region name. Prefixed, so a
+   region that arrives literally named All cannot collide with the All pill. */
+const BND_REGION = "region:";
+
+function bandKeeps(rec, tokens, filter) {
+  if (filter === "newbies" && !rec.newbie) return false;
+  if (filter.indexOf(BND_REGION) === 0 && rec.region !== filter.slice(BND_REGION.length)) {
+    return false;
+  }
+  /* Every word has to land somewhere in name, title, or club, so "north gm" and
+     "placeholder one" both work and the order typed does not matter. */
+  for (let i = 0; i < tokens.length; i++) {
+    if (rec.hay.indexOf(tokens[i]) === -1) return false;
+  }
+  return true;
+}
+
+function bandNothing(query, filter) {
+  if (query.trim()) return "Nobody by that name. Try fewer letters.";
+  if (filter === "newbies") return "No first timers on this list.";
+  return "Nobody in that region.";
+}
+
+/* "87 on the tour, 14 first timers". Both numbers come off the file. */
+function BandCount({ total, newbies }) {
+  return (
+    <p className="bnd-count">
+      <span className="bnd-count__n t-data">{total}</span> on the tour,{" "}
+      {newbies === 0 ? "no first timers" : (
+        <React.Fragment>
+          <span className="bnd-count__n t-data">{newbies}</span>
+          {newbies === 1 ? " first timer" : " first timers"}
+        </React.Fragment>
+      )}.
+    </p>
+  );
+}
+
+/* The headshot, or the tile that stands in for one. Shared by the grid cell and
+   the one-person view, so a missing photo cannot look like two different kinds
+   of hole. Spans throughout, because the grid cell is a button. */
+function BandShot({ rec, broken, onBroken, big }) {
+  const hasPhoto = !!rec.photo && !broken;
+  return (
+    <span className={"bnd-shot" + (big ? " bnd-shot--big" : "")}>
+      {hasPhoto ? (
+        <img
+          className="bnd-shot__img"
+          src={rec.photo}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          onError={() => onBroken(rec.key)}
+        />
+      ) : (
+        <span className="bnd-shot__img bnd-shot__init grille" aria-hidden="true">
+          <span className="bnd-shot__ini t-display">{rec.initials}</span>
+        </span>
+      )}
+      {rec.newbie ? (
+        <span className="pick bnd-pick" aria-hidden="true">
+          <span className="pick__text">First<br />Tour</span>
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
+function BandCard({ rec, broken, onBroken, onOpen }) {
+  return (
+    <button type="button" className="bnd-card grille" onClick={() => onOpen(rec.key)}>
+      <BandShot rec={rec} broken={broken} onBroken={onBroken} />
+      <span className="bnd-card__b">
+        <span className="bnd-card__n">{rec.name}</span>
+        {rec.title ? <span className="bnd-card__t">{rec.title}</span> : null}
+        {rec.club ? <span className="bnd-card__c">{rec.club}</span> : null}
+        {/* The pick is decoration to a screen reader, so the flag is said in
+            words instead. */}
+        {rec.newbie ? <span className="sr-only">First tour.</span> : null}
+      </span>
+    </button>
+  );
+}
+
+/* Club and title only. No phone number, no email, no room. Per the client. */
+function BandDetail({ rec, broken, onBroken, onBack, backRef }) {
+  return (
+    <div>
+      <button type="button" className="btn btn--quiet bnd-back" ref={backRef} onClick={onBack}>
+        {"◂"} Back to the lineup
+      </button>
+
+      <div className="bnd-detail__card glow-card grille">
+        <div className="bnd-detail__grid">
+          <div className="bnd-detail__shot">
+            <BandShot rec={rec} broken={broken} onBroken={onBroken} big />
+          </div>
+          <div className="bnd-detail__b">
+            <h3 className="bnd-detail__n t-display">{rec.name}</h3>
+            <dl className="set-dl bnd-dl">
+              <dt>Title</dt>
+              <dd>{rec.title || "Not on the roster."}</dd>
+              <dt>Club</dt>
+              <dd>{rec.club || "Not on the roster."}</dd>
+              {rec.region ? (
+                <React.Fragment><dt>Region</dt><dd>{rec.region}</dd></React.Fragment>
+              ) : null}
+            </dl>
+            {rec.newbie ? (
+              <p className="bnd-detail__first">First tour. Say hello.</p>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Same pill as the day pills on The Setlist, same gold count badge as the tab
+   bar. role="tab" is what makes aria-selected valid, and aria-selected is what
+   .daypill styles its lit state on. */
+function BandPill({ on, onPick, label, n }) {
+  return (
+    <button type="button" role="tab" className="daypill" aria-selected={on} onClick={onPick}>
+      <span>{label}</span>
+      <span className="tab__badge">{n}</span>
+    </button>
+  );
+}
+
 function BandTab({ isAdmin }) {
+  const roster = useRoster();
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("all");
+  const [selected, setSelected] = useState(null);
+  const [broken, setBroken] = useState({});
+  const scrollBack = useRef(0);
+  const backBtn = useRef(null);
+
+  const list = roster.list;
+  const total = list.length;
+  const newbies = list.filter((r) => r.newbie).length;
+  const regions = bandRegions(list);
+  const tokens = bandNorm(query).split(/\s+/).filter(Boolean);
+  const shown = list.filter((r) => bandKeeps(r, tokens, filter));
+  const person = selected ? list.filter((r) => r.key === selected)[0] || null : null;
+
+  /* A photo path that 404s is the same hole as no photo at all, and today every
+     path in the file is one, because assets/attendees is empty until T3.1. Both
+     fall back to the initials tile. */
+  const markBroken = useCallback((key) => {
+    setBroken((prev) => {
+      if (prev[key]) return prev;
+      const next = Object.assign({}, prev);
+      next[key] = 1;
+      return next;
+    });
+  }, []);
+
+  /* Captured on the tap rather than in the effect. By the time an effect runs
+     the grid is already gone and the browser may have clamped the scroll
+     position to the shorter page. */
+  const openPerson = useCallback((key) => {
+    scrollBack.current = window.pageYOffset || 0;
+    setSelected(key);
+  }, []);
+
+  useEffect(() => {
+    if (selected) {
+      window.scrollTo(0, 0);
+      const el = backBtn.current;
+      if (el) {
+        try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+      }
+    } else if (scrollBack.current) {
+      window.scrollTo(0, scrollBack.current);
+      scrollBack.current = 0;
+    }
+  }, [selected]);
+
+  useEffect(() => {
+    if (!selected) return;
+    const onKey = (e) => { if (e.key === "Escape") setSelected(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selected]);
+
   return (
     <TabFrame tabKey="band">
-      <Empty>No lineup posted. Nobody has been handed a laminate yet.</Empty>
+      {roster.status === "loading" ? <Empty>Checking the guest list.</Empty> : null}
+
+      {roster.status === "failed" ? (
+        <Empty>
+          The lineup did not load. {roster.reason} Everything else on the wall
+          still works.
+        </Empty>
+      ) : null}
+
+      {roster.status === "ready" && !total ? (
+        <Empty>No lineup posted. Nobody has been handed a laminate yet.</Empty>
+      ) : null}
+
+      {person ? (
+        <BandDetail
+          rec={person}
+          broken={!!broken[person.key]}
+          onBroken={markBroken}
+          onBack={() => setSelected(null)}
+          backRef={backBtn}
+        />
+      ) : total ? (
+        <div>
+          <BandCount total={total} newbies={newbies} />
+
+          <div className="bnd-find">
+            <label className="tf__l" htmlFor="bnd-q"><span>Find somebody</span></label>
+            <div className="bnd-find__row">
+              <input
+                id="bnd-q"
+                className="tf__in"
+                type="search"
+                autoComplete="off"
+                placeholder="Name, club, or title"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              {query ? (
+                <button type="button" className="btn btn--quiet" onClick={() => setQuery("")}>
+                  Clear
+                </button>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="dayrow bnd-pills" role="tablist" aria-label="Filter the lineup">
+            <BandPill
+              on={filter === "all"}
+              onPick={() => setFilter("all")}
+              label="All"
+              n={total}
+            />
+            <BandPill
+              on={filter === "newbies"}
+              onPick={() => setFilter("newbies")}
+              label="Newbies"
+              n={newbies}
+            />
+            {regions.map((g) => (
+              <BandPill
+                key={g.name}
+                on={filter === BND_REGION + g.name}
+                onPick={() => setFilter(BND_REGION + g.name)}
+                label={g.name}
+                n={g.n}
+              />
+            ))}
+          </div>
+
+          {shown.length !== total ? (
+            <p className="bnd-note t-data">{shown.length} of {total} showing.</p>
+          ) : null}
+
+          {!shown.length ? (
+            <Empty>{bandNothing(query, filter)}</Empty>
+          ) : (
+            <div className="bnd-grid">
+              {shown.map((r) => (
+                <BandCard
+                  key={r.key}
+                  rec={r}
+                  broken={!!broken[r.key]}
+                  onBroken={markBroken}
+                  onOpen={openPerson}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      ) : null}
+
       <BuildNote isAdmin={isAdmin} task="T1.3">
-        Roster grid against 20 placeholder records. Search by name, club, and
-        title. FIRST TOUR guitar pick on newbies, visible in the grid. Real data
-        loads at T3.1.
+        Grid, search, and pills against data/roster.json. Every name, club, and
+        region in that file is invented and the whole file is replaced at T3.1.
+        Static read, no Firebase, no admin controls. Cards carry club and title
+        and no contact details, per the client. A record with no photo, or with
+        a photo path that 404s, falls back to an initials tile, which is every
+        record today because assets/attendees is empty until T3.1.
       </BuildNote>
     </TabFrame>
   );

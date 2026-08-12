@@ -512,13 +512,61 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
   network read is `data/agenda.json` for the attire, and a failure there says so and points at
   The Setlist.
 
-### `[ ]` T1.3 The Band, container
+### `[x]` T1.3 The Band, container
 - **Inputs:** spec Section 3.2
 - **Output:** roster tab built against placeholder data
 - **Steps:** create `/data/roster.json` with 20 placeholder records covering the real field shape (slug, name, title, club, region, newbie, photo). Search filtering by name, club, and title. Filter pills for All, Newbies, and region groupings. Card grid with headshot, name, title, club. Guitar pick FIRST TOUR badge on newbies, visible in the grid. Tap for detail view. Header count line
 - **Acceptance:** search filters live as you type. Newbie filter returns only flagged records. Grid reflows cleanly from 380px to desktop. Layout holds with a missing photo
 - **Note:** real data loads in T3.1
 - **Parallel-safe with:** T1.1, T1.2
+- **Done Aug 11**, against `data/roster.json`: 20 invented records, 5 newbies, 4 regions.
+  The tab hardcodes no count, no region name and no club. Every number on screen comes off
+  the file, so T3.1 is a file swap with no code change.
+  | Acceptance criterion | Result |
+  |---|---|
+  | Search filters live as you type | No submit, no button. `enroll` narrowed to 7, `enroll sou` to 2 (Placeholder Seven and Ten), and the line read "2 of 20 showing." |
+  | All three fields are searched | `golf` hit 5 titles, `west` hit 3 clubs, and names match too |
+  | Word order does not matter | `sou enroll` returned the same 2 as `enroll sou`. Every token has to land somewhere in name, title or club |
+  | Clear resets | All 20 back, and the "of 20 showing" line disappears |
+  | Newbie filter returns only flagged records | Exactly 5 cards, and exactly 5 FIRST TOUR picks. The pill badge reads 5 and matches "5 first timers" in the header, because both read the same field |
+  | A region pill replaces the newbie filter rather than stacking | Region West returned 4 with only that pill lit |
+  | Grid reflows from 380px to desktop | 2 columns of 169px at 380px, still 2 at 320px, 4 columns of 176.5px at 1280px inside the 780px reading column. 0px overflow at all three |
+  | Cards in a row line up | Every row's headshots share a top edge. This is the thing worth looking at, because a stretched grid button centres its own content and it took an explicit flex column to stop it |
+  | Pill row scrolls without clipping at 380px | 775px of pills inside a 348px scroller, no pill clipped vertically |
+  | Layout holds with a missing photo | Every one of the 20 renders a square initials tile on the amp grille, same size and position as a headshot, same card height. Zero `img` tags, zero broken image icons, and the FIRST TOUR pick still sits on the tile for the 5 newbies |
+  | Detail view | Replaces the grid rather than floating over it, so nothing traps scroll. Title, Club and Region, no contact details. Escape and "Back to the lineup" both return to the grid |
+  | No console errors | None from the app's code. The latest load made exactly three network requests, all 200: `agenda.json`, `tour-band.jpg`, `roster.json`. Zero image requests |
+- **Found and fixed: the missing-photo fallback was dead.** The card image carries
+  `loading="lazy"`, and a lazily loaded image that 404s fires **no** `error` event in Chrome.
+  Proved it directly with a controlled pair against the same server: the eager image fired
+  `error`, the lazy one fired nothing in three seconds, and `decode()` neither resolved nor
+  rejected. So `onError` never ran, `broken` was never set, and all 17 records whose `photo`
+  path pointed at a missing file rendered as blank squares instead of initials tiles.
+- **How it was resolved, and the tradeoff.** `loading="lazy"` was kept, because at T3.1 this
+  grid renders about 90 headshots at once with no pagination and eager loading them all on
+  ballroom wifi is the worse failure. Instead the cause was fixed in the data: all 17 `photo`
+  values pointing at files that do not exist were set to `""`. An empty string makes no request
+  at all and renders the tile deliberately, which is exactly the state the spec said the live
+  URL should show. Result is 20 tiles, zero requests, clean console.
+- **This is load bearing for T3.1 and is written into `data/roster.json`'s own `_note`.**
+  **Only put a path in `photo` if the file is actually in `assets/attendees/`.** A wrong path
+  degrades to a blank square, not to the initials tile, and nothing in the page can detect it.
+  Anybody with no headshot gets `""`. If the fallback needs to survive a typo instead, the
+  change is dropping `loading="lazy"` and accepting the eager load.
+- **The larger view replaces the grid instead of floating over it.** A modal would have needed
+  either clipped content or an inner scroll container, and CLAUDE.md restricts the second to
+  Display Mode. Tapping a card remembers the scroll position and Back or Escape restores it.
+- **Sorted by display name**, which is first-name order, because there is no surname field and
+  guessing the last token is the mistake `tools/process-assets.sh` documents from its iconv
+  days. Region pills are alphabetical so the order cannot shift when a record is added mid-file.
+- **Search folds accents**, so a search for "jose" finds "José". macOS hands over decomposed
+  names, the same trap the asset pipeline hit.
+- **No Firebase, no admin controls, no local storage key.** The roster is static per the
+  CLAUDE.md data split. `BandTab` is handed `now` and ignores it, because nothing here is time
+  sensitive.
+- **Open, needs the organizers, not invented.** Region names are placeholders, and however many
+  regions the verified roster carries is however many pills appear. Whether "newbie" means first
+  time at this meeting or new to CGP is unconfirmed. The badge reads FIRST TOUR either way.
 
 ### `[x]` T1.4 Soundcheck
 - **Inputs:** spec Section 3.4
