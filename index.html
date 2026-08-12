@@ -1411,6 +1411,153 @@ body.display-mode .stubnote { font-size: 20px; }
   .bs-stub { font-size: 16px; }
   .bs-day__d { flex-basis: 72px; }
 }
+
+/* ==========================================================================
+   T1.6 ADMIN PANEL, v1. Spec 4.1.
+   Marquee, tab visibility, reset by section, clear this device, reset
+   everything. The PIN gate is T0.5 and is not restyled here.
+
+   Every selector is ap- prefixed so it cannot collide with another tab's work.
+   Fields and buttons reuse .tf__l, .tf__in, .tf__row and .btn. The section
+   cards are .glow-card plus .grille, the same composition as .dayhead.
+   No new palette token. The palette is still twelve.
+   ========================================================================== */
+
+.ap { display: flex; flex-direction: column; gap: 16px; }
+
+/* Stacked on a phone, with the button full width the way .enter is. A right
+   aligned button hanging under the lede on a 380px screen reads like it fell
+   off the row it wanted. */
+.ap__top { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
+.ap__h { margin: 0; font-size: clamp(26px, 8vw, 34px); }
+.ap__lede { margin: 5px 0 0; color: var(--dim); font-size: 14px; }
+
+/* Display Mode is on, or Firebase is not. Both are things to say loudly. */
+.ap-warn {
+  margin: 0; padding: 11px 13px;
+  background: var(--riser); border: 1px solid var(--danger);
+  border-radius: 10px; color: var(--cream); font-size: 13px;
+}
+
+.ap-sec { padding: 15px 16px 17px; }
+.ap-sec__h { margin: 0; font-size: clamp(17px, 5vw, 20px); }
+.ap-sec__p { margin: 8px 0 0; color: var(--dim); font-size: 13px; }
+.ap-sec__note { margin: 11px 0 0; color: var(--mute); font-size: 12px; }
+
+/* Two-state pill. .soon and .enc__hidden are gold only, and this one has to
+   read as off without reading as broken. */
+.ap-state {
+  display: inline-flex; align-items: center; flex: 0 0 auto;
+  border-radius: 999px; padding: 2px 9px;
+  font-size: 11px; font-weight: 600; white-space: nowrap;
+}
+
+.ap-state--on {
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+  border: 1px solid var(--gold-rule); color: var(--gold);
+}
+
+.ap-state--off {
+  background: var(--input);
+  border: 1px solid var(--edge); color: var(--mute);
+}
+
+/* --------------------------------------------------------- tab visibility */
+.ap-tabs { display: grid; grid-template-columns: 1fr; margin: 13px 0 0; }
+
+.ap-tab {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 0; border-top: 1px solid var(--edge);
+}
+
+.ap-tab__icon { flex: 0 0 auto; font-size: 15px; line-height: 1; }
+.ap-tab__n { flex: 1 1 auto; min-width: 0; font-size: 15px; font-weight: 600; }
+.ap-tab .btn { flex: 0 0 auto; }
+
+/* -------------------------------------------------------------- marquee */
+.ap-anns { list-style: none; margin: 13px 0 0; padding: 0; }
+.ap-ann { padding: 12px 0; border-top: 1px solid var(--edge); }
+.ap-ann__t { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+
+.ap-ann__m {
+  margin: 6px 0 0; display: flex; align-items: center; gap: 9px;
+  flex-wrap: wrap; font-size: 12px; color: var(--mute);
+}
+
+.ap-ann .tf__row { margin-top: 9px; }
+
+/* ------------------------------------------------------ reset by section */
+.ap-nodes { display: grid; grid-template-columns: 1fr; margin: 13px 0 0; }
+
+.ap-node {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 0; border-top: 1px solid var(--edge);
+}
+
+.ap-node__v { flex: 1 1 180px; min-width: 0; }
+.ap-node__n { margin: 0; font-size: 14px; font-weight: 600; }
+.ap-node__p { margin: 3px 0 0; font-size: 12px; color: var(--dim); }
+.ap-node__path { color: var(--gold); }
+
+.ap-node__b {
+  flex: 0 0 auto; margin-left: auto;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.ap-node .btn { flex: 0 0 auto; }
+
+/* ----------------------------------------------------------- this device */
+/* The keys are enumerated out of storage, so this list is whatever is really
+   there rather than whatever the source remembers. */
+.ap-keys {
+  list-style: none; margin: 12px 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+
+.ap-key {
+  font-size: 12px; color: var(--gold);
+  background: var(--input); border: 1px solid var(--edge);
+  border-radius: 6px; padding: 3px 8px;
+  overflow-wrap: anywhere;
+}
+
+.ap-said { margin: 11px 0 0; font-size: 13px; color: var(--gold); }
+
+/* ------------------------------------------------------ reset everything */
+/* This one is meant to look like what it is. */
+.ap-sec.ap-nuke {
+  border-color: var(--danger);
+  background:
+    radial-gradient(80% 62% at 50% 0%, rgba(255,107,74,0.10) 0%, transparent 70%),
+    var(--riser);
+}
+
+.ap-nuke__h { color: var(--danger); }
+
+.ap-arm {
+  margin: 13px 0 0; padding: 12px 13px;
+  background: var(--input);
+  border-left: 3px solid var(--danger); border-radius: 6px;
+}
+
+.ap-arm__p { margin: 0 0 10px; font-size: 13px; }
+
+/* Row of buttons inside the crew bar on a tab page. */
+.ap-open { margin-top: 10px; }
+
+@media (min-width: 700px) {
+  .ap-sec { padding: 18px 20px 20px; }
+
+  /* Heading and the way out share a row once there is room for both. */
+  .ap__top { flex-direction: row; align-items: flex-start; gap: 10px; }
+  .ap__top > .btn { margin-left: auto; flex: 0 0 auto; }
+
+  /* Ten switches and eight nodes read as a very long list in one column on a
+     laptop, and Jim reviews on a laptop. */
+  .ap-tabs { grid-template-columns: 1fr 1fr; column-gap: 24px; }
+  .ap-nodes { grid-template-columns: 1fr 1fr; column-gap: 24px; }
+}
 </style>
 </head>
 <body>
@@ -1923,7 +2070,7 @@ function Welcome({ onEnter, now, returning }) {
   );
 }
 
-function TabBar({ tabs, active, onPick, isAdmin }) {
+function TabBar({ tabs, vis, active, onPick, isAdmin }) {
   const scroller = useRef(null);
 
   /* Keep the selected pill in view. On a 380px screen most of the ten tabs
@@ -1951,7 +2098,11 @@ function TabBar({ tabs, active, onPick, isAdmin }) {
           >
             <span className="tab__icon" aria-hidden="true">{tab.icon}</span>
             <span>{tab.name}</span>
-            {isAdmin && tab.phase !== "pre" ? (
+            {/* T1.6. The padlock is the real visibility state now, not the
+                phase. A hidden tab stays in the bar for crew so Jim can work in
+                a tab the room cannot see. An attendee never reaches this line:
+                a hidden tab is absent from `tabs` altogether. */}
+            {isAdmin && !isTabOn(vis, tab) ? (
               <span className="tab__lock" title="Hidden from the room">
                 {"\u{1F512}"}
               </span>
@@ -2039,10 +2190,16 @@ const PHASE_LINE = {
 
 function TabFrame({ tabKey, children }) {
   const tab = TAB_BY_KEY[tabKey];
+  /* T1.6. The phase line says when a tab opens, so it has no job once the tab
+     is open. Without this, Crowd Vote would read "Opens during the meeting"
+     while the room was voting on it. Crew still see it on a padlocked tab,
+     because there it is still true. */
+  const vis = useTabVisibility();
+  const showPhase = tab.phase === "pre" || !isTabOn(vis, tab);
   return (
     <section aria-labelledby={"head-" + tabKey}>
       <h2 className="tabhead t-display" id={"head-" + tabKey}>{tab.name}</h2>
-      <p className="tabhead__sub">{PHASE_LINE[tab.phase]}</p>
+      {showPhase ? <p className="tabhead__sub">{PHASE_LINE[tab.phase]}</p> : null}
       {children}
     </section>
   );
@@ -3104,6 +3261,636 @@ function EncoreTab({ isAdmin }) {
   );
 }
 
+/* ==========================================================================
+   T1.6 ADMIN PANEL, v1. Spec 4.1.
+   Marquee, Tab Visibility, Reset by Section, Clear This Device, Reset
+   Everything. The PIN gate is T0.5 and is not rebuilt here. Vault Drops is
+   spec 4.1 too, and it lands at T2.8 with the drop engine it controls.
+
+   Tab visibility is the one that matters during the meeting. It lives at
+   settings/tabs/{key} as a bare boolean and reaches every phone through the
+   same listener pattern the rest of the wall uses. A tab with no stored value
+   falls back to its phase, so the six pre tabs are on and the four during and
+   post tabs are off. That makes the T4.4 launch state the default rather than
+   something anybody has to remember to set.
+
+   Nothing here writes a real person's name, a club, or a figure. Award and
+   tenure winners are typed in at the event.
+   ========================================================================== */
+
+/* One switch per tab, ten tabs. `map` is whatever settings/tabs holds, which is
+   null until the first snapshot arrives and may be missing keys forever.
+   Missing is a supported state, not an error. */
+function isTabOn(map, tab) {
+  if (map && typeof map[tab.key] === "boolean") return map[tab.key];
+  return tab.phase === "pre";
+}
+
+/* A map of ten booleans is a few dozen bytes, so one listener on the parent is
+   cheaper than ten and it keeps every device in step. */
+function useTabVisibility() {
+  const [map, setMap] = useState(null);
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("settings/tabs");
+    const handler = (snap) => setMap(snap.val() || {});
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return map;
+}
+
+/* 8:20 on a Wednesday morning is the wrong time to flip ten switches. */
+const PRE_TABS = ["setlist", "band", "backstage", "soundcheck", "vault", "liner"];
+
+const TAB_PRESETS = [
+  {
+    key: "pre",
+    label: "Pre-meeting",
+    on: PRE_TABS,
+    note: "The six tabs the room gets before Tuesday."
+  },
+  {
+    key: "wed",
+    label: "Wednesday",
+    on: PRE_TABS.concat(["vote", "pit", "cares"]),
+    note: "Adds Crowd Vote, The Pit, and The Cares Cup."
+  },
+  {
+    key: "thu",
+    label: "Thursday night",
+    on: TABS.map((t) => t.key),
+    note: "Adds Encore. Everything is open."
+  }
+];
+
+/* Presets write all ten keys, on and off both. Half absent and half set is how
+   you end up unable to tell what the room is looking at. */
+function presetMap(on) {
+  const map = {};
+  TABS.forEach((t) => { map[t.key] = on.indexOf(t.key) !== -1; });
+  return map;
+}
+
+/* One wipe per node. The label is what Jim reads, the node is what gets
+   emptied, and the confirmation prompt says both. */
+const RESET_NODES = [
+  { node: "announcements", label: "Marquee",             note: "Every announcement, live or not." },
+  { node: "questions",     label: "Soundcheck",          note: "Every question and its votes." },
+  { node: "polls",         label: "Crowd Vote",          note: "Every poll, its options, and its counts." },
+  { node: "takeaways",     label: "Liner Notes",         note: "Every takeaway." },
+  { node: "photos",        label: "The Pit",             note: "Every uploaded photo." },
+  { node: "reactions",     label: "Setlist reactions",   note: "Every session reaction counter." },
+  { node: "caresCup",      label: "The Cares Cup",       note: "Teams, scores, and the fundraising total." },
+  { node: "encore",        label: "Encore",              note: "Awards, Hall of Fame, videos, tenure, and their unlock flags." }
+];
+
+/* Enumerated out of storage, never typed into the source. A hardcoded list goes
+   stale the first time anybody adds a feature, and then Clear This Device
+   quietly leaves a key behind. */
+function mm26Keys() {
+  const found = [];
+  try {
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const k = window.localStorage.key(i);
+      if (k && k.indexOf("mm26_") === 0) found.push(k);
+    }
+  } catch (e) { /* private mode */ }
+  return found.sort();
+}
+
+/* Enumerate first, then delete. Removing while walking the index shifts
+   everything after it and skips keys. */
+function clearMm26Keys() {
+  const keys = mm26Keys();
+  keys.forEach((k) => {
+    try { window.localStorage.removeItem(k); } catch (e) { /* nothing to do */ }
+  });
+  return keys;
+}
+
+/* Everything the panel prints is Eastern, same rule as the rest of the wall. */
+function apEtStamp(ms) {
+  if (!ms) return "no timestamp";
+  try {
+    return new Date(ms).toLocaleString("en-US", {
+      timeZone: ET, weekday: "short", hour: "numeric", minute: "2-digit"
+    });
+  } catch (e) {
+    return String(ms);
+  }
+}
+
+function ApSection({ id, title, lede, danger, children }) {
+  return (
+    <section
+      className={"ap-sec glow-card grille" + (danger ? " ap-nuke" : "")}
+      aria-labelledby={id}
+    >
+      <h3
+        className={"ap-sec__h t-display" + (danger ? " ap-nuke__h" : "")}
+        id={id}
+      >
+        {title}
+      </h3>
+      {lede ? <p className="ap-sec__p">{lede}</p> : null}
+      {children}
+    </section>
+  );
+}
+
+function ApState({ on, onLabel, offLabel }) {
+  return (
+    <span className={"ap-state " + (on ? "ap-state--on" : "ap-state--off")}>
+      {on ? onLabel : offLabel}
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------- 1. marquee */
+
+/* The attendee side reads the same node through useAnnouncement and shows the
+   newest item with on === true. This one wants all of them, newest first, so
+   yesterday's line can go back up without being retyped. */
+function useAdminAnnouncements() {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("announcements");
+    const handler = (snap) => {
+      const all = snap.val() || {};
+      setItems(
+        Object.keys(all)
+          .map((id) => Object.assign({ id: id }, all[id]))
+          .sort((a, b) => (b.ts || 0) - (a.ts || 0))
+      );
+    };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return items;
+}
+
+/* `now` is the server corrected clock. A phone running fast would otherwise
+   stamp a banner into the future and pin it to the top of the list for the rest
+   of the week. */
+function ApMarquee({ now }) {
+  const items = useAdminAnnouncements();
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  /* Whatever attendees are actually looking at: newest item with on true. */
+  const live = items.filter((a) => a.on)[0] || null;
+  const liveId = live ? live.id : null;
+
+  /* One banner at a time. The attendee side only ever shows the newest one, so
+     leaving three switched on would put three rows in this panel and only one
+     of them would be telling the truth. */
+  const post = useCallback((e) => {
+    e.preventDefault();
+    const clean = text.trim();
+    if (!clean || !FB.ok || busy) return;
+    setBusy(true);
+    const off = {};
+    items.forEach((a) => { if (a.on) off[a.id + "/on"] = false; });
+    const root = FB.db.ref("announcements");
+    const first = Object.keys(off).length ? root.update(off) : Promise.resolve();
+    first
+      .then(() => root.push({ text: clean, on: true, ts: now }))
+      .then(() => { setText(""); setBusy(false); })
+      .catch(() => setBusy(false));
+  }, [text, items, now, busy]);
+
+  /* Putting one back up bumps its timestamp, because newest wins on the
+     attendee side and a five hour old banner would lose to nothing. */
+  function toggle(a) {
+    if (!FB.ok) return;
+    if (a.on) {
+      FB.db.ref("announcements/" + a.id + "/on").set(false);
+      return;
+    }
+    const patch = {};
+    items.forEach((x) => { if (x.on && x.id !== a.id) patch[x.id + "/on"] = false; });
+    patch[a.id + "/on"] = true;
+    patch[a.id + "/ts"] = now;
+    FB.db.ref("announcements").update(patch);
+  }
+
+  function drop(a) {
+    if (!FB.ok) return;
+    if (!window.confirm("Delete this announcement for good?\n\n" + a.text)) return;
+    FB.db.ref("announcements/" + a.id).remove();
+  }
+
+  return (
+    <ApSection
+      id="ap-marquee"
+      title="Marquee"
+      lede="One line across the top of every tab. An attendee can dismiss it on their own phone. Taking it down here takes it off all of them."
+    >
+      <form className="tf" onSubmit={post}>
+        <label className="tf__l">
+          <span>What it says</span>
+          <input
+            className="tf__in"
+            value={text}
+            maxLength={140}
+            placeholder="Say it in one line."
+            onChange={(e) => setText(e.target.value)}
+          />
+        </label>
+        <div className="tf__row">
+          <button
+            type="submit"
+            className="btn btn--go"
+            disabled={busy || !FB.ok || !text.trim()}
+          >
+            Put it on the wall
+          </button>
+        </div>
+      </form>
+
+      {!items.length ? (
+        <p className="ap-sec__note">
+          Nothing posted. The strip stays out of the way until there is something
+          to say.
+        </p>
+      ) : (
+        <ul className="ap-anns">
+          {items.map((a) => (
+            <li className="ap-ann" key={a.id}>
+              <p className="ap-ann__t">{a.text}</p>
+              <p className="ap-ann__m">
+                <ApState
+                  on={a.id === liveId}
+                  onLabel="On the wall"
+                  offLabel={a.on ? "On, but covered" : "Off"}
+                />
+                <span>{apEtStamp(a.ts)} Eastern</span>
+              </p>
+              <div className="tf__row">
+                <button
+                  className="btn btn--tiny"
+                  onClick={() => toggle(a)}
+                  disabled={!FB.ok}
+                >
+                  {a.on ? "Take it down" : "Put it back up"}
+                </button>
+                <button
+                  className="btn btn--tiny btn--kill"
+                  onClick={() => drop(a)}
+                  disabled={!FB.ok}
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </ApSection>
+  );
+}
+
+/* ------------------------------------------------------ 2. tab visibility */
+
+function ApTabs({ vis }) {
+  const [said, setSaid] = useState("");
+  const onCount = TABS.filter((t) => isTabOn(vis, t)).length;
+
+  function one(tab, next) {
+    if (!FB.ok) return;
+    FB.db.ref("settings/tabs/" + tab.key).set(next);
+    setSaid(
+      next
+        ? tab.name + " is on. It is in the room's tab bar now."
+        : tab.name + " is off. It is gone from the room's tab bar, padlocked in yours."
+    );
+  }
+
+  /* Forward through the week is one tap. Only a step backwards asks, because
+     the only way a preset can hurt is by taking something away mid-meeting. */
+  function applyPreset(p) {
+    if (!FB.ok) return;
+    const map = presetMap(p.on);
+    const hides = TABS.filter((t) => isTabOn(vis, t) && !map[t.key]);
+    if (hides.length) {
+      const names = hides.map((t) => t.name).join(", ");
+      if (!window.confirm("This takes " + names + " away from the room. Go ahead?")) return;
+    }
+    FB.db.ref("settings/tabs").set(map);
+    setSaid(p.label + " is set. " + p.on.length + " on, " + (TABS.length - p.on.length) + " off.");
+  }
+
+  return (
+    <ApSection
+      id="ap-tabs"
+      title="Tab visibility"
+      lede="A hidden tab is gone from the room's tab bar, not greyed out. You keep all ten, with a gold padlock on the ones nobody else can see."
+    >
+      <div className="tf__row">
+        {TAB_PRESETS.map((p) => (
+          <button
+            key={p.key}
+            className="btn"
+            onClick={() => applyPreset(p)}
+            disabled={!FB.ok}
+            title={p.note}
+          >
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="ap-tabs">
+        {TABS.map((t) => {
+          const on = isTabOn(vis, t);
+          return (
+            <div className="ap-tab" key={t.key}>
+              <span className="ap-tab__icon" aria-hidden="true">{t.icon}</span>
+              <span className="ap-tab__n">{t.name}</span>
+              <ApState on={on} onLabel="On" offLabel="Hidden" />
+              <button
+                className={"btn btn--tiny" + (on ? "" : " btn--go")}
+                onClick={() => one(t, !on)}
+                disabled={!FB.ok}
+                aria-label={(on ? "Hide " : "Show ") + t.name}
+              >
+                {on ? "Hide" : "Show"}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="ap-sec__note">
+        The room sees {onCount} of {TABS.length}. A switch lands on every phone in
+        about two seconds. Anyone sitting on a tab you turn off gets moved to the
+        first one that is still open.
+      </p>
+
+      {said ? <p className="ap-said">{said}</p> : null}
+    </ApSection>
+  );
+}
+
+/* ----------------------------------------------------- 3. reset by section */
+
+function ApResets() {
+  const [state, setState] = useState({});
+
+  function mark(node, value) {
+    setState((prev) => Object.assign({}, prev, { [node]: value }));
+  }
+
+  function wipe(r) {
+    if (!FB.ok) return;
+    const ask = 'Wipe the "' + r.node + '" node? ' + r.note
+      + " Nothing else is touched. This cannot be undone.";
+    if (!window.confirm(ask)) return;
+    mark(r.node, "working");
+    FB.db.ref(r.node).remove()
+      .then(() => mark(r.node, "clear"))
+      .catch(() => mark(r.node, "failed"));
+  }
+
+  return (
+    <ApSection
+      id="ap-resets"
+      title="Reset by section"
+      lede="One wipe per Firebase node. Each button names the node before it empties it, and it empties nothing else."
+    >
+      <div className="ap-nodes">
+        {RESET_NODES.map((r) => (
+          <div className="ap-node" key={r.node}>
+            <div className="ap-node__v">
+              <p className="ap-node__n">{r.label}</p>
+              <p className="ap-node__p">
+                <span className="ap-node__path">{r.node}</span> {r.note}
+              </p>
+            </div>
+            <div className="ap-node__b">
+              {state[r.node] === "working" ? (
+                <ApState on={false} onLabel="" offLabel="Working" />
+              ) : null}
+              {state[r.node] === "clear" ? (
+                <ApState on={true} onLabel="Emptied" offLabel="" />
+              ) : null}
+              {state[r.node] === "failed" ? (
+                <ApState on={false} onLabel="" offLabel="Refused" />
+              ) : null}
+              <button
+                className="btn btn--tiny btn--kill"
+                onClick={() => wipe(r)}
+                disabled={!FB.ok}
+              >
+                Wipe
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </ApSection>
+  );
+}
+
+/* ----------------------------------------------------- 4. clear this device */
+
+function ApDevice() {
+  const [keys, setKeys] = useState(() => mm26Keys());
+  const [said, setSaid] = useState("");
+
+  function clear() {
+    const found = mm26Keys();
+    setKeys(found);
+    if (!found.length) {
+      setSaid("Nothing to clear. This device is holding no mm26_ keys.");
+      return;
+    }
+    const ask = "Clear " + found.length + " key" + (found.length === 1 ? "" : "s")
+      + " on this device?\n\n" + found.join("\n")
+      + "\n\nShared data is untouched. The page reloads and the crew panel locks.";
+    if (!window.confirm(ask)) return;
+    const cleared = clearMm26Keys();
+    setKeys([]);
+    setSaid("Cleared " + cleared.length + ". Reloading as a fresh attendee.");
+    /* Reload, because mm26_entered is gone but React still believes you are
+       through the welcome screen, and testing the attendee experience is the
+       entire point of this button. */
+    window.setTimeout(() => window.location.reload(), 700);
+  }
+
+  return (
+    <ApSection
+      id="ap-device"
+      title="Clear this device"
+      lede="Wipes the mm26_ keys in this browser and nothing else. Shared data stays put, so you can walk the wall as an attendee without spending anybody's vote."
+    >
+      {keys.length ? (
+        <ul className="ap-keys">
+          {keys.map((k) => <li className="ap-key t-data" key={k}>{k}</li>)}
+        </ul>
+      ) : (
+        <p className="ap-sec__note">No mm26_ keys on this device right now.</p>
+      )}
+
+      <div className="tf__row" style={{ marginTop: "12px" }}>
+        <button className="btn btn--kill" onClick={clear}>Clear this device</button>
+        <button className="btn btn--quiet" onClick={() => setKeys(mm26Keys())}>
+          Check again
+        </button>
+      </div>
+
+      <p className="ap-sec__note">
+        Keys are read out of storage, not off a list in the source, so this is
+        whatever is really there. You come back to the welcome screen and the PIN
+        gets you back in here.
+      </p>
+
+      {said ? <p className="ap-said">{said}</p> : null}
+    </ApSection>
+  );
+}
+
+/* ------------------------------------------------------ 5. reset everything */
+
+/* Two deliberate actions, not two identical taps. Arm it, type the word, fire.
+   A double tap on the same button is a thing a thumb does by accident. */
+function ApNuke() {
+  const [armed, setArmed] = useState(false);
+  const [word, setWord] = useState("");
+  const [said, setSaid] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const ok = word.trim().toUpperCase() === "WIPE";
+
+  function fire() {
+    if (!ok || busy) return;
+    setBusy(true);
+    setSaid("Working.");
+    const jobs = FB.ok ? RESET_NODES.map((r) => FB.db.ref(r.node).remove()) : [];
+    Promise.all(jobs)
+      .then(() => {
+        const cleared = clearMm26Keys();
+        setSaid(
+          FB.ok
+            ? "All " + RESET_NODES.length + " nodes emptied and " + cleared.length
+              + " local keys cleared. Reloading."
+            : "Live updates are off, so nothing on the server changed. Cleared "
+              + cleared.length + " local keys. Reloading."
+        );
+        window.setTimeout(() => window.location.reload(), 1200);
+      })
+      .catch((err) => {
+        setBusy(false);
+        setSaid("Firebase refused part of that. " + ((err && err.message) || String(err)));
+      });
+  }
+
+  return (
+    <ApSection
+      id="ap-nuke"
+      title="Reset everything"
+      danger
+      lede="Empties all eight Firebase nodes and every mm26_ key on this device. Tab visibility survives, so the launch state does not have to be set twice. This is the one you run the day before the meeting."
+    >
+      {!armed ? (
+        <div className="tf__row" style={{ marginTop: "13px" }}>
+          <button className="btn btn--kill" onClick={() => setArmed(true)}>
+            Reset everything
+          </button>
+        </div>
+      ) : (
+        <div className="ap-arm">
+          <p className="ap-arm__p">
+            Every question, poll, takeaway, photo, reaction, score, Encore entry,
+            and announcement goes. Type WIPE to arm it.
+          </p>
+          <label className="tf__l">
+            <span>Type WIPE</span>
+            <input
+              className="tf__in t-data"
+              value={word}
+              autoComplete="off"
+              placeholder="WIPE"
+              onChange={(e) => setWord(e.target.value)}
+            />
+          </label>
+          <div className="tf__row">
+            <button
+              className="btn btn--kill"
+              onClick={fire}
+              disabled={!ok || busy}
+            >
+              Wipe it all
+            </button>
+            <button
+              className="btn btn--quiet"
+              onClick={() => { setArmed(false); setWord(""); }}
+              disabled={busy}
+            >
+              Back out
+            </button>
+          </div>
+        </div>
+      )}
+
+      {said ? <p className="ap-said">{said}</p> : null}
+    </ApSection>
+  );
+}
+
+/* ---------------------------------------------------------------- the panel */
+
+/* Renders in the content flow, in place of the tab body, rather than as a fixed
+   overlay. Five sections and ten switches in a fixed overlay needs an inner
+   scroll container, and CLAUDE.md keeps those in Display Mode. */
+function AdminPanel({ now, vis, displayMode, onClose, onLock }) {
+  return (
+    <div className="ap">
+      <div className="ap__top">
+        <div style={{ minWidth: 0 }}>
+          <h2 className="ap__h t-display">Crew panel</h2>
+          <p className="ap__lede">
+            Most of this reaches every phone in the room. Tread accordingly.
+          </p>
+        </div>
+        <button className="btn" onClick={onClose}>Back to the wall</button>
+      </div>
+
+      {displayMode ? (
+        <p className="ap-warn">
+          Display Mode is on, so this may be what the projector is showing.
+          Switch it off before you work in here.
+        </p>
+      ) : null}
+
+      {!FB.ok ? (
+        <p className="ap-warn">
+          Live updates are off, so nothing here reaches another phone. Clear This
+          Device still works.
+        </p>
+      ) : null}
+
+      <ApMarquee now={now} />
+      <ApTabs vis={vis} />
+      <ApResets />
+      <ApDevice />
+      <ApNuke />
+
+      <div className="tf__row">
+        <button className="btn btn--quiet" onClick={onLock}>
+          Lock the crew panel
+        </button>
+      </div>
+    </div>
+  );
+}
+
 const TAB_VIEWS = {
   setlist:    SetlistTab,
   band:       BandTab,
@@ -3123,6 +3910,7 @@ function App() {
   const [displayMode, setDisplayMode] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showPin, setShowPin] = useState(false);
+  const [showAdmin, setShowAdmin] = useState(false);
   const [dismissed, setDismissed] = useState(null);
   /* Pulling the welcome screen back up does NOT clear mm26_entered. Somebody
      showing the QR to a colleague should not have their own state reset. */
@@ -3133,17 +3921,44 @@ function App() {
   const { now, simulated } = useServerNow();
   const announcement = useAnnouncement();
 
+  /* T1.6 tab visibility. settings/tabs is a map of ten booleans. A tab with no
+     stored value falls back to its phase, so the six pre tabs are on and the
+     four during and post tabs are off until somebody says otherwise. That is
+     the T4.4 launch state, so an empty database is already right. */
+  const vis = useTabVisibility();
+
+  /* Crew keep every tab, with a padlock on the hidden ones. Attendees do not
+     get a padlock, they get nine tabs instead of ten. */
+  const visibleTabs = TABS.filter((t) => isAdmin || isTabOn(vis, t));
+
+  /* Derived, not corrected after the fact. If the tab under this viewer goes
+     hidden, this same paint is already rendering the first visible one, so a
+     hidden tab cannot flash its content on the way out. */
+  const shownKey = visibleTabs.filter((t) => t.key === active).length
+    ? active
+    : (visibleTabs.length ? visibleTabs[0].key : null);
+
   useEffect(() => {
     document.body.classList.toggle("display-mode", displayMode);
   }, [displayMode]);
+
+  /* Keep the stored tab honest after a redirect, so the pill highlight and the
+     scroll-into-view in TabBar both follow. */
+  useEffect(() => {
+    if (shownKey && shownKey !== active) setActive(shownKey);
+  }, [shownKey, active]);
 
   const enter = useCallback(() => {
     writeLS(LS.entered, "1");
     setEntered(true);
   }, []);
 
+  /* Spec 4: the PIN unlocks, and after that the gear opens the panel. Locking
+     is a deliberate button inside the panel rather than a stray tap out here,
+     because the gear sits next to Display Mode. */
   const gear = useCallback(() => {
-    if (isAdmin) { setIsAdmin(false); } else { setShowPin(true); }
+    if (!isAdmin) { setShowPin(true); return; }
+    setShowAdmin((prev) => !prev);
   }, [isAdmin]);
 
   if (!entered) {
@@ -3154,8 +3969,8 @@ function App() {
     return <Welcome onEnter={() => setShowWelcome(false)} now={now} returning />;
   }
 
-  const tab = TAB_BY_KEY[active] || TABS[0];
-  const TabView = TAB_VIEWS[tab.key];
+  const shownTab = shownKey ? TAB_BY_KEY[shownKey] : null;
+  const TabView = shownTab ? TAB_VIEWS[shownTab.key] : null;
   const liveAnnouncement =
     announcement && announcement.id !== dismissed ? announcement : null;
 
@@ -3191,14 +4006,20 @@ function App() {
             className={"iconbtn" + (isAdmin ? " iconbtn--on" : "")}
             onClick={gear}
             aria-pressed={isAdmin}
-            title={isAdmin ? "Lock the crew panel" : "Crew panel"}
+            title={isAdmin ? (showAdmin ? "Back to the wall" : "Open the crew panel") : "Crew panel"}
           >
             {"⚙"}
           </button>
         </div>
       </header>
 
-      <TabBar tabs={TABS} active={active} onPick={setActive} isAdmin={isAdmin} />
+      <TabBar
+        tabs={visibleTabs}
+        vis={vis}
+        active={shownKey}
+        onPick={(key) => { setShowAdmin(false); setActive(key); }}
+        isAdmin={isAdmin}
+      />
       </div>
 
       <main className="sheet">
@@ -3209,12 +4030,18 @@ function App() {
           </p>
         ) : null}
 
-        {isAdmin ? (
+        {isAdmin && !showAdmin ? (
           <div className="adminbar">
             <p className="adminbar__t">Crew panel unlocked</p>
             <p className="adminbar__p">
-              Tabs the room cannot see yet carry a padlock. The full panel arrives at T1.6.
+              Tabs the room cannot see carry a gold padlock. The gear opens the
+              panel.
             </p>
+            <div className="tf__row ap-open">
+              <button className="btn btn--tiny" onClick={() => setShowAdmin(true)}>
+                Open the crew panel
+              </button>
+            </div>
           </div>
         ) : null}
 
@@ -3233,7 +4060,19 @@ function App() {
           onDismiss={() => setDismissed(liveAnnouncement.id)}
         />
 
-        <TabView isAdmin={isAdmin} now={now} />
+        {showAdmin && isAdmin ? (
+          <AdminPanel
+            now={now}
+            vis={vis}
+            displayMode={displayMode}
+            onClose={() => setShowAdmin(false)}
+            onLock={() => { setShowAdmin(false); setIsAdmin(false); }}
+          />
+        ) : TabView ? (
+          <TabView isAdmin={isAdmin} now={now} />
+        ) : (
+          <Empty>Every tab is switched off. The crew is between songs.</Empty>
+        )}
       </main>
 
       {showPin ? (
