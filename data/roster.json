@@ -9,12 +9,18 @@
   },
   "_openQuestions": [
     {
-      "q": "Is aubrey-de-matthaeis the same person as Aubrey Gillespie, Chenal Enrollment Director? Looks like a name change.",
-      "effect": "Would give Aubrey Gillespie a photo."
-    },
-    {
       "q": "The list carries James Hinckley as Principal and Jim Hinckley as Partner. Same person, two rows, two titles. Which title is right?",
       "effect": "Both are in the roster, one with the photo and one without."
+    }
+  ],
+  "_resolved": [
+    {
+      "q": "Is aubrey-de-matthaeis the same person as Aubrey Gillespie?",
+      "a": "NO. Jim, Aug 12 2026: there are two Aubreys. Different people. aubrey-de-matthaeis is not on the attendee list and stays parked. Aubrey Gillespie still needs her own photo. Do NOT match these."
+    },
+    {
+      "q": "Is chelsea-pariseau the same person as Chelsea Petrick?",
+      "a": "YES. Jim, Aug 12 2026, name change. Applied via OVERRIDE."
     }
   ],
   "_photosOnDiskNotOnTheList": [
