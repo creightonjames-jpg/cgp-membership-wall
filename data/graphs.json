@@ -1,6 +1,6 @@
 {
   "generated_from": "CGPM_Membership Graphs-July 2026.xlsx",
-  "dir": "assets/graphs",
+  "dir": "graphs",
   "clubs": [
     {
       "slug": "anthem",
@@ -9,7 +9,7 @@
         "members": "anthem--members.svg",
         "dues": "anthem--dues.svg",
         "rates": "anthem--rates.svg",
-        "other": "anthem--other.svg"
+        "palmer": "anthem--palmer.svg"
       }
     },
     {
@@ -28,7 +28,7 @@
         "members": "ballantyne--members.svg",
         "dues": "ballantyne--dues.svg",
         "rates": "ballantyne--rates.svg",
-        "other": "ballantyne--other.svg"
+        "palmer": "ballantyne--palmer.svg"
       }
     },
     {
@@ -56,7 +56,7 @@
         "members": "chenal--members.svg",
         "dues": "chenal--dues.svg",
         "rates": "chenal--rates.svg",
-        "other": "chenal--other.svg"
+        "palmer": "chenal--palmer.svg"
       }
     },
     {
@@ -128,7 +128,7 @@
         "members": "medallion--members.svg",
         "dues": "medallion--dues.svg",
         "rates": "medallion--rates.svg",
-        "other": "medallion--other.svg"
+        "palmer": "medallion--palmer.svg"
       }
     },
     {
@@ -174,7 +174,7 @@
         "members": "prescott-lakes--members.svg",
         "dues": "prescott-lakes--dues.svg",
         "rates": "prescott-lakes--rates.svg",
-        "other": "prescott-lakes--other.svg"
+        "palmer": "prescott-lakes--palmer.svg"
       }
     },
     {
@@ -261,7 +261,7 @@
       "graphs": {
         "members": "wynstone--members.svg",
         "dues": "wynstone--dues.svg",
-        "other": "wynstone--other.svg",
+        "palmer": "wynstone--palmer.svg",
         "rates": "wynstone--rates.svg"
       }
     }

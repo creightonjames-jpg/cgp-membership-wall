@@ -52,6 +52,7 @@ readonly WARN_BYTES_ATTENDEE=$((150 * 1024))
 readonly WARN_BYTES_WIDE=$((600 * 1024))
 
 DRY_RUN=0
+MAP_FILE=""
 
 # ---------------------------------------------------------------- helpers
 
@@ -65,6 +66,11 @@ Asset intake for the Live Wall.
   tools/process-assets.sh graphs    <input-dir> [-n]   max 1600px wide PNG
   tools/process-assets.sh resources <input-dir> [-n]   max 1600px wide PNG
   tools/process-assets.sh brand     <input-dir> [-n]   max 1600px wide JPG
+
+  --map=<csv>   Rename map with columns file,slug. Filenames in a real drop are
+                things like "20230130-Hinckley-0008_pp.jpg", which slugify to
+                nonsense, so the map is how a verified roster gets applied.
+                Any file missing from the map is reported and NOT written.
 
   -n   Dry run. Report what would happen and write nothing.
 
@@ -166,6 +172,7 @@ INPUT_DIR=""
 for arg in "$@"; do
   case "$arg" in
     -n|--dry-run) DRY_RUN=1 ;;
+    --map=*)      MAP_FILE="${arg#--map=}" ;;
     -h|--help)    usage ;;
     attendees|graphs|resources|brand)
       [[ -z "$KIND" ]] || die "Only one kind at a time. Got '$KIND' and '$arg'."
@@ -239,7 +246,7 @@ printf '\n'
 
 (( DRY_RUN )) || mkdir -p "$OUT_DIR"
 
-declare -a DONE_SLUGS=() UNMATCHED=() FAILED=() UPSCALED=() SKIPPED=() COLLIDED=() OVERSIZED=()
+declare -a DONE_SLUGS=() UNMATCHED=() FAILED=() UPSCALED=() SKIPPED=() COLLIDED=() OVERSIZED=() UNMAPPED=()
 count=0
 
 while IFS= read -r src; do
@@ -248,11 +255,42 @@ while IFS= read -r src; do
   ext="$(printf '%s' "${base##*.}" | tr '[:upper:]' '[:lower:]')"
 
   case "$ext" in
-    jpg|jpeg|png|heic|heif|tif|tiff|gif|bmp|webp) ;;
+    jpg|jpeg|jpe|jfif|png|heic|heif|tif|tiff|gif|bmp|webp) ;;
     *) SKIPPED+=("$base (unsupported type .$ext)"); continue ;;
   esac
 
+  # Some files carry a doubled extension, "Walsh Trujillo.jpeg.JPG". Without
+  # this the slug comes out as walsh-trujillo-jpeg.
+  inner="$(printf '%s' "${stem##*.}" | tr '[:upper:]' '[:lower:]')"
+  case "$inner" in
+    jpg|jpeg|jpe|jfif|png|heic|heif|tif|tiff|gif|bmp|webp) stem="${stem%.*}" ;;
+  esac
+
   slug="$(slugify "$stem")"
+
+  # A rename map wins over slugifying. Real drops are named things like
+  # "20230130-Hinckley-0008_pp.jpg", which slugifies to garbage. Supply
+  # --map with columns file,slug and nothing is guessed.
+  if [[ -n "$MAP_FILE" ]]; then
+    mapped="$(python3 -c '
+import csv, sys
+want = sys.argv[2]
+try:
+    with open(sys.argv[1], newline="", encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            if (row.get("file") or "").strip() == want:
+                print((row.get("slug") or "").strip())
+                break
+except Exception:
+    pass
+' "$MAP_FILE" "$base")"
+    if [[ -n "$mapped" ]]; then
+      slug="$mapped"
+    else
+      UNMAPPED+=("$base")
+      continue
+    fi
+  fi
   if [[ -z "$slug" ]]; then
     SKIPPED+=("$base (name produced an empty slug)")
     continue
@@ -343,6 +381,7 @@ report_block "Upscaled from a small source:"                 "${UPSCALED[@]:-}"
 report_block "Bigger than the size guide. sips cannot shrink a PNG much, so if
   these are photographs ask for line art, and if they are already line art
   install pngquant and rerun:"                               "${OVERSIZED[@]:-}"
+report_block "Not in the rename map, so NOT written. Add them or drop --map:" "${UNMAPPED[@]:-}"
 report_block "No matching roster entry. Check the spelling:" "${UNMATCHED[@]:-}"
 
 # Roster entries still without a photo, counting files already in the repo.

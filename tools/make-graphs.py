@@ -125,6 +125,13 @@ def classify(title):
         left = re.sub(r"\s*Sales\s*$", "", left, flags=re.I)
         return left.strip(), "rates", PERCENT, "Sales and attrition, full privilege"
 
+    # Palmer Advantage is a real fourth chart type, not a parsing miss. Only six
+    # clubs have one, and Palmer Advantage has its own session on the Thursday
+    # agenda, so these are worth labelling properly rather than lumping as other.
+    if "Palmer Advantage" in t:
+        club = t.split(" - ")[0]
+        return club, "palmer", COUNT, "Palmer Advantage"
+
     club = t.split(" - ")[0]
     return club, "other", COUNT, t
 
@@ -406,14 +413,16 @@ def main():
     print("roll-ups:           %d  (%s)"
           % (len(manifest["rollups"]), ", ".join(r["slug"] for r in manifest["rollups"])))
     print()
-    incomplete = {k: v["graphs"] for k, v in entries.items() if len(v["graphs"]) < 3}
+    CORE = {"members", "dues", "rates"}
+    incomplete = {k: v["graphs"] for k, v in entries.items()
+                  if not CORE.issubset(set(v["graphs"]))}
     if incomplete:
         print("missing one or more of the three graph types:")
         for k in sorted(incomplete):
             have = set(incomplete[k])
             print("  %-24s has %-22s missing %s"
                   % (k, ", ".join(sorted(have)),
-                     ", ".join(sorted({"members", "dues", "rates"} - have))))
+                     ", ".join(sorted(CORE - have))))
     if skipped:
         print()
         for t, why in skipped[:12]:

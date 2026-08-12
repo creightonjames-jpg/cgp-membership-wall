@@ -1183,10 +1183,40 @@ body.display-mode .stubnote { font-size: 20px; }
 .reacts { display: flex; flex-wrap: wrap; gap: 8px; margin: 11px 0 0 12px; }
 
 .react {
+  position: relative;
   display: inline-flex; align-items: center; gap: 7px;
   background: var(--input); border: 1px solid var(--edge);
   border-radius: 999px; padding: 6px 12px;
   color: var(--dim); font-size: 14px; cursor: pointer;
+}
+
+/* What the emoji means, on hover. The native title attribute is still there as
+   a fallback, but it is slow and unstyled. Shown on :active as well because a
+   phone has no hover, and that is most of the room. */
+.react::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%) translateY(3px);
+  background: var(--stage);
+  border: 1px solid var(--gold-rule);
+  border-radius: 5px;
+  padding: 5px 9px;
+  color: var(--cream);
+  font-size: 11px; font-weight: 600; line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 110ms ease, transform 110ms ease;
+  z-index: 5;
+}
+
+.react:hover::after,
+.react:focus-visible::after,
+.react:active::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .react__n { font-size: 12px; font-weight: 600; min-width: 1ch; }
@@ -3822,11 +3852,13 @@ function BuildNote({ isAdmin, task, children }) {
    per session per device, held in mm26_reacted. Somebody determined can clear
    their own storage and cast again. That is fine. This is applause, not a
    ballot. */
+/* Rock themed, per the client. The keys are names rather than the emoji glyph
+   itself, so re-skinning these never orphans a count in Firebase. */
 const REACTIONS = [
-  { key: "fire",      glyph: "\u{1F525}", label: "Fire" },
-  { key: "horns",     glyph: "\u{1F918}", label: "Horns up" },
-  { key: "lightbulb", glyph: "\u{1F4A1}", label: "Good idea" },
-  { key: "bullseye",  glyph: "\u{1F3AF}", label: "Nailed it" }
+  { key: "rockon",  glyph: "\u{1F918}", label: "Rock on" },
+  { key: "shred",   glyph: "\u{1F3B8}", label: "Shred" },
+  { key: "micdrop", glyph: "\u{1F3A4}", label: "Mic drop" },
+  { key: "heat",    glyph: "\u{1F525}", label: "Brought the heat" }
 ];
 
 const HALF_HOUR = 30 * 60 * 1000;
@@ -4102,6 +4134,7 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle }
               disabled={!FB.ok || cast}
               onClick={() => onCast(sess.key, r.key)}
               title={cast ? "Already counted" : r.label}
+              data-label={cast ? "Already counted" : r.label}
             >
               <span aria-hidden="true">{r.glyph}</span>
               <span className="react__n t-data">{FB.ok ? n : "–"}</span>
