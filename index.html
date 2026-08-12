@@ -1589,6 +1589,84 @@ body.display-mode .stubnote { font-size: 20px; }
   .ap-nodes { grid-template-columns: 1fr 1fr; column-gap: 24px; }
 }
 
+/* --------------------------------------------------------- T3.1 roster */
+/* 147 rows in the page flow. No inner scroller, per CLAUDE.md, so the list
+   pages out in batches and exactly one row is open at a time. */
+.rst-count { margin: 13px 0 0; font-size: 14px; }
+.rst-count__n { color: var(--gold); font-weight: 700; }
+
+.rst-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; margin: 14px 0 0; }
+.rst-bar .tf__l { flex: 1 1 190px; margin: 0; min-width: 0; }
+.rst-bar .btn { flex: 0 0 auto; }
+.rst-bar .tf__in::-webkit-search-decoration,
+.rst-bar .tf__in::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+.rst-list { list-style: none; margin: 14px 0 0; padding: 0; }
+.rst-row { padding: 10px 0; border-top: 1px solid var(--edge); }
+.rst-row__top { display: flex; align-items: flex-start; gap: 10px; }
+.rst-row__v { flex: 1 1 auto; min-width: 0; }
+.rst-row__n { margin: 0; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.rst-row__c { margin: 2px 0 0; font-size: 12px; color: var(--dim); overflow-wrap: anywhere; }
+.rst-row__tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 5px 0 0; }
+.rst-row__top > .btn { flex: 0 0 auto; }
+
+/* Same square as a headshot, small. No overflow:hidden, the radius is on the
+   element, same reasoning as .bnd-shot__img. */
+.rst-thumb {
+  flex: 0 0 auto; display: block; width: 42px; height: 42px;
+  border-radius: 8px; background: var(--input); object-fit: cover;
+}
+.rst-thumb--init { display: grid; place-items: center; border: 1px solid var(--edge); }
+.rst-thumb__i { font-size: 13px; line-height: 1; color: var(--mute); letter-spacing: 0.04em; }
+
+.rst-edit {
+  margin: 12px 0 2px; padding: 13px;
+  background: var(--input); border-left: 3px solid var(--gold-rule);
+  border-radius: 6px;
+}
+
+.rst-grid { display: grid; grid-template-columns: 1fr; column-gap: 16px; }
+.rst-grid .tf__l { margin-bottom: 11px; }
+
+/* What the file says, and the button that puts it back. */
+.rst-was {
+  display: block; margin-top: 5px; font-size: 11px; color: var(--dim);
+  overflow-wrap: anywhere;
+}
+.rst-was--bad { color: var(--danger); }
+.rst-was__b { margin-left: 7px; vertical-align: baseline; }
+
+.rst-toggle {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 0 0 12px;
+}
+.rst-toggle__l {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--dim);
+}
+
+.rst-shot { display: flex; align-items: flex-start; gap: 11px; margin: 0 0 12px; }
+.rst-shot__img {
+  flex: 0 0 auto; display: block; width: 84px; height: 84px;
+  border-radius: 8px; background: var(--input); object-fit: cover;
+}
+.rst-shot__b { flex: 1 1 auto; min-width: 0; }
+
+.rst-hint { margin: 9px 0 0; font-size: 12px; color: var(--mute); }
+.rst-bad { margin: 9px 0 0; font-size: 13px; color: var(--danger); }
+
+.rst-add {
+  margin: 13px 0 0; padding: 13px;
+  background: var(--input); border-left: 3px solid var(--warm-edge);
+  border-radius: 6px;
+}
+.rst-add__h { margin: 0 0 11px; font-size: 16px; }
+
+@media (min-width: 700px) {
+  /* Four fields in one column is a lot of scrolling on the laptop where the
+     124 flagged names actually get worked through. */
+  .rst-grid { grid-template-columns: 1fr 1fr; }
+}
+
 /* ==========================================================================
    T2.1 to T2.3 THE VAULT
    Five sections, club graph picker, timed drops.
@@ -2289,6 +2367,29 @@ body.display-mode .ln-when { font-size: 15px; }
 
 .bnd-pills { margin-bottom: 14px; }
 .bnd-note { margin: 0 0 14px; font-size: 12px; color: var(--mute); }
+
+/* T3.1. Club and region are selects rather than pills. 29 clubs is about
+   1400px of pills, which is four swipes on a 380px phone to reach Wynstone, and
+   a native select hands the list to the phone's own picker. That picker scrolls
+   itself, so nothing in the page needs a scroll container to hold it, which is
+   the rule in CLAUDE.md. Appearance is left alone on purpose: the platform
+   draws its own caret and there is no thirteenth colour to invent for one. */
+.bnd-picks {
+  display: grid; grid-template-columns: 1fr; gap: 10px; margin: 0 0 14px;
+}
+.bnd-picks .tf__l { margin: 0; min-width: 0; }
+.bnd-picks select.tf__in { max-width: 100%; }
+
+/* Firebase is unreachable, so the crew's corrections are not on this phone. */
+.bnd-stale {
+  margin: 0 0 14px; padding: 10px 12px;
+  background: var(--riser); border: 1px solid var(--gold-rule);
+  border-radius: 8px; color: var(--dim); font-size: 13px;
+}
+
+@media (min-width: 700px) {
+  .bnd-picks { grid-template-columns: 1fr 1fr; gap: 14px; }
+}
 
 /* --------------------------------------------------------------- grid */
 /* auto-fill rather than a fixed column count, so the grid reflows on its own
@@ -3195,7 +3296,7 @@ body.display-mode .cares-row { --ticket-stub-w: 96px; }
    Tab bodies land in T0.6. Admin panel lands in T1.6.
    ========================================================================== */
 
-const { useState, useEffect, useRef, useCallback } = React;
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
 /* -------------------------------------------------------------- config */
 
@@ -4315,18 +4416,252 @@ function SetlistTab({ isAdmin, now }) {
 }
 
 /* ==========================================================================
+   T3.1 THE ROSTER, IN TWO LAYERS.
+
+   `data/roster.json` is the base: 147 records, in the repo, fast, and it works
+   with Firebase flat on its back. Firebase `roster/{slug}` is the override
+   layer, written by the crew panel, and it merges on top of the base FIELD BY
+   FIELD. That last part is the whole point. Fixing a spelling must not blank
+   the club somebody typed ten minutes earlier, so a write only ever carries
+   the fields that changed, and the merge only ever applies fields that are
+   present and non-empty.
+
+   A `roster/{slug}` with no counterpart in the base file is somebody the crew
+   added at the meeting. Their headshot is not in the repo, because nothing in
+   a browser can put a file there, so it rides on the record as compressed
+   base64, the same way The Pit stores its photos.
+
+   Base records cannot be deleted. You cannot take a line out of a static file
+   from a phone. They carry `hidden: true` instead, which takes them off the
+   wall and leaves them in the panel. Added records delete for real.
+
+   `reviewed: true` clears the base file's `needsReview` flag. 124 of the 147
+   names came off a filename and none of them are verified, so the panel counts
+   down and the flag is how it knows what is left.
+
+   Nothing in here invents a field. An empty title stays empty until a human
+   types one.
+   ========================================================================== */
+
+const RST_NODE = "roster";
+
+/* The four free text fields the crew edits. `newbie` is a boolean and `photo`
+   is handled on its own, so neither belongs in this list. */
+const RST_TEXT = ["name", "title", "club", "region"];
+
+const RST_LABEL = {
+  name: "Name", title: "Title", club: "Club", region: "Region",
+  newbie: "First tour", photo: "Headshot"
+};
+
+/* Same rule as tools/process-assets.sh, ported line for line, because a slug
+   built in the panel has to land on the same string the pipeline would have
+   produced. Lowercase, hyphens, nothing else. "Last, First" flips. Accents
+   fold to ASCII. */
+function rstSlug(raw) {
+  let s = String(raw == null ? "" : raw);
+  const cut = s.indexOf(",");
+  if (cut !== -1) s = s.slice(cut + 1) + " " + s.slice(0, cut);
+  s = s.replace(/&/g, " and ");
+  s = s.replace(/[\u2018\u2019\u02bc'`]/g, "");
+  s = s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
+  /* Drop anything outside printable ASCII, the way iconv //IGNORE would. */
+  s = s.replace(/[^\x20-\x7E]/g, "");
+  return s.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+/, "").replace(/-+$/, "").toLowerCase();
+}
+
+function rstClean(s) { return String(s == null ? "" : s).trim(); }
+
+/* The base file. One fetch, no listener. This is the layer that has to work
+   when nothing else does, so nothing below waits on Firebase to render it. */
+function useRosterBase() {
+  const [state, setState] = useState({
+    status: "loading", bySlug: {}, order: [], reason: ""
+  });
+
+  useEffect(() => {
+    let live = true;
+    fetch("data/roster.json", { cache: "no-cache" })
+      .then((res) => {
+        if (!res.ok) throw new Error("The file returned " + res.status + ".");
+        return res.json();
+      })
+      .then((data) => {
+        if (!live) return;
+        /* A bare array or { attendees: [...] }. tools/process-assets.sh reads
+           both shapes, so this reads both too. */
+        const raw = Array.isArray(data) ? data : (data && data.attendees) || [];
+        const bySlug = {};
+        const order = [];
+        raw.forEach((r, i) => {
+          const rec = r || {};
+          const slug = rstClean(rec.slug) || rstSlug(rstClean(rec.name)) || "row-" + i;
+          /* First one wins. Two records on one slug is a file to fix, not
+             something to silently overwrite here. */
+          if (bySlug[slug]) return;
+          bySlug[slug] = rec;
+          order.push(slug);
+        });
+        setState({ status: "ready", bySlug: bySlug, order: order, reason: "" });
+      })
+      .catch((err) => {
+        if (live) {
+          setState({
+            status: "failed", bySlug: {}, order: [],
+            reason: (err && err.message) || String(err)
+          });
+        }
+      });
+    return () => { live = false; };
+  }, []);
+
+  return state;
+}
+
+/* The override layer. Starts as an empty map rather than null, so a Firebase
+   that never answers reads as "no edits yet" and the base file renders on its
+   own instead of behind a spinner nobody can clear. */
+function useRosterEdits() {
+  const [map, setMap] = useState({});
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref(RST_NODE);
+    const handler = (snap) => setMap(snap.val() || {});
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return map;
+}
+
+/* THE MERGE. One person, base first, then every override field that is present
+   and non-empty. A field the override does not carry is the base's field, which
+   is what makes a name edit safe for a club and a club edit safe for a name.
+
+   `changed` is only meaningful against a base record, so an added person gets
+   an empty list rather than six fields marked as edits. */
+function rstOne(slug, base, edit) {
+  const b = base || null;
+  const e = edit || null;
+  const out = {
+    slug: slug,
+    name: "", title: "", club: "", region: "",
+    newbie: false, photo: "",
+    added: !b,
+    hidden: false,
+    reviewed: false,
+    needsReview: false,
+    changed: []
+  };
+
+  if (b) {
+    out.name = rstClean(b.name);
+    out.title = rstClean(b.title);
+    out.club = rstClean(b.club);
+    out.region = rstClean(b.region);
+    out.newbie = b.newbie === true;
+    out.photo = rstClean(b.photo);
+    out.needsReview = b.needsReview === true;
+  }
+
+  if (e) {
+    RST_TEXT.forEach((f) => {
+      const v = rstClean(e[f]);
+      if (!v) return;
+      if (b && v !== out[f]) out.changed.push(f);
+      out[f] = v;
+    });
+    if (typeof e.newbie === "boolean") {
+      if (b && e.newbie !== out.newbie) out.changed.push("newbie");
+      out.newbie = e.newbie;
+    }
+    const p = rstClean(e.photo);
+    if (p) {
+      if (b) out.changed.push("photo");
+      out.photo = p;
+    }
+    out.hidden = e.hidden === true;
+    out.reviewed = e.reviewed === true;
+  }
+
+  if (out.reviewed) out.needsReview = false;
+  return out;
+}
+
+/* Everybody, merged, sorted by display name. Base records first in file order,
+   then any slug that only exists in Firebase, which is somebody added. */
+function rstAll(base, edits) {
+  const out = [];
+  base.order.forEach((slug) => out.push(rstOne(slug, base.bySlug[slug], edits[slug])));
+  Object.keys(edits).forEach((slug) => {
+    if (!base.bySlug[slug]) out.push(rstOne(slug, null, edits[slug]));
+  });
+  return out.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/* ------------------------------------------------------- roster writes */
+
+/* `update` with nulls, never `set`. A null deletes that one field and leaves
+   the rest of the record alone, which is the same field-by-field promise the
+   merge makes on the way back out. `set` would replace the record and take
+   somebody's club with it. */
+function rstSave(slug, patch) {
+  return FB.db.ref(RST_NODE + "/" + slug).update(patch);
+}
+
+/* Per-field revert. Drop the override and the base file's value comes back on
+   its own, on every phone, because that is all the merge was ever doing. */
+function rstRevert(slug, field) {
+  return FB.db.ref(RST_NODE + "/" + slug + "/" + field).remove();
+}
+
+function rstDrop(slug) {
+  return FB.db.ref(RST_NODE + "/" + slug).remove();
+}
+
+/* Firebase is reachable, or it is not. `.info/connected` is local to the SDK
+   and flips within a second or two of the socket dropping, so it is the honest
+   answer rather than a guess about the network. The grace period is there
+   because every cold load is briefly disconnected, and a warning that flashes
+   on load is a warning people learn to ignore. */
+function useFbLive() {
+  const [live, setLive] = useState(true);
+
+  useEffect(() => {
+    if (!FB.ok) { setLive(false); return; }
+    let timer = null;
+    const ref = FB.db.ref(".info/connected");
+    const handler = (snap) => {
+      if (snap.val() === true) {
+        if (timer) { window.clearTimeout(timer); timer = null; }
+        setLive(true);
+      } else if (!timer) {
+        timer = window.setTimeout(() => { timer = null; setLive(false); }, 5000);
+      }
+    };
+    ref.on("value", handler);
+    return () => {
+      ref.off("value", handler);
+      if (timer) window.clearTimeout(timer);
+    };
+  }, []);
+
+  return live;
+}
+
+/* ==========================================================================
    T1.3 THE BAND. Spec 3.2.
-   Search, filter pills, card grid, and a one-person view, over
-   data/roster.json.
+   Search, filter pills, card grid, and a one-person view, over the merged
+   roster above.
 
-   The roster is static and read only during the event, so there is no Firebase
-   listener here and nothing that reads a clock. BandTab is still handed `now`
-   by App and ignores it on purpose: nothing in this tab is time sensitive, so
-   there is nothing for useServerNow to gate.
+   Nothing in here reads a clock. BandTab is still handed `now` by App and
+   ignores it on purpose: nothing in this tab is time sensitive, so there is
+   nothing for useServerNow to gate.
 
-   Every name, club, and region in the file today is invented. The whole file
-   is replaced at T3.1, so nothing below knows a count, a region name, or a
-   club name. It all comes off the file.
+   Nothing below knows a count, a club name, or a region name. Every number and
+   every pill comes off the merged roster, so a club typed into the crew panel
+   turns up here as a filter with no code change.
    ========================================================================== */
 
 /* Fold accents and case, so a search for "jose" finds "José". macOS hands over
@@ -4368,62 +4703,48 @@ function bandRecord(raw, i) {
   };
 }
 
+/* The base file plus the crew's edits, merged, ready for the grid. The base
+   file drives `status`, so the tab renders 147 people the moment the file lands
+   whether or not Firebase ever answers. `live` is only used to say out loud
+   that edits are not syncing. */
 function useRoster() {
-  const [state, setState] = useState({ status: "loading", list: [], reason: "" });
+  const base = useRosterBase();
+  const edits = useRosterEdits();
+  const live = useFbLive();
 
-  useEffect(() => {
-    let live = true;
-    fetch("data/roster.json", { cache: "no-cache" })
-      .then((res) => {
-        if (!res.ok) throw new Error("The file returned " + res.status + ".");
-        return res.json();
-      })
-      .then((data) => {
-        if (!live) return;
-        /* A bare array or { attendees: [...] }. tools/process-assets.sh already
-           reads both shapes, so this reads both too. */
-        const raw = Array.isArray(data) ? data : (data && data.attendees) || [];
-        const list = raw
-          .map(bandRecord)
-          .filter((r) => r.name)
-          .sort((a, b) => a.name.localeCompare(b.name));
-        setState({ status: "ready", list: list, reason: "" });
-      })
-      .catch((err) => {
-        if (live) {
-          setState({
-            status: "failed", list: [],
-            reason: (err && err.message) || String(err)
-          });
-        }
-      });
-    return () => { live = false; };
-  }, []);
+  const list = useMemo(() => {
+    return rstAll(base, edits)
+      .filter((p) => !p.hidden)
+      .map(bandRecord)
+      .filter((r) => r.name)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [base, edits]);
 
-  return state;
+  return { status: base.status, reason: base.reason, list: list, live: live };
 }
 
-/* One pill per region, alphabetical, with a head count. A record with no region
-   still shows under All and just never gets a pill of its own. */
-function bandRegions(list) {
+/* One entry per value actually on the merged roster, alphabetical, with a head
+   count. A record with no club still shows under All and just never gets an
+   entry of its own. A club typed into the crew panel appears here on its own,
+   because this counts the merged list rather than reading a fixed table. */
+function bandGroups(list, field) {
   const counts = {};
   list.forEach((r) => {
-    if (r.region) counts[r.region] = (counts[r.region] || 0) + 1;
+    if (r[field]) counts[r[field]] = (counts[r[field]] || 0) + 1;
   });
   return Object.keys(counts)
     .sort((a, b) => a.localeCompare(b))
     .map((name) => ({ name: name, n: counts[name] }));
 }
 
-/* Filter is "all", "newbies", or "region:" plus the region name. Prefixed, so a
-   region that arrives literally named All cannot collide with the All pill. */
-const BND_REGION = "region:";
-
-function bandKeeps(rec, tokens, filter) {
-  if (filter === "newbies" && !rec.newbie) return false;
-  if (filter.indexOf(BND_REGION) === 0 && rec.region !== filter.slice(BND_REGION.length)) {
-    return false;
-  }
+/* Three independent filters, not one. Pills are All and Newbies. Club and
+   region are selects, and they stack with Newbies rather than replacing it,
+   because "first timers at Chenal" is a question somebody will actually ask
+   and 29 clubs makes it hard to answer by eye. */
+function bandKeeps(rec, tokens, f) {
+  if (f.newbie && !rec.newbie) return false;
+  if (f.club && rec.club !== f.club) return false;
+  if (f.region && rec.region !== f.region) return false;
   /* Every word has to land somewhere in name, title, or club, so "north gm" and
      "placeholder one" both work and the order typed does not matter. */
   for (let i = 0; i < tokens.length; i++) {
@@ -4432,9 +4753,11 @@ function bandKeeps(rec, tokens, filter) {
   return true;
 }
 
-function bandNothing(query, filter) {
+function bandNothing(query, f) {
   if (query.trim()) return "Nobody by that name. Try fewer letters.";
-  if (filter === "newbies") return "No first timers on this list.";
+  if (f.newbie && f.club) return "No first timers from " + f.club + ".";
+  if (f.newbie) return "No first timers on this list.";
+  if (f.club) return "Nobody from " + f.club + ".";
   return "Nobody in that region.";
 }
 
@@ -4548,7 +4871,9 @@ function BandPill({ on, onPick, label, n }) {
 function BandTab({ isAdmin }) {
   const roster = useRoster();
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [newbieOnly, setNewbieOnly] = useState(false);
+  const [club, setClub] = useState("");
+  const [region, setRegion] = useState("");
   const [selected, setSelected] = useState(null);
   const [broken, setBroken] = useState({});
   const scrollBack = useRef(0);
@@ -4557,10 +4882,24 @@ function BandTab({ isAdmin }) {
   const list = roster.list;
   const total = list.length;
   const newbies = list.filter((r) => r.newbie).length;
-  const regions = bandRegions(list);
+  const clubs = useMemo(() => bandGroups(list, "club"), [list]);
+  const regions = useMemo(() => bandGroups(list, "region"), [list]);
+  const filter = { newbie: newbieOnly, club: club, region: region };
+  const anyFilter = newbieOnly || !!club || !!region;
   const tokens = bandNorm(query).split(/\s+/).filter(Boolean);
   const shown = list.filter((r) => bandKeeps(r, tokens, filter));
   const person = selected ? list.filter((r) => r.key === selected)[0] || null : null;
+
+  /* A club that stops existing, because the crew corrected the last record that
+     carried it, would otherwise leave the select pointing at nothing and the
+     grid empty with no way to see why. Drop the filter instead. */
+  useEffect(() => {
+    if (club && !clubs.some((c) => c.name === club)) setClub("");
+  }, [club, clubs]);
+
+  useEffect(() => {
+    if (region && !regions.some((g) => g.name === region)) setRegion("");
+  }, [region, regions]);
 
   /* A photo path that 404s is the same hole as no photo at all, and today every
      path in the file is one, because assets/attendees is empty until T3.1. Both
@@ -4617,6 +4956,16 @@ function BandTab({ isAdmin }) {
         <Empty>No lineup posted. Nobody has been handed a laminate yet.</Empty>
       ) : null}
 
+      {/* The base file is 147 records in the repo and it renders on its own.
+          This says the crew's live corrections are the part that is missing,
+          rather than letting somebody read a stale name as the final one. */}
+      {roster.status === "ready" && !roster.live ? (
+        <p className="bnd-stale">
+          Live updates are off, so this is the roster as it shipped. Any name the
+          crew has fixed since is not on this phone yet.
+        </p>
+      ) : null}
+
       {person ? (
         <BandDetail
           rec={person}
@@ -4651,27 +5000,60 @@ function BandTab({ isAdmin }) {
 
           <div className="dayrow bnd-pills" role="tablist" aria-label="Filter the lineup">
             <BandPill
-              on={filter === "all"}
-              onPick={() => setFilter("all")}
+              on={!anyFilter}
+              onPick={() => { setNewbieOnly(false); setClub(""); setRegion(""); }}
               label="All"
               n={total}
             />
             <BandPill
-              on={filter === "newbies"}
-              onPick={() => setFilter("newbies")}
+              on={newbieOnly}
+              onPick={() => setNewbieOnly(!newbieOnly)}
               label="Newbies"
               n={newbies}
             />
-            {regions.map((g) => (
-              <BandPill
-                key={g.name}
-                on={filter === BND_REGION + g.name}
-                onPick={() => setFilter(BND_REGION + g.name)}
-                label={g.name}
-                n={g.n}
-              />
-            ))}
           </div>
+
+          {/* Club is a select, not a row of pills. Twenty nine clubs is 1400px
+              of pills on a 380px phone, and the phone's own picker scrolls
+              itself, so the long list never needs a scroll container in here.
+              Region gets the same treatment and only appears if any record
+              carries one, which none do until somebody types one. */}
+          {clubs.length || regions.length ? (
+            <div className="bnd-picks">
+              {clubs.length ? (
+                <label className="tf__l" htmlFor="bnd-club">
+                  <span>Club</span>
+                  <select
+                    id="bnd-club"
+                    className="tf__in"
+                    value={club}
+                    onChange={(e) => setClub(e.target.value)}
+                  >
+                    <option value="">Every club</option>
+                    {clubs.map((c) => (
+                      <option key={c.name} value={c.name}>{c.name} ({c.n})</option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+              {regions.length ? (
+                <label className="tf__l" htmlFor="bnd-region">
+                  <span>Region</span>
+                  <select
+                    id="bnd-region"
+                    className="tf__in"
+                    value={region}
+                    onChange={(e) => setRegion(e.target.value)}
+                  >
+                    <option value="">Every region</option>
+                    {regions.map((g) => (
+                      <option key={g.name} value={g.name}>{g.name} ({g.n})</option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+            </div>
+          ) : null}
 
           {shown.length !== total ? (
             <p className="bnd-note t-data">{shown.length} of {total} showing.</p>
@@ -4695,13 +5077,13 @@ function BandTab({ isAdmin }) {
         </div>
       ) : null}
 
-      <BuildNote isAdmin={isAdmin} task="T1.3">
-        Grid, search, and pills against data/roster.json. Every name, club, and
-        region in that file is invented and the whole file is replaced at T3.1.
-        Static read, no Firebase, no admin controls. Cards carry club and title
-        and no contact details, per the client. A record with no photo, or with
-        a photo path that 404s, falls back to an initials tile, which is every
-        record today because assets/attendees is empty until T3.1.
+      <BuildNote isAdmin={isAdmin} task="T1.3 T3.1">
+        147 real headshots over data/roster.json, with the crew panel's edits at
+        roster/{"{slug}"} merged on top field by field. Names came off filenames
+        and are not verified, so fix them in the Roster section of the crew
+        panel. Club and region are selects because 29 clubs will not fit in a
+        pill row. Newbies stacks with a club. Cards carry club and title and no
+        contact details, per the client.
       </BuildNote>
     </TabFrame>
   );
@@ -8640,8 +9022,24 @@ function pitHalve(src, sw, sh, tw, th) {
 }
 
 /* Returns a data URL under the cap, plus the numbers to show the person who
-   just took the photo. Throws with a sentence that can go straight on screen. */
-async function pitCompress(file) {
+   just took the photo. Throws with a sentence that can go straight on screen.
+
+   `opts` is how T3.1 borrows this whole path instead of writing a second one.
+   It changes the dials and nothing else: the EXIF probe, the orientation
+   transform, the halving, and the quality ladder are the same code for a
+   ballroom snapshot and for a headshot. Defaults are The Pit's, so calling this
+   with one argument behaves exactly as it did before.
+     edges     long edge rungs to try, largest first
+     qualities JPEG quality rungs to try at each edge
+     maxB64    cap measured on the base64 string, not the JPEG bytes
+     square    centre crop to a square first, which is what the asset pipeline
+               does to every headshot in assets/attendees */
+async function pitCompress(file, opts) {
+  const o = opts || {};
+  const edges = o.edges || PIT_EDGES;
+  const qualities = o.qualities || PIT_QUALITIES;
+  const maxB64 = o.maxB64 || PIT_MAX_B64;
+
   if (!file) throw new Error("Nothing came back from that.");
   if (file.type && file.type.indexOf("image/") !== 0) {
     throw new Error("That is not a photo.");
@@ -8668,24 +9066,39 @@ async function pitCompress(file) {
     throw err;
   }
 
-  const sw = img.naturalWidth || img.width;
-  const sh = img.naturalHeight || img.height;
+  let sw = img.naturalWidth || img.width;
+  let sh = img.naturalHeight || img.height;
   if (!sw || !sh) {
     URL.revokeObjectURL(url);
     throw new Error("That photo came through with no size to it.");
   }
 
+  /* The centre square, taken at full resolution before anything is scaled. It
+     is done here rather than after the orientation transform because the centre
+     of a picture is still the centre under all eight EXIF values, so the crop
+     and the rotation do not have to know about each other. */
+  let source = img;
+  if (o.square && sw !== sh) {
+    const m = Math.min(sw, sh);
+    const crop = pitCanvas(m, m);
+    const cg = crop.getContext("2d");
+    cg.drawImage(img, Math.round((sw - m) / 2), Math.round((sh - m) / 2), m, m, 0, 0, m, m);
+    source = crop;
+    sw = m;
+    sh = m;
+  }
+
   let out = null;
 
-  for (let ei = 0; ei < PIT_EDGES.length && !out; ei++) {
-    const k = Math.min(1, PIT_EDGES[ei] / Math.max(sw, sh));
+  for (let ei = 0; ei < edges.length && !out; ei++) {
+    const k = Math.min(1, edges[ei] / Math.max(sw, sh));
     const dw = Math.max(1, Math.round(sw * k));
     const dh = Math.max(1, Math.round(sh * k));
     const swap = ori >= 5;
     const cw = swap ? dh : dw;
     const ch = swap ? dw : dh;
 
-    const step = pitHalve(img, sw, sh, dw, dh);
+    const step = pitHalve(source, sw, sh, dw, dh);
     const canvas = pitCanvas(cw, ch);
     const g = canvas.getContext("2d");
     g.imageSmoothingEnabled = true;
@@ -8693,11 +9106,11 @@ async function pitCompress(file) {
     pitOrient(g, ori, cw, ch);
     g.drawImage(step.src, 0, 0, step.w, step.h, 0, 0, dw, dh);
 
-    const lastEdge = ei === PIT_EDGES.length - 1;
-    for (let qi = 0; qi < PIT_QUALITIES.length; qi++) {
-      const data = canvas.toDataURL("image/jpeg", PIT_QUALITIES[qi]);
-      const lastQ = qi === PIT_QUALITIES.length - 1;
-      if (data.length <= PIT_MAX_B64 || (lastEdge && lastQ)) {
+    const lastEdge = ei === edges.length - 1;
+    for (let qi = 0; qi < qualities.length; qi++) {
+      const data = canvas.toDataURL("image/jpeg", qualities[qi]);
+      const lastQ = qi === qualities.length - 1;
+      if (data.length <= maxB64 || (lastEdge && lastQ)) {
         out = { data: data, w: cw, h: ch };
         break;
       }
@@ -11705,7 +12118,7 @@ function ApNuke() {
       id="ap-nuke"
       title="Reset everything"
       danger
-      lede="Empties all eight Firebase nodes and every mm26_ key on this device. Tab visibility survives, so the launch state does not have to be set twice. This is the one you run the day before the meeting."
+      lede="Empties all eight Firebase nodes and every mm26_ key on this device. Tab visibility survives, so the launch state does not have to be set twice. Roster edits survive too, because a name somebody fixed in August is not test data. This is the one you run the day before the meeting."
     >
       {!armed ? (
         <div className="tf__row" style={{ marginTop: "13px" }}>
@@ -11753,6 +12166,689 @@ function ApNuke() {
   );
 }
 
+/* ========================================================================== */
+/* T3.1 6. ROSTER                                                             */
+/*                                                                            */
+/* The client asked for two things: a way to fix names and clubs, and a way to */
+/* add somebody. Both write to roster/{slug} in Firebase and both reach The    */
+/* Band on every phone in about two seconds.                                   */
+/*                                                                            */
+/* 124 of the 147 names came off a filename, so the list is sorted by what     */
+/* needs attention rather than alphabetically: flagged first, then anybody     */
+/* with no club, then the rest. The counter at the top is the progress bar.    */
+/*                                                                            */
+/* One row opens at a time. 147 open forms is 147 forms, and CLAUDE.md rules   */
+/* out putting them in a box with its own scrollbar, so the page flows and the */
+/* list pages out in batches instead.                                          */
+/* ========================================================================== */
+
+/* Headshots in assets/attendees are 400x400 squares, centre cropped, per
+   tools/process-assets.sh. Somebody added from this panel has no file in the
+   repo, so their headshot rides on the record as base64 and it is made to the
+   same shape by the same compressor The Pit uses. Cap is well under The Pit's,
+   because a 400px square is a quarter of the pixels of an 800px photo and a
+   roster record is read by every phone that opens The Band. */
+const RST_SHOT = {
+  edges: [400, 340, 300],
+  qualities: [0.78, 0.68, 0.58, 0.48],
+  maxB64: 90000,
+  square: true
+};
+
+/* The real club list. data/graphs.json is generated from the membership graph
+   workbook and carries 29 display names. Union it with whatever clubs are
+   already on the merged roster, so a club typed in here suggests itself the
+   next time. No club name is written into this file, and a failed fetch just
+   leaves the combo suggesting the roster's own clubs. */
+function useKnownClubs(people) {
+  const [fromFile, setFromFile] = useState([]);
+
+  useEffect(() => {
+    let live = true;
+    fetch("data/graphs.json", { cache: "no-cache" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!live || !data) return;
+        setFromFile(((data.clubs) || []).map((c) => rstClean(c && c.name)).filter(Boolean));
+      })
+      .catch(() => { /* nothing to do, the roster's own clubs still suggest */ });
+    return () => { live = false; };
+  }, []);
+
+  return useMemo(() => {
+    const seen = {};
+    const out = [];
+    fromFile.concat(people.map((p) => p.club)).forEach((raw) => {
+      const v = rstClean(raw);
+      const k = v.toLowerCase();
+      if (!v || seen[k]) return;
+      seen[k] = 1;
+      out.push(v);
+    });
+    return out.sort((a, b) => a.localeCompare(b));
+  }, [fromFile, people]);
+}
+
+/* Flagged, then no club, then everybody else. Alphabetical inside each band. */
+function rstRank(p) {
+  if (p.needsReview) return 0;
+  if (!p.club) return 1;
+  return 2;
+}
+
+function rstQueue(a, b) {
+  const d = rstRank(a) - rstRank(b);
+  return d !== 0 ? d : a.name.localeCompare(b.name);
+}
+
+/* 42px thumbnail, or the same initials tile The Band falls back to. An empty
+   photo string makes no request, which is the whole reason the base file holds
+   "" rather than a path that might not resolve. See ROADMAP T1.3. */
+function ApRosterThumb({ person }) {
+  if (!person.photo) {
+    return (
+      <span className="rst-thumb rst-thumb--init grille" aria-hidden="true">
+        <span className="rst-thumb__i t-display">{bandInitials(person.name)}</span>
+      </span>
+    );
+  }
+  return <img className="rst-thumb" src={person.photo} alt="" loading="lazy" decoding="async" />;
+}
+
+/* One text field, plus what the base file says when the crew has changed it and
+   the one button that puts the file's value back. */
+function ApRosterField({ id, field, value, onValue, base, changed, onRevert, list, hint }) {
+  return (
+    <label className="tf__l" htmlFor={id}>
+      <span>{RST_LABEL[field]}</span>
+      <input
+        id={id}
+        className="tf__in"
+        value={value}
+        maxLength={60}
+        autoComplete="off"
+        list={list || undefined}
+        onChange={(e) => onValue(e.target.value)}
+      />
+      {changed ? (
+        <span className="rst-was">
+          File says {base ? '"' + base + '"' : "nothing"}.
+          <button type="button" className="btn btn--tiny rst-was__b" onClick={onRevert}>
+            Put it back
+          </button>
+        </span>
+      ) : null}
+      {hint ? <span className="rst-was">{hint}</span> : null}
+    </label>
+  );
+}
+
+function ApRosterEdit({ person, base, clubsId, onDone }) {
+  const added = person.added;
+  const [form, setForm] = useState(() => ({
+    name: person.name, title: person.title, club: person.club, region: person.region
+  }));
+  const [newbie, setNewbie] = useState(person.newbie);
+  const [shot, setShot] = useState(null);      /* a staged upload            */
+  const [dropShot, setDropShot] = useState(false); /* put the file's back    */
+  const [working, setWorking] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [bad, setBad] = useState("");
+
+  const set = (f) => (v) => setForm((prev) => Object.assign({}, prev, { [f]: v }));
+  const was = (f) => rstClean(base[f]);
+  const changed = (f) => person.changed.indexOf(f) !== -1;
+
+  const pick = useCallback((e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+    setBad("");
+    setShot(null);
+    setDropShot(false);
+    setWorking(true);
+    pitCompress(file, RST_SHOT)
+      .then((out) => { setShot(out); setWorking(false); })
+      .catch((err) => {
+        setBad((err && err.message) || "That photo did not go through.");
+        setWorking(false);
+      });
+  }, []);
+
+  function save() {
+    if (!FB.ok || busy) return;
+    const clean = rstClean(form.name);
+    if (!clean) { setBad("A name, at least. The rest can wait."); return; }
+    setBusy(true);
+    setBad("");
+
+    const patch = {};
+    RST_TEXT.forEach((f) => {
+      const v = rstClean(form[f]);
+      /* An added person's record IS the truth, so an empty field is stored as
+         empty. A base person's record is an override, so a value matching the
+         file, or an emptied field, drops the override and the file's value
+         comes back. That is the same field-by-field promise the merge makes. */
+      if (added) patch[f] = v;
+      else patch[f] = (v && v !== was(f)) ? v : null;
+    });
+
+    if (added) patch.newbie = newbie;
+    else patch.newbie = newbie !== (base.newbie === true) ? newbie : null;
+
+    if (shot) patch.photo = shot.data;
+    else if (dropShot) patch.photo = null;
+
+    /* Somebody looked at this record, which is what the counter is counting. */
+    if (person.needsReview) patch.reviewed = true;
+
+    rstSave(person.slug, patch)
+      .then(() => { setBusy(false); onDone(); })
+      .catch((err) => {
+        setBusy(false);
+        setBad("That did not save. " + ((err && err.message) || String(err)));
+      });
+  }
+
+  /* Nothing typed, nothing to fix. Clears the flag and moves on, which is what
+     most of the 124 will need. */
+  function looksRight() {
+    if (!FB.ok || busy) return;
+    setBusy(true);
+    rstSave(person.slug, { reviewed: true })
+      .then(() => { setBusy(false); onDone(); })
+      .catch(() => { setBusy(false); setBad("That did not save. Try it again."); });
+  }
+
+  function hide(next) {
+    if (!FB.ok) return;
+    if (next && !window.confirm("Take " + person.name + " off the wall?\n\nThe record stays in here and you can put them back.")) return;
+    rstSave(person.slug, { hidden: next ? true : null }).catch(() => setBad("That did not save."));
+  }
+
+  function remove() {
+    if (!FB.ok) return;
+    if (!window.confirm("Delete " + person.name + " for good?\n\nThis one was added here, so there is no file to fall back on.")) return;
+    setBusy(true);
+    rstDrop(person.slug)
+      .then(() => { setBusy(false); onDone(); })
+      .catch(() => { setBusy(false); setBad("That did not delete. Try it again."); });
+  }
+
+  const shotSrc = shot ? shot.data : (dropShot ? rstClean(base.photo) : person.photo);
+
+  return (
+    <div className="rst-edit">
+      <div className="rst-grid">
+        <ApRosterField
+          id={"rst-name-" + person.slug} field="name"
+          value={form.name} onValue={set("name")}
+          base={was("name")} changed={changed("name")}
+          onRevert={() => rstRevert(person.slug, "name")}
+        />
+        <ApRosterField
+          id={"rst-title-" + person.slug} field="title"
+          value={form.title} onValue={set("title")}
+          base={was("title")} changed={changed("title")}
+          onRevert={() => rstRevert(person.slug, "title")}
+        />
+        <ApRosterField
+          id={"rst-club-" + person.slug} field="club"
+          value={form.club} onValue={set("club")}
+          base={was("club")} changed={changed("club")}
+          onRevert={() => rstRevert(person.slug, "club")}
+          list={clubsId}
+          hint="Pick one off the list or type a new one."
+        />
+        <ApRosterField
+          id={"rst-region-" + person.slug} field="region"
+          value={form.region} onValue={set("region")}
+          base={was("region")} changed={changed("region")}
+          onRevert={() => rstRevert(person.slug, "region")}
+        />
+      </div>
+
+      <div className="rst-toggle">
+        <span className="rst-toggle__l">First tour</span>
+        <ApState on={newbie} onLabel="Yes" offLabel="No" />
+        <button type="button" className="btn btn--tiny" onClick={() => setNewbie(!newbie)}>
+          {newbie ? "Not their first" : "Mark first tour"}
+        </button>
+        {changed("newbie") ? (
+          <button
+            type="button"
+            className="btn btn--tiny"
+            onClick={() => { rstRevert(person.slug, "newbie"); setNewbie(base.newbie === true); }}
+          >
+            Put it back
+          </button>
+        ) : null}
+      </div>
+
+      <div className="rst-shot">
+        {shotSrc ? (
+          <img className="rst-shot__img" src={shotSrc} alt="" />
+        ) : (
+          <span className="rst-shot__img rst-thumb--init grille" aria-hidden="true">
+            <span className="rst-thumb__i t-display">{bandInitials(form.name)}</span>
+          </span>
+        )}
+        <div className="rst-shot__b">
+          {working ? <p className="rst-hint">Squeezing it down.</p> : (
+            <div className="tf__row">
+              <PitPicker label="Take Photo" glyph={"\u{1F4F7}"} capture onFile={pick} disabled={!FB.ok} />
+              <PitPicker label="Choose from Library" glyph={"\u{1F5BC}"} onFile={pick} disabled={!FB.ok} />
+            </div>
+          )}
+          {shot ? (
+            <p className="rst-hint t-data">
+              {pitBytes(shot.inBytes)} in. {pitBytes(shot.outBytes)} out. {shot.w} by {shot.h}.
+              Not saved until you save.
+            </p>
+          ) : null}
+          {!added && changed("photo") && !shot ? (
+            <div className="tf__row" style={{ marginTop: "8px" }}>
+              <button
+                type="button"
+                className="btn btn--tiny"
+                onClick={() => setDropShot(!dropShot)}
+              >
+                {dropShot ? "Keep the uploaded one" : "Use the file's headshot"}
+              </button>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="tf__row">
+        <button className="btn btn--go" onClick={save} disabled={busy || working || !FB.ok}>
+          {busy ? "Saving" : "Save"}
+        </button>
+        {person.needsReview ? (
+          <button className="btn" onClick={looksRight} disabled={busy || !FB.ok}>
+            Looks right
+          </button>
+        ) : null}
+        <button className="btn btn--quiet" onClick={onDone} disabled={busy}>
+          Close
+        </button>
+      </div>
+
+      <div className="tf__row" style={{ marginTop: "8px" }}>
+        {added ? (
+          <button className="btn btn--tiny btn--kill" onClick={remove} disabled={busy || !FB.ok}>
+            Delete
+          </button>
+        ) : (
+          <button
+            className={"btn btn--tiny" + (person.hidden ? "" : " btn--kill")}
+            onClick={() => hide(!person.hidden)}
+            disabled={!FB.ok}
+          >
+            {person.hidden ? "Put back on the wall" : "Take off the wall"}
+          </button>
+        )}
+      </div>
+
+      <p className="rst-hint">
+        {added
+          ? "This one only exists in Firebase, so deleting it deletes it."
+          : "Emptying a field puts the file's value back. A base record cannot be deleted from a browser, so it comes off the wall instead."}
+      </p>
+
+      {bad ? <p className="rst-bad">{bad}</p> : null}
+    </div>
+  );
+}
+
+function ApRosterRow({ person, base, open, onOpen, clubsId }) {
+  return (
+    <li className="rst-row">
+      <div className="rst-row__top">
+        <ApRosterThumb person={person} />
+        <div className="rst-row__v">
+          <p className="rst-row__n">{person.name}</p>
+          <p className="rst-row__c">
+            {person.club || "No club yet"}
+            {person.title ? " · " + person.title : ""}
+          </p>
+          <div className="rst-row__tags">
+            {person.needsReview ? <ApState on={false} onLabel="" offLabel="Needs a look" /> : null}
+            {person.changed.length ? (
+              <ApState
+                on={true}
+                onLabel={"Edited: " + person.changed.map((f) => RST_LABEL[f].toLowerCase()).join(", ")}
+                offLabel=""
+              />
+            ) : null}
+            {person.added ? <ApState on={true} onLabel="Added here" offLabel="" /> : null}
+            {person.newbie ? <ApState on={true} onLabel="First tour" offLabel="" /> : null}
+            {person.hidden ? <ApState on={false} onLabel="" offLabel="Off the wall" /> : null}
+          </div>
+        </div>
+        <button
+          className={"btn btn--tiny" + (open ? "" : " btn--go")}
+          onClick={() => onOpen(open ? null : person.slug)}
+          aria-expanded={open}
+        >
+          {open ? "Close" : "Edit"}
+        </button>
+      </div>
+
+      {open ? (
+        <ApRosterEdit
+          person={person}
+          base={base}
+          clubsId={clubsId}
+          onDone={() => onOpen(null)}
+        />
+      ) : null}
+    </li>
+  );
+}
+
+/* Slug is generated from the name and a collision is refused, not resolved.
+   Overwriting somebody else's record because two people share a name is worse
+   than making whoever is typing add a middle initial. */
+function ApRosterAdd({ taken, clubsId, onAdded }) {
+  const [on, setOn] = useState(false);
+  const [form, setForm] = useState({ name: "", title: "", club: "", region: "" });
+  const [newbie, setNewbie] = useState(false);
+  const [shot, setShot] = useState(null);
+  const [working, setWorking] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [bad, setBad] = useState("");
+  const [said, setSaid] = useState("");
+
+  const set = (f) => (v) => setForm((prev) => Object.assign({}, prev, { [f]: v }));
+  const slug = rstSlug(form.name);
+  const clash = !!slug && taken.indexOf(slug) !== -1;
+
+  const pick = useCallback((e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+    setBad("");
+    setShot(null);
+    setWorking(true);
+    pitCompress(file, RST_SHOT)
+      .then((out) => { setShot(out); setWorking(false); })
+      .catch((err) => {
+        setBad((err && err.message) || "That photo did not go through.");
+        setWorking(false);
+      });
+  }, []);
+
+  function reset() {
+    setForm({ name: "", title: "", club: "", region: "" });
+    setNewbie(false);
+    setShot(null);
+    setBad("");
+  }
+
+  function add() {
+    if (!FB.ok || busy) return;
+    if (!slug) { setBad("A name, at least. The rest can wait."); return; }
+    if (clash) { setBad("There is already a " + slug + " on the roster. Add an initial and try again."); return; }
+    setBusy(true);
+    setBad("");
+    setSaid("");
+    const rec = {
+      name: rstClean(form.name),
+      title: rstClean(form.title),
+      club: rstClean(form.club),
+      region: rstClean(form.region),
+      newbie: newbie,
+      photo: shot ? shot.data : "",
+      added: true,
+      reviewed: true
+    };
+    /* set, not update, because this slug is new and the record is the whole
+       truth about them. Everywhere else in here uses update for a reason. */
+    FB.db.ref(RST_NODE + "/" + slug).set(rec)
+      .then(() => {
+        setBusy(false);
+        setSaid(rec.name + " is on the wall.");
+        reset();
+        if (onAdded) onAdded();
+      })
+      .catch((err) => {
+        setBusy(false);
+        setBad("That did not save. " + ((err && err.message) || String(err)));
+      });
+  }
+
+  if (!on) {
+    return (
+      <div className="tf__row" style={{ marginTop: "13px" }}>
+        <button className="btn" onClick={() => { setOn(true); setSaid(""); }}>
+          Add somebody
+        </button>
+        {said ? <p className="ap-said" style={{ marginTop: 0 }}>{said}</p> : null}
+      </div>
+    );
+  }
+
+  return (
+    <div className="rst-add">
+      <p className="rst-add__h t-display">Add somebody</p>
+      <div className="rst-grid">
+        <label className="tf__l" htmlFor="rst-add-name">
+          <span>Name</span>
+          <input
+            id="rst-add-name" className="tf__in" value={form.name} maxLength={60}
+            autoComplete="off" placeholder="First Last"
+            onChange={(e) => set("name")(e.target.value)}
+          />
+          {slug ? (
+            <span className={"rst-was" + (clash ? " rst-was--bad" : "")}>
+              {clash
+                ? "Taken. " + slug + " is already somebody."
+                : "Files under " + slug + "."}
+            </span>
+          ) : null}
+        </label>
+        <label className="tf__l" htmlFor="rst-add-title">
+          <span>Title</span>
+          <input
+            id="rst-add-title" className="tf__in" value={form.title} maxLength={60}
+            autoComplete="off" onChange={(e) => set("title")(e.target.value)}
+          />
+        </label>
+        <label className="tf__l" htmlFor="rst-add-club">
+          <span>Club</span>
+          <input
+            id="rst-add-club" className="tf__in" value={form.club} maxLength={60}
+            autoComplete="off" list={clubsId}
+            onChange={(e) => set("club")(e.target.value)}
+          />
+          <span className="rst-was">Pick one off the list or type a new one.</span>
+        </label>
+        <label className="tf__l" htmlFor="rst-add-region">
+          <span>Region</span>
+          <input
+            id="rst-add-region" className="tf__in" value={form.region} maxLength={60}
+            autoComplete="off" onChange={(e) => set("region")(e.target.value)}
+          />
+        </label>
+      </div>
+
+      <div className="rst-toggle">
+        <span className="rst-toggle__l">First tour</span>
+        <ApState on={newbie} onLabel="Yes" offLabel="No" />
+        <button type="button" className="btn btn--tiny" onClick={() => setNewbie(!newbie)}>
+          {newbie ? "Not their first" : "Mark first tour"}
+        </button>
+      </div>
+
+      <div className="rst-shot">
+        {shot ? (
+          <img className="rst-shot__img" src={shot.data} alt="" />
+        ) : (
+          <span className="rst-shot__img rst-thumb--init grille" aria-hidden="true">
+            <span className="rst-thumb__i t-display">{bandInitials(form.name)}</span>
+          </span>
+        )}
+        <div className="rst-shot__b">
+          {working ? <p className="rst-hint">Squeezing it down.</p> : (
+            <div className="tf__row">
+              <PitPicker label="Take Photo" glyph={"\u{1F4F7}"} capture onFile={pick} disabled={!FB.ok} />
+              <PitPicker label="Choose from Library" glyph={"\u{1F5BC}"} onFile={pick} disabled={!FB.ok} />
+            </div>
+          )}
+          {shot ? (
+            <p className="rst-hint t-data">
+              {pitBytes(shot.inBytes)} in. {pitBytes(shot.outBytes)} out. {shot.w} by {shot.h}.
+            </p>
+          ) : (
+            <p className="rst-hint">No headshot is fine. They get an initials tile.</p>
+          )}
+        </div>
+      </div>
+
+      <div className="tf__row">
+        <button className="btn btn--go" onClick={add} disabled={busy || working || clash || !slug || !FB.ok}>
+          {busy ? "Adding" : "Add to the roster"}
+        </button>
+        <button className="btn btn--quiet" onClick={() => { setOn(false); reset(); }} disabled={busy}>
+          Back out
+        </button>
+      </div>
+
+      {bad ? <p className="rst-bad">{bad}</p> : null}
+    </div>
+  );
+}
+
+const RST_PAGE = 24;
+
+function ApRoster() {
+  const base = useRosterBase();
+  const edits = useRosterEdits();
+  const [query, setQuery] = useState("");
+  const [openSlug, setOpenSlug] = useState(null);
+  const [limit, setLimit] = useState(RST_PAGE);
+
+  const people = useMemo(() => rstAll(base, edits).sort(rstQueue), [base, edits]);
+  const clubs = useKnownClubs(people);
+
+  const left = people.filter((p) => p.needsReview).length;
+  const noClub = people.filter((p) => !p.needsReview && !p.club).length;
+  const edited = people.filter((p) => p.changed.length).length;
+  const addedN = people.filter((p) => p.added).length;
+
+  const tokens = bandNorm(query).split(/\s+/).filter(Boolean);
+  const shown = people.filter((p) => {
+    if (!tokens.length) return true;
+    const hay = bandNorm(p.name + " " + p.title + " " + p.club + " " + p.slug);
+    for (let i = 0; i < tokens.length; i++) {
+      if (hay.indexOf(tokens[i]) === -1) return false;
+    }
+    return true;
+  });
+
+  /* A search that narrows to four results should not still say "show more". */
+  useEffect(() => { setLimit(RST_PAGE); }, [query]);
+
+  const page = shown.slice(0, limit);
+
+  return (
+    <ApSection
+      id="ap-roster"
+      title="Roster"
+      lede="Fix a name, set a club, add somebody who is not on here. Every save lands on The Band on every phone in about two seconds."
+    >
+      {base.status === "failed" ? (
+        <p className="ap-warn">
+          data/roster.json did not load. {base.reason} Nothing in here can be
+          edited until it does.
+        </p>
+      ) : null}
+
+      <p className="rst-count">
+        <span className="rst-count__n t-data">{left}</span>
+        {left === 1 ? " name still to check." : " names still to check."}
+        {" "}
+        <span className="rst-count__n t-data">{noClub}</span> more with no club.
+        {" "}
+        {edited === 0 ? "Nothing edited yet." : (
+          <React.Fragment>
+            <span className="rst-count__n t-data">{edited}</span>
+            {edited === 1 ? " record edited" : " records edited"}
+            {addedN ? ", " + addedN + " added." : "."}
+          </React.Fragment>
+        )}
+      </p>
+
+      <p className="ap-sec__note">
+        Names came off the headshot filenames and none of them are verified. The
+        flagged ones are at the top. Save what is right, and Looks Right clears
+        the flag on the ones that already are.
+      </p>
+
+      <ApRosterAdd
+        taken={people.map((p) => p.slug)}
+        clubsId="rst-clubs"
+        onAdded={() => setQuery("")}
+      />
+
+      {/* One list for every combo box on the page. The crew picks a club that
+          already exists or types a new one, and no club name is hardcoded:
+          this is data/graphs.json's 29 clubs unioned with whatever is on the
+          roster right now. */}
+      <datalist id="rst-clubs">
+        {clubs.map((c) => <option key={c} value={c} />)}
+      </datalist>
+
+      <div className="rst-bar">
+        <label className="tf__l" htmlFor="rst-q">
+          <span>Find somebody</span>
+          <input
+            id="rst-q"
+            className="tf__in"
+            type="search"
+            autoComplete="off"
+            placeholder="Name, club, title, or slug"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </label>
+        {query ? (
+          <button className="btn btn--quiet" onClick={() => setQuery("")}>Clear</button>
+        ) : null}
+      </div>
+
+      {!shown.length ? (
+        <p className="ap-sec__note">Nobody by that name. Try fewer letters.</p>
+      ) : (
+        <ul className="rst-list">
+          {page.map((p) => (
+            <ApRosterRow
+              key={p.slug}
+              person={p}
+              base={base.bySlug[p.slug] || {}}
+              open={openSlug === p.slug}
+              onOpen={setOpenSlug}
+              clubsId="rst-clubs"
+            />
+          ))}
+        </ul>
+      )}
+
+      {shown.length > page.length ? (
+        <div className="tf__row" style={{ marginTop: "12px" }}>
+          <button className="btn" onClick={() => setLimit(limit + RST_PAGE)}>
+            Show {Math.min(RST_PAGE, shown.length - page.length)} more
+          </button>
+          <span className="rst-hint" style={{ margin: "0", alignSelf: "center" }}>
+            {page.length} of {shown.length}.
+          </span>
+        </div>
+      ) : null}
+    </ApSection>
+  );
+}
+
 /* ---------------------------------------------------------------- the panel */
 
 /* Renders in the content flow, in place of the tab body, rather than as a fixed
@@ -11789,6 +12885,10 @@ function AdminPanel({ now, vis, displayMode, onClose, onLock, onGoTab }) {
           disclosure, an accordion or a scroll. Two taps from the gear is an
           acceptance criterion, not a preference: gear, then the control. */}
       <AdminV2 isAdmin={true} now={now} onGoTab={onGoTab} />
+
+      {/* T3.1. Second, because 124 names need checking before the meeting and
+          the crew should not have to hunt for the list. */}
+      <ApRoster />
 
       <ApMarquee now={now} />
       <ApTabs vis={vis} />

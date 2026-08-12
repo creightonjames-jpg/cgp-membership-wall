@@ -1,10 +1,10 @@
 {
   "_note": "REAL PHOTOS, DERIVED DETAILS. Names come from filenames and clubs from filenames where a real club name appeared. Titles and regions are empty because no source gives them. Nothing here is verified. Edit names, clubs and the newbie flag from the crew panel; those edits are stored in Firebase under roster/{slug} and override this file. T3.1.",
   "_counts": {
-    "people": 147,
+    "people": 146,
     "newbie": 21,
     "withClub": 23,
-    "needsReview": 124
+    "needsReview": 123
   },
   "attendees": [
     {
@@ -375,16 +375,6 @@
       "region": "",
       "newbie": false,
       "photo": "assets/attendees/dobbs.jpg",
-      "needsReview": true
-    },
-    {
-      "slug": "dom-provenzano",
-      "name": "Dom Provenzano",
-      "title": "",
-      "club": "",
-      "region": "",
-      "newbie": false,
-      "photo": "assets/attendees/dom-provenzano.jpg",
       "needsReview": true
     },
     {

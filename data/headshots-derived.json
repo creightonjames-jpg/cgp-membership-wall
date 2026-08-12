@@ -1,6 +1,6 @@
 {
   "_note": "Photos are loaded. Names and clubs here are DERIVED FROM FILENAMES and are UNVERIFIED. Reconcile against the roster from Carol and Lisa, then rebuild data/roster.json. T3.1.",
-  "photos_loaded": 115,
+  "photos_loaded": 114,
   "newbie_from_folder": 21,
   "needs_a_name_before_it_can_be_loaded": [
     {
@@ -136,15 +136,7 @@
       "why": "surname or first name only"
     }
   ],
-  "same_person_twice_needs_confirming": [
-    {
-      "slugs": [
-        "dom-provenzano",
-        "domenic-provenzano"
-      ],
-      "note": "Dom is usually short for Domenic. If one person, say which slug to keep."
-    }
-  ],
+  "same_person_twice_needs_confirming": [],
   "people": [
     {
       "slug": "alvar-david",
@@ -341,13 +333,6 @@
       "club_from_filename": "",
       "newbie_from_folder": false,
       "source_file": "Dave Miller.jpg"
-    },
-    {
-      "slug": "dom-provenzano",
-      "name_from_filename": "Dom Provenzano",
-      "club_from_filename": "",
-      "newbie_from_folder": false,
-      "source_file": "Dom Provenzano.jpg"
     },
     {
       "slug": "domenic-provenzano",
@@ -950,6 +935,24 @@
       "club_from_filename": "Citrus Club",
       "newbie_from_folder": false,
       "source_file": "Zac Casey-Citrus Club.jpg"
+    }
+  ],
+  "resolved_duplicates": [
+    {
+      "kept": "domenic-provenzano",
+      "dropped": "dom-provenzano",
+      "by": "Jim, Aug 12 2026",
+      "note": "Same person. Domenic was also the larger image."
+    },
+    {
+      "kept": "greg-king",
+      "dropped": "greeg-king",
+      "note": "greeg was a typo."
+    },
+    {
+      "kept": "haley-scaman",
+      "dropped": "haley-scaman2",
+      "note": "Same person, kept the larger image."
     }
   ]
 }
