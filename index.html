@@ -3230,6 +3230,11 @@ const LS = {
   pitWho: "mm26_pitwho"         /* T2.5 The Pit     */
 };
 
+/* Session storage, not local. See readSS above for why. */
+const SS = {
+  crew: "mm26_crew"             /* T1.6 crew unlock, survives a reload */
+};
+
 /* Venue and contact facts, verbatim off the flier. One table, because The
    Setlist links to these venues and Backstage Pass lists them in full, and two
    copies of a phone number is one copy too many. Nothing here is inferred.
@@ -3304,6 +3309,23 @@ function readLS(key) {
 
 function writeLS(key, value) {
   try { window.localStorage.setItem(key, value); } catch (e) { /* private mode */ }
+}
+
+/* Crew unlock lives in SESSION storage, not local. T1.6 says the unlocked state
+   persists for the session, and session storage is exactly that: it survives a
+   reload, and it dies when the tab closes. Local storage would leave the panel
+   open on that phone indefinitely, which is the wrong default for a control that
+   can wipe every node. Same mm26_ prefix so Clear This Device still finds it. */
+function readSS(key) {
+  try { return window.sessionStorage.getItem(key); } catch (e) { return null; }
+}
+
+function writeSS(key, value) {
+  try { window.sessionStorage.setItem(key, value); } catch (e) { /* private mode */ }
+}
+
+function dropSS(key) {
+  try { window.sessionStorage.removeItem(key); } catch (e) { /* private mode */ }
 }
 
 /* Splits a millisecond span into whole days, hours, minutes, seconds. */
@@ -3452,28 +3474,51 @@ const SIM_CLOCK = (function () {
   } catch (e) { return null; }
 })();
 
+/* The corrected clock is anchored to a MONOTONIC source, not to Date.now().
+   This matters and it is not theoretical. The earlier version returned
+   Date.now() + offset, where offset is a delta captured once at sync. Change the
+   device clock after that and the jump carried straight through, so the Vault
+   lock state followed the tampered clock until Firebase happened to re-sync.
+   performance.now() does not move when the wall clock does, so once there is a
+   server anchor the lock cannot be moved by touching the device clock.
+   Re-anchors on every offset the server sends, so a genuine re-sync still wins.
+   Do not reintroduce Date.now() as the ticking base. See ROADMAP T2.3. */
 function useServerNow() {
-  const [offset, setOffset] = useState(() => (SIM_CLOCK ? SIM_CLOCK - Date.now() : 0));
-  const [synced, setSynced] = useState(false);
-  const [now, setNow] = useState(() => Date.now());
+  const anchorFor = (server) => ({ server: server, mono: performance.now() });
+
+  const anchor = useRef(SIM_CLOCK !== null ? anchorFor(SIM_CLOCK) : null);
+  const [synced, setSynced] = useState(SIM_CLOCK !== null);
+  const [offset, setOffset] = useState(0);
+  const [now, setNow] = useState(
+    () => (anchor.current ? anchor.current.server : Date.now())
+  );
+
+  const read = () => {
+    const a = anchor.current;
+    if (!a) return Date.now();          /* no anchor yet, best available */
+    return a.server + (performance.now() - a.mono);
+  };
 
   useEffect(() => {
-    if (!FB.ok || SIM_CLOCK) return;
+    if (!FB.ok || SIM_CLOCK !== null) return;
     const ref = FB.db.ref(".info/serverTimeOffset");
     const handler = (snap) => {
-      setOffset(snap.val() || 0);
+      const off = snap.val() || 0;
+      anchor.current = anchorFor(Date.now() + off);
+      setOffset(off);
       setSynced(true);
+      setNow(read());                   /* do not wait a tick to correct */
     };
     ref.on("value", handler);
     return () => ref.off("value", handler);
   }, []);
 
   useEffect(() => {
-    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    const id = window.setInterval(() => setNow(read()), 1000);
     return () => window.clearInterval(id);
   }, []);
 
-  return { now: now + offset, offset, synced, simulated: SIM_CLOCK !== null };
+  return { now, offset, synced, simulated: SIM_CLOCK !== null };
 }
 
 /* Marquee announcements. Admin posts them in T1.6. Until then this is a
@@ -11203,14 +11248,23 @@ const RESET_NODES = [
 /* Enumerated out of storage, never typed into the source. A hardcoded list goes
    stale the first time anybody adds a feature, and then Clear This Device
    quietly leaves a key behind. */
+/* Both stores. The crew unlock lives in session storage, and a Clear This Device
+   that silently skipped it would leave the panel open on a device you just told
+   the room was wiped. */
+function mm26Stores() {
+  return [window.localStorage, window.sessionStorage];
+}
+
 function mm26Keys() {
   const found = [];
-  try {
-    for (let i = 0; i < window.localStorage.length; i++) {
-      const k = window.localStorage.key(i);
-      if (k && k.indexOf("mm26_") === 0) found.push(k);
-    }
-  } catch (e) { /* private mode */ }
+  mm26Stores().forEach((store) => {
+    try {
+      for (let i = 0; i < store.length; i++) {
+        const k = store.key(i);
+        if (k && k.indexOf("mm26_") === 0 && found.indexOf(k) === -1) found.push(k);
+      }
+    } catch (e) { /* private mode */ }
+  });
   return found.sort();
 }
 
@@ -11219,7 +11273,9 @@ function mm26Keys() {
 function clearMm26Keys() {
   const keys = mm26Keys();
   keys.forEach((k) => {
-    try { window.localStorage.removeItem(k); } catch (e) { /* nothing to do */ }
+    mm26Stores().forEach((store) => {
+      try { store.removeItem(k); } catch (e) { /* nothing to do */ }
+    });
   });
   return keys;
 }
@@ -11766,7 +11822,9 @@ function App() {
   const [entered, setEntered] = useState(() => readLS(LS.entered) === "1");
   const [active, setActive] = useState(TABS[0].key);
   const [displayMode, setDisplayMode] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  /* Survives a reload, per T1.6. Re-entering the PIN after every refresh during
+     a four day event is the kind of friction that gets a panel left open. */
+  const [isAdmin, setIsAdmin] = useState(() => readSS(SS.crew) === "1");
   const [showPin, setShowPin] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
   const [dismissed, setDismissed] = useState(null);
@@ -11924,7 +11982,7 @@ function App() {
             vis={vis}
             displayMode={displayMode}
             onClose={() => setShowAdmin(false)}
-            onLock={() => { setShowAdmin(false); setIsAdmin(false); }}
+            onLock={() => { setShowAdmin(false); setIsAdmin(false); dropSS(SS.crew); }}
             onGoTab={(key) => { setShowAdmin(false); setActive(key); }}
           />
         ) : TabView ? (
@@ -11936,7 +11994,7 @@ function App() {
 
       {showPin ? (
         <PinGate
-          onPass={() => { setIsAdmin(true); setShowPin(false); }}
+          onPass={() => { setIsAdmin(true); writeSS(SS.crew, "1"); setShowPin(false); }}
           onClose={() => setShowPin(false)}
         />
       ) : null}
