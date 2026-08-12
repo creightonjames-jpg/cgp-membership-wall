@@ -1,0 +1,955 @@
+{
+  "_note": "Photos are loaded. Names and clubs here are DERIVED FROM FILENAMES and are UNVERIFIED. Reconcile against the roster from Carol and Lisa, then rebuild data/roster.json. T3.1.",
+  "photos_loaded": 115,
+  "newbie_from_folder": 21,
+  "needs_a_name_before_it_can_be_loaded": [
+    {
+      "file": "20230130-Adair-0005-2_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Adair-0006_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Akeroyd-0003_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Cortese-0002_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Darville-0013_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Dobbs-0007_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Gdovin-0003_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Gerlander-0008_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Han-0010_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Henrichsen-0004_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Hinckley-0008_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Hultz-0004_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-May-0002_pp.jpg",
+      "why": "no name in filename"
+    },
+    {
+      "file": "20230130-Miller-0007_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Romine-0003_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Stromme-0007_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20230130-Timerson-0003-2_pp.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "20250430-Spittle.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "Employee Wall - Chas.pdf",
+      "why": "PDF, not an image"
+    },
+    {
+      "file": "Employee Wall - Cole.pdf",
+      "why": "PDF, not an image"
+    },
+    {
+      "file": "Employee Wall - Elijah.pdf",
+      "why": "PDF, not an image"
+    },
+    {
+      "file": "Employee Wall - Jason.pdf",
+      "why": "PDF, not an image"
+    },
+    {
+      "file": "Employee Wall - Sean.pdf",
+      "why": "PDF, not an image"
+    },
+    {
+      "file": "Howe Headshot 2023- USE THIS ONE.jpeg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "JohnMartus-CFO.png",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "Kasey.png",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "Kristin.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "Nuncio June 2023.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "Three16 Photography-BobLockhart-GM.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "Three16 Photography-JessicaCalvillo-MemDir.jpg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "Tracey Pic.jpeg",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "dawne.jfif",
+      "why": "surname or first name only"
+    },
+    {
+      "file": "Newbies Headshots/K.Enoka Profile.jpeg",
+      "why": "surname or first name only"
+    }
+  ],
+  "same_person_twice_needs_confirming": [
+    {
+      "slugs": [
+        "dom-provenzano",
+        "domenic-provenzano"
+      ],
+      "note": "Dom is usually short for Domenic. If one person, say which slug to keep."
+    }
+  ],
+  "people": [
+    {
+      "slug": "alvar-david",
+      "name_from_filename": "Alvar David",
+      "club_from_filename": "The Nelson",
+      "newbie_from_folder": false,
+      "source_file": "Alvar David-The Nelson.JPG"
+    },
+    {
+      "slug": "alyssa-baker",
+      "name_from_filename": "Alyssa Baker",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Alyssa Baker.png"
+    },
+    {
+      "slug": "anai-romero",
+      "name_from_filename": "Anai Romero",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Anai Romero.jpg"
+    },
+    {
+      "slug": "andrew-knepper",
+      "name_from_filename": "Andrew Knepper",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Andrew Knepper.jpg"
+    },
+    {
+      "slug": "angel-anderson",
+      "name_from_filename": "Angel Anderson",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Angel Anderson.jpg"
+    },
+    {
+      "slug": "angela-morabito",
+      "name_from_filename": "Angela Morabito",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Angela Morabito.png"
+    },
+    {
+      "slug": "ashley-vaugh",
+      "name_from_filename": "Ashley Vaugh",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Ashley Vaugh.jpg"
+    },
+    {
+      "slug": "aubrey-de-matthaeis",
+      "name_from_filename": "Aubrey De Matthaeis",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Aubrey de Matthaeis.jpg"
+    },
+    {
+      "slug": "augi-barios",
+      "name_from_filename": "Augi Barios",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "augi barios.jfif"
+    },
+    {
+      "slug": "billy-bzura",
+      "name_from_filename": "Billy Bzura",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Billy Bzura.heic"
+    },
+    {
+      "slug": "brandon-resnick",
+      "name_from_filename": "Brandon Resnick",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "brandon resnick.png"
+    },
+    {
+      "slug": "brandon-rodenbeck",
+      "name_from_filename": "Brandon Rodenbeck",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Brandon Rodenbeck.jpg"
+    },
+    {
+      "slug": "brett-brummett",
+      "name_from_filename": "Brett Brummett",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Brett Brummett.jpg"
+    },
+    {
+      "slug": "brian-sanders",
+      "name_from_filename": "Brian Sanders",
+      "club_from_filename": "Anthem",
+      "newbie_from_folder": false,
+      "source_file": "Brian Sanders-Anthem.jpg"
+    },
+    {
+      "slug": "bryan-miller",
+      "name_from_filename": "Bryan Miller",
+      "club_from_filename": "Palm Valley",
+      "newbie_from_folder": false,
+      "source_file": "Bryan Miller-Palm Valley.jpg"
+    },
+    {
+      "slug": "carol-ruskowski",
+      "name_from_filename": "Carol Ruskowski",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "carol ruskowski-2025.jpg"
+    },
+    {
+      "slug": "casey-lewis",
+      "name_from_filename": "Casey Lewis",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "casey lewis.jpg"
+    },
+    {
+      "slug": "casey-smith",
+      "name_from_filename": "Casey Smith",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "casey smith.jpg"
+    },
+    {
+      "slug": "chelsea-pariseau",
+      "name_from_filename": "Chelsea Pariseau",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Chelsea Pariseau.JPG"
+    },
+    {
+      "slug": "chris-dolendo",
+      "name_from_filename": "Chris Dolendo",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Chris Dolendo.jpg"
+    },
+    {
+      "slug": "chris-kaczke",
+      "name_from_filename": "Chris Kaczke",
+      "club_from_filename": "Wood Ranch",
+      "newbie_from_folder": false,
+      "source_file": "Chris Kaczke-Wood Ranch.jpg"
+    },
+    {
+      "slug": "chris-paredes",
+      "name_from_filename": "Chris Paredes",
+      "club_from_filename": "Spanish Hills Club",
+      "newbie_from_folder": false,
+      "source_file": "Chris Paredes Director of Golf Spanish Hills Club.jpg"
+    },
+    {
+      "slug": "christina-egan",
+      "name_from_filename": "Christina Egan",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Christina Egan.jpg"
+    },
+    {
+      "slug": "claire-handville",
+      "name_from_filename": "Claire Handville",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Claire Handville.png"
+    },
+    {
+      "slug": "cole-clearman",
+      "name_from_filename": "Cole Clearman",
+      "club_from_filename": "Bear Creek",
+      "newbie_from_folder": false,
+      "source_file": "Cole Clearman-Bear Creek.jpg"
+    },
+    {
+      "slug": "crystal-daniel",
+      "name_from_filename": "Crystal Daniel",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Crystal Daniel.jpg"
+    },
+    {
+      "slug": "dan-corado",
+      "name_from_filename": "Dan Corado",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Dan Corado.jpg"
+    },
+    {
+      "slug": "dave-miller",
+      "name_from_filename": "Dave Miller",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Dave Miller.jpg"
+    },
+    {
+      "slug": "dom-provenzano",
+      "name_from_filename": "Dom Provenzano",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Dom Provenzano.jpg"
+    },
+    {
+      "slug": "domenic-provenzano",
+      "name_from_filename": "Domenic Provenzano",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Domenic Provenzano.jpg"
+    },
+    {
+      "slug": "doug-hoffort",
+      "name_from_filename": "Doug Hoffort",
+      "club_from_filename": "Marbella",
+      "newbie_from_folder": false,
+      "source_file": "Doug Hoffort-Marbella.jpg"
+    },
+    {
+      "slug": "dustin-riggs",
+      "name_from_filename": "Dustin Riggs",
+      "club_from_filename": "Medallion",
+      "newbie_from_folder": false,
+      "source_file": "Dustin Riggs - Medallion.jpg"
+    },
+    {
+      "slug": "dylan-campy",
+      "name_from_filename": "Dylan Campy",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "dylan campy.jpg"
+    },
+    {
+      "slug": "eddie-collins",
+      "name_from_filename": "Eddie Collins",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Eddie Collins.jpeg"
+    },
+    {
+      "slug": "elizabeth-sperber",
+      "name_from_filename": "Elizabeth Sperber",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Elizabeth Sperber.jpeg"
+    },
+    {
+      "slug": "eric-gray",
+      "name_from_filename": "Eric Gray",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Eric Gray.jpeg"
+    },
+    {
+      "slug": "eric-gray-director-of-golf",
+      "name_from_filename": "Eric Gray Director Of Golf",
+      "club_from_filename": "PGA West",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Eric Gray_Director of Golf_PGA WEST.png"
+    },
+    {
+      "slug": "eric-temena-west",
+      "name_from_filename": "Eric Temena - West",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Eric Temena-PGA WEST.jpg"
+    },
+    {
+      "slug": "erica-novosel",
+      "name_from_filename": "Erica Novosel",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Erica Novosel Headshot 26.jpg"
+    },
+    {
+      "slug": "erik-mettille",
+      "name_from_filename": "Erik Mettille",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Erik Mettille.jpg"
+    },
+    {
+      "slug": "frank-horton",
+      "name_from_filename": "Frank Horton",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "frank horton 2.jpg"
+    },
+    {
+      "slug": "gabe-bancroft",
+      "name_from_filename": "Gabe Bancroft",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Gabe Bancroft.JPG"
+    },
+    {
+      "slug": "garry-cramer",
+      "name_from_filename": "Garry Cramer",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Garry Cramer.JPG"
+    },
+    {
+      "slug": "geraldine-doran",
+      "name_from_filename": "Geraldine Doran",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Geraldine Doran.jpg"
+    },
+    {
+      "slug": "greg-king",
+      "name_from_filename": "Greg King",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "greg king.jpg"
+    },
+    {
+      "slug": "haley-scaman",
+      "name_from_filename": "Haley Scaman",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Haley Scaman.jpg"
+    },
+    {
+      "slug": "halley-meyers",
+      "name_from_filename": "Halley Meyers",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Halley Meyers.jpeg"
+    },
+    {
+      "slug": "heather-jergens",
+      "name_from_filename": "Heather Jergens",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "heather jergens.jpg"
+    },
+    {
+      "slug": "james-duenez",
+      "name_from_filename": "James Duenez",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/James Duenez.jpeg"
+    },
+    {
+      "slug": "james-jordan",
+      "name_from_filename": "James Jordan",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/James Jordan.jpeg"
+    },
+    {
+      "slug": "james-williams",
+      "name_from_filename": "James - Williams",
+      "club_from_filename": "The Nelson",
+      "newbie_from_folder": false,
+      "source_file": "James-Williams-Jr-The Nelson.jpg"
+    },
+    {
+      "slug": "jason-stuller",
+      "name_from_filename": "Jason Stuller",
+      "club_from_filename": "Sylvania",
+      "newbie_from_folder": false,
+      "source_file": "Jason Stuller-Sylvania.JPG"
+    },
+    {
+      "slug": "jason-waters",
+      "name_from_filename": "Jason Waters",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "jason waters.jpg"
+    },
+    {
+      "slug": "jay-mcluen",
+      "name_from_filename": "Jay Mcluen",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Jay McLuen 2026.jpg"
+    },
+    {
+      "slug": "jeff-kragt",
+      "name_from_filename": "Jeff Kragt",
+      "club_from_filename": "Oregon",
+      "newbie_from_folder": false,
+      "source_file": "Jeff Kragt-Oregon.JPG"
+    },
+    {
+      "slug": "jeff-muller",
+      "name_from_filename": "Jeff Muller",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Jeff Muller.jpg"
+    },
+    {
+      "slug": "jena-fretti",
+      "name_from_filename": "Jena Fretti",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Jena Fretti Headshot 07.26.JPG"
+    },
+    {
+      "slug": "jennifer-neal",
+      "name_from_filename": "Jennifer Neal",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Jennifer Neal.png"
+    },
+    {
+      "slug": "jerome-millet",
+      "name_from_filename": "Jerome Millet",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Jerome Millet.jpeg"
+    },
+    {
+      "slug": "jim-kern",
+      "name_from_filename": "Jim Kern",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Jim Kern.jpeg"
+    },
+    {
+      "slug": "joe-saikali",
+      "name_from_filename": "Joe Saikali",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Joe Saikali.png"
+    },
+    {
+      "slug": "joe-strahl",
+      "name_from_filename": "Joe Strahl",
+      "club_from_filename": "Wynstone",
+      "newbie_from_folder": false,
+      "source_file": "Joe Strahl-Wynstone.jpg"
+    },
+    {
+      "slug": "john-lewis",
+      "name_from_filename": "John Lewis",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "John Lewis.jpg"
+    },
+    {
+      "slug": "john-murray",
+      "name_from_filename": "John Murray",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/John Murray.jpg"
+    },
+    {
+      "slug": "kasey-oconnor",
+      "name_from_filename": "Kasey O'Connor",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Kasey O'Connor.JPG"
+    },
+    {
+      "slug": "katelong-spring-creek",
+      "name_from_filename": "Katelong - Spring Creek",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "KateLong -Spring Creek.png"
+    },
+    {
+      "slug": "katie-mode",
+      "name_from_filename": "Katie Mode",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Katie Mode.jpeg"
+    },
+    {
+      "slug": "katie-robinson",
+      "name_from_filename": "Katie Robinson",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Katie Robinson.jpg"
+    },
+    {
+      "slug": "kaucher-erinn-2-pp-web",
+      "name_from_filename": "Kaucher Erinn - 2 Pp Web",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Kaucher_Erinn-0000-32-2_pp_web.jpg"
+    },
+    {
+      "slug": "ken-blidy",
+      "name_from_filename": "Ken Blidy",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "ken blidy 2.jpg"
+    },
+    {
+      "slug": "kevin-paluch",
+      "name_from_filename": "Kevin Paluch",
+      "club_from_filename": "Prescott Lakes",
+      "newbie_from_folder": false,
+      "source_file": "Kevin Paluch-Prescott Lakes.jpg"
+    },
+    {
+      "slug": "kristen-bobanich",
+      "name_from_filename": "Kristen Bobanich",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Kristen Bobanich.JPG"
+    },
+    {
+      "slug": "kristina-karoll",
+      "name_from_filename": "Kristina Karoll",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Kristina Karoll.jpg"
+    },
+    {
+      "slug": "leo-calabro",
+      "name_from_filename": "Leo Calabro",
+      "club_from_filename": "El Camino",
+      "newbie_from_folder": false,
+      "source_file": "Leo Calabro-El Camino.png"
+    },
+    {
+      "slug": "leo-lee",
+      "name_from_filename": "Leo Lee",
+      "club_from_filename": "Las Posas",
+      "newbie_from_folder": false,
+      "source_file": "Leo Lee-Las Posas.heic"
+    },
+    {
+      "slug": "leonard-matsumoto",
+      "name_from_filename": "Leonard Matsumoto",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Leonard Matsumoto.jpg"
+    },
+    {
+      "slug": "maren-fadling",
+      "name_from_filename": "Maren Fadling",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Maren Fadling.jpg"
+    },
+    {
+      "slug": "mark-blais",
+      "name_from_filename": "Mark Blais",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Mark Blais.jpeg"
+    },
+    {
+      "slug": "mary-fina",
+      "name_from_filename": "Mary Fina",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Mary Fina.png"
+    },
+    {
+      "slug": "matt-saggio",
+      "name_from_filename": "Matt Saggio",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Matt Saggio 2025.jpg"
+    },
+    {
+      "slug": "matt-samson",
+      "name_from_filename": "Matt Samson",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Matt Samson.jpg"
+    },
+    {
+      "slug": "matthew-lopresti",
+      "name_from_filename": "Matthew Lopresti",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Matthew LoPresti.jpeg"
+    },
+    {
+      "slug": "megan-michel",
+      "name_from_filename": "Megan Michel",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Megan Michel.png"
+    },
+    {
+      "slug": "melfi-0001",
+      "name_from_filename": "Melfi 0001",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Melfi 0001.JPG"
+    },
+    {
+      "slug": "michelle-preuss",
+      "name_from_filename": "Michelle Preuss",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Michelle Preuss.jpg"
+    },
+    {
+      "slug": "mike-feeney",
+      "name_from_filename": "Mike Feeney",
+      "club_from_filename": "Monterey",
+      "newbie_from_folder": false,
+      "source_file": "Mike Feeney-Monterey.jpg"
+    },
+    {
+      "slug": "mike-goff",
+      "name_from_filename": "Mike Goff",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Mike Goff.jpg"
+    },
+    {
+      "slug": "mo-griffith",
+      "name_from_filename": "Mo Griffith",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Mo Griffith.png"
+    },
+    {
+      "slug": "molly-dunn",
+      "name_from_filename": "Molly Dunn",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Molly Dunn.jpg"
+    },
+    {
+      "slug": "nikki-ernenwein",
+      "name_from_filename": "Nikki Ernenwein",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Nikki Ernenwein.jpg"
+    },
+    {
+      "slug": "noah-daher",
+      "name_from_filename": "Noah Daher",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Noah Daher.png"
+    },
+    {
+      "slug": "patrick-mcgraw",
+      "name_from_filename": "Patrick - Mcgraw",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Patrick-McGraw.jpg"
+    },
+    {
+      "slug": "payton-williamson",
+      "name_from_filename": "Payton Williamson",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Payton Williamson.jpg"
+    },
+    {
+      "slug": "pete-ulliman",
+      "name_from_filename": "Pete Ulliman",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Pete Ulliman.JPG"
+    },
+    {
+      "slug": "pga-headshots-september2023",
+      "name_from_filename": "Pga Headshots September2023",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "PGA_Headshots_September2023-11.0.jpg"
+    },
+    {
+      "slug": "pierre-peroz",
+      "name_from_filename": "Pierre Peroz",
+      "club_from_filename": "Sunset Hills",
+      "newbie_from_folder": false,
+      "source_file": "Pierre Peroz-Sunset Hills.jpg"
+    },
+    {
+      "slug": "samantha-salyards",
+      "name_from_filename": "Samantha Salyards",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Samantha Salyards headshot.jpg"
+    },
+    {
+      "slug": "scott-mcclinton",
+      "name_from_filename": "Scott Mcclinton",
+      "club_from_filename": "Chenal",
+      "newbie_from_folder": false,
+      "source_file": "Scott McClinton-Chenal.jpg"
+    },
+    {
+      "slug": "shaina-lyon",
+      "name_from_filename": "Shaina Lyon",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Shaina Lyon.JPG"
+    },
+    {
+      "slug": "shannon-allen",
+      "name_from_filename": "Shannon Allen",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Shannon Allen.png"
+    },
+    {
+      "slug": "shannon-webre",
+      "name_from_filename": "Shannon Webre",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Shannon Webre.jpg"
+    },
+    {
+      "slug": "shauna-huntington",
+      "name_from_filename": "Shauna - Huntington",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Shauna-Huntington.jpg"
+    },
+    {
+      "slug": "shelley-caiazzo",
+      "name_from_filename": "Shelley Caiazzo",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "shelley caiazzo.jfif"
+    },
+    {
+      "slug": "spenser-doolittle",
+      "name_from_filename": "Spenser Doolittle",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Spenser Doolittle.JPG"
+    },
+    {
+      "slug": "steve-trinh-headshot",
+      "name_from_filename": "Steve Trinh Headshot",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Steve Trinh_Headshot 2022 (Full).jpg"
+    },
+    {
+      "slug": "sydney-ormsby",
+      "name_from_filename": "Sydney Ormsby",
+      "club_from_filename": "Eagles",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Sydney Ormsby-Eagles.png"
+    },
+    {
+      "slug": "taytem-bowles",
+      "name_from_filename": "Taytem Bowles",
+      "club_from_filename": "",
+      "newbie_from_folder": true,
+      "source_file": "Newbies Headshots/Taytem Bowles.jpeg"
+    },
+    {
+      "slug": "todd-leonard",
+      "name_from_filename": "Todd Leonard",
+      "club_from_filename": "Balcones",
+      "newbie_from_folder": false,
+      "source_file": "Todd Leonard-Balcones.png"
+    },
+    {
+      "slug": "tom-pyeatt",
+      "name_from_filename": "Tom Pyeatt",
+      "club_from_filename": "Canyon Oaks",
+      "newbie_from_folder": false,
+      "source_file": "Tom Pyeatt-Canyon Oaks.jpg"
+    },
+    {
+      "slug": "tony-clevenger",
+      "name_from_filename": "Tony Clevenger",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Tony Clevenger Headshot.jpg"
+    },
+    {
+      "slug": "tonya-prather",
+      "name_from_filename": "Tonya Prather",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Tonya Prather Photo.jpg"
+    },
+    {
+      "slug": "travis-long",
+      "name_from_filename": "Travis Long",
+      "club_from_filename": "Anthem",
+      "newbie_from_folder": false,
+      "source_file": "Travis Long-Anthem.jpg"
+    },
+    {
+      "slug": "tyler-busey",
+      "name_from_filename": "Tyler Busey",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Tyler Busey.png"
+    },
+    {
+      "slug": "walsh-trujillo",
+      "name_from_filename": "Walsh Trujillo",
+      "club_from_filename": "",
+      "newbie_from_folder": false,
+      "source_file": "Walsh Trujillo.jpeg.JPG"
+    },
+    {
+      "slug": "zac-casey",
+      "name_from_filename": "Zac Casey",
+      "club_from_filename": "Citrus Club",
+      "newbie_from_folder": false,
+      "source_file": "Zac Casey-Citrus Club.jpg"
+    }
+  ]
+}
