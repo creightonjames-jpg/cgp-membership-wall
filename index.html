@@ -2106,6 +2106,128 @@ figure.vt-card { margin: 0; padding: 14px; }
   .sc-big { --ticket-stub-w: 128px; }
   .sc-big .ticket__body { padding: 20px 24px; }
 }
+
+/* ==========================================================================
+   T1.5 LINER NOTES
+   The takeaways board. No new motifs and no new palette token. Cards are
+   .glow-card, chips are mixed from the same warm dials as the tab bar, the
+   filter pills are the .daypill from T1.1, and the form is the .tf pattern
+   the Encore tenure form already uses.
+   ========================================================================== */
+
+/* ------------------------------------------------------------ post panel */
+.ln-post { padding: 16px 16px 18px; margin: 0 0 18px; }
+
+.ln-post__h { margin: 0 0 5px; font-size: clamp(18px, 5.4vw, 22px); }
+
+.ln-post__note { margin: 0; font-size: 13px; color: var(--dim); }
+
+/* The tag the post will carry. Read only, because the date decides it. */
+.ln-post__tagline {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin: 12px 0 0;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.16em; color: var(--dim);
+}
+
+/* Name and club side by side as soon as there is room for them. */
+.ln-two { display: flex; flex-wrap: wrap; gap: 0 9px; }
+.ln-two > .tf__l { flex: 1 1 150px; min-width: 0; }
+
+.ln-ta { min-height: 104px; resize: vertical; line-height: 1.45; }
+
+.ln-post__go { margin-top: 12px; }
+
+.ln-left { margin: 6px 0 0; font-size: 11px; color: var(--mute); text-align: right; }
+.ln-left--low { color: var(--gold); }
+
+.ln-said { margin: 11px 0 0; font-size: 13px; color: var(--gold); }
+.ln-said--bad { color: var(--danger); }
+
+.ln-off { margin: 11px 0 0; font-size: 13px; color: var(--dim); }
+
+/* --------------------------------------------------------- export panel */
+/* Crew only. Reuses .adminbar so it reads as chrome rather than content. */
+.ln-tools { margin: 0 0 18px; }
+.ln-tools__row { margin-top: 11px; }
+
+/* ---------------------------------------------------------------- board */
+.ln-tally {
+  margin: 0 0 12px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.16em; color: var(--dim);
+}
+
+.ln-list { display: flex; flex-direction: column; gap: 14px; }
+
+.ln-card { padding: 14px 16px 15px; }
+
+/* Pinned. The border eats 2px, so the padding gives it back and the text on a
+   pinned card lines up with the text on every other card. */
+.ln-card--pin { border-left: 3px solid var(--scarlet); padding-left: 14px; }
+
+.ln-card__top {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin: 0 0 9px;
+}
+
+/* Day tag. Same warm chip as .soon, gold text, one notch quieter than a pill. */
+.ln-tag {
+  display: inline-flex; align-items: center;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge); border-radius: 999px;
+  padding: 3px 9px; color: var(--gold);
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em;
+}
+
+/* Pinned chip. Scarlet gradient with a gold hairline, the same poster move as
+   ON AIR, standing still. Nothing on this tab needs to throb. */
+.ln-pin {
+  display: inline-flex; align-items: center;
+  background-image: var(--grad-primary);
+  border: 1px solid var(--gold-rule); border-radius: 999px;
+  padding: 3px 10px; color: var(--cream);
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em;
+}
+
+.ln-when { margin-left: auto; font-size: 12px; color: var(--mute); }
+
+/* pre-wrap keeps the line breaks somebody typed. overflow-wrap stops one long
+   unbroken string pushing the card past the viewport. */
+.ln-text {
+  margin: 0; font-size: 16px; line-height: 1.45;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+
+.ln-who { margin: 9px 0 0; font-size: 13px; color: var(--dim); }
+.ln-who--none { color: var(--mute); }
+
+.ln-admin { margin-top: 11px; }
+
+/* --------------------------------------------------- projector behaviour */
+/* Display Mode is a global toggle, so this tab can land on a projector whether
+   or not it asked to. Inputs and crew controls go, the words get bigger. */
+body.display-mode .ln-post,
+body.display-mode .ln-tools,
+body.display-mode .ln-admin,
+body.display-mode .ln-tally { display: none; }
+
+body.display-mode .ln-list { gap: 20px; }
+body.display-mode .ln-card { padding: 20px 24px 22px; }
+body.display-mode .ln-card--pin { padding-left: 22px; }
+body.display-mode .ln-text { font-size: clamp(22px, 3vw, 34px); line-height: 1.32; }
+body.display-mode .ln-who { font-size: 17px; margin-top: 12px; }
+body.display-mode .ln-when { font-size: 15px; }
+
+@media (min-width: 700px) {
+  .ln-post { padding: 18px 20px 20px; }
+  .ln-card { padding: 16px 20px 18px; }
+  .ln-card--pin { padding-left: 18px; }
+  .ln-text { font-size: 17px; }
+}
 </style>
 </head>
 <body>
@@ -5193,14 +5315,569 @@ function VaultTab({ isAdmin, now }) {
   );
 }
 
-function LinerNotesTab({ isAdmin }) {
+/* ==========================================================================
+   T1.5 LINER NOTES. Spec 3.6.
+   Three day pills, a post panel, cards newest first, pinned on top with a
+   scarlet left border, and a Markdown export that is meant to be pasted
+   straight into the follow up note. Last year's equivalent became the raw
+   material for that communication, so the export is the point of the tab and
+   not a bolt on.
+
+   Every clock decision reads the server corrected `now` handed down from
+   useServerNow. Nothing in here calls Date.now(). Somebody posting at 11:50 PM
+   on a phone still set to Pacific has to land on the right meeting day.
+   ========================================================================== */
+
+const LN_MAX = 300;
+const LN_NAME_MAX = 40;
+const LN_CLUB_MAX = 60;
+
+/* Who is typing, so a second takeaway does not mean typing the name again.
+   Cleared by Clear This Device in T1.6 along with every other mm26_ key. */
+const LN_WHO_KEY = "mm26_liner_who";
+
+/* Mirrors the dates in data/agenda.json. Held here rather than fetched, because
+   the day tag has to work even when that file does not load. A takeaway with no
+   day is a takeaway that never reaches the recap. */
+const LN_DAYS = [
+  { key: "tue", date: "2026-08-25" },
+  { key: "wed", date: "2026-08-26" },
+  { key: "thu", date: "2026-08-27" },
+  { key: "fri", date: "2026-08-28" }
+];
+
+/* `tag` is the chip on a card. `head` is the Markdown heading. `order` is the
+   order the export walks, which is the order the meeting happened in. */
+const LN_DAY_META = {
+  pre:     { tag: "Pre",    name: "Before the show", head: "Before the meeting",   order: 0 },
+  tue:     { tag: "Tue",    name: "Tuesday",         head: "Tuesday, August 25",   order: 1 },
+  wed:     { tag: "Wed",    name: "Wednesday",       head: "Wednesday, August 26", order: 2 },
+  thu:     { tag: "Thu",    name: "Thursday",        head: "Thursday, August 27",  order: 3 },
+  fri:     { tag: "Fri",    name: "Friday",          head: "Friday, August 28",    order: 4 },
+  post:    { tag: "After",  name: "After the show",  head: "After the meeting",    order: 5 },
+  unknown: { tag: "No tag", name: "Untagged",        head: "Untagged",             order: 6 }
+};
+
+/* Three pills, per the roadmap. Wednesday and Thursday are the two days the
+   sessions run, so they are the two anybody filters by. A takeaway posted on
+   any other day still shows under All, which is where the tab opens. */
+const LN_FILTERS = [
+  { key: "all", kicker: "All",      name: "Everything", date: "" },
+  { key: "wed", kicker: "Wed 8/26", name: "Wednesday",  date: "2026-08-26" },
+  { key: "thu", kicker: "Thu 8/27", name: "Thursday",   date: "2026-08-27" }
+];
+
+/* Which meeting day a moment belongs to, off the corrected clock. */
+function lnDayKey(ms) {
+  const d = etDate(ms);
+  const hit = LN_DAYS.filter((x) => x.date === d)[0];
+  if (hit) return hit.key;
+  return d < LN_DAYS[0].date ? "pre" : "post";
+}
+
+function lnMeta(key) { return LN_DAY_META[key] || LN_DAY_META.unknown; }
+
+function lnCount(n) { return n + (n === 1 ? " takeaway" : " takeaways"); }
+
+function lnEtFormat(ms, opts) {
+  try {
+    return new Intl.DateTimeFormat("en-US", Object.assign({ timeZone: ET }, opts)).format(ms);
+  } catch (e) {
+    return "";
+  }
+}
+
+/* Full Eastern stamp. Sits in the title attribute of a card and in the export
+   header, where the exact minute is worth having. */
+function lnStamp(ms) {
+  const t = etParts(ms);
+  return lnEtFormat(ms, { month: "short", day: "numeric" }) +
+    ", " + t.hhmm + " " + t.ap + " Eastern";
+}
+
+/* Relative time against the corrected clock. Anything older than a day prints
+   the weekday and the time, because "yesterday" is ambiguous inside a meeting
+   that runs four days. A negative span means this device is a moment behind the
+   server, which reads as just now rather than as the future. The first minute
+   is "Just now" so that the minute count can never print zero. */
+function lnAgo(ts, now) {
+  if (!ts) return "";
+  const diff = now - ts;
+  if (diff < 60 * 1000) return "Just now";
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return mins + " min ago";
+  const hrs = Math.floor(diff / 3600000);
+  if (hrs < 24) return hrs === 1 ? "1 hour ago" : hrs + " hours ago";
+  if (diff < 7 * 86400000) {
+    const t = etParts(ts);
+    return lnEtFormat(ts, { weekday: "short" }) + ", " + t.hhmm + " " + t.ap;
+  }
+  return lnEtFormat(ts, { month: "short", day: "numeric" });
+}
+
+/* Server time when the server is reachable, which is what keeps ordering
+   honest across a room full of phones. A device running the ?clock test hook
+   writes its own simulated time instead, so a test post carries a day tag and a
+   timestamp that agree with each other. */
+function lnTs(corrected) {
+  if (SIM_CLOCK !== null) return corrected;
+  try {
+    return firebase.database.ServerValue.TIMESTAMP;
+  } catch (e) {
+    return corrected;
+  }
+}
+
+/* One listener for the whole node. Pinned first, then newest first. */
+function useTakeaways() {
+  const [items, setItems] = useState([]);
+  const [ready, setReady] = useState(!FB.ok);
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("takeaways");
+    const handler = (snap) => {
+      const all = snap.val() || {};
+      setItems(
+        Object.keys(all)
+          .map((id) => Object.assign({ id: id }, all[id]))
+          .filter((t) => t && typeof t.text === "string" && t.text.trim())
+      );
+      setReady(true);
+    };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return { items: items, ready: ready };
+}
+
+function lnSort(items) {
+  return items.slice().sort((a, b) => {
+    const p = (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0);
+    return p !== 0 ? p : (b.ts || 0) - (a.ts || 0);
+  });
+}
+
+/* ------------------------------------------------------- markdown export */
+
+/* One bullet has to survive being pasted into a Markdown viewer. Line breaks
+   collapse to spaces, and a leading character that would start a block gets
+   escaped so a takeaway cannot turn itself into a heading or a table. */
+function lnClean(text) {
+  const one = String(text || "").replace(/\s+/g, " ").trim();
+  return /^[#>\-*+|=]/.test(one) ? "\\" + one : one;
+}
+
+/* Attribution in parentheses. No em-dash, per the voice rules, and nothing at
+   all when both fields are blank. */
+function lnCredit(t) {
+  const bits = [String(t.name || "").trim(), String(t.club || "").trim()].filter(Boolean);
+  return bits.length ? " (" + bits.join(", ") + ")" : "";
+}
+
+/* The whole board, whatever the active filter is. A heading per day in the
+   order the meeting happened, pinned first inside each day, then oldest first,
+   because a recap reads forwards. */
+function lnMarkdown(items, now) {
+  const groups = {};
+  items.forEach((t) => {
+    const k = LN_DAY_META[t.day] ? t.day : "unknown";
+    if (!groups[k]) groups[k] = [];
+    groups[k].push(t);
+  });
+
+  const lines = [];
+  lines.push("# Liner Notes");
+  lines.push("");
+  lines.push("Century Golf Partners 2026 Private Clubs Membership Meeting. Columbus, Ohio.");
+  lines.push("");
+  lines.push(lnCount(items.length) + " off the board. Exported " + lnStamp(now) + ".");
+
+  Object.keys(groups)
+    .sort((a, b) => lnMeta(a).order - lnMeta(b).order)
+    .forEach((k) => {
+      const day = groups[k].slice().sort((a, b) => {
+        const p = (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0);
+        return p !== 0 ? p : (a.ts || 0) - (b.ts || 0);
+      });
+      lines.push("");
+      lines.push("## " + lnMeta(k).head);
+      lines.push("");
+      day.forEach((t) => {
+        lines.push("- " + (t.pinned ? "**Pinned.** " : "") + lnClean(t.text) + lnCredit(t));
+      });
+    });
+
+  lines.push("");
+  return lines.join("\n");
+}
+
+/* Selection and execCommand, for the phones and the desktop browsers where the
+   async clipboard is not available or refuses without a user gesture it likes. */
+function lnCopyFallback(text) {
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand("copy");
+    ta.remove();
+    return ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+function lnCopy(text) {
+  return new Promise((resolve) => {
+    try {
+      if (window.navigator && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(
+          () => resolve(true),
+          () => resolve(lnCopyFallback(text))
+        );
+        return;
+      }
+    } catch (e) { /* fall through */ }
+    resolve(lnCopyFallback(text));
+  });
+}
+
+function lnDownload(filename, text) {
+  try {
+    const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 4000);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+/* --------------------------------------------------------- components */
+
+/* A status line that clears itself. The nonce is what makes the same message
+   twice in a row still reset the timer. */
+function useLnSaid() {
+  const [said, setSaid] = useState(null);
+  const nonce = useRef(0);
+
+  useEffect(() => {
+    if (!said) return;
+    const id = window.setTimeout(() => setSaid(null), 8000);
+    return () => window.clearTimeout(id);
+  }, [said]);
+
+  const say = useCallback((msg, bad) => {
+    nonce.current += 1;
+    setSaid({ n: nonce.current, msg: msg, bad: !!bad });
+  }, []);
+
+  return { said: said, say: say };
+}
+
+function LnForm({ dayKey, offline, onPost }) {
+  const [text, setText] = useState("");
+  const [name, setName] = useState(() => String(readJSON(LN_WHO_KEY).name || ""));
+  const [club, setClub] = useState(() => String(readJSON(LN_WHO_KEY).club || ""));
+  const { said, say } = useLnSaid();
+
+  const left = LN_MAX - text.length;
+
+  /* Firebase writes locally in the same tick and syncs after, so the card is on
+     this screen before the server has heard about it. The box clears now rather
+     than on the server acknowledgement, because a weak ballroom connection would
+     otherwise leave somebody staring at a dead button. A rejection puts the
+     words back and says what happened. Clearing the box is also what stops a
+     double tap posting twice: the button disables itself the moment it is
+     empty. */
+  function submit(e) {
+    e.preventDefault();
+    const clean = text.trim();
+    if (!clean || offline) return;
+
+    writeJSON(LN_WHO_KEY, { name: name.trim(), club: club.trim() });
+    setText("");
+    say("Posted. It is on every phone in the room.");
+
+    onPost({
+      text: clean.slice(0, LN_MAX),
+      name: name.trim().slice(0, LN_NAME_MAX),
+      club: club.trim().slice(0, LN_CLUB_MAX)
+    }).catch((err) => {
+      setText(clean);
+      say("That did not post. " + ((err && err.message) || "Try it again."), true);
+    });
+  }
+
+  return (
+    <section className="ln-post glow-card grille" aria-labelledby="ln-post-h">
+      <h3 className="ln-post__h t-display" id="ln-post-h">Write one down</h3>
+      <p className="ln-post__note">
+        Name and club are optional. Blank posts as Anonymous.
+      </p>
+
+      <form className="tf" onSubmit={submit}>
+        <label className="tf__l">
+          <span>Takeaway</span>
+          <textarea
+            className="tf__in ln-ta"
+            value={text}
+            maxLength={LN_MAX}
+            rows={4}
+            placeholder="The one thing you are taking back to the club."
+            onChange={(e) => setText(e.target.value)}
+          />
+        </label>
+        <p className={"ln-left" + (left <= 40 ? " ln-left--low" : "")}>{left} left</p>
+
+        <div className="ln-two">
+          <label className="tf__l">
+            <span>Name, optional</span>
+            <input
+              className="tf__in"
+              value={name}
+              maxLength={LN_NAME_MAX}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </label>
+          <label className="tf__l">
+            <span>Club, optional</span>
+            <input
+              className="tf__in"
+              value={club}
+              maxLength={LN_CLUB_MAX}
+              onChange={(e) => setClub(e.target.value)}
+            />
+          </label>
+        </div>
+
+        <p className="ln-post__tagline">
+          <span>Tagged</span>
+          <span className="ln-tag">{lnMeta(dayKey).tag}</span>
+          <span>off today's date</span>
+        </p>
+
+        <div className="tf__row ln-post__go">
+          <button
+            type="submit"
+            className="btn btn--go"
+            disabled={offline || !text.trim()}
+          >
+            Post it
+          </button>
+        </div>
+      </form>
+
+      {offline ? (
+        <p className="ln-off">
+          Live updates are off, so nothing will post from this device. Everything else on
+          the wall still works.
+        </p>
+      ) : null}
+
+      {said ? (
+        <p className={"ln-said" + (said.bad ? " ln-said--bad" : "")}>{said.msg}</p>
+      ) : null}
+    </section>
+  );
+}
+
+function LnExport({ items, now }) {
+  const { said, say } = useLnSaid();
+  const empty = !items.length;
+
+  function copy() {
+    const md = lnMarkdown(items, now);
+    lnCopy(md).then((ok) => {
+      if (ok) {
+        say("Copied. " + lnCount(items.length) + ", ready to paste.");
+      } else {
+        say("The clipboard said no. Use Download instead.", true);
+      }
+    });
+  }
+
+  function save() {
+    const filename = "liner-notes-" + etDate(now) + ".md";
+    const ok = lnDownload(filename, lnMarkdown(items, now));
+    if (ok) {
+      say("Saved as " + filename + ".");
+    } else {
+      say("The download did not start. Use Copy instead.", true);
+    }
+  }
+
+  return (
+    <div className="adminbar ln-tools">
+      <p className="adminbar__t">Export the board</p>
+      <p className="adminbar__p">
+        Markdown. A heading per day, one bullet per takeaway with attribution. The whole
+        board, whichever pill is selected. Paste it straight into the follow up note.
+      </p>
+      <div className="tf__row ln-tools__row">
+        <button className="btn btn--go" onClick={copy} disabled={empty}>Copy Markdown</button>
+        <button className="btn" onClick={save} disabled={empty}>Download .md</button>
+      </div>
+      {empty ? <p className="adminbar__p ln-tools__row">Nothing on the board to export yet.</p> : null}
+      {said ? (
+        <p className={"ln-said" + (said.bad ? " ln-said--bad" : "")}>{said.msg}</p>
+      ) : null}
+    </div>
+  );
+}
+
+function LnCard({ t, now, isAdmin, onPin, onDelete }) {
+  const who = [String(t.name || "").trim(), String(t.club || "").trim()]
+    .filter(Boolean).join(", ");
+
+  return (
+    <article className={"ln-card glow-card" + (t.pinned ? " ln-card--pin" : "")}>
+      <div className="ln-card__top">
+        {t.pinned ? <span className="ln-pin">Pinned</span> : null}
+        <span className="ln-tag">{lnMeta(t.day).tag}</span>
+        <span className="ln-when t-data" title={t.ts ? lnStamp(t.ts) : ""}>
+          {lnAgo(t.ts, now)}
+        </span>
+      </div>
+
+      <p className="ln-text">{t.text}</p>
+      <p className={"ln-who" + (who ? "" : " ln-who--none")}>{who || "Anonymous"}</p>
+
+      {isAdmin ? (
+        <div className="ln-admin tf__row">
+          <button className="btn btn--tiny" onClick={() => onPin(t)}>
+            {t.pinned ? "Unpin" : "Pin"}
+          </button>
+          <button className="btn btn--tiny btn--kill" onClick={() => onDelete(t)}>
+            Delete
+          </button>
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
+function LinerNotesTab({ isAdmin, now }) {
+  const { items, ready } = useTakeaways();
+  const [filter, setFilter] = useState("all");
+
+  /* The post handler must tag off the clock at the moment of the tap, not off
+     the value that was current when the callback was built. */
+  const nowRef = useRef(now);
+  useEffect(() => { nowRef.current = now; }, [now]);
+
+  const today = etDate(now);
+
+  const counts = { all: items.length, wed: 0, thu: 0 };
+  items.forEach((t) => {
+    if (t.day === "wed") counts.wed += 1;
+    if (t.day === "thu") counts.thu += 1;
+  });
+
+  const pinned = items.filter((t) => t.pinned).length;
+  const shown = lnSort(filter === "all" ? items : items.filter((t) => t.day === filter));
+
+  const post = useCallback((fields) => {
+    if (!FB.ok) return Promise.reject(new Error("Live updates are off."));
+    const at = nowRef.current;
+    return FB.db.ref("takeaways").push({
+      text: fields.text,
+      name: fields.name,
+      club: fields.club,
+      day: lnDayKey(at),
+      pinned: false,
+      ts: lnTs(at)
+    });
+  }, []);
+
+  const pin = useCallback((t) => {
+    if (!FB.ok) return;
+    FB.db.ref("takeaways/" + t.id + "/pinned").set(!t.pinned);
+  }, []);
+
+  const remove = useCallback((t) => {
+    if (!FB.ok) return;
+    const label = String(t.text || "").replace(/\s+/g, " ").trim().slice(0, 70);
+    if (!window.confirm("Delete this takeaway?\n\n" + label)) return;
+    FB.db.ref("takeaways/" + t.id).remove();
+  }, []);
+
   return (
     <TabFrame tabKey="liner">
-      <Empty>No takeaways yet. Somebody write something down.</Empty>
+      <div className="dayrow" role="tablist" aria-label="Takeaway days">
+        {LN_FILTERS.map((f) => (
+          <button
+            key={f.key}
+            role="tab"
+            className="daypill"
+            aria-selected={f.key === filter}
+            onClick={() => setFilter(f.key)}
+          >
+            <span>
+              <span className="daypill__d t-display">{f.kicker}</span>
+              <span className="daypill__n">
+                {f.name} <span className="t-data">{counts[f.key]}</span>
+              </span>
+            </span>
+            {f.date && f.date === today ? (
+              <span className="daypill__dot" title="Today"></span>
+            ) : null}
+          </button>
+        ))}
+      </div>
+
+      <LnForm dayKey={lnDayKey(now)} offline={!FB.ok} onPost={post} />
+
+      {isAdmin ? <LnExport items={items} now={now} /> : null}
+
+      {items.length ? (
+        <p className="ln-tally">
+          {lnCount(items.length)}{pinned ? ", " + pinned + " pinned" : ""}
+        </p>
+      ) : null}
+
+      {!ready ? <Empty>Checking the board.</Empty> : null}
+
+      {ready && items.length === 0 ? (
+        <Empty>No takeaways yet. Somebody write something down.</Empty>
+      ) : null}
+
+      {ready && items.length > 0 && shown.length === 0 ? (
+        <Empty>Nothing tagged {lnMeta(filter).name} yet.</Empty>
+      ) : null}
+
+      <div className="ln-list">
+        {shown.map((t) => (
+          <LnCard
+            key={t.id}
+            t={t}
+            now={now}
+            isAdmin={isAdmin}
+            onPin={pin}
+            onDelete={remove}
+          />
+        ))}
+      </div>
+
       <BuildNote isAdmin={isAdmin} task="T1.5">
-        Day filter pills, submission panel with auto day tag, reverse
-        chronological cards, pinned items with a scarlet left border, Markdown
-        export for the recap.
+        Board lives at takeaways/ in Firebase. The day tag is computed from the server
+        corrected clock at the moment of the tap, so a phone on the wrong time zone still
+        lands on the right day. Pills are All, Wed, Thu: anything posted on another day
+        shows under All only. Export takes the whole board, not the filtered view. Append
+        ?clock=2026-08-26T09:15:00-04:00 to test the Wednesday tag without waiting.
       </BuildNote>
     </TabFrame>
   );

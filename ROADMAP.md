@@ -560,12 +560,47 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 - **Not verified, needs a device.** The native select and the on-screen keyboard on a real phone.
   T3.6.
 
-### `[ ]` T1.5 Liner Notes
+### `[x]` T1.5 Liner Notes
 - **Inputs:** spec Section 3.6
 - **Output:** complete takeaways tab
 - **Steps:** day filter pills All, Wed, Thu. Submission panel with optional name and club, takeaway text, auto day tag from current date. Reverse chronological cards with attribution, day tag, timestamp. Pinned items at top with scarlet left border. Admin: pin, delete, Markdown export
 - **Acceptance:** posts sync across devices. Day tag matches the posting date. Markdown export renders correctly when pasted into a Markdown viewer
 - **Parallel-safe with:** T1.4
+- **Done Aug 11.** Board lives at `takeaways/{id}`.
+  | Acceptance criterion | Result |
+  |---|---|
+  | Posts sync across devices | Same single `on("value")` listener pattern measured at 29ms in T2.3. Pin and delete both propagate through Firebase, verified in the tab. **A stopwatch across two genuinely separate devices is left for T3.6** |
+  | Day tag matches the posting date | Loaded with `?clock=2026-08-26T09:15:00-04:00`. The tag line read "Tagged WED off today's date", the today dot sat on the Wed 8/26 pill, and all three posts carried a Wed chip. The Thu pill showed "Nothing tagged Thursday yet." |
+  | Markdown export renders correctly | Captured the actual blob. `# Liner Notes` title, one `## Wednesday, August 26` heading, one `- ` bullet each, pinned bullet first prefixed `**Pinned.**`, attribution in parentheses, and nothing at all where both fields were blank |
+  | Markdown escaping | A takeaway typed starting with `-` exported as `\- A takeaway that starts with a dash`, so it renders as text and not a nested list. A typed line break collapsed to a single space, so no bullet breaks across lines |
+  | Filename and type | `liner-notes-2026-08-26.md`, `text/markdown;charset=utf-8` |
+  | Pinned rides the top with a scarlet left border | Measured `rgb(200,16,46)` at 3px, with a "Pinned" chip, and it took the top spot from a newer card |
+  | Attribution falls back cleanly | Name plus club, club only, and "Anonymous" when both are blank |
+  | Crew only controls | A non-admin device showed no export panel and zero pin or delete buttons. The PIN turned on the panel and three sets of card controls |
+  | Character cap | 300, counter turns gold at 40 remaining, verified at "0 left" with the low class applied |
+  | Display Mode does not look broken | Form, export panel, tally and admin buttons all `display: none`, card text scaling up through its clamp. Toggling back restored all of it |
+  | 380px | 0px overflow, zero elements past the edge, day pills scrolling sideways (370px inside 348px) |
+  | 1280px | 0px overflow, inside the 780px reading column, cards 748px, name and club side by side |
+  | No console errors | None across post, pin, delete, filter, export, and Display Mode both ways |
+- **`ts` is a server timestamp** except on a device running `?clock`, which writes its simulated
+  time so a test post's tag and timestamp agree with each other. **Consequence: the three test
+  posts made during this build look like August 26 to everybody.** They are placeholders
+  ("Test Club Alpha", "Placeholder One") and T4.2 clears the node.
+- **The export is always the whole board, never the filtered view.** The filter is a reading
+  aid, and exporting what happened to be on screen would silently drop half the recap the one
+  time somebody forgot which pill was selected. The panel copy says so.
+- **Relative time never says "yesterday".** Inside a four day meeting that is easy to misread,
+  so anything from one hour to seven days old prints the weekday and the Eastern time.
+- **A post outside Wednesday or Thursday still lands.** The roadmap fixes the pills at All, Wed,
+  Thu, and the tab is live before the meeting, so posts tagged `pre`, `tue`, `fri` and `post`
+  will exist. They show under All, which is where the tab opens, and they still get their own
+  heading in the export, so nothing is lost from the recap.
+- **One new local storage key, `mm26_liner_who`,** holding the name and club so a second
+  takeaway does not mean typing them again. It carries the prefix, so T1.6's Clear This Device
+  picks it up with no code change. Confirmed: the panel enumerated it.
+- **Open question for Carol, not invented either way.** Nobody said whether the recap wants the
+  takeaways attributed. Last year's became the raw material for the follow up note, so
+  attribution is in. An anonymous export is deleting one call to `lnCredit`.
 
 ### `[x]` T1.6 Admin panel, v1
 - **Inputs:** spec Section 4
