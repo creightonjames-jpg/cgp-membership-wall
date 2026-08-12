@@ -6080,7 +6080,13 @@ function SoundcheckTab({ isAdmin, now }) {
    under settings/vaultDrops for the two that open on a clock. */
 const VAULT_SECTIONS = [
   { key: "fundamentals", name: "Core Fundamentals",          icon: "\u{1F4D8}", kind: "images" },
-  { key: "buckets",      name: "Membership Buckets",         icon: "\u{1F5C2}", kind: "images" },
+  /* Lisa renamed this on Aug 12. The display name is "Invitation Sources".
+     The key stays `buckets` on purpose: it is the child name in
+     data/vault.json, the value stored in mm26_vaultsection on every phone
+     that has already opened the tab, and the id on the nav button. Renaming
+     the key would mean editing a data file somebody else owns and stranding
+     the stored value. The name is what the room reads. The key is plumbing. */
+  { key: "buckets",      name: "Invitation Sources",         icon: "\u{1F5C2}", kind: "images" },
   { key: "graphs",       name: "Club Graphs",                icon: "\u{1F4C8}", kind: "graphs" },
   { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "images", drop: "scenarios" },
   { key: "personas",     name: "Membership Funnel Personas",  icon: "\u{1F465}", kind: "images", drop: "personas" }
@@ -6109,7 +6115,7 @@ const VAULT_GRACE_MS = 8000;
    shelf is empty rather than pretending something is loading forever. */
 const VAULT_EMPTY = {
   fundamentals: "Empty shelf. The Core Fundamentals artwork has not turned up yet.",
-  buckets:      "Empty shelf. The Membership Buckets artwork has not turned up yet.",
+  buckets:      "Empty shelf. Tyler is sending the Invitation Sources artwork.",
   scenarios:    "Open and empty. The scenarios have not turned up yet.",
   personas:     "Open and empty. The personas have not turned up yet."
 };
@@ -7080,6 +7086,8 @@ function VaultTab({ isAdmin, now }) {
         comes from data/vault.json, which is empty for all four image sections
         until T3.3. Graphs come from data/graphs.json, 29 clubs and 2 rollups.
         The two unlock times are not yet confirmed in writing. T4.5 closes that.
+        Membership Buckets reads Invitation Sources since Aug 12, per Lisa. The
+        key in data/vault.json is still buckets, so drop Tyler's files there.
       </BuildNote>
     </TabFrame>
   );
