@@ -434,6 +434,27 @@ if [[ "$KIND" == "attendees" ]] && (( ROSTER_LOADED )); then
   fi
 fi
 
+# Framing check on what this run just wrote. A centred square crop is right for a
+# studio portrait and wrong for a full-body phone snap, where the middle of the
+# frame is somebody's waist. Molly Dunn shipped with her head missing entirely and
+# nobody caught it until Lisa and then Jim said so out loud, so the check runs here
+# rather than waiting for a human to scroll the whole roster.
+#
+# Advisory only. It never blocks the intake and it never edits anything. Skipped
+# without complaint when tools/facefind has not been built.
+if [[ "$KIND" == "attendees" ]] && (( ! DRY_RUN )) && (( ${#DONE_SLUGS[@]} )); then
+  if [[ -x "$REPO_ROOT/tools/facefind" ]]; then
+    printf '\n'
+    python3 "$REPO_ROOT/tools/recrop-headshots.py" --audit "${DONE_SLUGS[@]}" 2>/dev/null \
+      | sed -n '2,$p'
+    printf 'Framing not right? Fix it with:\n'
+    printf '    python3 tools/recrop-headshots.py --dry-run\n'
+  else
+    printf '\nFraming was NOT checked. Build the face finder to enable it:\n'
+    printf '    swiftc -O tools/facefind.swift -o tools/facefind\n'
+  fi
+fi
+
 printf '\n'
 if (( ${#FAILED[@]} )) || (( ${#COLLIDED[@]} )); then
   exit 1
