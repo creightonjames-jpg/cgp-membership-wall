@@ -3366,11 +3366,12 @@ const VENUES = {
     addr: "5000 Club Drive, Westerville, Ohio 43082",
     phone: "(614) 794-6999"
   },
-  smashpark: {
-    name: "Smash Park Westerville",
-    addr: "495 Polaris Parkway, Westerville, Ohio 43082",
-    phone: "(614) 502-6993"
-  },
+  /* Smash Park Westerville was here until Aug 12, when Lisa cancelled the
+     Wednesday outing and moved the evening to the hotel. The venue is gone
+     rather than kept "because the address is a fact", because a card nobody
+     goes to is a card somebody drives to. Wednesday evening points at `hotel`.
+     If it ever comes back, it was 495 Polaris Parkway, Westerville, Ohio
+     43082, (614) 502-6993, and the ROADMAP change log has the history. */
   /* The flier names the airport and nothing else, so there is no street
      address here to invent. The maps link searches the name. */
   cmh: {
@@ -4420,8 +4421,9 @@ function SetlistTab({ isAdmin, now }) {
 
       <BuildNote isAdmin={isAdmin} task="T1.1">
         Running order is the official agenda, which replaces the flier. Wednesday
-        evening is at the hotel, not Smash Park, and that conflict is still open
-        with Carol. No rooms, because the agenda names none. Append
+        evening is three cards at the hotel: 6:00 cocktails, 6:30 dinner, 7:00 to
+        9:00 karaoke and games. Lisa cancelled Smash Park on Aug 12 and that
+        conflict is closed. No rooms, because the agenda names none. Append
         ?clock=2026-08-26T09:15:00-04:00 to any URL to test On Air, the dimming,
         and the 30 minute countdown.
       </BuildNote>
@@ -5185,14 +5187,14 @@ function BackstageTab({ isAdmin }) {
 
         <Panel stub="Play" title="Where You Play">
           <Venue v={VENUES.club} note="Golf course and the Patio." />
-          <Venue v={VENUES.smashpark} />
+          <Venue v={VENUES.hotel} note="Wednesday night. Karaoke, corn hole, cards and beer pong." />
         </Panel>
 
         <Panel stub="Eat" title="Where You Eat">
           <ul className="bs-ul">
             <li>Tuesday, the Opening Act Welcome Mixer is on the Patio at The Medallion Club.</li>
             <li>Breakfast is at The Medallion Club both mornings.</li>
-            <li>Wednesday night, dinner is at Smash Park Westerville.</li>
+            <li>Wednesday night, cocktails and dinner are at the hotel.</li>
             <li>Thursday night, cocktails and dinner are at The Medallion Club.</li>
           </ul>
           <p className="bs-fine">
@@ -5268,9 +5270,9 @@ function BackstageTab({ isAdmin }) {
         CONTACTS tables so The Setlist links to the same addresses. Attire is read
         out of data/agenda.json rather than typed twice. The Video of the Year
         panel is not here: its deadline was August 1 and it is retired, per the
-        ROADMAP note. Smash Park stays as a venue card even though the official
-        agenda moved Wednesday evening to the hotel, because the address is a fact
-        either way. No website links anywhere, because no source gives a URL.
+        ROADMAP note. Smash Park is gone from VENUES and from this tab, because
+        Lisa cancelled the Wednesday outing on Aug 12. Wednesday night is at the
+        hotel. No website links anywhere, because no source gives a URL.
       </BuildNote>
     </TabFrame>
   );

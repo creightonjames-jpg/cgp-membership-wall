@@ -20,7 +20,7 @@
       "crewNote": "Why the question exists and what still needs a decision. Crew only, never shown to the room."
     },
     "openQuestions": [
-      "Wednesday evening: Jim resolved the Smash Park versus hotel conflict in favour of Smash Park on Aug 11 (T1.1a). The denim question below leans on that and on the attire wording, which is still open at T1.1b. Re-check both before publishing it.",
+      "Wednesday evening is settled. Lisa cancelled Smash Park on Aug 12 and the evening is at the hotel: 6:00 drinks, 6:30 dinner, 7:00 to 9:00 karaoke and games. The denim question below still leans on the attire wording, which is open at T1.1b. Re-check that one thing before publishing it.",
       "The seven Core Fundamentals breakout titles are used verbatim as answer options in three questions. If the breakout list changes, those three change with it.",
       "Nothing is drafted for the Vault drops, the Cares Cup, or the Awards Show. Those want live polls written in the room, not a library."
     ]
@@ -68,13 +68,13 @@
     {
       "id": "week-denim-day",
       "type": "knowledge",
-      "session": "wed-1800-smash-park",
+      "session": "wed-1800-cocktails",
       "question": "Which day can you get away with denim?",
       "options": ["Tuesday", "Wednesday", "Thursday", "None of them"],
       "correctIndex": 1,
-      "explain": "Wednesday. Denim is in for the Dress-Up Day costumes and fine at the Evening Outing. Tuesday and Thursday are no denim.",
+      "explain": "Wednesday. Denim is in for the Dress-Up Day costumes and fine at the hotel that evening. Tuesday and Thursday are no denim.",
       "draft": true,
-      "crewNote": "Leans on two things that are not fully settled: the attire wording at T1.1b and the Smash Park call at T1.1a. Confirm with Carol before this one runs, because the printed flier in the welcome packet may say something different."
+      "crewNote": "Leans on the attire wording at T1.1b, which is not settled. Confirm with Carol before this one runs, because the printed flier in the welcome packet may say something different."
     },
     {
       "id": "wed-culture-teller",

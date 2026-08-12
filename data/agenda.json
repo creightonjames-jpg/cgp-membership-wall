@@ -3,7 +3,7 @@
     "task": "ROADMAP T1.1, rebuilt from the official agenda on Aug 11.",
     "source": "The official agenda supplied by Jim. It supersedes the flier for the running order. Every title, time, presenter, and note below is the official agenda's own wording. Nothing here is inferred.",
     "timezone": "America/New_York",
-    "smashPark": "The flier and the official agenda disagreed about Wednesday evening. The flier had the 6:00 PM Smash Park outing, the official agenda had cocktails and dinner at the hotel bar. Jim resolved it on Aug 11 in favour of Smash Park, so this file carries the flier's Wednesday evening and the official agenda's hotel bar block is not used. Everything else on Wednesday is the official agenda.",
+    "smashPark": "CANCELLED. Read this whole entry before changing Wednesday evening again. The flier had a 6:00 PM outing at Smash Park Westerville. The official agenda had cocktails, dinner and karaoke at the hotel. Jim resolved it in favour of Smash Park on Aug 11, so this file carried the flier's version for one day. On Aug 12 Lisa cancelled Smash Park outright: 6:00 drinks, 6:30 dinner, 7:00 to 9:00 karaoke, all at the hotel. The official agenda was right the whole time and this file now carries it. The Smash Park venue is gone from index.html as well, so nothing here may point at it. Everything else on Wednesday is the official agenda and always was.",
     "rooms": "The official agenda names no rooms. Room fields are empty on purpose. Do not fill them in from memory.",
     "presenters": "Three people are named in the source and only three: Jim Hinckley, Doug Howe, and Gene. Nobody else gets a presenter.",
     "venueKeys": "venue points at the VENUES table in index.html, so an address and a phone number live in exactly one place.",
@@ -81,7 +81,7 @@
       "note": "",
       "attire": [
         { "k": "Attire", "v": "Rock N' Roll Team Dress-Up Day. Today only, denim is allowed for costumes." },
-        { "k": "At Smash Park", "v": "Casual, and yes you can wear denim here." }
+        { "k": "Evening at the hotel", "v": "Casual attire, denim allowed." }
       ],
       "sessions": [
         {
@@ -234,28 +234,43 @@
           "presenter": "",
           "venue": "hotel",
           "room": "",
-          "description": "Take a bow, you earned it. Head back to the hotel to change out of your Rock n' Roll costumes and drive rental cars over to the Evening Outing."
+          "description": "Take a bow, you earned it. Head back to the hotel to change out of your Rock n' Roll costumes and meet at the hotel bar. Casual attire, denim allowed."
         },
         {
-          "key": "wed-1800-smash-park",
-          "kind": "open",
+          "key": "wed-1800-cocktails",
+          "kind": "timed",
           "start": "2026-08-26T18:00:00-04:00",
-          "subtitle": "Evening Outing",
-          "title": "Put on Your Game Face",
+          "end": "2026-08-26T18:30:00-04:00",
+          "endSource": "next",
+          "title": "Cocktails at Hotel Bar",
           "presenter": "",
-          "venue": "smashpark",
+          "venue": "hotel",
           "room": "",
-          "description": "Beverages, Games, Dinner and Karaoke.",
-          "itemsLabel": "Activities",
-          "items": [
-            "Axe Throwing",
-            "Crazy Darts",
-            "Digital Shuffleboard",
-            "Pickle Ball",
-            "Bocce Ball",
-            "Corn Hole",
-            "Duck Pin Bowling and more"
-          ]
+          "description": ""
+        },
+        {
+          "key": "wed-1830-dinner",
+          "kind": "timed",
+          "start": "2026-08-26T18:30:00-04:00",
+          "end": "2026-08-26T19:00:00-04:00",
+          "endSource": "next",
+          "title": "Dinner Served at Hotel",
+          "presenter": "",
+          "venue": "hotel",
+          "room": "",
+          "description": ""
+        },
+        {
+          "key": "wed-1900-karaoke",
+          "kind": "timed",
+          "start": "2026-08-26T19:00:00-04:00",
+          "end": "2026-08-26T21:00:00-04:00",
+          "endSource": "stated",
+          "title": "Karaoke, Corn Hole, Cards and Beer Pong",
+          "presenter": "",
+          "venue": "hotel",
+          "room": "",
+          "description": ""
         }
       ]
     },
