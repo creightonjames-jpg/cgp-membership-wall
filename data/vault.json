@@ -7,9 +7,29 @@
     "note": "optional one line under the title. Leave it out rather than padding it."
   },
   "sections": {
-    "fundamentals": { "items": [] },
-    "buckets": { "items": [] },
-    "scenarios": { "items": [] },
-    "personas": { "items": [] }
+    "fundamentals": {
+      "items": [
+        {
+          "file": "core-fundamentals.png",
+          "title": "Private Club Membership Core Fundamentals",
+          "note": "The wheel. Effective, inspirational execution at the centre."
+        }
+      ]
+    },
+    "buckets": {
+      "items": [
+        {
+          "file": "invitation-sources.png",
+          "title": "Membership by Invitation",
+          "note": "Where invitations come from. Every source feeds the same destination."
+        }
+      ]
+    },
+    "scenarios": {
+      "items": []
+    },
+    "personas": {
+      "items": []
+    }
   }
 }
