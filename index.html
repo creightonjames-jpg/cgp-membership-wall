@@ -4702,9 +4702,15 @@ function useFbLive() {
    ignores it on purpose: nothing in this tab is time sensitive, so there is
    nothing for useServerNow to gate.
 
-   Nothing below knows a count, a club name, or a region name. Every number and
-   every pill comes off the merged roster, so a club typed into the crew panel
-   turns up here as a filter with no code change.
+   Nothing below knows a count or a region name. Every number and every pill
+   comes off the merged roster, so a club typed into the crew panel turns up
+   here as a filter with no code change.
+
+   One club string is matched in code and only one: bandClubRank tests for a
+   "Century Golf" prefix, so corporate staff sort after the clubs instead of
+   between Canyon Oaks and Chenal. It is a prefix test rather than an exact
+   name, so a fuller spelling still lands last. Every other club is whatever
+   the file says it is.
    ========================================================================== */
 
 /* Fold accents and case, so a search for "jose" finds "José". macOS hands over
@@ -5187,12 +5193,16 @@ function BandTab({ isAdmin }) {
       ) : null}
 
       <BuildNote isAdmin={isAdmin} task="T1.3 T3.1">
-        147 real headshots over data/roster.json, with the crew panel's edits at
+        Headshots over data/roster.json, with the crew panel's edits at
         roster/{"{slug}"} merged on top field by field. Names came off filenames
         and are not verified, so fix them in the Roster section of the crew
-        panel. Club and region are selects because 29 clubs will not fit in a
-        pill row. Newbies stacks with a club. Cards carry club and title and no
-        contact details, per the client.
+        panel. Grouped by club since Aug 12, per Lisa, with Century Golf
+        corporate after the clubs. The headings come off when the club select is
+        set, because they would all say the same word. Club and region are
+        selects because the clubs will not fit in a pill row. Newbies stacks
+        with a club. Every count on this tab is counted off the file, so
+        regenerating the roster changes them on its own. Cards carry club and
+        title and no contact details, per the client.
       </BuildNote>
     </TabFrame>
   );
