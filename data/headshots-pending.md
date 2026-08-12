@@ -16,8 +16,9 @@ When the files arrive, these are the priority:
 - Krisno Bridge        Sunset Hills, General Manager     (also in SharePoint as krisno bridge.jpg)
 - Lindsey Jenkins      Balcones, Enrollment Director
 - Natalie Bratcher     Century Golf, Catering Support
+- Patrick Ryan         Century Golf, Sr. Director Club Partnerships
 
-That is 10 of the 17 without a photo. Loading them takes the wall to 112 of 119.
+That is 11 of the 17 without a photo. Loading them takes the wall to 113 of 119.
 
 Fastest route: export the OneDrive folder
   1_Projects / 26 Strategic Priorities / Draft Board / GM Headshots
