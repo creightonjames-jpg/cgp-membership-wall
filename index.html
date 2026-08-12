@@ -2680,6 +2680,166 @@ body.display-mode .cv-new { display: none; }
   .cv-opt, .cv-bar__lab, .cv-rank__t { font-size: 16px; }
   .cv-new { padding: 18px 20px; }
 }
+/* ==========================================================================
+   T2.5 THE PIT
+   No new motifs. The upload panel is glow-card plus grille, the fields are the
+   tf pattern, every button is .btn, and the club filter reuses .dayrow and
+   .daypill from The Setlist so the two tabs read as one wall. Everything below
+   is layout and chrome mixed from the same dials the tab bar uses, so the
+   palette is still twelve tokens.
+   ========================================================================== */
+
+/* --------------------------------------------------------- upload panel */
+.pit-panel { padding: 15px 16px 17px; margin: 0 0 18px; }
+.pit-panel__h { margin: 0 0 12px; font-size: clamp(17px, 4.8vw, 21px); }
+.pit-hint { margin: 13px 0 0; font-size: 12px; color: var(--mute); }
+
+/* The picker is a label wrapping a file input, because a label is the one
+   control that opens the picker on every phone that will be in the room. The
+   input is stretched over the label at zero opacity, so the tap lands on the
+   input itself rather than relying on a scripted click. */
+.pit-pick {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 8px;
+  cursor: pointer;
+}
+
+.pit-pick.is-off { opacity: 0.55; cursor: default; }
+
+.pit-pick__in {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0; cursor: pointer;
+}
+
+.pit-pick:focus-within { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* --------------------------------------------------------- staged photo */
+/* Compressed, sized, and shown before it goes anywhere. The size line is how
+   anybody checks the 4MB claim without opening dev tools. */
+.pit-stage { margin: 13px 0 0; }
+
+.pit-stage__img {
+  display: block; width: 100%; max-width: 280px;
+  height: auto; max-height: 220px; object-fit: contain;
+  background: var(--input);
+  border: 1px solid var(--edge); border-radius: 8px;
+}
+
+.pit-stage__meta { margin: 9px 0 11px; font-size: 12px; color: var(--dim); }
+
+.pit-msg { margin: 12px 0 0; font-size: 13px; color: var(--gold); }
+.pit-msg--bad { color: var(--danger); }
+.pit-note { margin: 0 0 12px; font-size: 12px; color: var(--dim); }
+
+/* ---------------------------------------------------------------- grid */
+/* Square thumbnails, newest first, caption and attribution under each one.
+   auto-fill rather than a fixed count, so 380px gets two columns and the
+   reading column on a laptop gets four. No fixed heights anywhere, the grid
+   flows with the page. */
+.pit-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.pit-cell { min-width: 0; }
+
+.pit-shot { position: relative; }
+
+/* The square is the button. The like button sits over it as a sibling, because
+   a button cannot hold another button. */
+.pit-shot__hit {
+  display: block; width: 100%; aspect-ratio: 1; padding: 0;
+  background: var(--input);
+  border: 1px solid var(--edge); border-radius: 10px;
+  overflow: hidden; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+}
+
+.pit-shot__hit:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+.pit-shot__img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* Lit state is the scarlet gradient with a gold ring, the same two states the
+   tab bar and the day pills use. */
+.pit-like {
+  display: inline-flex; align-items: center; gap: 6px;
+  background-color: rgba(23, 22, 26, 0.74);
+  border: 1px solid var(--warm-edge); border-radius: 999px;
+  padding: 7px 12px;
+  color: var(--dim); font-family: inherit; font-size: 13px;
+  cursor: pointer;
+}
+
+.pit-shot .pit-like { position: absolute; right: 7px; bottom: 7px; }
+
+.pit-like.is-on {
+  background-color: transparent;
+  background-image: var(--grad-primary);
+  border-color: var(--gold);
+  color: var(--cream);
+}
+
+.pit-like__h { font-size: 14px; line-height: 1; color: var(--dim); }
+.pit-like.is-on .pit-like__h { color: var(--cream); }
+.pit-like__n { font-size: 12px; font-weight: 600; min-width: 1ch; }
+.pit-like:disabled { cursor: default; opacity: 0.55; }
+
+.pit-cap { margin: 8px 0 0; font-size: 13px; overflow-wrap: anywhere; }
+.pit-by { margin: 3px 0 0; font-size: 12px; color: var(--dim); overflow-wrap: anywhere; }
+.pit-by__t { color: var(--mute); }
+
+.pit-more { margin: 18px 0 0; }
+
+/* ------------------------------------------------------------ lightbox */
+/* This overlay deliberately does NOT lock the page. Nothing sets body
+   overflow, nothing calls preventDefault on a touch, and there is no
+   overscroll-behavior. It carries its own overflow-y for the one case that
+   would otherwise clip, a tall photo plus a long caption on a short screen,
+   and margin auto on the inner panel centres it without the top being cut off
+   the way justify-content would. Closing it leaves the grid exactly where it
+   was. "Does not trap scroll" is an acceptance criterion, not a preference. */
+.pit-box {
+  position: fixed; inset: 0; z-index: 50;
+  display: flex; flex-direction: column;
+  background: rgba(10, 9, 12, 0.93);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: calc(12px + var(--safe-t)) calc(12px + var(--safe-r))
+           calc(22px + var(--safe-b)) calc(12px + var(--safe-l));
+}
+
+.pit-box__inner { margin: auto; width: 100%; max-width: 560px; }
+
+.pit-box__bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin: 0 0 10px;
+}
+
+.pit-box__spacer { flex: 1 1 auto; }
+
+.pit-box__img {
+  display: block; width: 100%; height: auto;
+  max-height: 62vh;
+  max-height: 62svh;
+  object-fit: contain;
+  background: var(--input);
+  border: 1px solid var(--edge); border-radius: 10px;
+}
+
+.pit-box__meta { margin: 13px 0 0; }
+.pit-box .pit-like { padding: 11px 17px; font-size: 15px; }
+.pit-box__cap { margin: 11px 0 0; font-size: 15px; overflow-wrap: anywhere; }
+.pit-box__by { margin: 5px 0 0; font-size: 13px; color: var(--dim); overflow-wrap: anywhere; }
+
+@media (min-width: 700px) {
+  .pit-grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 16px; }
+  .pit-stage__img { max-width: 340px; max-height: 260px; }
+  .pit-box__inner { max-width: 620px; }
+  .pit-box__img { max-height: 70vh; max-height: 70svh; }
+}
 </style>
 </head>
 <body>
@@ -2735,8 +2895,10 @@ const OPENS_AT = Date.parse("2026-08-25T12:00:00-04:00");
 const LS = {
   entered: "mm26_entered",
   reacted: "mm26_reacted",
-  voted: "mm26_voted",
-  pollvotes: "mm26_pollvotes"
+  voted: "mm26_voted",          /* T1.4 Soundcheck  */
+  pollvotes: "mm26_pollvotes",  /* T2.4 Crowd Vote  */
+  liked: "mm26_liked",          /* T2.5 The Pit     */
+  pitWho: "mm26_pitwho"         /* T2.5 The Pit     */
 };
 
 /* Venue and contact facts, verbatim off the flier. One table, because The
@@ -7928,14 +8090,777 @@ function CrowdVoteTab({ isAdmin, now }) {
   );
 }
 
-function PitTab({ isAdmin }) {
+/* ==========================================================================
+   T2.5 THE PIT. Spec 3.8.
+   Wednesday is Rock N' Roll Team Dress-Up Day, the most photographed hour of
+   the week, so this tab gets used hard and on hotel Wi-Fi.
+
+   Three things in here are the whole task.
+
+   1. Both upload paths ship together. Take Photo is an input with
+      capture="environment". Choose from Library is a SECOND input with no
+      capture attribute. Camera only was a real limitation on the prior build
+      and CLAUDE.md forbids repeating it.
+   2. Compression happens on the phone, before the upload. Roughly 800px on the
+      long edge, and the JPEG is re-encoded down a quality ladder until the
+      string that lands in Firebase is under the cap. Orientation is applied by
+      hand when the browser has not already applied it, because phone photos
+      carry EXIF rotation and getting it wrong shows every Dress-Up Day photo
+      sideways.
+   3. The lightbox does not trap scroll. Nothing here touches body overflow,
+      nothing calls preventDefault on a touch, and there is no overscroll lock.
+
+   Every clock reading comes from the server corrected `now` handed down from
+   useServerNow. The stored timestamp is Firebase's own server value, so two
+   phones with two wrong clocks still sort into the same order.
+   ========================================================================== */
+
+/* Long edge first, then quality. A real photo lands on the first rung. The
+   lower rungs exist for the pathological case, a photo of static. */
+const PIT_EDGES = [800, 700, 600];
+const PIT_QUALITIES = [0.72, 0.6, 0.5, 0.42];
+
+/* The cap is measured on the base64 string that gets written, not on the JPEG
+   bytes inside it, because the string is what crosses the wire and what sits in
+   the database. 190000 leaves headroom under the 200KB the ROADMAP asks for. */
+const PIT_MAX_B64 = 190000;
+
+/* A sanity ceiling on the source. Anything past this is not a phone photo and
+   decoding it would take the tab down with it. */
+const PIT_MAX_SOURCE = 32 * 1024 * 1024;
+
+/* Photos are stored as base64 inside their own records, so the grid pulls a
+   page at a time rather than every photo taken all week. */
+const PIT_PAGE = 24;
+
+/* A 1 by 2 pixel JPEG carrying EXIF orientation 6. If the browser applies EXIF
+   rotation on decode, it reports 2 by 1 and the wall must NOT rotate again. If
+   it reports 1 by 2, the wall applies the rotation itself. This is a feature
+   test rather than a user agent sniff, because the behaviour changed browser by
+   browser and version by version. */
+const PIT_PROBE = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4QAiRXhpZgAATU0AKgAAAAgAAQESAAMAAAABAAYAAAAAAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAACAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAX/xAAZEAEAAgMAAAAAAAAAAAAAAAAAAQISUpH/xAAUAQEAAAAAAAAAAAAAAAAAAAAE/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8Aj5W2noBhb//Z";
+
+/* ------------------------------------------------------- compression */
+
+function pitBuffer(file) {
+  if (file.arrayBuffer) return file.arrayBuffer();
+  return new Promise(function (resolve, reject) {
+    const r = new FileReader();
+    r.onload = function () { resolve(r.result); };
+    r.onerror = function () { reject(new Error("The file did not read.")); };
+    r.readAsArrayBuffer(file);
+  });
+}
+
+/* Walks the JPEG markers to APP1, then the first IFD, and returns the
+   orientation tag. Returns 1 for anything that is not a JPEG with an
+   orientation tag, which covers PNG, screenshots, and anything already
+   stripped of EXIF. */
+function pitOrientation(buf) {
+  const view = new DataView(buf);
+  if (view.byteLength < 4) return 1;
+  if (view.getUint16(0, false) !== 0xFFD8) return 1;
+
+  let off = 2;
+  while (off + 4 <= view.byteLength) {
+    const marker = view.getUint16(off, false);
+    if ((marker & 0xFF00) !== 0xFF00) return 1;
+    if (marker === 0xFFDA || marker === 0xFFD9) return 1;
+
+    const size = view.getUint16(off + 2, false);
+    if (size < 2) return 1;
+
+    /* APP1 starting with "Exif". 0x45786966 is those four bytes. */
+    if (marker === 0xFFE1 && off + 10 <= view.byteLength
+        && view.getUint32(off + 4, false) === 0x45786966) {
+      const tiff = off + 10;
+      if (tiff + 8 <= view.byteLength) {
+        const little = view.getUint16(tiff, false) === 0x4949;
+        const ifd0 = tiff + view.getUint32(tiff + 4, little);
+        if (ifd0 + 2 <= view.byteLength) {
+          const count = view.getUint16(ifd0, little);
+          for (let i = 0; i < count; i++) {
+            const entry = ifd0 + 2 + i * 12;
+            if (entry + 12 > view.byteLength) break;
+            if (view.getUint16(entry, little) === 0x0112) {
+              const v = view.getUint16(entry + 8, little);
+              return v >= 1 && v <= 8 ? v : 1;
+            }
+          }
+        }
+      }
+    }
+
+    off += 2 + size;
+  }
+  return 1;
+}
+
+let pitProbeRun = null;
+
+function pitAutoOrients() {
+  if (pitProbeRun) return pitProbeRun;
+  pitProbeRun = new Promise(function (resolve) {
+    const img = new Image();
+    img.onload = function () {
+      resolve(img.naturalWidth === 2 && img.naturalHeight === 1);
+    };
+    img.onerror = function () { resolve(false); };
+    img.src = PIT_PROBE;
+  });
+  return pitProbeRun;
+}
+
+function pitLoadImage(url) {
+  return new Promise(function (resolve, reject) {
+    const img = new Image();
+    img.onload = function () { resolve(img); };
+    img.onerror = function () { reject(new Error("That file did not open as a photo.")); };
+    img.src = url;
+  });
+}
+
+function pitCanvas(w, h) {
+  const c = document.createElement("canvas");
+  c.width = w;
+  c.height = h;
+  return c;
+}
+
+/* Applies the EXIF transform to the canvas before the draw. `cw` and `ch` are
+   the finished canvas size, already swapped for the quarter turns. Verified
+   corner by corner against the EXIF definitions for all eight values. */
+function pitOrient(g, ori, cw, ch) {
+  if (ori === 2) { g.translate(cw, 0); g.scale(-1, 1); }
+  else if (ori === 3) { g.translate(cw, ch); g.rotate(Math.PI); }
+  else if (ori === 4) { g.translate(0, ch); g.scale(1, -1); }
+  else if (ori === 5) { g.scale(1, -1); g.rotate(-Math.PI / 2); }
+  else if (ori === 6) { g.translate(cw, 0); g.rotate(Math.PI / 2); }
+  else if (ori === 7) { g.translate(cw, ch); g.scale(1, -1); g.rotate(Math.PI / 2); }
+  else if (ori === 8) { g.translate(0, ch); g.rotate(-Math.PI / 2); }
+}
+
+/* Halve until within one step of the target. A single 12 times downscale in one
+   drawImage aliases badly on every browser, and a Dress-Up Day group shot is
+   exactly the picture where that shows. */
+function pitHalve(src, sw, sh, tw, th) {
+  let cur = src;
+  let cw = sw;
+  let ch = sh;
+  while (cw >= tw * 2 && ch >= th * 2 && cw > 1 && ch > 1) {
+    const nw = Math.max(1, Math.floor(cw / 2));
+    const nh = Math.max(1, Math.floor(ch / 2));
+    const c = pitCanvas(nw, nh);
+    const g = c.getContext("2d");
+    g.imageSmoothingEnabled = true;
+    g.imageSmoothingQuality = "high";
+    g.drawImage(cur, 0, 0, nw, nh);
+    cur = c;
+    cw = nw;
+    ch = nh;
+  }
+  return { src: cur, w: cw, h: ch };
+}
+
+/* Returns a data URL under the cap, plus the numbers to show the person who
+   just took the photo. Throws with a sentence that can go straight on screen. */
+async function pitCompress(file) {
+  if (!file) throw new Error("Nothing came back from that.");
+  if (file.type && file.type.indexOf("image/") !== 0) {
+    throw new Error("That is not a photo.");
+  }
+  if (file.size > PIT_MAX_SOURCE) {
+    throw new Error("That file is too big for this. Try another one.");
+  }
+
+  let ori = 1;
+  try {
+    ori = pitOrientation(await pitBuffer(file));
+  } catch (e) {
+    ori = 1;
+  }
+  /* The browser already turned it, so leave it alone. */
+  if (await pitAutoOrients()) ori = 1;
+
+  const url = URL.createObjectURL(file);
+  let img;
+  try {
+    img = await pitLoadImage(url);
+  } catch (err) {
+    URL.revokeObjectURL(url);
+    throw err;
+  }
+
+  const sw = img.naturalWidth || img.width;
+  const sh = img.naturalHeight || img.height;
+  if (!sw || !sh) {
+    URL.revokeObjectURL(url);
+    throw new Error("That photo came through with no size to it.");
+  }
+
+  let out = null;
+
+  for (let ei = 0; ei < PIT_EDGES.length && !out; ei++) {
+    const k = Math.min(1, PIT_EDGES[ei] / Math.max(sw, sh));
+    const dw = Math.max(1, Math.round(sw * k));
+    const dh = Math.max(1, Math.round(sh * k));
+    const swap = ori >= 5;
+    const cw = swap ? dh : dw;
+    const ch = swap ? dw : dh;
+
+    const step = pitHalve(img, sw, sh, dw, dh);
+    const canvas = pitCanvas(cw, ch);
+    const g = canvas.getContext("2d");
+    g.imageSmoothingEnabled = true;
+    g.imageSmoothingQuality = "high";
+    pitOrient(g, ori, cw, ch);
+    g.drawImage(step.src, 0, 0, step.w, step.h, 0, 0, dw, dh);
+
+    const lastEdge = ei === PIT_EDGES.length - 1;
+    for (let qi = 0; qi < PIT_QUALITIES.length; qi++) {
+      const data = canvas.toDataURL("image/jpeg", PIT_QUALITIES[qi]);
+      const lastQ = qi === PIT_QUALITIES.length - 1;
+      if (data.length <= PIT_MAX_B64 || (lastEdge && lastQ)) {
+        out = { data: data, w: cw, h: ch };
+        break;
+      }
+    }
+  }
+
+  URL.revokeObjectURL(url);
+
+  return {
+    data: out.data,
+    w: out.w,
+    h: out.h,
+    inBytes: file.size,
+    outBytes: out.data.length
+  };
+}
+
+/* ------------------------------------------------------------ helpers */
+
+function pitBytes(n) {
+  if (!n && n !== 0) return "";
+  if (n < 1024) return n + " B";
+  if (n < 1024 * 1024) return Math.round(n / 1024) + " KB";
+  return (n / (1024 * 1024)).toFixed(1) + " MB";
+}
+
+/* `now` is the server corrected clock. `ts` is Firebase's own server
+   timestamp, so this comparison holds even on a phone with a wrong clock. */
+function pitWhen(ts, now) {
+  if (!ts) return "just now";
+  const diff = now - ts;
+  if (diff < 60000) return "just now";
+  if (diff < 3600000) return Math.floor(diff / 60000) + " min ago";
+  if (diff < 6 * 3600000) return Math.floor(diff / 3600000) + " hr ago";
+  const at = etParts(ts);
+  return (at.hhmm + " " + at.ap).trim();
+}
+
+function pitWho(p) {
+  const parts = [];
+  const name = String(p.name || "").trim();
+  const club = String(p.club || "").trim();
+  if (name) parts.push(name);
+  if (club) parts.push(club);
+  return parts.join(" · ");
+}
+
+function pitTrim(s, max) {
+  return String(s || "").trim().slice(0, max);
+}
+
+/* ---------------------------------------------------------- firebase */
+
+function usePitPhotos(limit) {
+  const [state, setState] = useState({ ready: !FB.ok, items: [] });
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    /* orderByKey, not orderByChild("ts"). Push keys already sort
+       chronologically and ordering by key needs no index, so the server sends
+       one page. Ordering by a child with no .indexOn would ship the whole node
+       to the phone and sort it here, which is the opposite of the point. The
+       database rules are fixed by CLAUDE.md and carry no index. */
+    const q = FB.db.ref("photos").orderByKey().limitToLast(limit);
+    const handler = (snap) => {
+      const all = snap.val() || {};
+      const items = Object.keys(all)
+        .map((id) => Object.assign({ id: id }, all[id]))
+        .filter((p) => p && p.data)
+        .sort((a, b) => (b.ts || 0) - (a.ts || 0) || (a.id < b.id ? 1 : -1));
+      setState({ ready: true, items: items });
+    };
+    q.on("value", handler);
+    return () => q.off("value", handler);
+  }, [limit]);
+
+  return state;
+}
+
+function pitPost(fields) {
+  return FB.db.ref("photos").push({
+    data: fields.data,
+    caption: fields.caption,
+    name: fields.name,
+    club: fields.club,
+    likes: 0,
+    ts: firebase.database.ServerValue.TIMESTAMP
+  });
+}
+
+/* A transaction, because two people liking the same photo in the same second
+   must both count. Clamped at zero so a stale device cannot drive it negative. */
+function pitLike(id, on) {
+  if (!FB.ok) return;
+  FB.db.ref("photos/" + id + "/likes").transaction((cur) => {
+    const n = typeof cur === "number" ? cur : 0;
+    return on ? n + 1 : Math.max(0, n - 1);
+  });
+}
+
+/* Base64 back to bytes, then a blob URL. A data URL straight on an anchor is
+   refused or silently ignored by some mobile browsers. */
+function pitDownload(p) {
+  const parts = String(p.data || "").split(",");
+  if (parts.length < 2) return;
+  let bin;
+  try {
+    bin = window.atob(parts[1]);
+  } catch (e) {
+    return;
+  }
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const url = URL.createObjectURL(new Blob([bytes], { type: "image/jpeg" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "pit-" + String(p.id).replace(/^-+/, "") + ".jpg";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+}
+
+/* -------------------------------------------------------- components */
+
+/* One button, one input. The input covers the label at zero opacity, so the tap
+   lands on the input itself. That is the one pattern that opens the picker on
+   every phone in the room. Take Photo passes capture, Choose from Library does
+   not, and both ship. */
+function PitPicker({ label, glyph, capture, onFile, disabled }) {
+  return (
+    <label className={"btn pit-pick" + (disabled ? " is-off" : "")}>
+      <span aria-hidden="true">{glyph}</span>
+      <span>{label}</span>
+      <input
+        className="pit-pick__in"
+        type="file"
+        accept="image/*"
+        capture={capture ? "environment" : undefined}
+        disabled={disabled}
+        onChange={onFile}
+      />
+    </label>
+  );
+}
+
+function PitUpload({ onPosted }) {
+  /* The name and club stick, so the second photo of the day takes two taps. */
+  const [name, setName] = useState(() => String(readJSON(LS.pitWho).name || ""));
+  const [club, setClub] = useState(() => String(readJSON(LS.pitWho).club || ""));
+  const [caption, setCaption] = useState("");
+  const [staged, setStaged] = useState(null);
+  const [working, setWorking] = useState(false);
+  const [posting, setPosting] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [bad, setBad] = useState("");
+
+  const pick = useCallback((e) => {
+    const file = e.target.files && e.target.files[0];
+    /* Clear it, so picking the same photo twice still fires a change. */
+    e.target.value = "";
+    if (!file) return;
+    setMsg("");
+    setBad("");
+    setStaged(null);
+    setWorking(true);
+    pitCompress(file)
+      .then((shot) => { setStaged(shot); setWorking(false); })
+      .catch((err) => {
+        setBad((err && err.message) || "That photo did not go through.");
+        setWorking(false);
+      });
+  }, []);
+
+  const post = useCallback(() => {
+    if (!staged || !FB.ok) return;
+    setPosting(true);
+    setBad("");
+    const fields = {
+      data: staged.data,
+      caption: pitTrim(caption, 140),
+      name: pitTrim(name, 40),
+      club: pitTrim(club, 40)
+    };
+    pitPost(fields)
+      .then(() => {
+        writeJSON(LS.pitWho, { name: fields.name, club: fields.club });
+        setStaged(null);
+        setCaption("");
+        setPosting(false);
+        setMsg("Up on the wall.");
+        if (onPosted) onPosted();
+      })
+      .catch(() => {
+        setPosting(false);
+        setBad("That did not post. Try it again.");
+      });
+  }, [staged, caption, name, club, onPosted]);
+
+  return (
+    <section className="pit-panel glow-card grille" aria-labelledby="pit-add">
+      <h3 className="pit-panel__h t-display" id="pit-add">Get it on the wall</h3>
+
+      <label className="tf__l">
+        <span>Your name, optional</span>
+        <input
+          className="tf__in"
+          value={name}
+          maxLength={40}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </label>
+
+      <label className="tf__l">
+        <span>Club or team, optional</span>
+        <input
+          className="tf__in"
+          value={club}
+          maxLength={40}
+          onChange={(e) => setClub(e.target.value)}
+        />
+      </label>
+
+      <label className="tf__l">
+        <span>Caption, optional</span>
+        <input
+          className="tf__in"
+          value={caption}
+          maxLength={140}
+          placeholder="Who is that supposed to be"
+          onChange={(e) => setCaption(e.target.value)}
+        />
+      </label>
+
+      {!FB.ok ? (
+        <p className="pit-msg pit-msg--bad">
+          Live updates are off, so nothing can post right now.
+        </p>
+      ) : null}
+
+      {working ? (
+        <p className="pit-msg">Squeezing it down.</p>
+      ) : null}
+
+      {!working && !staged ? (
+        <div className="tf__row">
+          <PitPicker
+            label="Take Photo"
+            glyph={"\u{1F4F7}"}
+            capture
+            onFile={pick}
+            disabled={!FB.ok}
+          />
+          <PitPicker
+            label="Choose from Library"
+            glyph={"\u{1F5BC}"}
+            onFile={pick}
+            disabled={!FB.ok}
+          />
+        </div>
+      ) : null}
+
+      {staged ? (
+        <div className="pit-stage">
+          <img className="pit-stage__img" src={staged.data} alt="The photo you just picked" />
+          <p className="pit-stage__meta t-data">
+            {pitBytes(staged.inBytes)} in. {pitBytes(staged.outBytes)} out.{" "}
+            {staged.w} by {staged.h}.
+          </p>
+          <div className="tf__row">
+            <button className="btn btn--go" onClick={post} disabled={posting || !FB.ok}>
+              {posting ? "Posting" : "Post it"}
+            </button>
+            <button
+              className="btn btn--quiet"
+              onClick={() => { setStaged(null); setBad(""); }}
+              disabled={posting}
+            >
+              Start over
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {bad ? <p className="pit-msg pit-msg--bad">{bad}</p> : null}
+      {msg ? <p className="pit-msg">{msg}</p> : null}
+
+      <p className="pit-hint">
+        Take Photo opens the camera. Choose from Library picks one you already
+        have. Photos get shrunk on your phone before they go up, so this works on
+        hotel Wi-Fi.
+      </p>
+    </section>
+  );
+}
+
+function PitLike({ p, mine, onLike }) {
+  return (
+    <button
+      className={"pit-like" + (mine ? " is-on" : "")}
+      onClick={() => onLike(p.id)}
+      aria-pressed={mine}
+      disabled={!FB.ok}
+    >
+      <span className="pit-like__h" aria-hidden="true">{mine ? "♥" : "♡"}</span>
+      <span className="pit-like__n t-data">{FB.ok ? (p.likes || 0) : "–"}</span>
+      <span className="sr-only">{mine ? "Unlike this photo" : "Like this photo"}</span>
+    </button>
+  );
+}
+
+function PitCell({ p, now, mine, onLike, onOpen }) {
+  const who = pitWho(p);
+  return (
+    <li className="pit-cell">
+      <div className="pit-shot">
+        <button
+          className="pit-shot__hit"
+          onClick={(e) => onOpen(p.id, e.currentTarget)}
+          aria-label={p.caption ? "Open photo: " + p.caption : "Open photo"}
+        >
+          <img
+            className="pit-shot__img"
+            src={p.data}
+            alt={p.caption || "Photo from the meeting"}
+            loading="lazy"
+          />
+        </button>
+        <PitLike p={p} mine={mine} onLike={onLike} />
+      </div>
+      {p.caption ? <p className="pit-cap">{p.caption}</p> : null}
+      <p className="pit-by">
+        {who ? <span>{who} · </span> : null}
+        <span className="pit-by__t">{pitWhen(p.ts, now)}</span>
+      </p>
+    </li>
+  );
+}
+
+/* The overlay is fixed and it deliberately does not lock the page. No body
+   overflow change, no touch preventDefault, no overscroll-behavior. It carries
+   its own overflow-y so that a tall photo plus a long caption on a short screen
+   scrolls inside the overlay instead of being clipped, and closing it leaves the
+   grid exactly where it was. */
+function PitBox({ p, now, mine, onLike, onClose, isAdmin, onDelete }) {
+  const closeRef = useRef(null);
+
+  useEffect(() => {
+    if (closeRef.current && closeRef.current.focus) {
+      closeRef.current.focus({ preventScroll: true });
+    }
+  }, []);
+
+  useEffect(() => {
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const who = pitWho(p);
+
+  return (
+    <div
+      className="pit-box"
+      role="dialog"
+      aria-label="Photo"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div className="pit-box__inner">
+        <div className="pit-box__bar">
+          <button ref={closeRef} className="btn" onClick={onClose}>Close</button>
+          <span className="pit-box__spacer"></span>
+          {isAdmin ? (
+            <button className="btn" onClick={() => pitDownload(p)}>Download</button>
+          ) : null}
+          {isAdmin ? (
+            <button className="btn btn--kill" onClick={() => onDelete(p)}>Delete</button>
+          ) : null}
+        </div>
+
+        <img
+          className="pit-box__img"
+          src={p.data}
+          alt={p.caption || "Photo from the meeting"}
+        />
+
+        <div className="pit-box__meta">
+          <PitLike p={p} mine={mine} onLike={onLike} />
+          {p.caption ? <p className="pit-box__cap">{p.caption}</p> : null}
+          <p className="pit-box__by">
+            {who ? <span>{who} · </span> : null}
+            <span className="pit-by__t">{pitWhen(p.ts, now)}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PitTab({ isAdmin, now }) {
+  const [limit, setLimit] = useState(PIT_PAGE);
+  const { ready, items } = usePitPhotos(limit);
+  const [liked, setLiked] = useState(() => readJSON(LS.liked));
+  const [filter, setFilter] = useState("");
+  const [openId, setOpenId] = useState(null);
+  const backTo = useRef(null);
+
+  /* One like per photo per device, held in mm26_liked. Storage is read rather
+     than trusted from state, so a second tab on the same phone cannot double
+     count through a stale copy. */
+  const onLike = useCallback((id) => {
+    const held = readJSON(LS.liked);
+    const on = !held[id];
+    if (on) held[id] = 1; else delete held[id];
+    writeJSON(LS.liked, held);
+    setLiked(held);
+    pitLike(id, on);
+  }, []);
+
+  const close = useCallback(() => {
+    setOpenId(null);
+    const el = backTo.current;
+    if (el && el.focus && document.body.contains(el)) {
+      el.focus({ preventScroll: true });
+    }
+  }, []);
+
+  const remove = useCallback((p) => {
+    if (!FB.ok) return;
+    if (!window.confirm("Delete this photo? It does not come back.")) return;
+    FB.db.ref("photos/" + p.id).remove();
+    close();
+  }, [close]);
+
+  /* Filter values are whatever people actually typed in. Nothing is invented
+     and no club list is hard coded. */
+  const clubs = [];
+  items.forEach((p) => {
+    const c = String(p.club || "").trim();
+    if (c && clubs.indexOf(c) === -1) clubs.push(c);
+  });
+  clubs.sort((a, b) => a.localeCompare(b));
+
+  const active = filter && clubs.indexOf(filter) >= 0 ? filter : "";
+  const shown = active
+    ? items.filter((p) => String(p.club || "").trim() === active)
+    : items;
+
+  const open = openId ? shown.filter((p) => p.id === openId)[0] || null : null;
+
   return (
     <TabFrame tabKey="pit">
-      <Empty>No photos yet. Somebody go find the drummer.</Empty>
+      <PitUpload onPosted={() => { setFilter(""); }} />
+
+      {!ready ? <Empty>Pulling the photos.</Empty> : null}
+
+      {ready && !items.length ? (
+        <Empty>No photos yet. Somebody go find the drummer.</Empty>
+      ) : null}
+
+      {clubs.length > 1 ? (
+        <div className="dayrow" role="tablist" aria-label="Filter by club or team">
+          <button
+            role="tab"
+            className="daypill"
+            aria-selected={!active}
+            onClick={() => setFilter("")}
+          >
+            <span className="daypill__n">All</span>
+          </button>
+          {clubs.map((c) => (
+            <button
+              key={c}
+              role="tab"
+              className="daypill"
+              aria-selected={active === c}
+              onClick={() => setFilter(c)}
+            >
+              <span className="daypill__n">{c}</span>
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      {ready && items.length ? (
+        <p className="pit-note">
+          {shown.length === 1 ? "One photo." : shown.length + " photos."}{" "}
+          {active ? "Filtered to " + active + "." : "Newest first."}
+        </p>
+      ) : null}
+
+      {ready && items.length && !shown.length ? (
+        <Empty>Nothing filed under that yet.</Empty>
+      ) : null}
+
+      {shown.length ? (
+        <ul className="pit-grid">
+          {shown.map((p) => (
+            <PitCell
+              key={p.id}
+              p={p}
+              now={now}
+              mine={!!liked[p.id]}
+              onLike={onLike}
+              onOpen={(id, el) => { backTo.current = el; setOpenId(id); }}
+            />
+          ))}
+        </ul>
+      ) : null}
+
+      {items.length >= limit ? (
+        <div className="pit-more">
+          <button className="btn" onClick={() => setLimit(limit + PIT_PAGE)}>
+            Load {PIT_PAGE} older
+          </button>
+        </div>
+      ) : null}
+
+      {open ? (
+        <PitBox
+          p={open}
+          now={now}
+          mine={!!liked[open.id]}
+          onLike={onLike}
+          onClose={close}
+          isAdmin={isAdmin}
+          onDelete={remove}
+        />
+      ) : null}
+
       <BuildNote isAdmin={isAdmin} task="T2.5">
-        Both upload paths ship together, camera and library. Client side
-        compression to roughly 800px. Square grid, likes that sync, lightbox
-        with admin download and delete.
+        Both upload paths ship, camera and library, as two separate inputs.
+        Compression runs on the phone to roughly 800px on the long edge and steps
+        down a quality ladder until the stored string is under 190KB, so a 4MB
+        photo lands around 80KB. EXIF rotation is applied here only when the
+        browser has not already applied it, decided by a probe image rather than
+        a user agent guess. Likes are a Firebase transaction with the device half
+        in mm26_liked. The lightbox never touches body overflow, which is the
+        acceptance criterion. The grid pulls {PIT_PAGE} photos at a time, because
+        every photo is base64 inside its own record.
       </BuildNote>
     </TabFrame>
   );

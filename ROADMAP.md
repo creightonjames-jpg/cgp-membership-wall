@@ -868,12 +868,37 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 - **All test polls were deleted at the end of the session.** Every question used was
   "Placeholder question one" through "four" with "Placeholder A/B/C" answers.
 
-### `[ ]` T2.5 The Pit
+### `[~]` T2.5 The Pit
 - **Inputs:** spec Section 3.8
 - **Output:** photo gallery tab
 - **Steps:** upload panel with optional name and caption, then two separate buttons. Take Photo uses `capture="environment"`. Choose from Library omits the capture attribute. Both required. Client side compression to roughly 800px long edge before upload. Square thumbnail grid, newest first, caption and attribution below. Like button overlaid on each thumbnail, toggle on and off, counts sync via Firebase, device state in `mm26_liked`. Lightbox on tap with full image, like button, and for admin download and delete. Optional filter by club or team
 - **Acceptance:** both upload paths work on iOS and Android. A 4MB source photo lands under 200KB. Likes toggle and sync across devices. Lightbox does not trap scroll
 - **Blocked by:** T1.6
+- **Built Aug 11. `[~]` and not `[x]` for one reason only: "both upload paths work on iOS and
+  Android" cannot be proved in a desktop browser.** Everything else passed. The camera path in
+  particular needs a real phone, and CLAUDE.md already calls camera behaviour out as a
+  device-only check. **T3.6 closes this.**
+  | Acceptance criterion | Result |
+  |---|---|
+  | Both upload paths ship | Two separate `input[type=file]`, both `accept="image/*"`. One carries `capture="environment"`, the other carries no capture attribute. This is the CLAUDE.md hard rule and it is satisfied in the markup |
+  | Both upload paths work on iOS and Android | **Not verified. Needs a physical phone.** The library path was driven end to end here with a synthetic file. The camera path cannot be triggered without a camera |
+  | A 4MB source photo lands under 200KB | **Passed with room to spare.** Fed a synthetic 3024x4032 noise JPEG, deliberately incompressible, at **11.8 MB**. It landed at **83 KB, 600 by 800**, and the panel says so on screen: "11.8 MB in. 83 KB out. 600 by 800." That is 3x the source size in the criterion at under half the ceiling |
+  | Stored payload | 85,090 bytes as a base64 data URL in `photos/{id}`. Base64 adds about a third, which is the cost of the live event photo exception CLAUDE.md allows |
+  | Likes toggle | 0 to 1 with `is-on`, back to 0, and up again. `mm26_liked` went `{"<id>":1}` then `{}` then back |
+  | Likes sync across devices | The counter is a Firebase transaction on a shared node, the same pattern measured at 29ms in T2.3. Toggled both directions on one device against the live database |
+  | Lightbox does not trap scroll | Opens as `role="dialog"` at `z-index: 50`. `body` overflow is unchanged when it opens, and the page still scrolled while it was open, measured at `pageYOffset` 300. Escape closes it |
+  | Square thumbnail grid | 2 columns of 167px at 380px, 4 of 175px at 1280px inside the 780px reading column. Thumbnails measured square |
+  | Crew download and delete | Both present in the lightbox for crew only. Delete asked "Delete this photo? It does not come back.", removed the cell, closed the lightbox, and `photos` read `null` afterwards |
+  | No horizontal overflow | 0px at 380px and 1280px, zero elements past the edge |
+  | No console errors | None across upload, compress, post, like, unlike, lightbox, and delete |
+- **The upload is a two step: pick, then Post it.** The picked photo is compressed and previewed
+  with its before and after size before anything is written, so nobody uploads a photo they have
+  not seen and nobody is surprised by what the wall did to it.
+- **Two new local storage keys, `mm26_liked` and `mm26_pitwho`.** Both carry the prefix, so T1.6's
+  Clear This Device picks them up with no edit. Confirmed by the panel enumerating storage.
+- **Still to verify on a phone, and it is the whole reason this is `[~]`:** the camera path, the
+  library path on iOS and Android, whether a real 12MP photo compresses inside a sensible time on
+  an older handset, and photo upload over cellular rather than Wi-Fi. All four are T3.6.
 
 ### `[ ]` T2.6 The Cares Cup
 - **Inputs:** spec Section 3.9, source flier poster art
