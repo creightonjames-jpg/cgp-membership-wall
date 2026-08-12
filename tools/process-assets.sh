@@ -124,12 +124,40 @@ report_block() {
 
 # ---------------------------------------------------------------- converters
 
+# Echoes the path to a PNG working copy that sips can edit in place.
+#
+# Do not just copy the source and keep its extension. sips READS webp but
+# refuses to write one back, so --resampleWidth on a .webp copy fails and the
+# file gets reported as "conversion failed" even though nothing is wrong with
+# it. Two of Jim's headshots died this way. Normalizing every input to PNG up
+# front costs one pass and removes the whole class of bug for webp, heic, gif
+# and bmp at once.
+#
+# PIL is the fallback because it reads some webp variants that sips does not.
+stage_editable() {
+  local src="$1" work
+  work="$(mktemp -t mm26asset).png"
+  if sips -s format png "$src" --out "$work" >/dev/null 2>&1 \
+     && [[ -s "$work" ]]; then
+    printf '%s' "$work"; return 0
+  fi
+  if python3 - "$src" "$work" <<'PY' >/dev/null 2>&1
+import sys
+from PIL import Image
+Image.open(sys.argv[1]).convert("RGB").save(sys.argv[2], "PNG")
+PY
+  then
+    [[ -s "$work" ]] && { printf '%s' "$work"; return 0; }
+  fi
+  rm -f "$work"
+  return 1
+}
+
 # 400x400 center-cropped JPG. Scales the SHORT edge to 400 first so the crop
 # only ever removes pixels and never pads with background.
 convert_attendee() {
   local src="$1" out="$2" w="$3" h="$4" work rc
-  work="$(mktemp -t mm26asset).${src##*.}"
-  cp "$src" "$work" || { rm -f "$work"; return 1; }
+  work="$(stage_editable "$src")" || return 1
 
   if (( w <= h )); then
     sips --resampleWidth "$ATTENDEE_PX" "$work" >/dev/null 2>&1 || { rm -f "$work"; return 1; }
@@ -148,8 +176,7 @@ convert_attendee() {
 # OUT_EXT: png for charts and line art, jpg for photographs.
 convert_wide() {
   local src="$1" out="$2" w="$3" work rc
-  work="$(mktemp -t mm26asset).${src##*.}"
-  cp "$src" "$work" || { rm -f "$work"; return 1; }
+  work="$(stage_editable "$src")" || return 1
 
   if (( w > WIDE_MAX_PX )); then
     sips --resampleWidth "$WIDE_MAX_PX" "$work" >/dev/null 2>&1 || { rm -f "$work"; return 1; }
@@ -199,12 +226,15 @@ esac
 # ---------------------------------------------------------------- roster
 
 declare -a ROSTER_SLUGS=()
+declare -a ROSTER_NOPHOTO=()
 ROSTER_FILE="$REPO_ROOT/data/roster.json"
 ROSTER_LOADED=0
 
 if [[ "$KIND" == "attendees" && -f "$ROSTER_FILE" ]]; then
-  while IFS= read -r slug; do
-    [[ -n "$slug" ]] && ROSTER_SLUGS+=("$slug")
+  while IFS='|' read -r slug has; do
+    [[ -n "$slug" ]] || continue
+    ROSTER_SLUGS+=("$slug")
+    [[ "$has" == "1" ]] || ROSTER_NOPHOTO+=("$slug")
   done < <(python3 -c '
 import json, sys
 try:
@@ -215,7 +245,12 @@ except Exception as e:
 records = data if isinstance(data, list) else data.get("attendees", [])
 for r in records:
     if isinstance(r, dict) and r.get("slug"):
-        print(r["slug"])
+        # The photo field is the authority, not the filename. A person matched
+        # by surname or by OVERRIDE has a face on disk under a name that is not
+        # their slug: Cyndi Melfi is melfi-0001.jpg. Testing for {slug}.jpg
+        # reported 40 people as photoless when only 9 were, which sends
+        # somebody chasing photos that already shipped.
+        print("%s|%s" % (r["slug"], "1" if r.get("photo") else "0"))
 ' "$ROSTER_FILE")
   ROSTER_LOADED=1
 fi
@@ -384,10 +419,13 @@ report_block "Bigger than the size guide. sips cannot shrink a PNG much, so if
 report_block "Not in the rename map, so NOT written. Add them or drop --map:" "${UNMAPPED[@]:-}"
 report_block "No matching roster entry. Check the spelling:" "${UNMATCHED[@]:-}"
 
-# Roster entries still without a photo, counting files already in the repo.
+# Roster entries still without a photo. Starts from the reconciled photo field,
+# then forgives anyone whose face just landed in this run, since roster.json is
+# only rewritten when reconcile-roster.py runs afterwards.
 if [[ "$KIND" == "attendees" ]] && (( ROSTER_LOADED )); then
   declare -a MISSING=()
-  for slug in "${ROSTER_SLUGS[@]}"; do
+  for slug in "${ROSTER_NOPHOTO[@]:-}"; do
+    [[ -n "$slug" ]] || continue
     [[ -s "$OUT_DIR/$slug.jpg" ]] || MISSING+=("$slug")
   done
   report_block "On the roster with no photo. Needs one or a placeholder:" "${MISSING[@]:-}"
