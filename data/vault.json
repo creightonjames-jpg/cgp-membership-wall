@@ -1,0 +1,15 @@
+{
+  "note": "Artwork manifest for The Vault, ROADMAP T2.1 and T3.3. One entry per delivered file. Nothing is invented in here: an empty items array is the truth, and the wall prints its own empty state for that section. Club Graphs is not in here, it reads data/graphs.json instead.",
+  "dir": "assets/resources",
+  "itemShape": {
+    "file": "filename inside dir. png, jpg, webp or svg. An svg is inlined so the wall's fonts apply, with an img tag as the fallback.",
+    "title": "what the card is called. Falls back to the filename when missing.",
+    "note": "optional one line under the title. Leave it out rather than padding it."
+  },
+  "sections": {
+    "fundamentals": { "items": [] },
+    "buckets": { "items": [] },
+    "scenarios": { "items": [] },
+    "personas": { "items": [] }
+  }
+}

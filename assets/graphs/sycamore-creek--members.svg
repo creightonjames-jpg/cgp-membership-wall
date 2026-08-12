@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 240" width="380" height="240" role="img" aria-label="Sycamore Creek, Full privilege members">
+<rect width="380" height="240" rx="10" fill="#201E24" stroke="#332F38"/>
+<text x="12" y="18" fill="#F7F3EA" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="700">Sycamore Creek</text>
+<text x="12" y="31" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="9.5">Full privilege members</text>
+<line x1="44" y1="214.0" x2="368" y2="214.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="217.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">0</text>
+<line x1="44" y1="128.0" x2="368" y2="128.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="131.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">200</text>
+<line x1="44" y1="42.0" x2="368" y2="42.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="45.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">400</text>
+<text x="159.7" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2025</text>
+<text x="298.6" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2026</text>
+<path d="M44.0,214.0 L44.0,66.5 L55.6,66.9 L67.1,66.5 L78.7,65.6 L90.3,66.5 L101.9,66.1 L113.4,63.1 L125.0,63.1 L136.6,62.6 L148.1,63.1 L159.7,64.4 L171.3,65.2 L182.9,63.1 L194.4,63.5 L206.0,62.6 L217.6,63.1 L229.1,62.6 L240.7,62.6 L252.3,61.8 L263.9,60.9 L275.4,62.2 L287.0,62.6 L298.6,63.1 L310.1,61.4 L321.7,60.5 L333.3,60.5 L344.9,61.4 L356.4,60.9 L368.0,60.5 L368.0,214.0 Z" fill="#C8102E" opacity="0.14"/>
+<path d="M44.0,66.5 L55.6,66.9 L67.1,66.5 L78.7,65.6 L90.3,66.5 L101.9,66.1 L113.4,63.1 L125.0,63.1 L136.6,62.6 L148.1,63.1 L159.7,64.4 L171.3,65.2 L182.9,63.1 L194.4,63.5 L206.0,62.6 L217.6,63.1 L229.1,62.6 L240.7,62.6 L252.3,61.8 L263.9,60.9 L275.4,62.2 L287.0,62.6 L298.6,63.1 L310.1,61.4 L321.7,60.5 L333.3,60.5 L344.9,61.4 L356.4,60.9 L368.0,60.5" fill="none" stroke="#C8102E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="368.0" cy="60.5" r="2.6" fill="#C8102E"/>
+<text x="368" y="19" fill="#D9A94C" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="700" text-anchor="end">357</text>
+</svg>

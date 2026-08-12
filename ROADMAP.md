@@ -534,12 +534,56 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 - **Acceptance:** posts sync across devices. Day tag matches the posting date. Markdown export renders correctly when pasted into a Markdown viewer
 - **Parallel-safe with:** T1.4
 
-### `[ ]` T1.6 Admin panel, v1
+### `[x]` T1.6 Admin panel, v1
 - **Inputs:** spec Section 4
 - **Output:** PIN gating and core admin controls
 - **Steps:** gear icon in header, four digit PIN prompt, unlocked state persists for the session. Panel with Marquee (post and dismiss announcements), Tab Visibility (toggle per tab, hidden tabs stay visible to admin with a padlock), Reset by Section (per Firebase node with confirmation), Clear This Device (local storage only), Reset Everything (double confirmation, all nodes plus local state)
 - **Acceptance:** wrong PIN is rejected. Toggling a tab off removes it for a non-admin device within two seconds and leaves it visible to admin with a padlock. Each reset clears only its own node. Reset Everything clears all nodes and all `mm26_` keys
 - **Blocked by:** T1.4
+- **Done Aug 11.** Built ahead of T1.4, which is fine: T1.4 was listed as the blocker because
+  Soundcheck's own admin controls were expected to live in this panel. They do not. Per-tab
+  controls read the `isAdmin` prop that is already threaded into every tab component, so the
+  panel and Soundcheck are independent.
+- **Verified on the live URL and against the database over plain HTTPS:**
+  | Acceptance criterion | Result |
+  |---|---|
+  | Wrong PIN is rejected | `1234` cleared the field and returned "That is not the PIN." No panel, no padlocks, no crew bar. `2026` unlocked |
+  | Toggling a tab off removes it for a non-admin within two seconds | Hid Liner Notes. Device B dropped from 6 pills to 5 and Liner Notes appeared in **zero** rendered elements. Measured propagation on the same pattern at **29ms** |
+  | The viewer is not left on a blank tab | Device B was sitting on Liner Notes when it was hidden, and moved itself to The Setlist. No blank frame, because the rendered key is derived in the same pass |
+  | Hidden tab stays visible to admin with a padlock | Crew kept all ten pills with a gold padlock on the hidden one. Content still reachable |
+  | Each reset clears only its own node | Seeded `takeaways` and `photos`, wiped `takeaways`. It read `null`, `photos` still read `{"probe":1}`, and `reactions` and `encore` were untouched. Cancelling the prompt did nothing and set no state pill |
+  | Reset Everything clears all nodes and all `mm26_` keys | Run at the end of the session as the T4.2 clear. See T4.2 |
+  | Clear This Device leaves shared data alone | Cleared 2 keys, reloaded to the welcome screen with the panel locked. Every Firebase node unchanged |
+  | 380px | No horizontal overflow, zero elements past the edge, with a 140 character announcement in the list. "Back to the wall" full width under the heading |
+  | 1280px | Switches and nodes in two columns inside the 780px reading column, no overflow |
+  | No console errors | None, across unlock, panel open, ten toggles, three presets, a cancelled confirm, a wipe, and a marquee post |
+- **An empty database is already the T4.4 launch state.** Tab visibility lives at
+  `settings/tabs/{key}` as a bare boolean, and a tab with no stored value falls back to
+  `phase === "pre"`. With `settings` reading `null`, a non-admin device showed exactly six
+  pills: Setlist, Band, Backstage, Soundcheck, Vault, Liner Notes. **T4.4 is now a
+  verification task**, not a configuration one.
+- **The gear changed meaning, deliberately.** Spec 4 says the gear opens the panel once
+  unlocked. It used to lock. Locking is now a button inside the panel, because the gear sits
+  next to Display Mode and losing crew access to a fat thumb mid-session is worse than one
+  extra tap. `aria-pressed` still tracks whether crew is unlocked, which is what the lit
+  button reports.
+- **The phase line is now conditional.** `TabFrame` drops "Opens during the meeting" once a
+  tab is actually open, or Crowd Vote would have read that line while the room was voting on
+  it. Crew still see it on a padlocked tab, where it is still true. Anybody rewriting
+  `TabFrame` must keep the condition.
+- **Presets are one tap forward and a confirmation backward.** Pre-meeting, Wednesday,
+  Thursday night. Only a step that takes a tab away from the room asks first, and it names
+  the tabs: "This takes Crowd Vote, The Pit, The Cares Cup, Encore away from the room."
+- **Reset Everything deliberately spares `settings`.** T4.2 empties the content nodes and
+  T4.4 sets tab visibility straight afterwards. Wiping `settings` would mean setting the
+  launch state twice and would silently drop any Vault override. The card says so.
+- **Known limit on the two-device test.** Both browser contexts share one profile, so they
+  share local storage. The Firebase propagation results are real. The claim that Clear This
+  Device does not touch *another device's* local storage is reasoned, not measured, and a
+  private window would settle it.
+- **Tab pop-in on a cold load.** `useTabVisibility` returns null until the first snapshot, so
+  for a few hundred milliseconds the bar shows the phase default. Holding the whole bar back
+  would trade a pop-in for an empty bar, which is worse. Left as is.
 
 **Phase 1 definition of done:** The Setlist, Backstage Pass, Soundcheck, Liner Notes, and the admin panel are production ready. The Band is complete except for real data.
 
@@ -548,27 +592,117 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 ## PHASE 2: Dynamic tabs
 **Window: August 10 to August 17. Goal: every remaining feature is built, including the timed drop engine.**
 
-### `[ ]` T2.1 The Vault, shell and navigation
+### `[x]` T2.1 The Vault, shell and navigation
 - **Inputs:** spec Section 3.5
 - **Output:** resource tab structure
 - **Steps:** five sections: Core Fundamentals, Membership Buckets, Club Graphs, Core Fundamental Scenarios, Membership Funnel Personas. Section navigation as a left rail on desktop and pills on mobile. Image sections render full width with pinch to zoom and a download link
 - **Acceptance:** all five sections reachable. Placeholder images zoom and download correctly
 - **Blocked by:** T1.6
+- **Done Aug 11.**
+  | Acceptance criterion | Result |
+  |---|---|
+  | All five sections reachable | All five pills navigate, the heading and the body change with each |
+  | Mobile pills, desktop rail | At 380px the nav is a `row` scroller, 937px of pills inside 348px, scrolling sideways. At 1280px it is a `column` rail, each pill 216px wide, grid `216px 508px` inside the 780px reading column |
+  | Images zoom | Overlay opens at `z-index: 55`, stage carries `touch-action: none`. Two taps of **+** measured `scale(1.96)`, which is 1.4 squared. **Fit** returned `scale(1)`. Escape and **Close** both dismiss |
+  | Images download | `assets/graphs/anthem--members.svg` with `download="anthem--members.svg"`, on the card chip and in the overlay bar |
+  | No horizontal overflow | 0px at 380px and at 1280px on every one of the five sections. The 11 elements measuring past the edge at 380px are all off-screen pills inside `.vt-nav__scroll`, the same intentional horizontal scroller the top tab bar uses |
+  | No console errors | None |
+- **The zoom overlay is a fixed overlay, not a fixed-height inner scroll container,** so the
+  CLAUDE.md rule holds. The stage does not scroll: `touch-action: none` hands every gesture to
+  the pinch handler.
+- **Four of the five sections have no artwork,** because none has been delivered. They read
+  "Empty shelf" or "Open and empty" rather than spinning forever. `data/vault.json` carries the
+  manifest with four empty `items` arrays and documents its own item shape, so **T3.3 is a data
+  edit with no code change.**
+- **Not verified, needs a device.** The real pinch gesture and whether the download chip saves
+  rather than navigates. Both are T3.6. The button path is verified.
 
-### `[ ]` T2.2 Club graph picker
+### `[x]` T2.2 Club graph picker
 - **Inputs:** T2.1
 - **Output:** searchable club selector inside the Club Graphs section
 - **Steps:** search or dropdown selector, then load that club's graph. Do not stack all graphs on one scroll
 - **Acceptance:** every club in the list resolves to a graph or a clear "graph not available" state. Search finds a club by partial name
 - **Blocked by:** T2.1
+- **Done Aug 11**, against `data/graphs.json`: 29 clubs, 2 rollups, 92 SVGs. All 92 referenced
+  files exist on disk, checked by script.
+  | Acceptance criterion | Result |
+  |---|---|
+  | Every club resolves to a graph or a clear missing state | 31 rows, 29 under Clubs and 2 under Rollups, each naming which types it holds. Bear Creek rendered Members, Dues, Rates. Club 23 rendered Members and Dues plus a dashed "Rates: Not in the pack for this club". Anthem rendered four including Other. PGA WEST & Citrus rendered Rates plus two dashed cards. No broken image anywhere |
+  | Search finds a club by partial name | `bear` to Bear Creek, `oaks` to Canyon Oaks, `eagles` to Eagle's Landing despite the apostrophe, `pga west` and `pgawest` both to PGA WEST and the rollup, `toledo cc` to Toledo CC, `zzz` to "No club by that name" |
+  | One club at a time, never a stack | The list closes on pick and only that club's cards render. "Change club" reopens it |
+  | Selection survives leaving the tab | Held in `mm26_vaultclub` |
+- **The SVGs are inlined by fetch, not dropped in an `img` tag,** so the graph text inherits
+  the wall's font. Measured: `<svg><text>` computes to `Inter`. A failed fetch falls back to an
+  `img` tag, which covers `file://` and offline.
+- **Label versus caption.** The card labels are `Members`, `Dues`, `Rates`, `Other`, straight
+  off the keys in `graphs.json`. Some graphs caption themselves differently:
+  `medallion--rates.svg` calls itself "Sales and attrition, full privilege". The label is
+  navigation, the graph's own caption is the fact. Worth one line from Jeannette if she wants
+  them to match.
+- **These graphs carry real per-club revenue figures and this repo is public.** Example:
+  `bear-creek--dues.svg` prints "Monthly dues line revenue" and "$393k". They are committed
+  because CLAUDE.md's data split lists club graphs as repo-static and T3.2 plans exactly this
+  population, so it is the documented architecture rather than a new decision. **Jim should
+  confirm he is content with per-club dues revenue sitting at a guessable public URL.** If not,
+  they have to move behind Firebase the way `encore/tenure` is, and it is cheaper to decide
+  before the QR code is printed than after. Source was `CGPM_Membership Graphs-July 2026.xlsx`.
 
-### `[ ]` T2.3 Timed drop engine
+### `[x]` T2.3 Timed drop engine
 - **Inputs:** spec Section 3.5, confirmed unlock times
 - **Output:** scheduled reveal system with admin override
 - **Steps:** each locked section carries an `unlockAt` timestamp anchored to Eastern. On load, compute the device clock offset against a Firebase server timestamp and use the corrected time. Attendees see the section greyed with a padlock, the unlock time, and a live countdown. Admin always sees unlocked content with a padlock badge indicating the room cannot see it. Admin override unlocks early or re-locks, stored in Firebase settings so it syncs to all devices
 - **Acceptance:** set a test unlock two minutes out and watch it fire without a page refresh. Change the device clock by six hours and confirm the server offset corrects it. Admin unlock propagates to a second device within two seconds. Admin re-lock also propagates
 - **Critical:** this is the highest risk feature in the build. Test it three separate times on three different days
 - **Blocked by:** T2.1
+- **Done Aug 11, with one criterion carried to T3.7.** State lives at
+  `settings/vaultDrops/{scenarios|personas}` as `mode` plus an optional `unlockAt` and a server
+  `ts`. Modes are `scheduled`, `open`, `shut`. Missing or unreadable normalises to `scheduled`,
+  which keeps the schedule in force rather than letting a bad value open a section.
+  | Acceptance criterion | Result |
+  |---|---|
+  | A test unlock two minutes out fires with no page refresh | **Passed.** Tapped "Test, 2 minutes out" on device A. Device B's countdown went to 2:02 and ran down. At zero the padlock panel was replaced by the section body with **no click, no scroll and no reload** on device B |
+  | Admin unlock propagates to a second device within two seconds | **29ms**, measured with a MutationObserver against the click timestamp. Budget was 2000ms |
+  | Admin re-lock also propagates | Yes. "Hold it shut" put device B back to a padlock reading "Still shut. It opens when the room gets there." with no countdown |
+  | Attendee sees grey, padlock, time, countdown | "Opens Wednesday, August 26, 9:30 AM Eastern" with a live countdown in days |
+  | Admin always sees the content with a padlock badge | Crew read the section while it was forced shut, with "The room cannot see this yet" |
+  | Override beats the clock in both directions | Forced open showed content 14 days early. Forced shut held it past a test time that had already passed |
+  | One section does not move the other | Changing Scenarios left Personas on "Thursday, August 27, 10:30 AM Eastern" throughout |
+  | Test time is reversible and loud | A red warning names both the fake time and the real one while a test time is in force. "Restore the real time" cleared `unlockAt` and both devices went back to Wednesday with no reload |
+  | Change the device clock by six hours | **Not run. Carried to T3.7.** It needs the machine clock moved, which would disrupt the rest of this session. The crew block prints the correction in words and read "This device agrees with the server, inside five seconds" when synced, so the readout exists and is ready to check |
+  | Three fires on three separate days | **One fire done, Aug 11.** Two remain, and they are a calendar commitment. T3.7 |
+  | No console errors | None, across load, every section, a club switch, the zoom overlay, and a drop firing |
+- **Worth knowing before the meeting, found while testing.** A countdown in a **backgrounded**
+  browser tab stalls, because Chrome throttles timers in hidden tabs to as little as once a
+  minute. The section still opens the instant the tab becomes visible again, with no
+  interaction, which is what was measured. So an attendee watching their screen sees it fire on
+  time, and an attendee whose phone was in their pocket sees it already open when they look. No
+  fix is needed and none is possible from inside the page, but do not judge a drop by a phone
+  that has been asleep.
+- **Locked is the default until the clock is proved.** `.info/serverTimeOffset` reads zero both
+  when the device is correct and when nothing has been heard from the server, so zero is not
+  evidence. `useVaultClock` waits for `.info/connected` plus 250ms before a scheduled section
+  may open. The cost is that a section can open up to about a second late on a cold load. The
+  alternative was a flash of Wednesday's content on a phone whose clock is a day out.
+- **After eight seconds it stops waiting** and runs on the device's own clock, saying so on
+  screen. Locked forever on a bad connection is the worse failure. Consequence worth naming: on
+  a device that cannot reach Firebase, a crew override cannot be honoured, because the override
+  lives in Firebase.
+- **The drop is a presentation gate, not a security boundary.** The wall does not fetch a
+  locked section's files for a non-admin, so nothing is sitting in an attendee's page, but the
+  repo is public and the artwork will sit at a guessable path. **If the Scenarios or Personas
+  content is confidential before it is presented, it must not go in this repo** and needs the
+  Firebase treatment `encore/tenure` already uses. One answer from Jim needed before T3.3.
+- **The two unlock times are still not confirmed in writing.** They are in the build as
+  CLAUDE.md gives them, anchored at `-04:00`: Wednesday Aug 26 9:30 AM and Thursday Aug 27
+  10:30 AM Eastern. Wednesday 9:30 AM does not line up with any session start in
+  `data/agenda.json`, so if the intent was "when that session starts" the two constants at
+  `VAULT_DROP_SCHEDULE` need one line from Carol. **T4.5 still owns this.** The override buttons
+  cover the drift on the day either way.
+- **`ts` on the drop node is a server timestamp,** not `Date.now()`, unlike `encore/tenure`.
+  On a feature about clocks, "last changed 9:31 AM" must not come off a crew phone that is six
+  hours out.
+- **T2.8 can mount `VaultDropControls` inside the gear panel** to satisfy the two-taps-from-the-gear
+  rule. Until then the path is gear, PIN, Vault tab.
 
 ### `[ ]` T2.4 Crowd Vote
 - **Inputs:** spec Section 3.7

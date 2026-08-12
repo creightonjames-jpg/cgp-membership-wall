@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 240" width="380" height="240" role="img" aria-label="Prescott Lakes, Sales and attrition, full privilege">
+<rect width="380" height="240" rx="10" fill="#201E24" stroke="#332F38"/>
+<text x="12" y="18" fill="#F7F3EA" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="700">Prescott Lakes</text>
+<text x="12" y="31" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="9.5">Sales and attrition, full privilege</text>
+<line x1="44" y1="214.0" x2="368" y2="214.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="217.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">5%</text>
+<line x1="44" y1="171.0" x2="368" y2="171.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="174.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">10%</text>
+<line x1="44" y1="128.0" x2="368" y2="128.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="131.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">15%</text>
+<line x1="44" y1="85.0" x2="368" y2="85.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="88.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">20%</text>
+<line x1="44" y1="42.0" x2="368" y2="42.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="45.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">25%</text>
+<text x="44.0" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2015</text>
+<text x="102.9" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2017</text>
+<text x="161.8" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2019</text>
+<text x="220.7" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2021</text>
+<text x="279.6" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2023</text>
+<text x="338.5" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2025</text>
+<path d="M44.0,63.9 L73.5,99.0 L102.9,61.7 L132.4,110.7 L161.8,82.6 L191.3,95.6 L220.7,102.2 L250.2,155.5 L279.6,167.6 L309.1,166.0 L338.5,189.9 L368.0,189.7" fill="none" stroke="#C8102E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="368.0" cy="189.7" r="2.6" fill="#C8102E"/>
+<path d="M44.0,99.8 L73.5,74.5 L102.9,97.2 L132.4,124.0 L161.8,95.8 L191.3,117.7 L220.7,143.1 L250.2,163.9 L279.6,174.0 L309.1,185.5 L338.5,161.8 L368.0,152.8" fill="none" stroke="#D9A94C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="368.0" cy="152.8" r="2.6" fill="#D9A94C"/>
+<rect x="251.0" y="14" width="11" height="3" rx="1.5" fill="#C8102E"/>
+<text x="266.0" y="19" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10">Sales</text>
+<rect x="305.0" y="14" width="11" height="3" rx="1.5" fill="#D9A94C"/>
+<text x="320.0" y="19" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10">Attrition</text>
+</svg>

@@ -1558,6 +1558,268 @@ body.display-mode .stubnote { font-size: 20px; }
   .ap-tabs { grid-template-columns: 1fr 1fr; column-gap: 24px; }
   .ap-nodes { grid-template-columns: 1fr 1fr; column-gap: 24px; }
 }
+
+/* ==========================================================================
+   T2.1 to T2.3 THE VAULT
+   Five sections, club graph picker, timed drops.
+   No new motifs and no thirteenth palette token. The section nav reuses .tab
+   from the top tab bar, cards sit on .glow-card and .grille, and every chip is
+   the existing .linkchip. Everything below is layout plus the same warm chrome
+   recipe the tab bar and the day pills already use.
+   ========================================================================== */
+
+/* ------------------------------------------------------- section navigation */
+/* Pills on a phone, left rail from 700px. Same control, one CSS rule apart. */
+.vt-nav__scroll {
+  display: flex; gap: 6px;
+  overflow-x: auto; overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  margin: 0 0 16px; padding: 0 0 3px;
+}
+
+.vt-nav__scroll::-webkit-scrollbar { display: none; }
+
+/* Five long section names, so one notch down from the top bar. The top bar has
+   to stay the loudest control on the page. */
+.vt-nav .tab { font-size: 12px; padding: 7px 12px; }
+
+/* ---------------------------------------------------------------- headings */
+.vt-h { margin: 0 0 12px; font-size: clamp(20px, 6vw, 26px); }
+
+/* Crew only. Says out loud that the room is not seeing this yet. */
+.vt-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0 0 14px;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+  border: 1px solid var(--gold-rule); border-radius: 999px;
+  padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--gold);
+}
+
+/* -------------------------------------------------------------- art cards */
+.vt-cards { display: flex; flex-direction: column; gap: 16px; }
+
+figure.vt-card { margin: 0; padding: 14px; }
+
+.vt-card__k {
+  margin: 0 0 4px; font-size: 13px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+.vt-card__note { margin: 0 0 10px; font-size: 12px; color: var(--dim); }
+.vt-card__k + .vt-art { margin-top: 10px; }
+
+/* A type this club does not have. Dashed, like the TBA session card, because it
+   is a hole in the pack rather than a thing that failed. */
+.vt-card--none {
+  background: var(--riser); border: 1px dashed var(--edge);
+  border-radius: 12px; padding: 14px;
+}
+
+.vt-card__none { margin: 0; font-size: 13px; color: var(--dim); }
+
+.vt-art { margin: 0 0 12px; }
+
+/* The graphs are 380x240 SVGs with a viewBox, so CSS width wins over the width
+   attribute and the aspect ratio comes off the viewBox. */
+.vt-svg svg, .vt-img {
+  display: block; width: 100%; height: auto; max-width: 100%;
+  border-radius: 8px; background: var(--riser);
+}
+
+/* This is the whole reason the SVGs are inlined rather than dropped in an img
+   tag. font-family on the element is a presentation attribute, so any author
+   rule beats it and the graphs pick up Inter with the rest of the wall. */
+.vt-svg svg text { font-family: var(--font-body); }
+
+.vt-card .chiprow { margin-top: 0; }
+
+/* Two of the chips are buttons, not links. .linkchip carries no anchor-only
+   properties, so they only need the UA button chrome stripped. */
+.vt button.linkchip, .vt-zoom button.linkchip {
+  font-family: inherit; cursor: pointer;
+}
+
+/* ------------------------------------------------------------ locked panel */
+/* Greyed, padlocked, and counting. Visible but shut builds anticipation and
+   stops anybody asking where the section went. */
+.vt-locked { padding: 24px 18px; text-align: center; opacity: 0.82; }
+
+.vt-locked__lock { margin: 0 0 10px; font-size: 26px; line-height: 1; }
+.vt-locked__p { margin: 0 0 12px; font-size: 14px; color: var(--cream); }
+
+.vt-locked__t {
+  margin: 0; font-size: clamp(28px, 9vw, 40px); line-height: 1;
+  color: var(--gold);
+}
+
+.vt-locked__f { margin: 12px 0 0; font-size: 12px; color: var(--mute); }
+
+/* -------------------------------------------------------- crew drop panel */
+.vt-crew { padding: 14px; margin: 0 0 18px; }
+.vt-crew__h { margin: 0 0 5px; font-size: 16px; }
+.vt-crew__clock { margin: 0; font-size: 12px; color: var(--dim); }
+.vt-crew__off { margin: 12px 0 0; font-size: 12px; color: var(--danger); }
+
+.vt-drop { margin-top: 14px; }
+.vt-drop + .vt-drop { padding-top: 14px; border-top: 1px solid var(--edge); }
+
+.vt-drop__top {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin: 0 0 6px;
+}
+
+.vt-drop__n { margin: 0; font-size: 15px; font-weight: 600; }
+.vt-drop__room { margin: 0 0 4px; font-size: 13px; color: var(--cream); }
+.vt-drop__at { margin: 0 0 10px; font-size: 12px; color: var(--dim); }
+.vt-drop__ts { margin: 8px 0 0; font-size: 11px; color: var(--mute); }
+
+/* Which state is in force, at a glance, under time pressure. */
+.vt-state {
+  display: inline-flex; align-items: center;
+  border: 1px solid var(--edge); border-radius: 999px;
+  background-color: var(--input);
+  padding: 3px 10px; font-size: 11px; font-weight: 600;
+}
+
+.vt-state--scheduled { color: var(--dim); }
+
+.vt-state--open {
+  background-color: transparent; background-image: var(--grad-primary);
+  border-color: var(--gold); color: var(--cream);
+}
+
+.vt-state--shut { border-color: var(--danger); color: var(--danger); }
+
+/* A test time is a lie told to the whole room on purpose, so it is the loudest
+   thing in the crew panel until somebody clears it. */
+.vt-drop__warn {
+  margin: 0 0 10px; padding: 9px 11px;
+  background: var(--input); border-left: 3px solid var(--danger);
+  border-radius: 6px; font-size: 12px; color: var(--cream);
+}
+
+.vt-drop .tf__row { margin-top: 8px; }
+
+/* ------------------------------------------------------------ club picker */
+.vt-search { margin: 0 0 14px; }
+.vt-search .tf__in { font-size: 16px; }   /* 16px or iOS zooms the page on focus */
+
+.vt-group {
+  margin: 14px 0 8px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.16em; color: var(--mute);
+}
+
+.vt-group:first-child { margin-top: 0; }
+
+.vt-clublist { display: flex; flex-direction: column; gap: 8px; }
+
+/* Same warm chrome as the pills, shaped as a full width row because 31 names
+   in a wrapped pill cloud is a wall of text on a phone. */
+.vt-club {
+  width: 100%; text-align: left;
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge); border-radius: 10px;
+  padding: 11px 13px; color: var(--cream);
+  font-family: inherit; font-size: 15px; cursor: pointer;
+}
+
+.vt-club:active {
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+}
+
+.vt-club__n { flex: 1 1 auto; min-width: 0; }
+.vt-club__have { flex: 0 0 auto; font-size: 12px; color: var(--gold); }
+
+.vt-chosen {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  margin: 0 0 16px;
+}
+
+.vt-chosen__n { flex: 1 1 auto; margin: 0; font-size: clamp(20px, 6vw, 26px); }
+
+/* -------------------------------------------------------------- zoom view */
+/* Fixed overlay, not an inner scroll container, so the no-fixed-height rule is
+   intact. The stage does not scroll at all: touch-action none hands every
+   gesture to the pinch handler instead of to the browser. */
+.vt-zoom {
+  position: fixed; inset: 0; z-index: 55;
+  background: rgba(10, 9, 12, 0.95);
+  display: flex; flex-direction: column;
+  overscroll-behavior: none;
+}
+
+.vt-zoom__bar {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: calc(10px + var(--safe-t)) calc(12px + var(--safe-r))
+           10px calc(12px + var(--safe-l));
+  background: rgba(23, 22, 26, 0.94);
+  border-bottom: 1px solid var(--warm-edge);
+}
+
+.vt-zoom__t {
+  flex: 1 1 140px; min-width: 0; margin: 0;
+  font-size: 13px; color: var(--dim);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.vt-zoom__bar a.btn {
+  display: inline-flex; align-items: center; text-decoration: none;
+}
+
+.vt-zoom__stage {
+  flex: 1 1 auto; min-height: 0;
+  overflow: hidden;
+  display: grid; place-items: center;
+  padding: 10px;
+  touch-action: none;
+}
+
+.vt-zoom__inner { width: min(94vw, 960px); }
+
+.vt-zoom__inner .vt-svg svg, .vt-zoom__inner img {
+  display: block; width: 100%; height: auto;
+  border-radius: 8px; background: var(--riser);
+}
+
+.vt-zoom__foot {
+  flex: 0 0 auto; margin: 0;
+  padding: 8px calc(12px + var(--safe-r)) calc(10px + var(--safe-b))
+           calc(12px + var(--safe-l));
+  font-size: 11px; color: var(--mute); text-align: center;
+}
+
+/* ==========================================================================
+   THE VAULT ON A LAPTOP
+   Jim reviews on a laptop, so the section nav becomes a real rail rather than a
+   swipe strip with no touchscreen behind it. minmax(0,1fr) on the body column,
+   or a 380px wide SVG at width:100% blows the grid out.
+   ========================================================================== */
+@media (min-width: 700px) {
+  .vt {
+    display: grid;
+    grid-template-columns: 216px minmax(0, 1fr);
+    gap: 24px; align-items: start;
+  }
+
+  .vt-nav__scroll {
+    flex-direction: column; gap: 7px;
+    overflow-x: visible; margin: 0; padding: 0;
+  }
+
+  .vt-nav .tab {
+    width: 100%; justify-content: flex-start;
+    white-space: normal; text-align: left;
+    border-radius: 10px; font-size: 13px;
+  }
+
+  .vt-cards { gap: 20px; }
+  figure.vt-card { padding: 18px; }
+  .vt-locked { padding: 34px 24px; }
+}
 </style>
 </head>
 <body>
@@ -2850,14 +3112,1029 @@ function SoundcheckTab({ isAdmin }) {
   );
 }
 
-function VaultTab({ isAdmin }) {
+/* ==========================================================================
+   T2.1 to T2.3 THE VAULT. Spec 3.5.
+   Five sections, a club graph picker, and the timed drop engine.
+
+   The drop engine is the highest risk feature in the build, so three rules run
+   through all of it.
+
+   1. Nothing in here calls Date.now() in a timing path. Every lock decision is
+      a pure function of the server corrected `now` that App ticks once a
+      second and hands down as a prop. That is also why it fires with no
+      refresh: there is no mount-time snapshot of the lock state to go stale.
+   2. Locked is the default. Until this device has proved it talked to the
+      server, and until the override state has arrived, a timed section stays
+      shut. A phone six hours out would otherwise drop Wednesday's content on
+      Tuesday night.
+   3. The crew override beats the clock in both directions and says which state
+      is in force, because it gets used with a room watching.
+   ========================================================================== */
+
+/* Five sections in the order the meeting uses them. `drop` names the child
+   under settings/vaultDrops for the two that open on a clock. */
+const VAULT_SECTIONS = [
+  { key: "fundamentals", name: "Core Fundamentals",          icon: "\u{1F4D8}", kind: "images" },
+  { key: "buckets",      name: "Membership Buckets",         icon: "\u{1F5C2}", kind: "images" },
+  { key: "graphs",       name: "Club Graphs",                icon: "\u{1F4C8}", kind: "graphs" },
+  { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "images", drop: "scenarios" },
+  { key: "personas",     name: "Membership Funnel Personas",  icon: "\u{1F465}", kind: "images", drop: "personas" }
+];
+
+/* These are the two times CLAUDE.md and the spec both give. August in Ohio is
+   EDT, so both stamps are anchored at -04:00 and the device's own zone never
+   enters into it.
+   NOT yet confirmed in writing by the organizers. ROADMAP records that gate as
+   passed on August 5 with no confirmation received, and T4.5 is the task that
+   closes it. If either time moves, it is these two constants and nothing else.
+   The override buttons cover the drift on the day either way. */
+const VAULT_DROP_SCHEDULE = {
+  scenarios: Date.parse("2026-08-26T09:30:00-04:00"),
+  personas:  Date.parse("2026-08-27T10:30:00-04:00")
+};
+
+/* If the server clock and the override state have not both arrived inside this
+   window, stop waiting and run on what this device has, and say so. A section
+   that never opens is a worse failure in front of the room than one that opens
+   on a phone's own clock. */
+const VAULT_GRACE_MS = 8000;
+
+/* Empty state copy, per section. No artwork has been delivered for any of the
+   four image sections, so these are the words an attendee reads. They say the
+   shelf is empty rather than pretending something is loading forever. */
+const VAULT_EMPTY = {
+  fundamentals: "Empty shelf. The Core Fundamentals artwork has not turned up yet.",
+  buckets:      "Empty shelf. The Membership Buckets artwork has not turned up yet.",
+  scenarios:    "Open and empty. The scenarios have not turned up yet.",
+  personas:     "Open and empty. The personas have not turned up yet."
+};
+
+/* The three types every club is meant to have. A club missing one gets a
+   "not in the pack" card rather than a broken image. Anything else in
+   graphs.json, which today is `other` on six clubs, renders after these. */
+const VAULT_GRAPH_TYPES = ["members", "dues", "rates"];
+
+const VAULT_GRAPH_LABELS = {
+  members: "Members", dues: "Dues", rates: "Rates", other: "Other"
+};
+
+const VAULT_LS = { section: "mm26_vaultsection", club: "mm26_vaultclub" };
+
+/* Inlined SVG text, keyed by path. Switching back to a club you already looked
+   at is then instant instead of three more requests. */
+const VAULT_SVG_CACHE = {};
+
+/* ---------------------------------------------------------------- helpers */
+
+/* Plain language, always Eastern, whatever the phone thinks. "Wednesday,
+   August 26, 9:30 AM Eastern". */
+function vaultWhen(ms) {
+  try {
+    const day = new Intl.DateTimeFormat("en-US", {
+      timeZone: ET, weekday: "long", month: "long", day: "numeric"
+    }).format(ms);
+    const t = etParts(ms);
+    return day + ", " + t.hhmm + " " + t.ap + " Eastern";
+  } catch (e) {
+    return new Date(ms).toString();
+  }
+}
+
+/* Days out early in the week, h:mm:ss inside a day, m:ss inside an hour. */
+function vaultCountdownText(ms) {
+  if (ms <= 0) return "0:00";
+  const t = breakdown(ms);
+  if (t.days > 0) {
+    return t.days + (t.days === 1 ? " day " : " days ")
+      + pad(t.hours) + ":" + pad(t.minutes) + ":" + pad(t.seconds);
+  }
+  return clock(ms);
+}
+
+/* Crew readout. How far off this device's own clock is, in words, so the six
+   hour test is a sentence somebody can read out rather than a number to
+   subtract. `now` is already corrected, so the gap is the correction. */
+function vaultClockLine(now) {
+  const secs = Math.round((now - Date.now()) / 1000);
+  const a = Math.abs(secs);
+  if (a < 5) return "This device agrees with the server, inside five seconds.";
+  const d = Math.floor(a / 86400);
+  const h = Math.floor((a % 86400) / 3600);
+  const m = Math.floor((a % 3600) / 60);
+  const s = a % 60;
+  const parts = [];
+  if (d) parts.push(d + (d === 1 ? " day" : " days"));
+  if (h) parts.push(h + (h === 1 ? " hour" : " hours"));
+  if (m) parts.push(m + (m === 1 ? " minute" : " minutes"));
+  if (!d && !h && s) parts.push(s + (s === 1 ? " second" : " seconds"));
+  return "This device's own clock runs " + parts.join(" ")
+    + (secs > 0 ? " slow." : " fast.")
+    + " The wall is using the server clock.";
+}
+
+/* Search normaliser. Strips case, spaces, and punctuation, so "eagles",
+   "pga west", "pgawest" and "toledo cc" all find their club. */
+function vaultNorm(s) {
+  return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function vaultMatch(entry, query) {
+  const q = vaultNorm(query);
+  if (!q) return true;
+  return vaultNorm(entry.name).indexOf(q) >= 0 || vaultNorm(entry.slug).indexOf(q) >= 0;
+}
+
+/* The three canonical types first, present or not, then anything else the file
+   carries for this club. */
+function vaultGraphSlots(club) {
+  const have = (club && club.graphs) || {};
+  const slots = VAULT_GRAPH_TYPES.map((key) => ({
+    key: key, label: VAULT_GRAPH_LABELS[key] || key, file: have[key] || null
+  }));
+
+  Object.keys(have).forEach((key) => {
+    if (VAULT_GRAPH_TYPES.indexOf(key) >= 0) return;
+    slots.push({
+      key: key,
+      label: VAULT_GRAPH_LABELS[key] || (key.charAt(0).toUpperCase() + key.slice(1)),
+      file: have[key]
+    });
+  });
+
+  return slots;
+}
+
+/* These SVGs are generated by tools/ in this repo, so this is not a sanitiser
+   fighting hostile input. It drops the XML prolog, any script, any comment, and
+   any inline handler, because injecting markup by hand deserves at least that
+   much. */
+function vaultCleanSvg(text) {
+  const at = text.indexOf("<svg");
+  const body = at > 0 ? text.slice(at) : text;
+  return body
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/\son[a-z]+\s*=\s*"[^"]*"/gi, "")
+    .replace(/\son[a-z]+\s*=\s*'[^']*'/gi, "");
+}
+
+/* Server stamp, not a device stamp. "Last changed" on a clock sensitive
+   feature must not come off a crew phone that is six hours out. */
+function vaultStampValue() {
+  try {
+    if (window.firebase && firebase.database && firebase.database.ServerValue) {
+      return firebase.database.ServerValue.TIMESTAMP;
+    }
+  } catch (e) { /* fall through to null */ }
+  return null;
+}
+
+function vaultWriteDrop(sectionKey, patch) {
+  if (!FB.ok) return;
+  const body = Object.assign({}, patch);
+  const stamp = vaultStampValue();
+  if (stamp !== null) body.ts = stamp;
+  /* update, not set, so the two sections and the fields inside one section
+     never clobber each other. A null value removes that child. */
+  FB.db.ref("settings/vaultDrops/" + sectionKey).update(body);
+}
+
+/* Normalise whatever is at settings/vaultDrops/{section} into one shape.
+   Missing, unreadable, or unrecognised all mean "scheduled", which is the safe
+   direction: the schedule stays in force. */
+function vaultDropState(node, scheduledAt) {
+  let mode = "scheduled";
+  let at = scheduledAt;
+  let ts = 0;
+
+  if (typeof node === "string") {
+    mode = node;
+  } else if (node && typeof node === "object") {
+    if (typeof node.mode === "string") mode = node.mode;
+    if (typeof node.unlockAt === "number" && isFinite(node.unlockAt)) at = node.unlockAt;
+    if (typeof node.ts === "number") ts = node.ts;
+  }
+
+  if (mode !== "open" && mode !== "shut") mode = "scheduled";
+
+  return {
+    mode: mode,
+    at: at,
+    scheduledAt: scheduledAt,
+    isTestTime: at !== scheduledAt,
+    ts: ts
+  };
+}
+
+/* The one decision the whole feature turns on. The override wins in both
+   directions and does not wait for the clock. Only the scheduled branch needs
+   a clock it can trust. */
+function vaultRoomSees(st, now, ready) {
+  if (st.mode === "open") return true;
+  if (st.mode === "shut") return false;
+  if (!ready) return false;
+  return now >= st.at;
+}
+
+function vaultClampScale(s) {
+  if (!isFinite(s)) return 1;
+  return Math.min(6, Math.max(1, s));
+}
+
+function vaultTouchGap(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+/* ------------------------------------------------------------------ hooks */
+
+/* One static JSON file. Same shape of state as useAgenda, so a failed fetch is
+   a sentence on screen and not a blank tab. */
+function useVaultJSON(path) {
+  const [state, setState] = useState({ status: "loading", data: null, reason: "" });
+
+  useEffect(() => {
+    let live = true;
+    fetch(path, { cache: "no-cache" })
+      .then((res) => {
+        if (!res.ok) throw new Error("The file returned " + res.status + ".");
+        return res.json();
+      })
+      .then((data) => { if (live) setState({ status: "ready", data: data, reason: "" }); })
+      .catch((err) => {
+        if (live) {
+          setState({
+            status: "failed", data: null,
+            reason: (err && err.message) || String(err)
+          });
+        }
+      });
+    return () => { live = false; };
+  }, [path]);
+
+  return state;
+}
+
+/* Fetch an SVG and hand back its markup so it can be inlined and pick up the
+   wall's fonts. Any failure returns status "img", and the caller falls back to
+   an img tag. That is the file:// case and the offline case both covered. */
+function useVaultInlineSvg(src) {
+  const [state, setState] = useState({ status: "idle", markup: "", src: "" });
+
+  useEffect(() => {
+    if (!src) { setState({ status: "idle", markup: "", src: "" }); return; }
+
+    if (VAULT_SVG_CACHE[src]) {
+      setState({ status: "ready", markup: VAULT_SVG_CACHE[src], src: src });
+      return;
+    }
+
+    let live = true;
+    setState({ status: "loading", markup: "", src: src });
+
+    fetch(src)
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.text();
+      })
+      .then((text) => {
+        if (text.indexOf("<svg") < 0) throw new Error("Not an SVG.");
+        const clean = vaultCleanSvg(text);
+        VAULT_SVG_CACHE[src] = clean;
+        if (live) setState({ status: "ready", markup: clean, src: src });
+      })
+      .catch(() => {
+        if (live) setState({ status: "img", markup: "", src: src });
+      });
+
+    return () => { live = false; };
+  }, [src]);
+
+  return state;
+}
+
+/* One listener for both sections. Three scalars each, nothing confidential, so
+   it is safe to listen to whether or not the viewer is crew. `loaded` matters:
+   until the snapshot arrives the wall does not know whether a section has been
+   held shut, so a timed section stays locked. Without that, a phone opening the
+   wall at 9:35 on Wednesday would flash the content for a moment even though
+   crew had held it shut because the session was running late. */
+function useVaultDrops() {
+  const [state, setState] = useState({ node: null, loaded: false });
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("settings/vaultDrops");
+    const handler = (snap) => setState({ node: snap.val() || {}, loaded: true });
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return state;
+}
+
+/* Can this device's clock be trusted for a drop decision.
+
+   useServerNow already corrects `now` against .info/serverTimeOffset. What it
+   cannot tell a caller is whether that correction is real or still zero,
+   because the offset reads zero both when the device is right and when nothing
+   has been heard from the server yet. .info/connected answers that: it goes
+   true only after a handshake, and the handshake is where the offset comes
+   from. The extra quarter second is there so the offset has certainly landed in
+   App's state before this says yes, rather than resting on the order two
+   internal listeners happen to fire in. */
+function useVaultClock() {
+  const [connected, setConnected] = useState(false);
+  const [settled, setSettled] = useState(false);
+  const [graced, setGraced] = useState(false);
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref(".info/connected");
+    const handler = (snap) => { if (snap.val() === true) setConnected(true); };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  useEffect(() => {
+    if (!connected) return;
+    const id = window.setTimeout(() => setSettled(true), 250);
+    return () => window.clearTimeout(id);
+  }, [connected]);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setGraced(true), VAULT_GRACE_MS);
+    return () => window.clearTimeout(id);
+  }, []);
+
+  /* The clock override is a deliberate lie for testing and the App already
+     says so on screen, so it counts as trusted. */
+  if (SIM_CLOCK !== null) return { trusted: true, graced: graced, source: "override" };
+  if (!FB.ok) return { trusted: true, graced: graced, source: "device" };
+  if (connected && settled) return { trusted: true, graced: graced, source: "server" };
+  if (graced) return { trusted: true, graced: true, source: "device" };
+  return { trusted: false, graced: false, source: "waiting" };
+}
+
+/* ------------------------------------------------------------- components */
+
+/* Full screen zoom. Pinch with two fingers, drag with one, double tap to snap
+   back, and buttons for a laptop with no touchscreen.
+
+   touch-action: none on the stage is what makes the pinch work: it stops the
+   browser claiming the gesture, which also means no preventDefault is needed.
+   React registers touchmove as a passive listener, so preventDefault would
+   have done nothing anyway. */
+function VaultZoom({ view, onClose }) {
+  const [z, setZ] = useState({ s: 1, x: 0, y: 0 });
+  const pinch = useRef(null);
+  const drag = useRef(null);
+  const lastTap = useRef(0);
+
+  useEffect(() => { setZ({ s: 1, x: 0, y: 0 }); }, [view.src]);
+
+  useEffect(() => {
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  function bump(mult) {
+    setZ((p) => {
+      const s = vaultClampScale(p.s * mult);
+      return s <= 1 ? { s: 1, x: 0, y: 0 } : { s: s, x: p.x, y: p.y };
+    });
+  }
+
+  function onTouchStart(e) {
+    const t = e.touches;
+    if (t.length >= 2) {
+      pinch.current = { gap: vaultTouchGap(t), s: z.s };
+      drag.current = null;
+    } else if (t.length === 1) {
+      pinch.current = null;
+      drag.current = { px: t[0].clientX, py: t[0].clientY, x: z.x, y: z.y };
+    }
+  }
+
+  function onTouchMove(e) {
+    const t = e.touches;
+    if (t.length >= 2 && pinch.current && pinch.current.gap > 0) {
+      const gap = vaultTouchGap(t);
+      const s = vaultClampScale(pinch.current.s * (gap / pinch.current.gap));
+      setZ((p) => ({ s: s, x: p.x, y: p.y }));
+    } else if (t.length === 1 && drag.current) {
+      const d = drag.current;
+      setZ((p) => ({
+        s: p.s,
+        x: d.x + (t[0].clientX - d.px),
+        y: d.y + (t[0].clientY - d.py)
+      }));
+    }
+  }
+
+  function onTouchEnd(e) {
+    if (e.touches.length > 0) return;
+    pinch.current = null;
+    drag.current = null;
+
+    /* performance.now(), because this is elapsed input timing rather than an
+       event clock. Nothing in the Vault reads Date.now() for a decision about
+       when something happens. */
+    const t = window.performance && window.performance.now
+      ? window.performance.now() : 0;
+
+    if (t && lastTap.current && t - lastTap.current < 320) {
+      lastTap.current = 0;
+      setZ((p) => (p.s > 1.05 ? { s: 1, x: 0, y: 0 } : { s: 2.5, x: 0, y: 0 }));
+    } else {
+      lastTap.current = t;
+    }
+  }
+
+  function onMouseDown(e) {
+    if (z.s <= 1.01) return;
+    drag.current = { px: e.clientX, py: e.clientY, x: z.x, y: z.y };
+  }
+
+  function onMouseMove(e) {
+    if (!drag.current || e.buttons === 0) return;
+    const d = drag.current;
+    setZ((p) => ({ s: p.s, x: d.x + (e.clientX - d.px), y: d.y + (e.clientY - d.py) }));
+  }
+
+  function endDrag() { drag.current = null; }
+
+  return (
+    <div className="vt-zoom" role="dialog" aria-modal="true" aria-label={view.title}>
+      <div className="vt-zoom__bar">
+        <p className="vt-zoom__t">{view.title}</p>
+        <button type="button" className="btn btn--tiny" onClick={() => bump(1 / 1.4)}
+                aria-label="Zoom out">{"−"}</button>
+        <button type="button" className="btn btn--tiny"
+                onClick={() => setZ({ s: 1, x: 0, y: 0 })}>Fit</button>
+        <button type="button" className="btn btn--tiny" onClick={() => bump(1.4)}
+                aria-label="Zoom in">{"+"}</button>
+        <a className="btn btn--tiny" href={view.src} download={view.download || ""}>
+          Download
+        </a>
+        <button type="button" className="btn btn--tiny btn--go" onClick={onClose}>
+          Close
+        </button>
+      </div>
+
+      <div
+        className="vt-zoom__stage"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        onTouchCancel={onTouchEnd}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={endDrag}
+        onMouseLeave={endDrag}
+      >
+        <div
+          className="vt-zoom__inner"
+          style={{
+            transform: "translate(" + z.x + "px, " + z.y + "px) scale(" + z.s + ")"
+          }}
+        >
+          {view.markup ? (
+            <div className="vt-svg" dangerouslySetInnerHTML={{ __html: view.markup }} />
+          ) : (
+            <img src={view.src} alt={view.title} />
+          )}
+        </div>
+      </div>
+
+      <p className="vt-zoom__foot">
+        Pinch to zoom. Drag to move. Double tap to snap back.
+      </p>
+    </div>
+  );
+}
+
+/* One picture plus its two chips. Shared by the graph cards and the artwork
+   cards, so zoom and download behave identically everywhere. */
+function VaultArt({ src, title, download, onZoom }) {
+  const wantsInline = /\.svg(\?|$)/i.test(src);
+  const svg = useVaultInlineSvg(wantsInline ? src : null);
+  const inline = svg.status === "ready" && svg.src === src;
+
+  return (
+    <div>
+      <div className="vt-art">
+        {inline ? (
+          <div className="vt-svg" dangerouslySetInnerHTML={{ __html: svg.markup }} />
+        ) : svg.status === "loading" ? (
+          <p className="vt-card__none">Loading.</p>
+        ) : (
+          <img className="vt-img" src={src} alt={title} loading="lazy" />
+        )}
+      </div>
+
+      <div className="chiprow">
+        <button
+          type="button"
+          className="linkchip"
+          onClick={() => onZoom({
+            title: title, src: src, download: download,
+            markup: inline ? svg.markup : null
+          })}
+        >
+          <span className="linkchip__i" aria-hidden="true">{"\u{1F50D}"}</span>
+          <span>Bigger</span>
+        </button>
+        <a className="linkchip" href={src} download={download}>
+          <span className="linkchip__i" aria-hidden="true">{"↓"}</span>
+          <span>Download</span>
+        </a>
+      </div>
+    </div>
+  );
+}
+
+/* One graph type for one club. A type this club does not have is a dashed card
+   that says so, never a broken image. */
+function VaultGraphCard({ club, slot, onZoom }) {
+  if (!slot.file) {
+    return (
+      <div className="vt-card--none">
+        <p className="vt-card__k t-display">{slot.label}</p>
+        <p className="vt-card__none">Not in the pack for this club. Nothing to show.</p>
+      </div>
+    );
+  }
+
+  return (
+    <figure className="vt-card glow-card grille">
+      <figcaption className="vt-card__k t-display">{slot.label}</figcaption>
+      <VaultArt
+        src={"assets/graphs/" + slot.file}
+        title={club.name + ", " + slot.label}
+        download={slot.file}
+        onZoom={onZoom}
+      />
+    </figure>
+  );
+}
+
+/* T2.2. Search, then one club's graphs. Never a stack of everyone's. */
+function VaultGraphPicker({ onZoom }) {
+  const file = useVaultJSON("data/graphs.json");
+  const [query, setQuery] = useState("");
+  const [slug, setSlug] = useState(() => readLS(VAULT_LS.club) || "");
+  const [browse, setBrowse] = useState(false);
+
+  const clubs = (file.data && file.data.clubs) || [];
+  const rollups = (file.data && file.data.rollups) || [];
+  const all = clubs.concat(rollups);
+  const club = all.filter((c) => c.slug === slug)[0] || null;
+
+  const pick = useCallback((next) => {
+    setSlug(next);
+    writeLS(VAULT_LS.club, next);
+    setQuery("");
+    setBrowse(false);
+  }, []);
+
+  if (file.status === "loading") return <Empty>Finding the graphs.</Empty>;
+
+  if (file.status === "failed") {
+    return (
+      <Empty>
+        The graph index did not load. {file.reason} Everything else on the wall
+        still works.
+      </Empty>
+    );
+  }
+
+  if (!all.length) {
+    return <Empty>No graphs in the index yet. Nothing to pick from.</Empty>;
+  }
+
+  /* The list is open until a club is chosen, and it comes back the moment
+     somebody types or asks for it. Leaving 31 rows above the graphs would push
+     the graphs off a phone screen. */
+  const listOpen = !club || query.length > 0 || browse;
+  const hits = all.filter((c) => vaultMatch(c, query));
+  const clubHits = hits.filter((c) => rollups.indexOf(c) < 0);
+  const rollupHits = hits.filter((c) => rollups.indexOf(c) >= 0);
+
+  function row(c) {
+    const have = vaultGraphSlots(c).filter((s) => s.file).map((s) => s.label);
+    return (
+      <button
+        type="button"
+        key={c.slug}
+        className="vt-club"
+        onClick={() => pick(c.slug)}
+      >
+        <span className="vt-club__n">{c.name}</span>
+        <span className="vt-club__have">{have.length ? have.join(", ") : "Nothing yet"}</span>
+      </button>
+    );
+  }
+
+  return (
+    <div>
+      <label className="tf__l vt-search">
+        <span>Find a club</span>
+        <input
+          className="tf__in"
+          type="search"
+          value={query}
+          placeholder="Type part of the name"
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </label>
+
+      {club && !listOpen ? (
+        <div className="vt-chosen">
+          <h4 className="vt-chosen__n t-display">{club.name}</h4>
+          <button type="button" className="btn btn--quiet" onClick={() => setBrowse(true)}>
+            Change club
+          </button>
+        </div>
+      ) : null}
+
+      {listOpen ? (
+        <div>
+          {clubHits.length ? (
+            <div>
+              <p className="vt-group">Clubs</p>
+              <div className="vt-clublist">{clubHits.map(row)}</div>
+            </div>
+          ) : null}
+
+          {rollupHits.length ? (
+            <div>
+              <p className="vt-group">Rollups</p>
+              <div className="vt-clublist">{rollupHits.map(row)}</div>
+            </div>
+          ) : null}
+
+          {!hits.length ? (
+            <Empty>No club by that name. Check the spelling and try less of it.</Empty>
+          ) : null}
+        </div>
+      ) : null}
+
+      {club && !listOpen ? (
+        <div className="vt-cards">
+          {vaultGraphSlots(club).map((slot) => (
+            <VaultGraphCard key={slot.key} club={club} slot={slot} onZoom={onZoom} />
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/* An artwork section, driven by data/vault.json. Empty today for all four,
+   because nothing has been delivered. T3.3 adds entries and touches no code. */
+function VaultImageSection({ section, manifest, onZoom }) {
+  if (manifest.status === "loading") return <Empty>Checking the shelf.</Empty>;
+
+  if (manifest.status === "failed") {
+    return (
+      <Empty>
+        The vault index did not load. {manifest.reason} Everything else on the
+        wall still works.
+      </Empty>
+    );
+  }
+
+  const data = manifest.data || {};
+  const dir = String(data.dir || "assets/resources").replace(/\/+$/, "");
+  const sec = (data.sections && data.sections[section.key]) || null;
+  const items = (sec && sec.items) || [];
+
+  if (!items.length) {
+    return <Empty>{VAULT_EMPTY[section.key] || "Nothing here yet."}</Empty>;
+  }
+
+  return (
+    <div className="vt-cards">
+      {items.map((item, i) => {
+        const title = item.title || item.file;
+        return (
+          <figure className="vt-card glow-card grille" key={item.file || i}>
+            <figcaption className="vt-card__k t-display">{title}</figcaption>
+            {item.note ? <p className="vt-card__note">{item.note}</p> : null}
+            <VaultArt
+              src={dir + "/" + item.file}
+              title={title}
+              download={item.file}
+              onZoom={onZoom}
+            />
+          </figure>
+        );
+      })}
+    </div>
+  );
+}
+
+/* What an attendee sees on a section that has not opened. Greyed, padlocked,
+   the time in plain language, and a countdown that moves. It does not repeat
+   the section name: the heading directly above it already says it. */
+function VaultLocked({ st, now, trusted, clockNote }) {
+  const held = st.mode === "shut";
+
+  return (
+    <div className="vt-locked glow-card grille">
+      <p className="vt-locked__lock" aria-hidden="true">{"\u{1F512}"}</p>
+
+      {!trusted ? (
+        <p className="vt-locked__p">Checking the clock.</p>
+      ) : held ? (
+        <p className="vt-locked__p">Still shut. It opens when the room gets there.</p>
+      ) : (
+        <React.Fragment>
+          <p className="vt-locked__p">Opens {vaultWhen(st.at)}.</p>
+          <p className="vt-locked__t t-display t-data">
+            {vaultCountdownText(st.at - now)}
+          </p>
+          <p className="vt-locked__f">Nothing to do. It opens itself.</p>
+        </React.Fragment>
+      )}
+
+      {clockNote ? <p className="vt-locked__f">{clockNote}</p> : null}
+    </div>
+  );
+}
+
+/* One section's crew controls. Which state is in force, what the room is
+   seeing, and the override in both directions. */
+function VaultDropRow({ section, st, roomSees, now, trusted }) {
+  const label = st.mode === "open" ? "Forced open"
+    : st.mode === "shut" ? "Forced shut"
+    : "Scheduled";
+
+  return (
+    <div className="vt-drop">
+      <div className="vt-drop__top">
+        <p className="vt-drop__n">{section.name}</p>
+        <span className={"vt-state vt-state--" + st.mode}>{label}</span>
+      </div>
+
+      <p className="vt-drop__room">
+        {roomSees
+          ? "The room sees it."
+          : st.mode === "shut"
+            ? "The room sees a padlock and no countdown."
+            : "The room sees a padlock and a countdown."}
+      </p>
+
+      <p className="vt-drop__at">
+        {st.mode !== "scheduled"
+          ? "The schedule says " + vaultWhen(st.scheduledAt)
+            + ". The override is what counts right now."
+          : !trusted
+            ? "Opens " + vaultWhen(st.at) + ". Clock not confirmed yet."
+            : now >= st.at
+              ? "Opened " + vaultWhen(st.at) + ", on the schedule."
+              : "Opens " + vaultWhen(st.at) + ". "
+                + vaultCountdownText(st.at - now) + " to go."}
+      </p>
+
+      {st.isTestTime ? (
+        <p className="vt-drop__warn">
+          Test time in force. The room is being told {vaultWhen(st.at)}. The real
+          time is {vaultWhen(st.scheduledAt)}. Restore it before anybody reads it
+          as the truth.
+        </p>
+      ) : null}
+
+      <div className="tf__row">
+        <button
+          type="button"
+          className="btn btn--go"
+          disabled={!FB.ok || st.mode === "open"}
+          onClick={() => vaultWriteDrop(section.drop, { mode: "open" })}
+        >
+          Open it now
+        </button>
+        <button
+          type="button"
+          className="btn btn--kill"
+          disabled={!FB.ok || st.mode === "shut"}
+          onClick={() => vaultWriteDrop(section.drop, { mode: "shut" })}
+        >
+          Hold it shut
+        </button>
+        <button
+          type="button"
+          className="btn"
+          disabled={!FB.ok || st.mode === "scheduled"}
+          onClick={() => vaultWriteDrop(section.drop, { mode: "scheduled" })}
+        >
+          Back to the schedule
+        </button>
+      </div>
+
+      <div className="tf__row">
+        <button
+          type="button"
+          className="btn btn--tiny"
+          disabled={!FB.ok}
+          onClick={() => vaultWriteDrop(section.drop, {
+            mode: "scheduled", unlockAt: now + 2 * 60 * 1000
+          })}
+        >
+          Test, 2 minutes out
+        </button>
+        <button
+          type="button"
+          className="btn btn--tiny"
+          disabled={!FB.ok}
+          onClick={() => vaultWriteDrop(section.drop, {
+            mode: "scheduled", unlockAt: now + 5 * 60 * 1000
+          })}
+        >
+          Test, 5 minutes out
+        </button>
+        <button
+          type="button"
+          className="btn btn--tiny btn--quiet"
+          disabled={!FB.ok || !st.isTestTime}
+          onClick={() => vaultWriteDrop(section.drop, { unlockAt: null })}
+        >
+          Restore the real time
+        </button>
+      </div>
+
+      {st.ts ? (
+        <p className="vt-drop__ts">
+          Last changed {etParts(st.ts).hhmm} {etParts(st.ts).ap} Eastern.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+/* The crew block. Both sections in one place at the top of the tab, because
+   under time pressure nobody should have to navigate to the right section
+   first. T2.8 can mount this same component inside the gear panel to satisfy
+   the two taps from the gear icon rule. */
+function VaultDropControls({ states, seen, now, clock }) {
+  return (
+    <div className="vt-crew glow-card">
+      <p className="vt-crew__h t-display">Vault drops</p>
+      <p className="vt-crew__clock">
+        {clock.source === "server"
+          ? vaultClockLine(now)
+          : clock.source === "override"
+            ? "Clock override is on for this device. Do not judge a real drop by this screen."
+            : clock.source === "waiting"
+              ? "Waiting on the server clock. Both sections stay shut until it lands."
+              : "No server clock. Running on this device's own clock."}
+      </p>
+
+      {VAULT_SECTIONS.filter((s) => s.drop).map((s) => (
+        <VaultDropRow
+          key={s.drop}
+          section={s}
+          st={states[s.drop]}
+          roomSees={seen[s.drop]}
+          now={now}
+          trusted={clock.trusted}
+        />
+      ))}
+
+      {!FB.ok ? (
+        <p className="vt-crew__off">
+          Live updates are off, so an override cannot reach the room. Fix that
+          first or the buttons above only change this phone.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function VaultSectionNav({ active, onPick, locked }) {
+  return (
+    <nav className="vt-nav" aria-label="Vault sections">
+      <div className="vt-nav__scroll" role="tablist">
+        {VAULT_SECTIONS.map((s) => (
+          <button
+            key={s.key}
+            id={"vt-tab-" + s.key}
+            role="tab"
+            aria-selected={active === s.key}
+            aria-controls="vt-panel"
+            className="tab"
+            onClick={() => onPick(s.key)}
+          >
+            <span className="tab__icon" aria-hidden="true">{s.icon}</span>
+            <span>{s.name}</span>
+            {s.drop && locked[s.drop] ? (
+              <span className="tab__lock" title="Not open yet">{"\u{1F512}"}</span>
+            ) : null}
+          </button>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
+function VaultTab({ isAdmin, now }) {
+  const manifest = useVaultJSON("data/vault.json");
+  const drops = useVaultDrops();
+  const clock = useVaultClock();
+  const [zoom, setZoom] = useState(null);
+  const [active, setActive] = useState(() => {
+    const held = readLS(VAULT_LS.section);
+    return VAULT_SECTIONS.filter((s) => s.key === held).length
+      ? held : VAULT_SECTIONS[0].key;
+  });
+
+  const pick = useCallback((key) => {
+    setActive(key);
+    writeLS(VAULT_LS.section, key);
+  }, []);
+
+  const onZoom = useCallback((view) => setZoom(view), []);
+  const closeZoom = useCallback(() => setZoom(null), []);
+
+  /* Ready means this device can be trusted to decide. The clock has to be
+     trusted and the override state has to have arrived. If neither happens
+     inside the grace window, go anyway on what is here, because a section that
+     never opens is the worse failure. */
+  const ready = (clock.trusted && drops.loaded) || clock.graced || !FB.ok;
+
+  const states = {};
+  const seen = {};
+  VAULT_SECTIONS.forEach((s) => {
+    if (!s.drop) return;
+    const st = vaultDropState(
+      drops.node ? drops.node[s.drop] : null,
+      VAULT_DROP_SCHEDULE[s.drop]
+    );
+    states[s.drop] = st;
+    seen[s.drop] = vaultRoomSees(st, now, ready);
+  });
+
+  const locked = {};
+  Object.keys(seen).forEach((k) => { locked[k] = !seen[k]; });
+
+  const section = VAULT_SECTIONS.filter((s) => s.key === active)[0] || VAULT_SECTIONS[0];
+  const st = section.drop ? states[section.drop] : null;
+  const roomSees = section.drop ? seen[section.drop] : true;
+  const canSee = roomSees || isAdmin;
+
+  const clockNote = clock.source === "device"
+    ? "Could not reach the server clock, so this countdown is running on this phone's own clock."
+    : "";
+
   return (
     <TabFrame tabKey="vault">
-      <Empty>The vault is shut. Two sections open on a clock during the meeting.</Empty>
+      {isAdmin ? (
+        <VaultDropControls states={states} seen={seen} now={now} clock={clock} />
+      ) : null}
+
+      <div className="vt">
+        <VaultSectionNav active={active} onPick={pick} locked={locked} />
+
+        <div className="vt-body" id="vt-panel" role="tabpanel"
+             aria-labelledby={"vt-tab-" + section.key}>
+          <h3 className="vt-h t-display">{section.name}</h3>
+
+          {section.drop && isAdmin && !roomSees ? (
+            <p className="vt-badge">
+              {"\u{1F512}"} The room cannot see this yet
+            </p>
+          ) : null}
+
+          {!canSee ? (
+            <VaultLocked
+              st={st}
+              now={now}
+              trusted={ready}
+              clockNote={clockNote}
+            />
+          ) : section.kind === "graphs" ? (
+            <VaultGraphPicker onZoom={onZoom} />
+          ) : (
+            <VaultImageSection section={section} manifest={manifest} onZoom={onZoom} />
+          )}
+        </div>
+      </div>
+
+      {zoom ? <VaultZoom view={zoom} onClose={closeZoom} /> : null}
+
       <BuildNote isAdmin={isAdmin} task="T2.1 to T2.3">
-        Five sections. Club graph picker. Timed drops for Scenarios on Wednesday
-        at 9:30 AM Eastern and Personas on Thursday at 10:30 AM, corrected
-        against the server clock, with admin override both directions.
+        Drops live at settings/vaultDrops/scenarios and /personas. Scheduled,
+        forced open, or forced shut, and the override beats the clock both ways.
+        Lock state is derived from the server corrected clock on every tick, so
+        it fires with no refresh. A section stays shut until this device has
+        talked to the server and the override state has arrived, with an eight
+        second grace before it gives up and uses this phone's clock. Artwork
+        comes from data/vault.json, which is empty for all four image sections
+        until T3.3. Graphs come from data/graphs.json, 29 clubs and 2 rollups.
+        The two unlock times are not yet confirmed in writing. T4.5 closes that.
       </BuildNote>
     </TabFrame>
   );

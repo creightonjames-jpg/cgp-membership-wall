@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 240" width="380" height="240" role="img" aria-label="Sunset Hills, Sales and attrition, full privilege">
+<rect width="380" height="240" rx="10" fill="#201E24" stroke="#332F38"/>
+<text x="12" y="18" fill="#F7F3EA" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="700">Sunset Hills</text>
+<text x="12" y="31" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="9.5">Sales and attrition, full privilege</text>
+<line x1="44" y1="214.0" x2="368" y2="214.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="217.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">0%</text>
+<line x1="44" y1="156.7" x2="368" y2="156.7" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="160.2" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">20%</text>
+<line x1="44" y1="99.3" x2="368" y2="99.3" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="102.8" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">40%</text>
+<line x1="44" y1="42.0" x2="368" y2="42.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="45.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">60%</text>
+<text x="44.0" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2018</text>
+<text x="84.5" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2019</text>
+<text x="125.0" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2020</text>
+<text x="165.5" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2021</text>
+<text x="206.0" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2022</text>
+<text x="246.5" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2023</text>
+<text x="287.0" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2024</text>
+<text x="327.5" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2025</text>
+<text x="368.0" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2026</text>
+<path d="M44.0,123.8 L84.5,120.7 L125.0,95.8 L165.5,132.7 L206.0,142.0 L246.5,168.4 L287.0,164.4 L327.5,131.4 L368.0,115.2" fill="none" stroke="#C8102E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="368.0" cy="115.2" r="2.6" fill="#C8102E"/>
+<path d="M44.0,97.7 L84.5,96.9 L125.0,120.1 L165.5,98.3 L206.0,120.2 L246.5,154.6 L287.0,182.1 L327.5,180.5 L368.0,179.3" fill="none" stroke="#D9A94C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="368.0" cy="179.3" r="2.6" fill="#D9A94C"/>
+<rect x="251.0" y="14" width="11" height="3" rx="1.5" fill="#C8102E"/>
+<text x="266.0" y="19" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10">Sales</text>
+<rect x="305.0" y="14" width="11" height="3" rx="1.5" fill="#D9A94C"/>
+<text x="320.0" y="19" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10">Attrition</text>
+</svg>

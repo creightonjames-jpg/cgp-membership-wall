@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 240" width="380" height="240" role="img" aria-label="Wynstone, Wynstone - Palmer Advantage">
+<rect width="380" height="240" rx="10" fill="#201E24" stroke="#332F38"/>
+<text x="12" y="18" fill="#F7F3EA" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="700">Wynstone</text>
+<text x="12" y="31" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="9.5">Wynstone - Palmer Advantage</text>
+<line x1="44" y1="214.0" x2="368" y2="214.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="217.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">0</text>
+<line x1="44" y1="156.7" x2="368" y2="156.7" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="160.2" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">25</text>
+<line x1="44" y1="99.3" x2="368" y2="99.3" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="102.8" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">50</text>
+<line x1="44" y1="42.0" x2="368" y2="42.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="45.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">75</text>
+<path d="M44.0,214.0 L44.0,108.5 L65.6,74.1 L87.2,78.7 L108.8,71.8 L130.4,71.8 L152.0,85.6 L173.6,85.6 L195.2,87.9 L216.8,97.0 L238.4,87.9 L260.0,74.1 L281.6,58.1 L303.2,44.3 L324.8,53.5 L346.4,55.8 L368.0,58.1 L368.0,214.0 Z" fill="#C8102E" opacity="0.14"/>
+<path d="M44.0,108.5 L65.6,74.1 L87.2,78.7 L108.8,71.8 L130.4,71.8 L152.0,85.6 L173.6,85.6 L195.2,87.9 L216.8,97.0 L238.4,87.9 L260.0,74.1 L281.6,58.1 L303.2,44.3 L324.8,53.5 L346.4,55.8 L368.0,58.1" fill="none" stroke="#C8102E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="368.0" cy="58.1" r="2.6" fill="#C8102E"/>
+<text x="368" y="19" fill="#D9A94C" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="700" text-anchor="end">68</text>
+</svg>

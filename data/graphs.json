@@ -1,0 +1,286 @@
+{
+  "generated_from": "CGPM_Membership Graphs-July 2026.xlsx",
+  "dir": "assets/graphs",
+  "clubs": [
+    {
+      "slug": "anthem",
+      "name": "Anthem",
+      "graphs": {
+        "members": "anthem--members.svg",
+        "dues": "anthem--dues.svg",
+        "rates": "anthem--rates.svg",
+        "other": "anthem--other.svg"
+      }
+    },
+    {
+      "slug": "balcones",
+      "name": "Balcones",
+      "graphs": {
+        "members": "balcones--members.svg",
+        "dues": "balcones--dues.svg",
+        "rates": "balcones--rates.svg"
+      }
+    },
+    {
+      "slug": "ballantyne",
+      "name": "Ballantyne",
+      "graphs": {
+        "members": "ballantyne--members.svg",
+        "dues": "ballantyne--dues.svg",
+        "rates": "ballantyne--rates.svg",
+        "other": "ballantyne--other.svg"
+      }
+    },
+    {
+      "slug": "bear-creek",
+      "name": "Bear Creek",
+      "graphs": {
+        "members": "bear-creek--members.svg",
+        "dues": "bear-creek--dues.svg",
+        "rates": "bear-creek--rates.svg"
+      }
+    },
+    {
+      "slug": "canyon-oaks",
+      "name": "Canyon Oaks",
+      "graphs": {
+        "members": "canyon-oaks--members.svg",
+        "dues": "canyon-oaks--dues.svg",
+        "rates": "canyon-oaks--rates.svg"
+      }
+    },
+    {
+      "slug": "chenal",
+      "name": "Chenal",
+      "graphs": {
+        "members": "chenal--members.svg",
+        "dues": "chenal--dues.svg",
+        "rates": "chenal--rates.svg",
+        "other": "chenal--other.svg"
+      }
+    },
+    {
+      "slug": "citrus-club",
+      "name": "Citrus Club",
+      "graphs": {
+        "members": "citrus-club--members.svg",
+        "dues": "citrus-club--dues.svg",
+        "rates": "citrus-club--rates.svg"
+      }
+    },
+    {
+      "slug": "club-23",
+      "name": "Club 23",
+      "graphs": {
+        "members": "club-23--members.svg",
+        "dues": "club-23--dues.svg"
+      }
+    },
+    {
+      "slug": "eagles-landing",
+      "name": "Eagle's Landing",
+      "graphs": {
+        "members": "eagles-landing--members.svg",
+        "dues": "eagles-landing--dues.svg",
+        "rates": "eagles-landing--rates.svg"
+      }
+    },
+    {
+      "slug": "el-camino",
+      "name": "El Camino",
+      "graphs": {
+        "members": "el-camino--members.svg",
+        "dues": "el-camino--dues.svg",
+        "rates": "el-camino--rates.svg"
+      }
+    },
+    {
+      "slug": "huntington-club",
+      "name": "Huntington Club",
+      "graphs": {
+        "members": "huntington-club--members.svg",
+        "dues": "huntington-club--dues.svg",
+        "rates": "huntington-club--rates.svg"
+      }
+    },
+    {
+      "slug": "las-posas",
+      "name": "Las Posas",
+      "graphs": {
+        "members": "las-posas--members.svg",
+        "dues": "las-posas--dues.svg",
+        "rates": "las-posas--rates.svg"
+      }
+    },
+    {
+      "slug": "marbella",
+      "name": "Marbella",
+      "graphs": {
+        "members": "marbella--members.svg",
+        "dues": "marbella--dues.svg",
+        "rates": "marbella--rates.svg"
+      }
+    },
+    {
+      "slug": "medallion",
+      "name": "Medallion",
+      "graphs": {
+        "members": "medallion--members.svg",
+        "dues": "medallion--dues.svg",
+        "rates": "medallion--rates.svg",
+        "other": "medallion--other.svg"
+      }
+    },
+    {
+      "slug": "monterey",
+      "name": "Monterey",
+      "graphs": {
+        "members": "monterey--members.svg",
+        "dues": "monterey--dues.svg",
+        "rates": "monterey--rates.svg"
+      }
+    },
+    {
+      "slug": "oregon-gc",
+      "name": "Oregon GC",
+      "graphs": {
+        "members": "oregon-gc--members.svg",
+        "dues": "oregon-gc--dues.svg",
+        "rates": "oregon-gc--rates.svg"
+      }
+    },
+    {
+      "slug": "palm-valley",
+      "name": "Palm Valley",
+      "graphs": {
+        "members": "palm-valley--members.svg",
+        "dues": "palm-valley--dues.svg",
+        "rates": "palm-valley--rates.svg"
+      }
+    },
+    {
+      "slug": "pga-west",
+      "name": "PGA WEST",
+      "graphs": {
+        "dues": "pga-west--dues.svg",
+        "members": "pga-west--members.svg",
+        "rates": "pga-west--rates.svg"
+      }
+    },
+    {
+      "slug": "prescott-lakes",
+      "name": "Prescott Lakes",
+      "graphs": {
+        "members": "prescott-lakes--members.svg",
+        "dues": "prescott-lakes--dues.svg",
+        "rates": "prescott-lakes--rates.svg",
+        "other": "prescott-lakes--other.svg"
+      }
+    },
+    {
+      "slug": "spanish-hills",
+      "name": "Spanish Hills",
+      "graphs": {
+        "members": "spanish-hills--members.svg",
+        "dues": "spanish-hills--dues.svg",
+        "rates": "spanish-hills--rates.svg"
+      }
+    },
+    {
+      "slug": "sunset-hills",
+      "name": "Sunset Hills",
+      "graphs": {
+        "members": "sunset-hills--members.svg",
+        "dues": "sunset-hills--dues.svg",
+        "rates": "sunset-hills--rates.svg"
+      }
+    },
+    {
+      "slug": "sycamore-creek",
+      "name": "Sycamore Creek",
+      "graphs": {
+        "members": "sycamore-creek--members.svg",
+        "dues": "sycamore-creek--dues.svg",
+        "rates": "sycamore-creek--rates.svg"
+      }
+    },
+    {
+      "slug": "sylvania",
+      "name": "Sylvania",
+      "graphs": {
+        "members": "sylvania--members.svg",
+        "dues": "sylvania--dues.svg",
+        "rates": "sylvania--rates.svg"
+      }
+    },
+    {
+      "slug": "the-nelson",
+      "name": "The Nelson",
+      "graphs": {
+        "members": "the-nelson--members.svg",
+        "dues": "the-nelson--dues.svg",
+        "rates": "the-nelson--rates.svg"
+      }
+    },
+    {
+      "slug": "timberlane",
+      "name": "Timberlane",
+      "graphs": {
+        "members": "timberlane--members.svg",
+        "dues": "timberlane--dues.svg"
+      }
+    },
+    {
+      "slug": "toledo-cc",
+      "name": "Toledo CC",
+      "graphs": {
+        "members": "toledo-cc--members.svg",
+        "dues": "toledo-cc--dues.svg"
+      }
+    },
+    {
+      "slug": "valor-club",
+      "name": "Valor Club",
+      "graphs": {
+        "members": "valor-club--members.svg",
+        "dues": "valor-club--dues.svg"
+      }
+    },
+    {
+      "slug": "wood-ranch",
+      "name": "Wood Ranch",
+      "graphs": {
+        "members": "wood-ranch--members.svg",
+        "dues": "wood-ranch--dues.svg",
+        "rates": "wood-ranch--rates.svg"
+      }
+    },
+    {
+      "slug": "wynstone",
+      "name": "Wynstone",
+      "graphs": {
+        "members": "wynstone--members.svg",
+        "dues": "wynstone--dues.svg",
+        "other": "wynstone--other.svg",
+        "rates": "wynstone--rates.svg"
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "slug": "all-clubs",
+      "name": "All Clubs",
+      "graphs": {
+        "members": "all-clubs--members.svg",
+        "dues": "all-clubs--dues.svg"
+      }
+    },
+    {
+      "slug": "pga-west-and-citrus",
+      "name": "PGA WEST & Citrus",
+      "graphs": {
+        "rates": "pga-west-and-citrus--rates.svg"
+      }
+    }
+  ]
+}

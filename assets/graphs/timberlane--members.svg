@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 240" width="380" height="240" role="img" aria-label="Timberlane, Full privilege members">
+<rect width="380" height="240" rx="10" fill="#201E24" stroke="#332F38"/>
+<text x="12" y="18" fill="#F7F3EA" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="700">Timberlane</text>
+<text x="12" y="31" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="9.5">Full privilege members</text>
+<line x1="44" y1="214.0" x2="368" y2="214.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="217.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">0</text>
+<line x1="44" y1="156.7" x2="368" y2="156.7" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="160.2" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">200</text>
+<line x1="44" y1="99.3" x2="368" y2="99.3" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="102.8" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">400</text>
+<line x1="44" y1="42.0" x2="368" y2="42.0" stroke="#332F38" stroke-width="1"/>
+<text x="38" y="45.5" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="end">600</text>
+<text x="79.0" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2021</text>
+<text x="131.6" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2022</text>
+<text x="184.1" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2023</text>
+<text x="236.6" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2024</text>
+<text x="289.2" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2025</text>
+<text x="341.7" y="231" fill="#6E6862" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10" text-anchor="middle">2026</text>
+<path d="M44.0,214.0 L44.0,130.9 L48.4,122.8 L52.8,121.7 L57.1,119.7 L61.5,119.7 L65.9,120.0 L70.3,117.1 L74.6,116.0 L79.0,114.5 L83.4,114.8 L87.8,109.7 L92.2,107.6 L96.5,105.4 L100.9,102.5 L105.3,102.5 L109.7,101.3 L114.1,101.3 L118.4,102.5 L122.8,102.5 L127.2,102.5 L131.6,101.6 L135.9,99.6 L140.3,97.0 L144.7,93.3 L149.1,91.6 L153.5,91.3 L157.8,91.6 L162.2,91.0 L166.6,91.0 L171.0,92.2 L175.4,92.7 L179.7,93.0 L184.1,94.2 L188.5,94.7 L192.9,93.0 L197.2,91.3 L201.6,90.7 L206.0,88.7 L210.4,89.9 L214.8,89.6 L219.1,90.2 L223.5,89.3 L227.9,89.6 L232.3,89.3 L236.6,94.5 L241.0,95.9 L245.4,93.0 L249.8,91.3 L254.2,91.0 L258.5,86.7 L262.9,86.7 L267.3,88.4 L271.7,87.9 L276.1,86.4 L280.4,86.4 L284.8,87.0 L289.2,79.8 L293.6,79.3 L297.9,77.8 L302.3,78.4 L306.7,75.8 L311.1,74.1 L315.5,73.5 L319.8,70.7 L324.2,69.8 L328.6,68.4 L333.0,68.9 L337.4,70.1 L341.7,69.5 L346.1,68.7 L350.5,68.1 L354.9,65.5 L359.2,65.2 L363.6,63.8 L368.0,62.4 L368.0,214.0 Z" fill="#C8102E" opacity="0.14"/>
+<path d="M44.0,130.9 L48.4,122.8 L52.8,121.7 L57.1,119.7 L61.5,119.7 L65.9,120.0 L70.3,117.1 L74.6,116.0 L79.0,114.5 L83.4,114.8 L87.8,109.7 L92.2,107.6 L96.5,105.4 L100.9,102.5 L105.3,102.5 L109.7,101.3 L114.1,101.3 L118.4,102.5 L122.8,102.5 L127.2,102.5 L131.6,101.6 L135.9,99.6 L140.3,97.0 L144.7,93.3 L149.1,91.6 L153.5,91.3 L157.8,91.6 L162.2,91.0 L166.6,91.0 L171.0,92.2 L175.4,92.7 L179.7,93.0 L184.1,94.2 L188.5,94.7 L192.9,93.0 L197.2,91.3 L201.6,90.7 L206.0,88.7 L210.4,89.9 L214.8,89.6 L219.1,90.2 L223.5,89.3 L227.9,89.6 L232.3,89.3 L236.6,94.5 L241.0,95.9 L245.4,93.0 L249.8,91.3 L254.2,91.0 L258.5,86.7 L262.9,86.7 L267.3,88.4 L271.7,87.9 L276.1,86.4 L280.4,86.4 L284.8,87.0 L289.2,79.8 L293.6,79.3 L297.9,77.8 L302.3,78.4 L306.7,75.8 L311.1,74.1 L315.5,73.5 L319.8,70.7 L324.2,69.8 L328.6,68.4 L333.0,68.9 L337.4,70.1 L341.7,69.5 L346.1,68.7 L350.5,68.1 L354.9,65.5 L359.2,65.2 L363.6,63.8 L368.0,62.4" fill="none" stroke="#C8102E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="368.0" cy="62.4" r="2.6" fill="#C8102E"/>
+<text x="368" y="19" fill="#D9A94C" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="700" text-anchor="end">529</text>
+</svg>
