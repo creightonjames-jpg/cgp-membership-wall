@@ -255,7 +255,7 @@ while IFS= read -r src; do
   ext="$(printf '%s' "${base##*.}" | tr '[:upper:]' '[:lower:]')"
 
   case "$ext" in
-    jpg|jpeg|jpe|jfif|png|heic|heif|tif|tiff|gif|bmp|webp) ;;
+    jpg|jpeg|jpe|jfif|jp2|png|heic|heif|tif|tiff|gif|bmp|webp) ;;
     *) SKIPPED+=("$base (unsupported type .$ext)"); continue ;;
   esac
 
@@ -263,7 +263,7 @@ while IFS= read -r src; do
   # this the slug comes out as walsh-trujillo-jpeg.
   inner="$(printf '%s' "${stem##*.}" | tr '[:upper:]' '[:lower:]')"
   case "$inner" in
-    jpg|jpeg|jpe|jfif|png|heic|heif|tif|tiff|gif|bmp|webp) stem="${stem%.*}" ;;
+    jpg|jpeg|jpe|jfif|jp2|png|heic|heif|tif|tiff|gif|bmp|webp) stem="${stem%.*}" ;;
   esac
 
   slug="$(slugify "$stem")"

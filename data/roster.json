@@ -1,199 +1,1481 @@
 {
-  "_note": "PLACEHOLDER DATA. Every name, club, and region below is invented so The Band (ROADMAP T1.3) can be built and reviewed before the verified roster arrives. Nothing here is a real person and nothing here is a real club. The whole file is replaced at T3.1, when Carol and Lisa's verified roster and Jeannette's headshots land. Do not correct a name in here. Replace the file. PHOTO CONVENTION, load bearing: leave `photo` as an empty string unless the file is actually in assets/attendees/. The wall lazy loads headshots, and a lazily loaded image that 404s fires no error event in Chrome, so a wrong path degrades to a blank square rather than to the initials tile. An empty string makes no request at all and renders the tile on purpose. All 20 paths were blanked on Aug 11 for exactly this reason.",
-  "meta": {
-    "task": "ROADMAP T1.3, container built against placeholders. Real data at T3.1.",
-    "fields": {
-      "slug": "Filename key. Matches assets/attendees/{slug}.jpg and is what tools/process-assets.sh cross-checks in both directions. It is the slugified name, so if a name changes the slug changes with it.",
-      "name": "Display name.",
-      "title": "Role. The only titles used here are the three the agenda itself names in the Thursday Fireside Chat, plus one deliberately long placeholder so the card layout gets tested. No real titles are invented.",
-      "club": "Club name. Never a real CGP club in this file.",
-      "region": "Grouping the filter pills use. Four here, so All plus Newbies plus four regions is six pills.",
-      "newbie": "Boolean. True gets the FIRST TOUR guitar pick in the grid.",
-      "photo": "Path string, relative to the repo root. Empty string means no headshot, which is a real case and has to render without a hole in the card."
-    },
-    "coverage": "20 records. 5 newbies. 4 regions. 7 clubs. 3 records with an empty photo. One long title and one long club name, both there so wrapping is exercised at 380px.",
-    "arrayKey": "The records sit under \"attendees\" because tools/process-assets.sh already reads either a bare array or data[\"attendees\"], and it was written before this file existed. Renaming this key silently loads zero records into the photo cross-check, which fails quietly rather than loudly. Leave it."
+  "_note": "REAL PHOTOS, DERIVED DETAILS. Names come from filenames and clubs from filenames where a real club name appeared. Titles and regions are empty because no source gives them. Nothing here is verified. Edit names, clubs and the newbie flag from the crew panel; those edits are stored in Firebase under roster/{slug} and override this file. T3.1.",
+  "_counts": {
+    "people": 147,
+    "newbie": 21,
+    "withClub": 23,
+    "needsReview": 124
   },
   "attendees": [
     {
-      "slug": "placeholder-one",
-      "name": "Placeholder One",
-      "title": "General Manager",
-      "club": "Placeholder Club North",
-      "region": "Region North",
+      "slug": "adair",
+      "name": "Adair",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": false,
-      "photo": ""
+      "photo": "assets/attendees/adair.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-two",
-      "name": "Placeholder Two",
-      "title": "Enrollment Director",
-      "club": "Placeholder Club North",
-      "region": "Region North",
+      "slug": "akeroyd",
+      "name": "Akeroyd",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/akeroyd.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "alvar-david",
+      "name": "Alvar David",
+      "title": "",
+      "club": "The Nelson",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/alvar-david.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "alyssa-baker",
+      "name": "Alyssa Baker",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/alyssa-baker.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "anai-romero",
+      "name": "Anai Romero",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": true,
-      "photo": ""
+      "photo": "assets/attendees/anai-romero.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-three",
-      "name": "Placeholder Three",
-      "title": "Golf Professional",
-      "club": "Placeholder Club North",
-      "region": "Region North",
+      "slug": "andrew-knepper",
+      "name": "Andrew Knepper",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": false,
-      "photo": ""
+      "photo": "assets/attendees/andrew-knepper.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-four",
-      "name": "Placeholder Four",
-      "title": "General Manager",
-      "club": "Placeholder Club North Two",
-      "region": "Region North",
+      "slug": "angel-anderson",
+      "name": "Angel Anderson",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": false,
-      "photo": ""
+      "photo": "assets/attendees/angel-anderson.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-five",
-      "name": "Placeholder Five",
-      "title": "Enrollment Director",
-      "club": "Placeholder Club North Two",
-      "region": "Region North",
+      "slug": "angela-morabito",
+      "name": "Angela Morabito",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/angela-morabito.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "ashley-vaugh",
+      "name": "Ashley Vaugh",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/ashley-vaugh.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "aubrey-de-matthaeis",
+      "name": "Aubrey De Matthaeis",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/aubrey-de-matthaeis.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "augi-barios",
+      "name": "Augi Barios",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/augi-barios.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "billy-bzura",
+      "name": "Billy Bzura",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/billy-bzura.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "boblockhart",
+      "name": "Boblockhart",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/boblockhart.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "brandon-resnick",
+      "name": "Brandon Resnick",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/brandon-resnick.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "brandon-rodenbeck",
+      "name": "Brandon Rodenbeck",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/brandon-rodenbeck.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "brett-brummett",
+      "name": "Brett Brummett",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/brett-brummett.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "brian-sanders",
+      "name": "Brian Sanders",
+      "title": "",
+      "club": "Anthem",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/brian-sanders.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "bryan-miller",
+      "name": "Bryan Miller",
+      "title": "",
+      "club": "Palm Valley",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/bryan-miller.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "carol-ruskowski",
+      "name": "Carol Ruskowski",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/carol-ruskowski.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "casey-lewis",
+      "name": "Casey Lewis",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/casey-lewis.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "casey-smith",
+      "name": "Casey Smith",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/casey-smith.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "chas",
+      "name": "Chas",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/chas.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "chelsea-pariseau",
+      "name": "Chelsea Pariseau",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/chelsea-pariseau.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "chris-dolendo",
+      "name": "Chris Dolendo",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/chris-dolendo.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "chris-kaczke",
+      "name": "Chris Kaczke",
+      "title": "",
+      "club": "Wood Ranch",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/chris-kaczke.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "chris-paredes",
+      "name": "Chris Paredes",
+      "title": "",
+      "club": "Spanish Hills",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/chris-paredes.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "christina-egan",
+      "name": "Christina Egan",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/christina-egan.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "claire-handville",
+      "name": "Claire Handville",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/claire-handville.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "cole-clearman",
+      "name": "Cole Clearman",
+      "title": "",
+      "club": "Bear Creek",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/cole-clearman.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "cole",
+      "name": "Cole",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/cole.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "cortese",
+      "name": "Cortese",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/cortese.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "crystal-daniel",
+      "name": "Crystal Daniel",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/crystal-daniel.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "dan-corado",
+      "name": "Dan Corado",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/dan-corado.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "darville",
+      "name": "Darville",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/darville.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "dave-miller",
+      "name": "Dave Miller",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/dave-miller.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "dawne",
+      "name": "Dawne",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/dawne.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "dobbs",
+      "name": "Dobbs",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/dobbs.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "dom-provenzano",
+      "name": "Dom Provenzano",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/dom-provenzano.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "domenic-provenzano",
+      "name": "Domenic Provenzano",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/domenic-provenzano.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "doug-hoffort",
+      "name": "Doug Hoffort",
+      "title": "",
+      "club": "Marbella",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/doug-hoffort.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "dustin-riggs",
+      "name": "Dustin Riggs",
+      "title": "",
+      "club": "Medallion",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/dustin-riggs.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "dylan-campy",
+      "name": "Dylan Campy",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/dylan-campy.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "eddie-collins",
+      "name": "Eddie Collins",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": true,
-      "photo": ""
+      "photo": "assets/attendees/eddie-collins.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-six",
-      "name": "Placeholder Six",
-      "title": "General Manager",
-      "club": "Placeholder Club South",
-      "region": "Region South",
+      "slug": "elijah",
+      "name": "Elijah",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": false,
-      "photo": ""
+      "photo": "assets/attendees/elijah.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-seven",
-      "name": "Placeholder Seven",
-      "title": "Enrollment Director",
-      "club": "Placeholder Club South",
-      "region": "Region South",
+      "slug": "elizabeth-sperber",
+      "name": "Elizabeth Sperber",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": false,
-      "photo": ""
+      "photo": "assets/attendees/elizabeth-sperber.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-eight",
-      "name": "Placeholder Eight",
-      "title": "Golf Professional",
-      "club": "Placeholder Club South",
-      "region": "Region South",
+      "slug": "eric-gray-director-of-golf",
+      "name": "Eric Gray Director Of Golf",
+      "title": "",
+      "club": "PGA WEST",
+      "region": "",
       "newbie": true,
-      "photo": ""
+      "photo": "assets/attendees/eric-gray-director-of-golf.jpg",
+      "needsReview": false
     },
     {
-      "slug": "placeholder-nine",
-      "name": "Placeholder Nine",
-      "title": "General Manager",
-      "club": "Placeholder Club South Two",
-      "region": "Region South",
-      "newbie": false,
-      "photo": ""
-    },
-    {
-      "slug": "placeholder-ten",
-      "name": "Placeholder Ten",
-      "title": "Enrollment Director",
-      "club": "Placeholder Club South Two",
-      "region": "Region South",
-      "newbie": false,
-      "photo": ""
-    },
-    {
-      "slug": "placeholder-eleven",
-      "name": "Placeholder Eleven",
-      "title": "Golf Professional",
-      "club": "Placeholder Club South Two",
-      "region": "Region South",
-      "newbie": false,
-      "photo": ""
-    },
-    {
-      "slug": "placeholder-twelve",
-      "name": "Placeholder Twelve",
-      "title": "General Manager",
-      "club": "Placeholder Club West",
-      "region": "Region West",
-      "newbie": false,
-      "photo": ""
-    },
-    {
-      "slug": "placeholder-thirteen",
-      "name": "Placeholder Thirteen",
-      "title": "Enrollment Director",
-      "club": "Placeholder Club West",
-      "region": "Region West",
+      "slug": "eric-gray",
+      "name": "Eric Gray",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": true,
-      "photo": ""
+      "photo": "assets/attendees/eric-gray.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-fourteen",
-      "name": "Placeholder Fourteen",
-      "title": "Golf Professional",
-      "club": "Placeholder Club West",
-      "region": "Region West",
+      "slug": "eric-temena-west",
+      "name": "Eric Temena - West",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": false,
-      "photo": ""
+      "photo": "assets/attendees/eric-temena-west.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-fifteen",
-      "name": "Placeholder Fifteen",
-      "title": "General Manager",
-      "club": "Placeholder Club East",
-      "region": "Region East",
-      "newbie": false,
-      "photo": ""
-    },
-    {
-      "slug": "placeholder-sixteen",
-      "name": "Placeholder Sixteen",
-      "title": "Enrollment Director",
-      "club": "Placeholder Club East",
-      "region": "Region East",
+      "slug": "erica-novosel",
+      "name": "Erica Novosel",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": true,
-      "photo": ""
+      "photo": "assets/attendees/erica-novosel.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-seventeen",
-      "name": "Placeholder Seventeen",
-      "title": "Placeholder Title That Runs Long So The Card Has To Wrap It",
-      "club": "Placeholder Club East",
-      "region": "Region East",
-      "newbie": false,
-      "photo": ""
+      "slug": "erik-mettille",
+      "name": "Erik Mettille",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/erik-mettille.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-eighteen",
-      "name": "Placeholder Eighteen",
-      "title": "General Manager",
-      "club": "Placeholder Club With A Deliberately Long Name",
-      "region": "Region West",
+      "slug": "frank-horton",
+      "name": "Frank Horton",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": false,
-      "photo": ""
+      "photo": "assets/attendees/frank-horton.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-nineteen",
-      "name": "Placeholder Nineteen",
-      "title": "Golf Professional",
-      "club": "Placeholder Club North Two",
-      "region": "Region North",
+      "slug": "gabe-bancroft",
+      "name": "Gabe Bancroft",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": false,
-      "photo": ""
+      "photo": "assets/attendees/gabe-bancroft.jpg",
+      "needsReview": true
     },
     {
-      "slug": "placeholder-twenty",
-      "name": "Placeholder Twenty",
-      "title": "Enrollment Director",
-      "club": "Placeholder Club East",
-      "region": "Region East",
+      "slug": "garry-cramer",
+      "name": "Garry Cramer",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/garry-cramer.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "gdovin",
+      "name": "Gdovin",
+      "title": "",
+      "club": "",
+      "region": "",
       "newbie": false,
-      "photo": ""
+      "photo": "assets/attendees/gdovin.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "geraldine-doran",
+      "name": "Geraldine Doran",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/geraldine-doran.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "gerlander",
+      "name": "Gerlander",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/gerlander.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "greg-king",
+      "name": "Greg King",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/greg-king.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "haley-scaman",
+      "name": "Haley Scaman",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/haley-scaman.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "halley-meyers",
+      "name": "Halley Meyers",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/halley-meyers.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "han",
+      "name": "Han",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/han.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "heather-jergens",
+      "name": "Heather Jergens",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/heather-jergens.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "henrichsen",
+      "name": "Henrichsen",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/henrichsen.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "hinckley",
+      "name": "Hinckley",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/hinckley.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "howe",
+      "name": "Howe",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/howe.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "hultz",
+      "name": "Hultz",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/hultz.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "james-duenez",
+      "name": "James Duenez",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/james-duenez.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "james-jordan",
+      "name": "James Jordan",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/james-jordan.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "james-williams",
+      "name": "James - Williams",
+      "title": "",
+      "club": "The Nelson",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/james-williams.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "jason-stuller",
+      "name": "Jason Stuller",
+      "title": "",
+      "club": "Sylvania",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/jason-stuller.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "jason-waters",
+      "name": "Jason Waters",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/jason-waters.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "jason",
+      "name": "Jason",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/jason.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "jay-mcluen",
+      "name": "Jay Mcluen",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/jay-mcluen.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "jeff-kragt",
+      "name": "Jeff Kragt",
+      "title": "",
+      "club": "Oregon GC",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/jeff-kragt.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "jeff-muller",
+      "name": "Jeff Muller",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/jeff-muller.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "jena-fretti",
+      "name": "Jena Fretti",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/jena-fretti.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "jennifer-neal",
+      "name": "Jennifer Neal",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/jennifer-neal.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "jerome-millet",
+      "name": "Jerome Millet",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/jerome-millet.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "jessicacalvillo",
+      "name": "Jessicacalvillo",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/jessicacalvillo.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "jim-kern",
+      "name": "Jim Kern",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/jim-kern.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "joe-saikali",
+      "name": "Joe Saikali",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/joe-saikali.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "joe-strahl",
+      "name": "Joe Strahl",
+      "title": "",
+      "club": "Wynstone",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/joe-strahl.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "john-lewis",
+      "name": "John Lewis",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/john-lewis.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "john-murray",
+      "name": "John Murray",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/john-murray.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "johnmartus",
+      "name": "Johnmartus",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/johnmartus.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "k-enoka",
+      "name": "K.enoka",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/k-enoka.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "kasey-oconnor",
+      "name": "Kasey O'Connor",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/kasey-oconnor.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "kasey",
+      "name": "Kasey",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/kasey.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "katelong-spring-creek",
+      "name": "Katelong - Spring Creek",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/katelong-spring-creek.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "katie-mode",
+      "name": "Katie Mode",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/katie-mode.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "katie-robinson",
+      "name": "Katie Robinson",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/katie-robinson.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "kaucher-erinn-2-pp-web",
+      "name": "Kaucher Erinn - 2 Pp Web",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/kaucher-erinn-2-pp-web.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "ken-blidy",
+      "name": "Ken Blidy",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/ken-blidy.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "kevin-paluch",
+      "name": "Kevin Paluch",
+      "title": "",
+      "club": "Prescott Lakes",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/kevin-paluch.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "kristen-bobanich",
+      "name": "Kristen Bobanich",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/kristen-bobanich.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "kristin",
+      "name": "Kristin",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/kristin.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "kristina-karoll",
+      "name": "Kristina Karoll",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/kristina-karoll.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "leo-calabro",
+      "name": "Leo Calabro",
+      "title": "",
+      "club": "El Camino",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/leo-calabro.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "leo-lee",
+      "name": "Leo Lee",
+      "title": "",
+      "club": "Las Posas",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/leo-lee.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "leonard-matsumoto",
+      "name": "Leonard Matsumoto",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/leonard-matsumoto.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "maren-fadling",
+      "name": "Maren Fadling",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/maren-fadling.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "mark-blais",
+      "name": "Mark Blais",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/mark-blais.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "mary-fina",
+      "name": "Mary Fina",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/mary-fina.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "matt-saggio",
+      "name": "Matt Saggio",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/matt-saggio.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "matt-samson",
+      "name": "Matt Samson",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/matt-samson.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "matthew-lopresti",
+      "name": "Matthew Lopresti",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/matthew-lopresti.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "may",
+      "name": "May",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/may.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "megan-michel",
+      "name": "Megan Michel",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/megan-michel.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "melfi-0001",
+      "name": "Melfi 0001",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/melfi-0001.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "michelle-preuss",
+      "name": "Michelle Preuss",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/michelle-preuss.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "mike-feeney",
+      "name": "Mike Feeney",
+      "title": "",
+      "club": "Monterey",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/mike-feeney.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "mike-goff",
+      "name": "Mike Goff",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/mike-goff.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "miller",
+      "name": "Miller",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/miller.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "mo-griffith",
+      "name": "Mo Griffith",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/mo-griffith.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "molly-dunn",
+      "name": "Molly Dunn",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/molly-dunn.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "nikki-ernenwein",
+      "name": "Nikki Ernenwein",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/nikki-ernenwein.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "noah-daher",
+      "name": "Noah Daher",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/noah-daher.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "nuncio",
+      "name": "Nuncio",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/nuncio.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "patrick-mcgraw",
+      "name": "Patrick - Mcgraw",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/patrick-mcgraw.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "payton-williamson",
+      "name": "Payton Williamson",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/payton-williamson.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "pete-ulliman",
+      "name": "Pete Ulliman",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/pete-ulliman.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "pga-headshots-september2023",
+      "name": "Pga Headshots September2023",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/pga-headshots-september2023.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "pierre-peroz",
+      "name": "Pierre Peroz",
+      "title": "",
+      "club": "Sunset Hills",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/pierre-peroz.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "romine",
+      "name": "Romine",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/romine.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "samantha-salyards",
+      "name": "Samantha Salyards",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/samantha-salyards.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "scott-mcclinton",
+      "name": "Scott Mcclinton",
+      "title": "",
+      "club": "Chenal",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/scott-mcclinton.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "sean",
+      "name": "Sean",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/sean.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "shaina-lyon",
+      "name": "Shaina Lyon",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/shaina-lyon.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "shannon-allen",
+      "name": "Shannon Allen",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/shannon-allen.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "shannon-webre",
+      "name": "Shannon Webre",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/shannon-webre.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "shauna-huntington",
+      "name": "Shauna - Huntington",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/shauna-huntington.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "shelley-caiazzo",
+      "name": "Shelley Caiazzo",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/shelley-caiazzo.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "spenser-doolittle",
+      "name": "Spenser Doolittle",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/spenser-doolittle.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "spittle",
+      "name": "Spittle",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/spittle.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "steve-trinh-headshot",
+      "name": "Steve Trinh Headshot",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/steve-trinh-headshot.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "stromme",
+      "name": "Stromme",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/stromme.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "sydney-ormsby",
+      "name": "Sydney Ormsby",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/sydney-ormsby.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "taytem-bowles",
+      "name": "Taytem Bowles",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": true,
+      "photo": "assets/attendees/taytem-bowles.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "timerson",
+      "name": "Timerson",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/timerson.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "todd-leonard",
+      "name": "Todd Leonard",
+      "title": "",
+      "club": "Balcones",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/todd-leonard.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "tom-pyeatt",
+      "name": "Tom Pyeatt",
+      "title": "",
+      "club": "Canyon Oaks",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/tom-pyeatt.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "tony-clevenger",
+      "name": "Tony Clevenger",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/tony-clevenger.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "tonya-prather",
+      "name": "Tonya Prather",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/tonya-prather.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "tracey",
+      "name": "Tracey",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/tracey.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "travis-long",
+      "name": "Travis Long",
+      "title": "",
+      "club": "Anthem",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/travis-long.jpg",
+      "needsReview": false
+    },
+    {
+      "slug": "tyler-busey",
+      "name": "Tyler Busey",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/tyler-busey.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "walsh-trujillo",
+      "name": "Walsh Trujillo",
+      "title": "",
+      "club": "",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/walsh-trujillo.jpg",
+      "needsReview": true
+    },
+    {
+      "slug": "zac-casey",
+      "name": "Zac Casey",
+      "title": "",
+      "club": "Citrus Club",
+      "region": "",
+      "newbie": false,
+      "photo": "assets/attendees/zac-casey.jpg",
+      "needsReview": false
     }
   ]
 }
