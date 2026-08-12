@@ -12299,6 +12299,15 @@ function ApRosterEdit({ person, base, clubsId, onDone }) {
   const was = (f) => rstClean(base[f]);
   const changed = (f) => person.changed.indexOf(f) !== -1;
 
+  /* Put the field in the open form back at the same time as the record. The
+     form holds its own copy so a half-typed name is not thrown away by every
+     snapshot, and without this line the input kept the reverted value and the
+     next Save quietly put it back. */
+  const revert = (f) => () => {
+    setForm((prev) => Object.assign({}, prev, { [f]: was(f) }));
+    rstRevert(person.slug, f);
+  };
+
   const pick = useCallback((e) => {
     const file = e.target.files && e.target.files[0];
     e.target.value = "";
@@ -12384,19 +12393,19 @@ function ApRosterEdit({ person, base, clubsId, onDone }) {
           id={"rst-name-" + person.slug} field="name"
           value={form.name} onValue={set("name")}
           base={was("name")} changed={changed("name")}
-          onRevert={() => rstRevert(person.slug, "name")}
+          onRevert={revert("name")}
         />
         <ApRosterField
           id={"rst-title-" + person.slug} field="title"
           value={form.title} onValue={set("title")}
           base={was("title")} changed={changed("title")}
-          onRevert={() => rstRevert(person.slug, "title")}
+          onRevert={revert("title")}
         />
         <ApRosterField
           id={"rst-club-" + person.slug} field="club"
           value={form.club} onValue={set("club")}
           base={was("club")} changed={changed("club")}
-          onRevert={() => rstRevert(person.slug, "club")}
+          onRevert={revert("club")}
           list={clubsId}
           hint="Pick one off the list or type a new one."
         />
@@ -12404,7 +12413,7 @@ function ApRosterEdit({ person, base, clubsId, onDone }) {
           id={"rst-region-" + person.slug} field="region"
           value={form.region} onValue={set("region")}
           base={was("region")} changed={changed("region")}
-          onRevert={() => rstRevert(person.slug, "region")}
+          onRevert={revert("region")}
         />
       </div>
 
@@ -12610,6 +12619,10 @@ function ApRosterAdd({ taken, clubsId, onAdded }) {
         setBusy(false);
         setSaid(rec.name + " is on the wall.");
         reset();
+        /* Close the form on the way out. The confirmation lives on the closed
+           state, so leaving the form open said nothing at all and the crew had
+           to go looking in the list to find out whether it worked. */
+        setOn(false);
         if (onAdded) onAdded();
       })
       .catch((err) => {
