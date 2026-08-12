@@ -42,6 +42,15 @@ OVERRIDE = {
     "chelsea petrick": "chelsea-pariseau",        # name change, confirmed by Jim
 }
 
+# Photo slugs withheld from matching because the filename does not say WHICH
+# person it is, and two people on the list could claim it. A missing face is a
+# gap. A wrong face under a real name is a mistake somebody notices in the room.
+HOLD = {
+    "hinckley": ("20230130-Hinckley-0008_pp.jpg says only Hinckley, and Jim "
+                 "Hinckley and James Hinckley are two different people. "
+                 "SharePoint also holds a separate James Hinckley.jpg."),
+}
+
 # Rows in the list that are the same human as another row. Keyed by the row to
 # drop, valued by the row to keep, so a title clash gets decided once.
 SAME_PERSON = {}
@@ -64,12 +73,16 @@ RESOLVED = [
           "Aubrey Gillespie still needs her own photo. Do NOT match these."},
     {"q": "Is chelsea-pariseau the same person as Chelsea Petrick?",
      "a": "YES. Jim, Aug 12 2026, name change. Applied via OVERRIDE."},
+    {"q": "Are Jim Hinckley and James Hinckley the same person?",
+     "a": "NO. Jim, Aug 12 2026: two different people. Both stay in the roster "
+          "as separate records. Do NOT collapse them."},
 ]
 
 OPEN_QUESTIONS = [
-    {"q": "The list carries James Hinckley as Principal and Jim Hinckley as "
-          "Partner. Same person, two rows, two titles. Which title is right?",
-     "effect": "Both are in the roster, one with the photo and one without."},
+    {"q": "Who is in 20230130-Hinckley-0008_pp.jpg, Jim Hinckley or James "
+          "Hinckley? The filename does not say and they are two people.",
+     "effect": "The photo is HELD BACK, so both Hinckleys currently show without "
+               "one rather than risk the wrong face under the wrong name."},
 ]
 
 
@@ -114,7 +127,7 @@ def main():
     report_only = "--report" in sys.argv
 
     photos = sorted(f[:-4] for f in os.listdir(SHOTS) if f.endswith(".jpg"))
-    unused = set(photos)
+    unused = set(photos) - set(HOLD)
 
     rows = load_rows()
     excluded = [r for r in rows if "NOT ATTENDING" in r["notes"].upper()]
@@ -224,6 +237,7 @@ def main():
         "_counts": counts,
         "_openQuestions": OPEN_QUESTIONS,
         "_resolved": RESOLVED,
+        "_photosHeldPendingIdentification": {k: v for k, v in HOLD.items()},
         "_photosOnDiskNotOnTheList": sorted(unused),
         "attendees": out,
     }
