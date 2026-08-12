@@ -520,12 +520,45 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 - **Note:** real data loads in T3.1
 - **Parallel-safe with:** T1.1, T1.2
 
-### `[ ]` T1.4 Soundcheck
+### `[x]` T1.4 Soundcheck
 - **Inputs:** spec Section 3.4
 - **Output:** complete Q&A tab
 - **Steps:** submission panel with optional name, optional club, category dropdown (Membership Sales, Retention, Programming, Pricing, Operations, Other), anonymous toggle, question body. Sort pills Top and New. Category filter pills plus Show Answered toggle. Question cards with upvote, count, text, attribution, timestamp, category tag. One vote per device per question via `mm26_voted`, voted state scarlet and locked. Display Mode variant with large type, top questions only, no inputs, auto-scroll. Admin: delete, mark answered, pin, CSV export grouped by category
 - **Acceptance:** submit from one device and confirm it appears on a second device within two seconds. Vote once, reload, confirm the lock persists. Display Mode is legible from across a room. CSV opens cleanly in Excel
 - **Blocked by:** T0.8
+- **Done Aug 11.** Questions live at `questions/{id}` with the nine field record, read back over
+  plain HTTPS and confirmed: `anonymous answered category club name pinned text ts votes`.
+  | Acceptance criterion | Result |
+  |---|---|
+  | Submit appears on a second device within two seconds | The write path is the same `on("value")` listener proved at 29ms on this database in T2.3, and an external write appeared with no reload. **A stopwatch across two genuinely separate devices is left for T3.6** |
+  | Vote once, reload, the lock persists | 0 to 1, arrow to checkmark, scarlet gradient measured `rgb(200,16,46)` to `rgb(138,14,31)` with a gold border, button disabled. A second tap was refused. After a reload it was still scarlet, still checked, count unchanged, and `mm26_voted` held the id |
+  | Display Mode is legible from across a room | At 1280 by 800: **zero** input controls in the DOM, question type 33.28px, vote number 51.2px, heading 60px. The answered question was absent, top votes first, pinned first |
+  | CSV opens cleanly in Excel | Captured the actual blob. One header row, nine columns, BOM bytes `EF BB BF`, CRLF endings, `text/csv;charset=utf-8` |
+  | CSV escaping | `Why ""premium"", exactly?` doubled correctly inside one cell. `=SUM(A1:A9)` exported as `'=SUM(A1:A9)` so Excel reads it as text. `José Peña` intact. The anonymous row exported with empty Name and Club and Anonymous set to Yes |
+  | CSV grouping | Rows came out in category order, Retention then Pricing then Operations, which is the `SC_CATEGORIES` order, highest votes first inside a group |
+  | Answered sinks and dims | Sank to the bottom at opacity 0.55 with a "✓ Answered" flag, hidden until Show answered is on, and the badge counted it |
+  | Pinned rides the top | Gold ring, "Pinned" flag, and it held the top spot with 0 votes while an answered card with 1 vote stayed at the bottom. Answered is tested before votes on purpose |
+  | Auto scroll only when needed | With 2 cards the wall was `sc-wall--still`, one copy, no animation. With 10 it grew to two copies, the duplicate `aria-hidden`, `sc-roll` running at 69s, and page scroll room of 189px, about one masthead |
+  | No horizontal overflow | 0px at 380px and at 1280px, zero elements past the edge, pill rows and the three admin buttons both wrapping |
+  | No console errors | None, across submit, vote, sort, filter, both admin toggles, export, and Display Mode on and off |
+- **`ts` is a server timestamp**, so a phone with a wrong clock cannot post a question stamped
+  tomorrow. Confirmed as a resolved integer in the stored record.
+- **Display Mode ignores the sort and filter pills on purpose.** Nobody can change them from the
+  projector, and a wall quietly showing one category because somebody tapped a pill an hour ago
+  is worse than a wall that always shows the same thing: the top 12 unanswered.
+- **The wall parks the masthead off the top** so it fills the screen. Lisa's masthead is on every
+  page including Display Mode, and measured raw it left the wall about a third of a laptop
+  screen. The sticky header stays pinned, so the Display Mode button is always reachable to turn
+  it off.
+- **One apparent exception to the no-fixed-height rule, and it is not one.** A sweep for fixed
+  height scroll containers outside Display Mode returns exactly one element, `.sc-body`, which is
+  the question textarea at its `min-height` of 96px with `resize: vertical`. That is a form field,
+  not a container holding page content behind a scrollbar.
+- **The BOM is written as `﻿`, not as a literal byte-order mark in the source.** A literal
+  one does not survive being copied through a spec, and it lands as an invisible character in the
+  middle of a JS file. Verified the emitted bytes rather than the source.
+- **Not verified, needs a device.** The native select and the on-screen keyboard on a real phone.
+  T3.6.
 
 ### `[ ]` T1.5 Liner Notes
 - **Inputs:** spec Section 3.6

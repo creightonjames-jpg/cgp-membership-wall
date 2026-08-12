@@ -1820,6 +1820,292 @@ figure.vt-card { margin: 0; padding: 14px; }
   figure.vt-card { padding: 18px; }
   .vt-locked { padding: 34px 24px; }
 }
+
+/* ==========================================================================
+   T1.4 SOUNDCHECK
+   Q and A. Every selector is .sc- prefixed so it cannot collide with another
+   tab's work. No new motif and no thirteenth palette token: the cards are the
+   T0.4 ticket stub with the tear-off as the upvote button, and every colour
+   here is mixed from the twelve through the same --warm-fill, --warm-edge and
+   --gold-rule dials the tab bar uses.
+   ========================================================================== */
+
+/* --------------------------------------------------------- ask panel */
+.sc-ask { padding: 15px 16px; margin: 0 0 18px; }
+
+.sc-ask__h { margin: 0 0 5px; font-size: clamp(18px, 5.2vw, 22px); }
+.sc-ask__p { margin: 0 0 12px; color: var(--dim); font-size: 13px; }
+.sc-ask__note { margin: 10px 0 0; font-size: 12px; color: var(--mute); }
+.sc-ask__ok { margin: 10px 0 0; font-size: 13px; color: var(--gold); }
+.sc-ask__err { margin: 10px 0 0; font-size: 13px; color: var(--danger); }
+
+/* Name and club sit side by side on anything wider than a small phone and
+   stack below it, without a media query. */
+.sc-two { display: flex; flex-wrap: wrap; gap: 8px; }
+.sc-two > .tf__l { flex: 1 1 150px; min-width: 0; }
+
+.sc-body { min-height: 96px; line-height: 1.45; resize: vertical; }
+.sc-count { margin: 5px 0 0; font-size: 11px; color: var(--mute); text-align: right; }
+
+/* Native select chrome is left alone so each platform draws its own caret.
+   The option list is forced dark, because some Androids render inherited
+   cream on a white system menu. */
+.sc-select { padding-right: 10px; }
+.sc-select option { background: var(--riser); color: var(--cream); }
+
+/* ------------------------------------------------------------- pills */
+/* Same warm chrome language as the tab bar and the day pills, one notch
+   quieter, because the tab bar stays the loudest control on the page. */
+.sc-rows { display: flex; flex-direction: column; gap: 9px; margin: 0 0 14px; }
+
+.sc-pills {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  align-items: center;
+}
+
+.sc-pills__k {
+  flex: 0 0 auto;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--mute);
+  margin-right: 2px;
+}
+
+.sc-pill {
+  flex: 0 0 auto;
+  display: inline-flex; align-items: center; gap: 7px;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge);
+  border-radius: 999px; padding: 7px 13px;
+  color: var(--cream); font-family: inherit; font-size: 13px; font-weight: 500;
+  white-space: nowrap; cursor: pointer;
+  transition: background-image 120ms ease, border-color 120ms ease;
+}
+
+.sc-pill:active {
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+}
+
+.sc-pill[aria-pressed="true"] {
+  background-color: transparent;
+  background-image: var(--grad-primary);
+  border-color: var(--gold);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px rgba(217,169,76,0.22), 0 3px 12px rgba(200,16,46,0.34);
+}
+
+/* Gold badge with dark text, same call as the tab bar count: a scarlet badge
+   on a now scarlet selected pill would be invisible. */
+.sc-pill__n {
+  background: var(--gold); color: #2A1408;
+  border-radius: 999px; min-width: 18px; padding: 0 5px;
+  font-size: 11px; font-weight: 700; text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.sc-tally { margin: 0 0 14px; font-size: 12px; color: var(--mute); }
+
+/* -------------------------------------------------------- crew strip */
+/* Same treatment as .enc__crew, so crew tools read the same on every tab. */
+.sc-crew {
+  margin: 0 0 16px; padding: 12px 13px;
+  background: var(--input); border-left: 3px solid var(--scarlet);
+  border-radius: 6px;
+}
+
+/* ------------------------------------------------------ question cards */
+.sc-list { display: flex; flex-direction: column; gap: 16px; }
+
+.sc-card { --ticket-stub-w: 68px; }
+
+/* Pinned rides the top and says so with a gold ring rather than a second
+   border colour fighting the ticket. */
+.ticket.sc-card--pin {
+  border-color: var(--gold-rule);
+  box-shadow: 0 0 0 1px rgba(217,169,76,0.20);
+}
+
+.ticket.sc-card--pin .ticket__stub { border-right-color: var(--gold-rule); }
+
+/* Tighter than the default stub, because the whole tear-off is a button. */
+.sc-stub { padding: 9px 7px; }
+
+.sc-vote {
+  width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 9px 4px;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge); border-radius: 8px;
+  color: var(--cream); font-family: inherit; cursor: pointer;
+}
+
+.sc-vote:active {
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+}
+
+.sc-vote__i { font-size: 13px; line-height: 1; }
+.sc-vote__n { font-size: 17px; font-weight: 700; line-height: 1; }
+
+/* Cast. Scarlet and locked. */
+.sc-vote.is-cast {
+  background-color: transparent;
+  background-image: var(--grad-primary);
+  border-color: var(--gold);
+  cursor: default;
+}
+
+.sc-vote:disabled { cursor: default; }
+.sc-vote:disabled:not(.is-cast) { opacity: 0.55; }
+.sc-vote:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.sc-q { margin: 0; font-size: 16px; line-height: 1.42; overflow-wrap: anywhere; }
+
+.sc-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  margin: 10px 0 0; font-size: 12px; color: var(--dim);
+}
+
+.sc-who { color: var(--cream); font-weight: 600; }
+.sc-time { color: var(--mute); }
+
+.sc-tag {
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge); border-radius: 999px;
+  padding: 2px 9px; font-size: 11px; color: var(--gold);
+}
+
+.sc-flag {
+  border: 1px solid var(--gold-rule); border-radius: 999px;
+  padding: 2px 9px; font-size: 11px; font-weight: 600; color: var(--gold);
+}
+
+.sc-admin { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; }
+
+/* ==========================================================================
+   DISPLAY MODE. The projector variant.
+   The only place a viewport locked height is allowed, per CLAUDE.md. This is
+   what the regional team keeps open on a second screen, so type is sized to be
+   read from the back of a ballroom and the list walks itself.
+   ========================================================================== */
+
+.sc-dhead { display: flex; align-items: baseline; flex-wrap: wrap; gap: 14px; }
+
+.sc-dcount {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: clamp(14px, 1.6vw, 22px); color: var(--gold);
+}
+
+.sc-dsub {
+  margin: 4px 0 18px;
+  font-size: clamp(14px, 1.4vw, 20px); color: var(--dim);
+}
+
+.sc-dempty { margin: 0; font-size: clamp(20px, 2.2vw, 32px); color: var(--dim); }
+
+/* Height comes in as --sc-h, measured against the real viewport in JS, so the
+   wall fills the screen exactly once and the page itself never scrolls. */
+.sc-wall {
+  position: relative;
+  height: var(--sc-h, 70svh);
+  overflow: hidden;
+}
+
+.sc-wall__copy {
+  display: flex; flex-direction: column; gap: 22px;
+  padding-bottom: 22px;   /* held identical in both copies, so -50% is seamless */
+}
+
+.sc-wall__track {
+  animation-name: sc-roll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  /* duration is set inline from the measured height, at a fixed px per second */
+}
+
+/* Content fits the screen. No duplicate, no motion, no fade. */
+.sc-wall--still { height: auto; }
+.sc-wall--still .sc-wall__track { animation: none; }
+
+/* Reading one question while the wall moves. Not an input control. */
+.sc-wall:hover .sc-wall__track { animation-play-state: paused; }
+
+/* A card cut off at the bottom edge should read as more to come. */
+.sc-wall:not(.sc-wall--still)::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: 0; height: 74px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(23,22,26,0) 0%, var(--stage) 92%);
+}
+
+@keyframes sc-roll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }   /* content is duplicated once */
+}
+
+/* The projector is a laptop or a screen, but Display Mode is a header button
+   and somebody will press it on a phone. At 380px a 128px stub is a third of
+   the screen given to a vote count, so it starts narrow and widens with the
+   viewport. */
+.sc-big { --ticket-stub-w: 92px; }
+
+.sc-big .ticket__body { padding: 16px 18px; }
+
+.sc-bignum {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4vw, 62px); line-height: 1; color: var(--gold);
+}
+
+.sc-biglab {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: clamp(10px, 1vw, 14px); letter-spacing: 0.16em; color: var(--dim);
+}
+
+.sc-bigq {
+  margin: 0; font-weight: 600;
+  font-size: clamp(22px, 2.6vw, 40px); line-height: 1.24;
+  overflow-wrap: anywhere;
+}
+
+.sc-bigmeta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 14px;
+  margin: 12px 0 0; font-size: clamp(13px, 1.2vw, 20px); color: var(--dim);
+}
+
+.sc-bigtag {
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge); border-radius: 999px;
+  padding: 3px 12px; color: var(--gold);
+  font-size: clamp(12px, 1.1vw, 18px);
+}
+
+/* A wall that walks up the screen on its own is exactly the thing to switch
+   off for anyone who asked for less motion. Killing the animation alone would
+   clip the list inside a locked height, so the height goes with it and the
+   page scrolls by hand instead. */
+@media (prefers-reduced-motion: reduce) {
+  .sc-wall { height: auto; }
+  .sc-wall__track { animation: none; }
+  .sc-wall__copy[aria-hidden="true"] { display: none; }
+  .sc-wall:not(.sc-wall--still)::after { display: none; }
+}
+
+/* ------------------------------------------------------ desktop and laptop */
+/* Jim reviews on a laptop. The reading column is already capped by .sheet, so
+   this is only about the cards not looking like stretched phone cards. */
+@media (min-width: 700px) {
+  .sc-card { --ticket-stub-w: 80px; }
+  .sc-q { font-size: 17px; }
+  .sc-ask { padding: 18px 20px; }
+  .sc-vote__n { font-size: 19px; }
+
+  /* Room for the vote number to be the second thing you read from the back of
+     the room, after the question itself. */
+  .sc-big { --ticket-stub-w: 128px; }
+  .sc-big .ticket__body { padding: 20px 24px; }
+}
 </style>
 </head>
 <body>
@@ -1874,7 +2160,8 @@ const OPENS_AT = Date.parse("2026-08-25T12:00:00-04:00");
 
 const LS = {
   entered: "mm26_entered",
-  reacted: "mm26_reacted"
+  reacted: "mm26_reacted",
+  voted: "mm26_voted"
 };
 
 /* Venue and contact facts, verbatim off the flier. One table, because The
@@ -3099,14 +3386,780 @@ function BackstageTab({ isAdmin }) {
   );
 }
 
-function SoundcheckTab({ isAdmin }) {
+/* ==========================================================================
+   T1.4 SOUNDCHECK. Spec 3.4.
+   The Q and A. Carol asked whether this updates live for the regional team. It
+   does: one Firebase listener on `questions`, so a question typed in the back
+   row lands on the regional team's laptop in about a second with no reload.
+
+   Every clock decision reads the server corrected `now` handed down from
+   useServerNow, and `ts` is written by the server rather than by the phone, so
+   a device an hour out cannot post a question stamped tomorrow.
+
+   Display Mode reads the body class the header toggle already sets, so no
+   wiring is needed in App to build the projector variant.
+   ========================================================================== */
+
+/* Exactly six, in this order, everywhere: the dropdown, the filter pills, and
+   the CSV grouping. Presenters pull the questions for their session by
+   category, so the list is fixed rather than free text. */
+const SC_CATEGORIES = [
+  "Membership Sales",
+  "Retention",
+  "Programming",
+  "Pricing",
+  "Operations",
+  "Other"
+];
+
+const SC_MAX_TEXT = 500;
+const SC_MAX_NAME = 60;
+const SC_WALL_COUNT = 12;    /* top questions on the projector          */
+const SC_WALL_SPEED = 26;    /* pixels per second the wall walks upward  */
+
+/* The server stamps the time. The device clock is only a last resort if the
+   Firebase library is not there at all, in which case nothing is syncing
+   anyway. */
+function scServerStamp() {
+  try {
+    return firebase.database.ServerValue.TIMESTAMP;
+  } catch (e) {
+    return Date.now();
+  }
+}
+
+/* One listener for the whole node. Defensive on the way in: a hand edited
+   record cannot crash the tab, and an unknown category reads as Other. */
+function useScQuestions() {
+  const [items, setItems] = useState([]);
+  const [ready, setReady] = useState(!FB.ok);
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("questions");
+    const handler = (snap) => {
+      const all = snap.val() || {};
+      const list = [];
+      Object.keys(all).forEach((id) => {
+        const r = all[id];
+        if (!r || typeof r.text !== "string" || !r.text) return;
+        list.push({
+          id: id,
+          text: r.text,
+          name: typeof r.name === "string" ? r.name : "",
+          club: typeof r.club === "string" ? r.club : "",
+          category: SC_CATEGORIES.indexOf(r.category) >= 0 ? r.category : "Other",
+          anonymous: r.anonymous === true,
+          votes: typeof r.votes === "number" ? r.votes : 0,
+          answered: r.answered === true,
+          pinned: r.pinned === true,
+          ts: typeof r.ts === "number" ? r.ts : 0
+        });
+      });
+      setItems(list);
+      setReady(true);
+    };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return { items: items, ready: ready };
+}
+
+/* The header Display Mode toggle sets a class on body. Watching the class
+   rather than taking a prop keeps App untouched, which matters because several
+   tabs are being built at once. */
+function useScDisplayMode() {
+  const [on, setOn] = useState(
+    () => document.body.classList.contains("display-mode")
+  );
+
+  useEffect(() => {
+    const el = document.body;
+    const read = () => setOn(el.classList.contains("display-mode"));
+    read();
+    if (!window.MutationObserver) return;
+    const obs = new MutationObserver(read);
+    obs.observe(el, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+
+  return on;
+}
+
+/* Relative against the corrected clock, never Date.now(). A negative span,
+   which happens for a second when the local echo of a server timestamp lands
+   slightly ahead, reads as "just now" rather than as a time in the future. */
+function scRelTime(ts, now) {
+  if (!ts) return "just now";
+  const diff = now - ts;
+  if (diff < 45000) return "just now";
+  const m = Math.round(diff / 60000);
+  if (m < 60) return m + " min ago";
+  const h = Math.round(diff / 3600000);
+  if (h < 24) return h + (h === 1 ? " hr ago" : " hr ago");
+  const d = Math.round(diff / 86400000);
+  return d + (d === 1 ? " day ago" : " days ago");
+}
+
+/* Answered sinks, pinned rises, then either votes or recency. Answered is
+   tested before pinned on purpose: an answered question leaves the top of the
+   wall even if somebody pinned it earlier. */
+function scSort(list, mode) {
+  return list.slice().sort((a, b) => {
+    const aa = a.answered ? 1 : 0;
+    const ba = b.answered ? 1 : 0;
+    if (aa !== ba) return aa - ba;
+
+    const ap = a.pinned ? 0 : 1;
+    const bp = b.pinned ? 0 : 1;
+    if (ap !== bp) return ap - bp;
+
+    if (mode === "top" && a.votes !== b.votes) return b.votes - a.votes;
+    return b.ts - a.ts;
+  });
+}
+
+function scWho(q) {
+  if (q.anonymous) return "Anonymous";
+  return q.name || "Somebody in the room";
+}
+
+function scWhere(q) { return q.anonymous ? "" : q.club; }
+
+/* ---------------------------------------------------------------- CSV */
+/* Grouped by category, one header row, and it has to survive Excel. Every
+   field is quoted, internal quotes are doubled, newlines are flattened to a
+   space, lines end CRLF, and the file leads with a BOM so accented names do
+   not arrive as mojibake. */
+const SC_CSV_COLS = [
+  "Category", "Votes", "Answered", "Pinned",
+  "Question", "Name", "Club", "Anonymous", "Submitted (Eastern)"
+];
+
+function scCsvCell(value) {
+  let s = value === null || value === undefined ? "" : String(value);
+  s = s.replace(/\r\n|\r|\n/g, " ").trim();
+  /* Excel evaluates a leading =, + or @ as a formula even inside quotes. A
+     leading apostrophe stops that. Leading - is left alone, because a dash
+     opening a sentence is a real thing people type and Excel lands it as
+     text. */
+  if (/^[=+@]/.test(s)) s = "'" + s;
+  return '"' + s.replace(/"/g, '""') + '"';
+}
+
+/* 2026-08-25 14:03 Eastern. Excel parses that as a datetime without being
+   asked. Intl does the DST work rather than a hardcoded offset. */
+function scEtStamp(ms) {
+  if (!ms) return "";
+  try {
+    const f = new Intl.DateTimeFormat("en-CA", {
+      timeZone: ET, year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hour12: false
+    });
+    const p = {};
+    f.formatToParts(ms).forEach((x) => { p[x.type] = x.value; });
+    const hh = p.hour === "24" ? "00" : p.hour;
+    return p.year + "-" + p.month + "-" + p.day + " " + hh + ":" + p.minute;
+  } catch (e) {
+    return new Date(ms).toISOString().slice(0, 16).replace("T", " ");
+  }
+}
+
+function scBuildCsv(list) {
+  const rank = {};
+  SC_CATEGORIES.forEach((c, i) => { rank[c] = i; });
+
+  const rows = list.slice().sort((a, b) => {
+    const d = (rank[a.category] || 0) - (rank[b.category] || 0);
+    if (d !== 0) return d;
+    if (a.votes !== b.votes) return b.votes - a.votes;
+    return a.ts - b.ts;
+  });
+
+  const lines = [SC_CSV_COLS.map(scCsvCell).join(",")];
+
+  rows.forEach((q) => {
+    lines.push([
+      q.category,
+      q.votes,
+      q.answered ? "Yes" : "No",
+      q.pinned ? "Yes" : "No",
+      q.text,
+      q.anonymous ? "" : q.name,
+      q.anonymous ? "" : q.club,
+      q.anonymous ? "Yes" : "No",
+      scEtStamp(q.ts)
+    ].map(scCsvCell).join(","));
+  });
+
+  /* Escaped, not a literal byte-order mark, so this survives being copied
+     out of a spec and pasted into a file. Excel needs it to read accents. */
+  return "\uFEFF" + lines.join("\r\n") + "\r\n";
+}
+
+function scSaveCsv(text, filename) {
+  try {
+    const blob = new Blob([text], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+/* --------------------------------------------------------- ask panel */
+/* Name and club are optional and stay filled after a send, because one person
+   usually asks more than one question. The body clears. Category defaults to
+   nothing rather than to Membership Sales: a wrong tag is worse than an
+   untagged question, so a blank selection is stored as Other. */
+function ScAsk({ onPost, live }) {
+  const [name, setName] = useState("");
+  const [club, setClub] = useState("");
+  const [category, setCategory] = useState("");
+  const [anon, setAnon] = useState(false);
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [ok, setOk] = useState("");
+  const [err, setErr] = useState("");
+
+  function submit(e) {
+    e.preventDefault();
+    const clean = {
+      text: text.trim().slice(0, SC_MAX_TEXT),
+      name: anon ? "" : name.trim().slice(0, SC_MAX_NAME),
+      club: anon ? "" : club.trim().slice(0, SC_MAX_NAME),
+      category: SC_CATEGORIES.indexOf(category) >= 0 ? category : "Other",
+      anonymous: anon
+    };
+
+    if (!clean.text) {
+      setOk("");
+      setErr("Type a question first.");
+      return;
+    }
+
+    setBusy(true);
+    setErr("");
+    setOk("");
+
+    onPost(clean).then((sent) => {
+      setBusy(false);
+      if (sent) {
+        setText("");
+        setOk("That is on the wall. Everyone can see it now.");
+      } else {
+        setErr("That did not send. Try again in a second.");
+      }
+    });
+  }
+
+  return (
+    <form className="sc-ask glow-card grille" onSubmit={submit}>
+      <h3 className="sc-ask__h t-display">Ask Something</h3>
+      <p className="sc-ask__p">
+        Presenters read these. Short and specific beats long and polite.
+      </p>
+
+      <div className="tf">
+        <div className="sc-two">
+          <label className="tf__l">
+            <span>Your name, optional</span>
+            <input
+              className="tf__in"
+              value={name}
+              maxLength={SC_MAX_NAME}
+              disabled={anon}
+              autoComplete="name"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </label>
+          <label className="tf__l">
+            <span>Your club, optional</span>
+            <input
+              className="tf__in"
+              value={club}
+              maxLength={SC_MAX_NAME}
+              disabled={anon}
+              onChange={(e) => setClub(e.target.value)}
+            />
+          </label>
+        </div>
+
+        <label className="tf__l">
+          <span>Category</span>
+          <select
+            className="tf__in sc-select"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="">Pick one</option>
+            {SC_CATEGORIES.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </label>
+
+        <div className="sc-pills" style={{ margin: "0 0 9px" }}>
+          <button
+            type="button"
+            className="sc-pill"
+            aria-pressed={anon}
+            onClick={() => setAnon(!anon)}
+          >
+            {anon ? "\u{1F576} Anonymous" : "Ask anonymously"}
+          </button>
+        </div>
+
+        <label className="tf__l">
+          <span>Your question</span>
+          <textarea
+            className="tf__in sc-body"
+            value={text}
+            maxLength={SC_MAX_TEXT}
+            placeholder="What do you actually want to know?"
+            onChange={(e) => setText(e.target.value)}
+          />
+        </label>
+        <p className="sc-count t-data">{text.length}/{SC_MAX_TEXT}</p>
+
+        <div className="tf__row">
+          <button type="submit" className="btn btn--go" disabled={busy || !live}>
+            {busy ? "Sending" : "Send it in"}
+          </button>
+        </div>
+      </div>
+
+      {anon ? (
+        <p className="sc-ask__note">Your name and club stay off it.</p>
+      ) : null}
+      {category === "" ? (
+        <p className="sc-ask__note">No category picked, so it files under Other.</p>
+      ) : null}
+      {ok ? <p className="sc-ask__ok">{ok}</p> : null}
+      {err ? <p className="sc-ask__err">{err}</p> : null}
+    </form>
+  );
+}
+
+/* ------------------------------------------------------ question card */
+/* The ticket is a div, not a button, because the tear-off stub holds the
+   upvote and the body holds three admin buttons. A button cannot hold another
+   button, which is why The Setlist puts its reactions outside the ticket. */
+function ScCard({ q, now, voted, onVote, isAdmin, onAnswer, onPin, onDelete }) {
+  const where = scWhere(q);
+
+  return (
+    <article
+      className={
+        "sc-card ticket" +
+        (q.pinned ? " sc-card--pin" : "") +
+        (q.answered ? " is-done" : "")
+      }
+    >
+      <div className="ticket__stub sc-stub">
+        <button
+          className={"sc-vote" + (voted ? " is-cast" : "")}
+          disabled={!FB.ok || voted}
+          onClick={() => onVote(q)}
+          title={voted ? "Counted. One per device." : "Upvote this question"}
+        >
+          <span className="sc-vote__i" aria-hidden="true">{voted ? "✓" : "▲"}</span>
+          <span className="sc-vote__n t-data">{FB.ok ? q.votes : "–"}</span>
+          <span className="sr-only">
+            {voted ? "You already upvoted this question" : "Upvote this question"}
+          </span>
+        </button>
+      </div>
+
+      <div className="ticket__body">
+        <p className="sc-q">{q.text}</p>
+
+        <div className="sc-meta">
+          <span className="sc-tag">{q.category}</span>
+          {q.pinned ? <span className="sc-flag">Pinned</span> : null}
+          {q.answered ? <span className="sc-flag">✓ Answered</span> : null}
+          <span className="sc-who">{scWho(q)}</span>
+          {where ? <span>{where}</span> : null}
+          <span className="sc-time">{scRelTime(q.ts, now)}</span>
+        </div>
+
+        {isAdmin ? (
+          <div className="sc-admin">
+            <button className="btn btn--tiny" onClick={() => onAnswer(q)}>
+              {q.answered ? "Unmark" : "Mark answered"}
+            </button>
+            <button className="btn btn--tiny" onClick={() => onPin(q)}>
+              {q.pinned ? "Unpin" : "Pin to top"}
+            </button>
+            <button className="btn btn--tiny btn--kill" onClick={() => onDelete(q)}>
+              Delete
+            </button>
+          </div>
+        ) : null}
+      </div>
+    </article>
+  );
+}
+
+/* ------------------------------------------------- projector variant */
+function ScBigCard({ q, now }) {
+  const where = scWhere(q);
+  return (
+    <article className={"sc-big ticket" + (q.pinned ? " sc-card--pin" : "")}>
+      <div className="ticket__stub">
+        <span className="sc-bignum t-data">{q.votes}</span>
+        <span className="sc-biglab">{q.votes === 1 ? "Vote" : "Votes"}</span>
+      </div>
+      <div className="ticket__body">
+        <p className="sc-bigq">{q.text}</p>
+        <p className="sc-bigmeta">
+          <span className="sc-bigtag">{q.category}</span>
+          <span>{[scWho(q), where].filter(Boolean).join(", ")}</span>
+          <span className="sc-time">{scRelTime(q.ts, now)}</span>
+        </p>
+      </div>
+    </article>
+  );
+}
+
+/* The wall walks upward at a fixed pixels per second, so a long list moves at
+   the same reading speed as a short one. The list is duplicated once and the
+   track travels exactly half its height, which loops with no seam. It only
+   moves when the content is taller than the screen: a wall of three questions
+   sliding around for no reason looks broken. */
+function ScWall({ items, now }) {
+  const boxRef = useRef(null);
+  const copyRef = useRef(null);
+  const [box, setBox] = useState({ h: 0, content: 0, lift: 0 });
+
+  useEffect(() => {
+    function measure() {
+      const b = boxRef.current;
+      const c = copyRef.current;
+      if (!b || !c) return;
+
+      const scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
+
+      /* The masthead sits above the sticky header on every page, per Lisa, and
+         Display Mode keeps it. Measured raw, that left the wall 282px of an
+         800px laptop screen, which is two questions on a ballroom projector.
+         So the wall is sized as if the masthead were scrolled off, and the
+         effect below scrolls it off. `lift` is the masthead's height: the
+         document offset of .stickytop, which is the first thing under it.
+         Hiding the masthead outright would be a change to every tab in
+         Display Mode, which is not this feature's call to make. */
+      const sticky = document.querySelector(".stickytop");
+      const lift = sticky
+        ? Math.max(0, Math.round(sticky.getBoundingClientRect().top + scrolled))
+        : 0;
+
+      /* The sheet's own bottom padding is read rather than guessed, because
+         guessing it left the page a few pixels too short to park the masthead
+         cleanly and a sliver of it stayed on screen above the header. Read, the
+         page comes out exactly one masthead taller than the viewport. */
+      const sheet = b.closest ? b.closest(".sheet") : null;
+      const pad = sheet
+        ? Math.ceil(parseFloat(window.getComputedStyle(sheet).paddingBottom) || 48)
+        : 48;
+
+      /* Document coordinates, so the answer does not move when the page
+         scrolls. */
+      const top = Math.round(b.getBoundingClientRect().top + scrolled);
+      const h = Math.max(260, Math.round(window.innerHeight - (top - lift) - pad));
+      const content = Math.round(c.getBoundingClientRect().height);
+
+      setBox((prev) =>
+        prev.h === h && prev.content === content && prev.lift === lift
+          ? prev
+          : { h: h, content: content, lift: lift }
+      );
+    }
+
+    measure();
+    /* Anton and Inter land after first paint and change the height. */
+    const late = window.setTimeout(measure, 600);
+    window.addEventListener("resize", measure);
+    return () => {
+      window.clearTimeout(late);
+      window.removeEventListener("resize", measure);
+    };
+  }, [items.length]);
+
+  /* Park the masthead just off the top so the wall fills the screen. Only
+     while the projector view is up, only once per measurement, and the sticky
+     header stays pinned, so the Display Mode button is still there to turn
+     this off. */
+  useEffect(() => {
+    if (!box.lift || !box.h) return;
+    const max = Math.max(
+      0,
+      document.documentElement.scrollHeight - window.innerHeight
+    );
+    window.scrollTo(0, Math.min(box.lift, max));
+  }, [box.lift, box.h]);
+
+  const rolls = box.h > 0 && box.content > box.h + 8;
+  const dur = Math.max(24, Math.round(box.content / SC_WALL_SPEED));
+
+  const copy = (dupe) => (
+    <div
+      className="sc-wall__copy"
+      ref={dupe ? null : copyRef}
+      aria-hidden={dupe ? "true" : undefined}
+    >
+      {items.map((q) => (
+        <ScBigCard key={(dupe ? "dupe-" : "") + q.id} q={q} now={now} />
+      ))}
+    </div>
+  );
+
+  return (
+    <div
+      className={"sc-wall" + (rolls ? "" : " sc-wall--still")}
+      ref={boxRef}
+      style={{ "--sc-h": box.h ? box.h + "px" : "auto" }}
+    >
+      <div
+        className="sc-wall__track"
+        style={rolls ? { animationDuration: dur + "s" } : undefined}
+      >
+        {copy(false)}
+        {rolls ? copy(true) : null}
+      </div>
+    </div>
+  );
+}
+
+/* --------------------------------------------------------------- tab */
+/* An empty list has three different reasons behind it, and telling somebody
+   "nothing here yet" when the only question in that category is answered is a
+   lie they can catch. */
+function scEmptyLine(items, cat, showAnswered, ready) {
+  if (!ready) return "Checking the wall.";
+  if (!items.length) return "No questions yet. Somebody has to go first.";
+
+  const hidden = !showAnswered && items.some(
+    (q) => q.answered && (cat === "all" || q.category === cat)
+  );
+  if (hidden) return "Everything here is answered. Turn Show answered on to read it back.";
+
+  if (cat !== "all") return "Nothing under " + cat + " yet. Ask the first one.";
+  return "Nothing to show.";
+}
+
+function SoundcheckTab({ isAdmin, now }) {
+  const { items, ready } = useScQuestions();
+  const displayMode = useScDisplayMode();
+  const [votedMap, setVotedMap] = useState(() => readJSON(LS.voted));
+  const [sort, setSort] = useState("top");
+  const [cat, setCat] = useState("all");
+  const [showAnswered, setShowAnswered] = useState(false);
+
+  const post = useCallback((clean) => {
+    if (!FB.ok) return Promise.resolve(false);
+    return FB.db.ref("questions").push().set({
+      text: clean.text,
+      name: clean.name,
+      club: clean.club,
+      category: clean.category,
+      anonymous: clean.anonymous,
+      votes: 0,
+      answered: false,
+      pinned: false,
+      ts: scServerStamp()
+    }).then(() => true).catch(() => false);
+  }, []);
+
+  /* Storage is read at cast time rather than trusting state, so a second tab
+     open on the same phone cannot double vote through a stale copy. The same
+     call The Setlist makes for reactions. */
+  const onVote = useCallback((q) => {
+    if (!FB.ok) return;
+    const held = readJSON(LS.voted);
+    if (held[q.id]) { setVotedMap(held); return; }
+    held[q.id] = 1;
+    writeJSON(LS.voted, held);
+    setVotedMap(held);
+    FB.db.ref("questions/" + q.id + "/votes")
+      .transaction((cur) => (typeof cur === "number" ? cur : 0) + 1);
+  }, []);
+
+  const onAnswer = useCallback((q) => {
+    if (!FB.ok) return;
+    FB.db.ref("questions/" + q.id + "/answered").set(!q.answered);
+  }, []);
+
+  const onPin = useCallback((q) => {
+    if (!FB.ok) return;
+    FB.db.ref("questions/" + q.id + "/pinned").set(!q.pinned);
+  }, []);
+
+  const onDelete = useCallback((q) => {
+    if (!FB.ok) return;
+    if (!window.confirm("Delete this question for good?\n\n" + q.text.slice(0, 140))) return;
+    FB.db.ref("questions/" + q.id).remove();
+  }, []);
+
+  const exportCsv = useCallback(() => {
+    if (!items.length) return;
+    const stamp = scEtStamp(now).replace(" ", "-").replace(":", "");
+    scSaveCsv(scBuildCsv(items), "soundcheck-questions-" + stamp + ".csv");
+  }, [items, now]);
+
+  /* Display Mode deliberately ignores the sort and category pills. Nobody can
+     change them from the projector, and a wall quietly showing one category
+     because somebody tapped a pill an hour ago is worse than a wall that
+     always shows the same thing: the top unanswered questions in the room. */
+  const wall = scSort(items.filter((q) => !q.answered), "top")
+    .slice(0, SC_WALL_COUNT);
+
+  if (displayMode) {
+    return (
+      <section aria-labelledby="head-soundcheck">
+        <div className="sc-dhead">
+          <h2 className="tabhead t-display" id="head-soundcheck">Soundcheck</h2>
+          {wall.length ? (
+            <span className="sc-dcount t-data">{wall.length} live</span>
+          ) : null}
+        </div>
+        <p className="sc-dsub">Top questions from the room. Add yours on Soundcheck.</p>
+
+        {wall.length ? (
+          <ScWall items={wall} now={now} />
+        ) : (
+          <p className="sc-dempty">
+            {!ready
+              ? "Checking the wall."
+              : items.length
+                ? "Every question is answered. Ask a harder one."
+                : "Nothing on the wall yet. Somebody has to go first."}
+          </p>
+        )}
+      </section>
+    );
+  }
+
+  const visible = items.filter((q) =>
+    (showAnswered || !q.answered) && (cat === "all" || q.category === cat)
+  );
+  const sorted = scSort(visible, sort);
+
+  const pool = items.filter((q) => showAnswered || !q.answered);
+  const counts = {};
+  pool.forEach((q) => { counts[q.category] = (counts[q.category] || 0) + 1; });
+  const answeredCount = items.filter((q) => q.answered).length;
+
   return (
     <TabFrame tabKey="soundcheck">
-      <Empty>No questions yet. Somebody has to go first.</Empty>
+      {FB.ok ? (
+        <ScAsk onPost={post} live={FB.ok} />
+      ) : (
+        <Empty>Questions need the live connection, and it is off right now.</Empty>
+      )}
+
+      <div className="sc-rows">
+        <div className="sc-pills" role="group" aria-label="Sort">
+          <span className="sc-pills__k">Sort</span>
+          <button
+            className="sc-pill"
+            aria-pressed={sort === "top"}
+            onClick={() => setSort("top")}
+          >Top</button>
+          <button
+            className="sc-pill"
+            aria-pressed={sort === "new"}
+            onClick={() => setSort("new")}
+          >New</button>
+          <button
+            className="sc-pill"
+            aria-pressed={showAnswered}
+            onClick={() => setShowAnswered(!showAnswered)}
+          >
+            Show answered
+            {answeredCount ? <span className="sc-pill__n t-data">{answeredCount}</span> : null}
+          </button>
+        </div>
+
+        <div className="sc-pills" role="group" aria-label="Category">
+          <span className="sc-pills__k">Filter</span>
+          <button
+            className="sc-pill"
+            aria-pressed={cat === "all"}
+            onClick={() => setCat("all")}
+          >
+            All
+            {pool.length ? <span className="sc-pill__n t-data">{pool.length}</span> : null}
+          </button>
+          {SC_CATEGORIES.map((c) => (
+            <button
+              key={c}
+              className="sc-pill"
+              aria-pressed={cat === c}
+              onClick={() => setCat(c)}
+            >
+              {c}
+              {counts[c] ? <span className="sc-pill__n t-data">{counts[c]}</span> : null}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <p className="sc-tally t-data">
+        {items.length} {items.length === 1 ? "question" : "questions"}
+        {answeredCount ? ", " + answeredCount + " answered" : ""}.
+      </p>
+
+      {isAdmin ? (
+        <div className="sc-crew">
+          <div className="tf__row">
+            <button className="btn" onClick={exportCsv} disabled={!items.length}>
+              Export CSV
+            </button>
+          </div>
+          <p className="sc-ask__note">
+            The CSV comes out grouped by category with one header row, and Excel
+            opens it as is. Answered questions sink to the bottom. Pinned ones ride
+            the top, on phones and on the projector.
+          </p>
+        </div>
+      ) : null}
+
+      {sorted.length ? (
+        <div className="sc-list">
+          {sorted.map((q) => (
+            <ScCard
+              key={q.id}
+              q={q}
+              now={now}
+              voted={!!votedMap[q.id]}
+              onVote={onVote}
+              isAdmin={isAdmin}
+              onAnswer={onAnswer}
+              onPin={onPin}
+              onDelete={onDelete}
+            />
+          ))}
+        </div>
+      ) : (
+        <Empty>{scEmptyLine(items, cat, showAnswered, ready)}</Empty>
+      )}
+
       <BuildNote isAdmin={isAdmin} task="T1.4">
-        Submission panel with optional name and club, six categories, anonymous
-        toggle. Top and New sorting, one upvote per device, Display Mode for the
-        projector, CSV export.
+        Questions live at questions/{"{id}"}. One upvote per device in mm26_voted, so
+        anybody who clears their own storage buys one more vote. That is fine, this
+        orders a list, it is not a ballot. Display Mode shows the top 12 unanswered,
+        ignores the sort and filter pills on purpose, and only auto scrolls when the
+        list is taller than the screen. ts is written by the server, not by the
+        phone.
       </BuildNote>
     </TabFrame>
   );
