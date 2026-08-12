@@ -900,15 +900,35 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
   library path on iOS and Android, whether a real 12MP photo compresses inside a sensible time on
   an older handset, and photo upload over cellular rather than Wi-Fi. All four are T3.6.
 
-### `[ ]` T2.6 The Cares Cup
+### `[x]` T2.6 The Cares Cup
 - **Inputs:** spec Section 3.9, source flier poster art
 - **Output:** tournament leaderboard tab
 - **Steps:** leaderboard list with position, team name, score, thru. Gold, silver, bronze treatment on the top three. Poster art card backgrounds for Team Total Consciousness (Mike Akeroyd, Donny Darville) and Spalding's Revenge Team (Todd Keefer, Jimmy Han). Century Golf Cares fundraising total displayed at the top. Score entry is admin only
 - **Acceptance:** admin can add teams, enter scores, update the fundraising total, and lock the board. Non-admin cannot edit anything. Leaderboard sorts correctly including ties
 - **Note:** poster art use is an open question. Build with a solid color fallback so the tab ships either way
 - **Blocked by:** T1.6
+- **Done Aug 11.** Board lives at `caresCup/`.
+  | Acceptance criterion | Result |
+  |---|---|
+  | Admin can add teams | "Add team" took a name and a comma separated pair of players. Also one tap for "Add the two poster teams" |
+  | Admin can enter scores | Score and thru per row. `-4` printed as `-4`, `2` as `+2`, and thru 18 as `F`, which is how a golfer reads a board |
+  | Admin can update the fundraising total | Set 12500 and the panel read "CENTURY GOLF CARES $12,500. Raised by people who cannot putt." with an Eastern update stamp |
+  | Admin can lock the board | Locked to "🏆 Final", the button flipped to "Unlock the board", and every score entry form left the page |
+  | Non-admin cannot edit anything | On an attendee device: **zero** forms, **zero** inputs, **zero** buttons anywhere on the tab. Board and total render read only |
+  | Leaderboard sorts correctly including ties | 1 at `-4`, then two teams tied at `+2` both showing **T2** and both carrying the same silver `cares-row--m2` treatment. The leader carries `--m1` |
+  | Gold, silver, bronze on the top three | Positional classes `--m1`, `--m2`, `--m3`, and a tie shares its rank's treatment rather than inventing a third place |
+  | Poster art ships with a solid colour fallback | There is a "Poster art on" toggle and a per team "Poster art file" field. With no file the row uses the solid treatment, so the tab shipped without the art existing. `assets/cares/` carries a README and no image |
+  | No horizontal overflow | 0px at 380px and 1280px |
+  | No console errors | None |
+- **The only names written into `index.html` are the two team names off the flier's poster art,**
+  `Team Total Consciousness` and `Spalding's Revenge Team`, in `CARES_SEED`. **No player name is
+  in any tracked file.** The four players ROADMAP T2.6 quotes from the flier are typed in at the
+  event through the crew panel, into Firebase. Checked: zero occurrences of any of those four
+  surnames in `index.html`.
+- **Poster art is still an open question and the tab does not depend on it.** If Jeannette
+  supplies the art, drop the files in `assets/cares/` and name them in the per team field.
 
-### `[~]` T2.7 Encore
+### `[x]` T2.7 Encore
 - **Inputs:** spec Section 3.10
 - **Output:** recognition tab, scaffolded and admin editable
 - **Steps:** four sections, each independently unlockable: Award Winners (winner photo on vinyl label background, award name in Alfa Slab One, club, citation), Hall of Fame (inductee cards with photo, club, year, citation), Top Videos (YouTube or Vimeo embeds), Tenure Recognition (grouped by milestone with photo, name, club, years). Full admin create, edit, and delete on every section so content can be posted live from the Awards Show
@@ -947,18 +967,56 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
   written into any tracked file.
 - **The section is locked as of the end of this session.** `encore/tenure/unlocked` reads
   `false`, so the room sees the locked message and nothing else.
-- **Still to do for T2.7:** Award Winners on a vinyl label with citation and photo, Hall of
-  Fame cards, Top Videos embeds, and an independent unlock flag for each of those three. The
-  Tenure section is the pattern to copy: gate the read, not the render.
+- **Parts two to four done Aug 11.** Award Winners, Hall of Fame and Top Videos are built, each
+  with its own unlock flag under `encore/{section}/unlocked`, so all four sections are
+  independently publishable.
+  | Criterion | Result |
+  |---|---|
+  | Each section unlocks independently | Published **Award Winners only**. On an attendee device that section rendered its entry while Tenure, Hall of Fame and Top Videos all stayed locked with their own copy. Three "hidden" badges remained on the crew device |
+  | Tenure can go live while awards stay hidden | Proved, and the stronger inverse was proved too: **awards live while tenure stays hidden**, which is the case that actually risks spoiling something |
+  | The confidential list does not leak | With Tenure locked on an attendee device, the four placeholder tenure names appear **nowhere** in the page. `indexOf` on the rendered text returned -1 |
+  | Admin create with a photo from a phone | Award Winners carries "Take photo" and "Choose from library", the same two path rule as The Pit, plus a file path field. Created an award with award, winner, club and citation and read the record back over plain HTTPS |
+  | Alfa Slab One on the section headings | Computed `"Alfa Slab One", Georgia, serif` on all four. That is the whole ration CLAUDE.md allows it |
+  | Video embeds play inline | **Not verified.** No video URL exists yet. The section takes a YouTube or Vimeo id and there is nothing real to point it at until T3.x. The container is built |
+  | No console errors, no overflow | Clean at 380px and 1280px |
+- **Every Encore name in the database is a placeholder** and T4.2 clears the node.
 - **Alfa Slab One appears here and nowhere else,** on the four section headings and the
   milestone labels. That is the whole ration CLAUDE.md allows it.
 
-### `[ ]` T2.8 Admin panel, v2
+### `[x]` T2.8 Admin panel, v2
 - **Inputs:** T2.3, T2.6, T2.7
 - **Output:** complete admin control set
 - **Steps:** add Vault Drops panel (per section unlock status, scheduled time, manual unlock and re-lock). Add per-tab controls listed in spec Section 4.2. Add Encore CRUD entry points. Add Cares Cup score entry
 - **Acceptance:** every control in spec Section 4.2 exists and works. Vault Drops is reachable in two taps from the gear icon, because it will be used under time pressure
 - **Blocked by:** T2.7
+- **Done Aug 11.**
+  | Acceptance criterion | Result |
+  |---|---|
+  | Vault Drops is reachable in two taps from the gear | **Yes.** Once crew is unlocked, tap the gear and the panel opens with **Vault Drops as its first section**, directly under the panel heading. It is not behind an accordion, a chooser or a scroll: walked every ancestor of the block and none is a scroller and none sets a max-height |
+  | Per section unlock status, scheduled time, manual unlock and re-lock | Six gated sections in one board. The two Vault drops show a status pill, "Scheduled Wednesday 9:30 AM Eastern" or Thursday 10:30, and Unlock now / Re-lock / Back on the clock. The four Encore sections are manual only and print their planned time |
+  | Encore CRUD entry points | A jump button, "Post an Encore entry", which closes the panel and lands on the tab |
+  | Cares Cup score entry | Same, "Enter Cares Cup scores". Both verified: the panel closed and the right tab opened |
+  | Every control in spec 4.2 exists and works | Marquee, Tab Visibility, Reset by Section, Clear This Device and Reset Everything came with T1.6. Vault Drops and the two jumps are added here |
+- **Conflict resolved, and it mattered.** This spec was drafted against
+  `settings/drops/{key}` holding a bare `"auto" | "open" | "shut"` string. T2.3 had already
+  shipped `settings/vaultDrops/{key}` holding `{ mode, unlockAt, ts }` with
+  `"scheduled" | "open" | "shut"`. Left alone, the crew panel and the Vault tab would have read
+  **two different nodes** and disagreed about whether a section was open, on the single most
+  time-critical control in the build. Per this spec's own Edit 5, the four seam functions
+  (`useDropOverrides`, `dropMode`, `dropOpen`, `setDropMode`) were pointed at the shipped node.
+  `"auto"` is accepted as an alias for `"scheduled"`. Writes use `update`, not `set`, so a test
+  `unlockAt` and the server `ts` survive a mode change made from the panel.
+  **Verified end to end:** tapping "Unlock now" in the panel wrote
+  `{"mode":"open"}` to `settings/vaultDrops/scenarios` and an **attendee** device's Vault tab
+  swapped from the padlock to the section body. `settings/drops` reads `null`, so no competing
+  source of truth was created.
+- **The panel also surfaces a test time.** If the Vault tab has a test `unlockAt` set, the panel
+  row says "TEST TIME in force, not the real schedule" rather than printing it as the schedule.
+- **Second name collision resolved.** Block C defined a `VaultDropRow`, and T2.3 had already
+  shipped a `VaultDropRow` inside the Vault tab taking entirely different props. Two function
+  declarations with one name means the second silently wins, which would have broken the Vault
+  tab's own crew block. The panel's copy is now `AdminVaultDropRow`. A duplicate-declaration scan
+  across the whole script block now returns **zero** duplicates.
 
 **Phase 2 definition of done:** every feature in the spec is built and working against placeholder content. No feature work remains.
 

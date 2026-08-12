@@ -2840,6 +2840,305 @@ body.display-mode .cv-new { display: none; }
   .pit-box__inner { max-width: 620px; }
   .pit-box__img { max-height: 70vh; max-height: 70svh; }
 }
+/* ==========================================================================
+   T2.6 THE CARES CUP, T2.7 ENCORE PARTS TWO TO FOUR, T2.8 VAULT DROPS
+   No new motifs and no thirteenth palette token. The leaderboard is the ticket
+   stub from T0.4 with the position in the stub. The award card is the vinyl
+   label from T0.4. Medals are motif dials mixed from the twelve, the same way
+   --warm-fill is: gold is the token, silver is cream knocked back, and bronze
+   is gold ink on an oxblood ground, which is what bronze actually is.
+   ========================================================================== */
+
+/* ------------------------------------------------- T2.6 fundraising total */
+/* Top of the tab, biggest number on the screen. This is the point of the
+   tournament and it does not sit under the joke. */
+.cares-fund { padding: 17px 16px 19px; margin: 0 0 18px; text-align: center; }
+
+.cares-fund__k {
+  display: block; margin: 0 0 7px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 11px; letter-spacing: 0.16em; color: var(--gold);
+}
+
+.cares-fund__n {
+  margin: 0; color: var(--gold);
+  font-size: clamp(38px, 13vw, 62px); line-height: 0.94;
+}
+
+.cares-fund__sub { margin: 9px 0 0; font-size: 13px; color: var(--dim); }
+.cares-fund__fine { margin: 7px 0 0; font-size: 11px; color: var(--mute); }
+
+.cares-fund__bar {
+  margin: 13px auto 0; max-width: 320px; height: 8px;
+  background: var(--input); border: 1px solid var(--edge);
+  border-radius: 999px; overflow: hidden;
+}
+
+.cares-fund__fill { height: 100%; background-image: var(--grad-primary); }
+
+/* --------------------------------------------------------- T2.6 the board */
+.cares-board {
+  /* Medal dials. Not palette tokens. Mixed from --gold, --cream and --oxblood
+     exactly as --warm-fill is mixed, so tokens.html still tells the truth. */
+  --cares-m1-ink:  var(--gold);
+  --cares-m1-fill: rgba(217, 169, 76, 0.16);
+  --cares-m2-ink:  rgba(247, 243, 234, 0.88);
+  --cares-m2-fill: rgba(247, 243, 234, 0.07);
+  --cares-m3-ink:  rgba(217, 169, 76, 0.62);
+  --cares-m3-fill: rgba(138, 14, 31, 0.34);
+}
+
+.cares-list { display: flex; flex-direction: column; gap: 15px; }
+.cares-row { --ticket-stub-w: 62px; }
+
+/* Poster art sits behind the card under a scrim, so a bright poster cannot eat
+   the score. Off by default, and a missing file leaves the solid card. */
+.cares-row .ticket > * { position: relative; z-index: 1; }
+
+.cares-art {
+  position: absolute; inset: 0; z-index: 0;
+  border-radius: 10px; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(23, 22, 26, 0.60), rgba(23, 22, 26, 0.60)),
+    var(--cares-art, none);
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+}
+
+.cares-pos { font-family: var(--font-display); font-size: 22px; line-height: 1; }
+.cares-pos__t { font-size: 15px; }
+
+.cares-pos__l {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 9px; letter-spacing: 0.14em; color: var(--mute);
+}
+
+.cares-row--m1 .ticket { border-color: var(--cares-m1-ink); }
+.cares-row--m1 .ticket__stub {
+  border-right-color: var(--cares-m1-ink);
+  background-image: linear-gradient(var(--cares-m1-fill), var(--cares-m1-fill));
+}
+.cares-row--m1 .cares-pos { color: var(--cares-m1-ink); }
+
+.cares-row--m2 .ticket { border-color: var(--cares-m2-ink); }
+.cares-row--m2 .ticket__stub {
+  border-right-color: var(--cares-m2-ink);
+  background-image: linear-gradient(var(--cares-m2-fill), var(--cares-m2-fill));
+}
+.cares-row--m2 .cares-pos { color: var(--cares-m2-ink); }
+
+.cares-row--m3 .ticket { border-color: var(--cares-m3-ink); }
+.cares-row--m3 .ticket__stub {
+  border-right-color: var(--cares-m3-ink);
+  background-image: linear-gradient(var(--cares-m3-fill), var(--cares-m3-fill));
+}
+.cares-row--m3 .cares-pos { color: var(--cares-m3-ink); }
+
+.cares-grid {
+  display: flex; gap: 12px; align-items: flex-start;
+  justify-content: space-between; flex-wrap: wrap;
+}
+
+.cares-grid__l { flex: 1 1 150px; min-width: 0; }
+.cares-name { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.25; }
+.cares-players { margin: 5px 0 0; font-size: 13px; color: var(--dim); }
+
+.cares-figs { flex: 0 0 auto; display: flex; gap: 18px; }
+.cares-fig { text-align: right; }
+.cares-fig__n { display: block; font-family: var(--font-display); font-size: 24px; line-height: 1; }
+
+.cares-fig__l {
+  display: block; margin-top: 4px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--dim);
+}
+
+/* Waiting on a card. Dashed, like the T1.1 placeholder ticket. */
+.cares-row--waiting .ticket { border-style: dashed; }
+.cares-row--waiting .ticket__stub { border-right-style: dashed; }
+.cares-row--waiting .cares-fig__n { color: var(--mute); }
+
+.cares-h {
+  margin: 22px 0 10px; padding-bottom: 6px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 11px; letter-spacing: 0.16em; color: var(--gold);
+  border-bottom: 1px solid var(--gold-rule);
+}
+
+.cares-state { margin: 0 0 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+.cares-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge); border-radius: 999px;
+  padding: 3px 11px; font-size: 11px; font-weight: 600; color: var(--gold);
+}
+
+.cares-pill--final { border-color: var(--gold); }
+
+/* ----------------------------------------------------------- T2.6 crew */
+/* Same language as .set-detail and .enc__crew: input ground, scarlet spine. */
+.cares-crew {
+  margin: 0 0 18px; padding: 13px 14px;
+  background: var(--input); border-left: 3px solid var(--scarlet);
+  border-radius: 6px;
+}
+
+.cares-crew__k {
+  margin: 15px 0 7px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+.cares-crew__k:first-child { margin-top: 0; }
+.cares-crew__note { margin: 8px 0 0; font-size: 12px; color: var(--dim); }
+
+.cares-admin {
+  margin: 10px 0 0 12px; padding: 11px 13px;
+  background: var(--input); border-left: 3px solid var(--scarlet);
+  border-radius: 6px;
+}
+
+.cares-entry { display: flex; flex-wrap: wrap; gap: 9px; align-items: flex-end; }
+.cares-entry .tf__l { margin: 0; flex: 0 0 92px; }
+.cares-entry .tf__in { padding: 9px 10px; }
+.cares-err { margin: 8px 0 0; font-size: 12px; color: var(--danger); }
+.cares-rowbtns { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+
+/* ================================================= T2.7 award winners */
+/* The vinyl label from T0.4 carries the photo. Alfa Slab One on the award name
+   only, which is the ration CLAUDE.md allows. */
+.en2-award { display: grid; grid-template-columns: 96px 1fr; gap: 14px; align-items: start; }
+
+.en2-award + .en2-award {
+  margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--edge);
+}
+
+.en2-award__b { min-width: 0; }
+.en2-award__aw { margin: 0; font-size: clamp(15px, 4.3vw, 18px); color: var(--gold); line-height: 1.25; }
+.en2-award__n { margin: 7px 0 0; font-size: clamp(19px, 6vw, 25px); }
+.en2-award__c { margin: 5px 0 0; font-size: 13px; color: var(--dim); }
+.en2-award__cit { margin: 9px 0 0; font-size: 14px; }
+
+/* ==================================================== T2.7 hall of fame */
+.en2-hof { display: flex; gap: 13px; align-items: flex-start; }
+
+.en2-hof + .en2-hof {
+  margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--edge);
+}
+
+.en2-hof__ph {
+  flex: 0 0 auto; width: 62px; height: 62px; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--gold); background: var(--input);
+}
+
+.en2-hof__b { flex: 1 1 auto; min-width: 0; }
+.en2-hof__n { margin: 0; font-size: 17px; font-weight: 600; }
+.en2-hof__m { margin: 4px 0 0; font-size: 13px; color: var(--dim); }
+.en2-hof__cit { margin: 8px 0 0; font-size: 14px; }
+
+/* ====================================================== T2.7 top videos */
+/* Embeds only. No video file has any business in this repo. */
+.en2-vid + .en2-vid {
+  margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--edge);
+}
+
+.en2-vid__t { margin: 0 0 9px; font-size: 16px; font-weight: 600; }
+
+.en2-frame {
+  position: relative; width: 100%; aspect-ratio: 16 / 9;
+  background: #0C0B0E; border: 1px solid var(--edge);
+  border-radius: 10px; overflow: hidden;
+}
+
+.en2-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.en2-vid__note { margin: 9px 0 0; font-size: 13px; color: var(--dim); }
+.en2-vid__bad { margin: 9px 0 0; font-size: 13px; color: var(--danger); }
+
+/* ------------------------------------------------- T2.7 photo field */
+/* Camera and library both ship, per CLAUDE.md. Camera only was a real
+   limitation on the prior build. */
+.en2-pf { display: flex; align-items: center; gap: 11px; flex-wrap: wrap; margin: 0 0 9px; }
+
+.en2-pf__pv {
+  width: 58px; height: 58px; border-radius: 50%; object-fit: cover;
+  border: 2px solid var(--gold); background: var(--input);
+}
+
+.en2-file { position: relative; display: inline-flex; align-items: center; }
+.en2-file input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.en2-file:focus-within { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 8px; }
+.en2-pf__hint { flex: 1 1 100%; margin: 0; font-size: 12px; color: var(--mute); }
+.en2-ta { min-height: 78px; resize: vertical; line-height: 1.45; }
+.en2-note { margin: 10px 0 0; font-size: 12px; color: var(--dim); }
+
+/* ==================================================== T2.8 vault drops */
+/* First block in the crew panel and never behind a disclosure. Two taps from
+   the gear: the gear opens the panel, the second tap fires the drop. */
+.vdrop {
+  margin: 0 0 16px; padding: 14px;
+  background: var(--riser); border: 1px solid var(--scarlet); border-radius: 12px;
+}
+
+.vdrop__h { margin: 0 0 3px; font-size: clamp(17px, 5vw, 20px); }
+.vdrop__sub { margin: 0 0 4px; font-size: 12px; color: var(--dim); }
+
+.vdrop__g { margin: 15px 0 0; }
+
+.vdrop__gh {
+  margin: 0 0 4px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+.vdrop__gn { margin: 0 0 6px; font-size: 12px; color: var(--mute); }
+
+.vdrop-row { padding: 11px 0; }
+.vdrop-row + .vdrop-row { border-top: 1px solid var(--edge); }
+.vdrop-row__top { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.vdrop-row__n { font-size: 15px; font-weight: 600; }
+.vdrop-row__when { margin: 4px 0 0; font-size: 12px; color: var(--mute); }
+.vdrop-row__btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+
+.vdrop-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--input); border: 1px solid var(--edge); border-radius: 999px;
+  padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--dim);
+}
+
+.vdrop-pill--open {
+  background-color: transparent; background-image: var(--grad-primary);
+  border-color: var(--gold); color: var(--cream);
+}
+
+.vdrop-pill--held { border-color: var(--danger); color: var(--danger); }
+.vdrop-pill--forced { border-color: var(--gold-rule); color: var(--gold); }
+
+.vdrop__jump {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 15px 0 0; padding-top: 13px; border-top: 1px solid var(--edge);
+}
+
+/* --------------------------------------------------------------- desktop */
+/* Jim reviews on a laptop. Wider stub, bigger figures, the award photo gets
+   room. Nothing stretches. */
+@media (min-width: 700px) {
+  .cares-row { --ticket-stub-w: 78px; }
+  .cares-pos { font-size: 27px; }
+  .cares-fig__n { font-size: 27px; }
+  .cares-fund__n { font-size: 64px; }
+  .en2-award { grid-template-columns: 132px 1fr; gap: 20px; }
+  .en2-hof__ph { width: 74px; height: 74px; }
+}
+
+/* ---------------------------------------------------------- display mode */
+/* The leaderboard on the ballroom screen. Type only, no fixed heights. */
+body.display-mode .cares-fund__n { font-size: clamp(56px, 9vw, 112px); }
+body.display-mode .cares-name { font-size: 23px; }
+body.display-mode .cares-players { font-size: 17px; }
+body.display-mode .cares-pos { font-size: 34px; }
+body.display-mode .cares-fig__n { font-size: 36px; }
+body.display-mode .cares-row { --ticket-stub-w: 96px; }
 </style>
 </head>
 <body>
@@ -8866,15 +9165,584 @@ function PitTab({ isAdmin, now }) {
   );
 }
 
+/* ==========================================================================
+   T2.6 THE CARES CUP. Spec 3.9.
+   The Shank Showdown II leaderboard, benefiting Century Golf Cares. The
+   fundraising total is the top of the tab because it is the actual point of the
+   tournament, and the leaderboard is the joke that gets people to look at it.
+
+   Score entry is crew only. Players do not enter their own scores, which is
+   both what the spec says and the only way a leaderboard survives a golf
+   tournament. Every write on this tab is behind isAdmin.
+
+   Scores are to par and lower is better. Ties share a position and print as
+   T2. Teams with nothing posted are not ranked last, they sit under "Not in
+   yet", because a blank card is not a bad round.
+   ========================================================================== */
+
+/* Both names are already public in the flier's poster art, so they are safe to
+   seed. No player names. Pairings arrive from the organizers at T3.5 and get
+   typed into the crew block, not into this file. */
+const CARES_SEED = ["Team Total Consciousness", "Spalding's Revenge Team"];
+
+/* Server stamp, not a device clock. Nothing is gated on it, but Awards sort on
+   the equivalent field and a phone an hour out would reorder the show. */
+function wallStamp() {
+  try {
+    return firebase.database.ServerValue.TIMESTAMP;
+  } catch (e) {
+    return Date.now();
+  }
+}
+
+/* One place for the two single value writes, so a failed Firebase boot cannot
+   turn a tap on Lock the board into an exception in a full ballroom. */
+function caresWrite(field, value) {
+  if (!FB.ok) return;
+  FB.db.ref("caresCup/" + field).set(value);
+}
+
+/* "E", "-3", "+2", "" all valid. Anything else is rejected out loud rather
+   than quietly stored as NaN. */
+function caresParseScore(raw) {
+  const s = String(raw == null ? "" : raw).trim();
+  if (!s) return { ok: true, value: null };
+  if (/^e$/i.test(s)) return { ok: true, value: 0 };
+  if (!/^[+-]?\d{1,3}$/.test(s)) return { ok: false, value: null };
+  return { ok: true, value: parseInt(s, 10) };
+}
+
+function caresFmtScore(n) {
+  if (typeof n !== "number") return "--";
+  if (n === 0) return "E";
+  return n > 0 ? "+" + n : String(n);
+}
+
+/* Thru is 1 to 18 or F. Blank and 0 both mean not started. */
+function caresParseThru(raw) {
+  const s = String(raw == null ? "" : raw).trim();
+  if (!s) return { ok: true, value: 0 };
+  if (/^f$/i.test(s)) return { ok: true, value: 18 };
+  if (!/^\d{1,2}$/.test(s)) return { ok: false, value: 0 };
+  const n = parseInt(s, 10);
+  if (n < 0 || n > 18) return { ok: false, value: 0 };
+  return { ok: true, value: n };
+}
+
+function caresFmtThru(n) {
+  if (typeof n !== "number" || n <= 0) return "--";
+  return n >= 18 ? "F" : String(n);
+}
+
+function caresThruField(n) {
+  if (typeof n !== "number" || n <= 0) return "";
+  return n >= 18 ? "F" : String(n);
+}
+
+function caresFmtMoney(n) {
+  if (typeof n !== "number" || !isFinite(n)) return null;
+  try {
+    return "$" + Math.round(n).toLocaleString("en-US");
+  } catch (e) {
+    return "$" + Math.round(n);
+  }
+}
+
+function caresParseMoney(raw) {
+  const s = String(raw == null ? "" : raw).replace(/[$,\s]/g, "").trim();
+  if (!s) return { ok: true, value: null };
+  if (!/^\d+(\.\d{1,2})?$/.test(s)) return { ok: false, value: null };
+  return { ok: true, value: Math.round(parseFloat(s)) };
+}
+
+/* Standard golf ranking. Equal scores share a position and the next team skips
+   to its true count: 1, 2, 2, 4. Inside a tie the order is alphabetical, so it
+   is stable and it is nobody's thumb on the scale. Unscored teams come back
+   separately rather than being sorted to the bottom of the ranking. */
+function caresRank(teams) {
+  const scored = teams.filter((t) => typeof t.score === "number");
+  const waiting = teams.filter((t) => typeof t.score !== "number");
+
+  scored.sort((a, b) => {
+    if (a.score !== b.score) return a.score - b.score;
+    return String(a.name || "").localeCompare(String(b.name || ""));
+  });
+
+  const ranked = [];
+  let pos = 0;
+  let prev = null;
+  scored.forEach((t, i) => {
+    if (prev === null || t.score !== prev) pos = i + 1;
+    prev = t.score;
+    ranked.push(Object.assign({}, t, { pos: pos }));
+  });
+
+  ranked.forEach((t) => {
+    t.tied = ranked.filter((o) => o.pos === t.pos).length > 1;
+  });
+
+  waiting.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+
+  return { ranked: ranked, waiting: waiting };
+}
+
+/* One listener for the whole tab. Teams, total, lock and the art switch are a
+   few hundred bytes together, so a listener per branch would cost more than it
+   saves. */
+function useCaresCup() {
+  const [state, setState] = useState({
+    ready: !FB.ok, teams: [], total: null, goal: null,
+    updated: null, locked: false, art: false
+  });
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("caresCup");
+    const handler = (snap) => {
+      const v = snap.val() || {};
+      const t = v.teams || {};
+      const f = v.fundraising || {};
+      setState({
+        ready: true,
+        teams: Object.keys(t).map((id) => Object.assign({ id: id }, t[id])),
+        total: typeof f.total === "number" ? f.total : null,
+        goal: typeof f.goal === "number" && f.goal > 0 ? f.goal : null,
+        updated: typeof f.ts === "number" ? f.ts : null,
+        locked: v.locked === true,
+        art: v.art === true
+      });
+    };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return state;
+}
+
+function CaresFund({ total, goal, updated }) {
+  const money = caresFmtMoney(total);
+  const pct = money !== null && goal ? Math.min(100, Math.round((total / goal) * 100)) : null;
+  const at = updated ? etParts(updated) : null;
+
+  return (
+    <div className="cares-fund glow-card grille">
+      <span className="cares-fund__k">Century Golf Cares</span>
+      {money !== null ? (
+        <p className="cares-fund__n t-display t-data">{money}</p>
+      ) : (
+        <p className="cares-fund__sub" style={{ margin: 0 }}>
+          The total posts when the money is counted.
+        </p>
+      )}
+      {pct !== null ? (
+        <div>
+          <div className="cares-fund__bar">
+            <div className="cares-fund__fill" style={{ width: pct + "%" }}></div>
+          </div>
+          <p className="cares-fund__sub">
+            {pct} percent of {caresFmtMoney(goal)}. Raised by people who cannot putt.
+          </p>
+        </div>
+      ) : money !== null ? (
+        <p className="cares-fund__sub">Raised by people who cannot putt.</p>
+      ) : null}
+      {at ? (
+        <p className="cares-fund__fine">Updated {at.hhmm} {at.ap} Eastern.</p>
+      ) : null}
+    </div>
+  );
+}
+
+/* One team, one card. The ticket stub carries the position, which is what a
+   stub is for. Poster art is a background layer under a scrim and it is off
+   until crew switches it on. */
+function CaresRow({ t, artOn, isAdmin, locked, onEdit, onDelete, onScore }) {
+  const medal = t.pos === 1 ? " cares-row--m1"
+    : t.pos === 2 ? " cares-row--m2"
+    : t.pos === 3 ? " cares-row--m3" : "";
+  const waiting = typeof t.score !== "number";
+  const artFile = artOn && t.art ? String(t.art).replace(/["'\\]/g, "") : "";
+
+  return (
+    <article className={"cares-row" + medal + (waiting ? " cares-row--waiting" : "")}>
+      <div className="ticket">
+        {artFile ? (
+          <div
+            className="cares-art"
+            aria-hidden="true"
+            style={{ "--cares-art": 'url("assets/cares/' + artFile + '")' }}
+          ></div>
+        ) : null}
+
+        <div className="ticket__stub">
+          {waiting ? (
+            <span className="cares-pos__l">Out<br />there</span>
+          ) : (
+            <span className="cares-pos t-display t-data">
+              {t.tied ? <span className="cares-pos__t">T</span> : null}{t.pos}
+            </span>
+          )}
+        </div>
+
+        <div className="ticket__body">
+          <div className="cares-grid">
+            <div className="cares-grid__l">
+              <p className="cares-name">{t.name}</p>
+              {t.players ? <p className="cares-players">{t.players}</p> : null}
+            </div>
+            <div className="cares-figs">
+              <div className="cares-fig">
+                <span className="cares-fig__n t-data">{caresFmtScore(t.score)}</span>
+                <span className="cares-fig__l">Score</span>
+              </div>
+              <div className="cares-fig">
+                <span className="cares-fig__n t-data">{caresFmtThru(t.thru)}</span>
+                <span className="cares-fig__l">Thru</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {isAdmin ? (
+        <div className="cares-admin">
+          {locked ? (
+            <p className="cares-crew__note" style={{ marginTop: 0 }}>
+              Board is final. Unlock it above to change this score.
+            </p>
+          ) : (
+            <CaresScoreEntry team={t} onSet={onScore} />
+          )}
+          <div className="cares-rowbtns">
+            <button className="btn btn--tiny" onClick={() => onEdit(t)}>Edit team</button>
+            <button className="btn btn--tiny btn--kill" onClick={() => onDelete(t)}>Delete</button>
+          </div>
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
+/* Two boxes and a button, on the card, in the order somebody reads a score off
+   a card: number then holes. This is the control that gets used standing on a
+   cart path, so it is not behind a disclosure and not in a modal. */
+function CaresScoreEntry({ team, onSet }) {
+  const [score, setScore] = useState(() => (typeof team.score === "number" ? caresFmtScore(team.score) : ""));
+  const [thru, setThru] = useState(() => caresThruField(team.thru));
+  const [err, setErr] = useState("");
+
+  function submit(e) {
+    e.preventDefault();
+    const s = caresParseScore(score);
+    if (!s.ok) { setErr("Score reads E, -3 or +2."); return; }
+    const th = caresParseThru(thru);
+    if (!th.ok) { setErr("Thru is 1 to 18, or F."); return; }
+    setErr("");
+    onSet(team, s.value, th.value);
+  }
+
+  return (
+    <form className="cares-entry" onSubmit={submit}>
+      <label className="tf__l">
+        <span>Score</span>
+        <input
+          className="tf__in t-data"
+          value={score}
+          placeholder="E"
+          inputMode="text"
+          autoComplete="off"
+          onChange={(e) => { setScore(e.target.value); setErr(""); }}
+        />
+      </label>
+      <label className="tf__l">
+        <span>Thru</span>
+        <input
+          className="tf__in t-data"
+          value={thru}
+          placeholder="F"
+          inputMode="text"
+          autoComplete="off"
+          onChange={(e) => { setThru(e.target.value); setErr(""); }}
+        />
+      </label>
+      <button type="submit" className="btn btn--go">Post</button>
+      {err ? <p className="cares-err" style={{ flex: "1 1 100%" }}>{err}</p> : null}
+    </form>
+  );
+}
+
+const CARES_BLANK_TEAM = { name: "", players: "", art: "" };
+
+function CaresTeamForm({ initial, onSave, onCancel, busy }) {
+  const [form, setForm] = useState(() => Object.assign({}, CARES_BLANK_TEAM, initial || {}));
+  const [more, setMore] = useState(false);
+  const nameRef = useRef(null);
+  const editing = !!(initial && initial.id);
+
+  function set(k, v) { setForm((prev) => Object.assign({}, prev, { [k]: v })); }
+
+  function submit(e) {
+    e.preventDefault();
+    const clean = {
+      name: form.name.trim(),
+      players: form.players.trim(),
+      art: form.art.trim()
+    };
+    if (!clean.name) return;
+    onSave(clean);
+    if (!editing) {
+      setForm(Object.assign({}, CARES_BLANK_TEAM));
+      if (nameRef.current) nameRef.current.focus();
+    }
+  }
+
+  return (
+    <form className="tf" onSubmit={submit}>
+      <label className="tf__l">
+        <span>Team name</span>
+        <input
+          ref={nameRef}
+          className="tf__in"
+          value={form.name}
+          placeholder="Team name off the pairing sheet"
+          onChange={(e) => set("name", e.target.value)}
+        />
+      </label>
+
+      <label className="tf__l">
+        <span>Players, optional</span>
+        <input
+          className="tf__in"
+          value={form.players}
+          placeholder="Two names, comma separated"
+          onChange={(e) => set("players", e.target.value)}
+        />
+      </label>
+
+      {more ? (
+        <label className="tf__l">
+          <span>Poster art file, optional</span>
+          <input
+            className="tf__in"
+            value={form.art}
+            placeholder="total-consciousness.jpg"
+            onChange={(e) => set("art", e.target.value)}
+          />
+        </label>
+      ) : null}
+
+      <div className="tf__row">
+        <button type="submit" className="btn btn--go" disabled={busy}>
+          {editing ? "Save team" : "Add team"}
+        </button>
+        {editing ? (
+          <button type="button" className="btn" onClick={onCancel}>Cancel</button>
+        ) : null}
+        <button type="button" className="btn btn--quiet" onClick={() => setMore(!more)}>
+          {more ? "Fewer fields" : "Poster art file"}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function CaresFundForm({ total, goal, onSave, busy }) {
+  const [t, setT] = useState(() => (typeof total === "number" ? String(total) : ""));
+  const [g, setG] = useState(() => (typeof goal === "number" ? String(goal) : ""));
+  const [err, setErr] = useState("");
+
+  function submit(e) {
+    e.preventDefault();
+    const pt = caresParseMoney(t);
+    if (!pt.ok) { setErr("Dollars only. 12480 or 12,480."); return; }
+    const pg = caresParseMoney(g);
+    if (!pg.ok) { setErr("The goal is dollars only too."); return; }
+    setErr("");
+    onSave(pt.value, pg.value);
+  }
+
+  return (
+    <form className="tf" onSubmit={submit}>
+      <div className="tf__row">
+        <label className="tf__l" style={{ flex: "1 1 130px", margin: 0 }}>
+          <span>Raised</span>
+          <input className="tf__in t-data" value={t} inputMode="decimal"
+                 placeholder="12480" onChange={(e) => { setT(e.target.value); setErr(""); }} />
+        </label>
+        <label className="tf__l" style={{ flex: "1 1 130px", margin: 0 }}>
+          <span>Goal, optional</span>
+          <input className="tf__in t-data" value={g} inputMode="decimal"
+                 placeholder="25000" onChange={(e) => { setG(e.target.value); setErr(""); }} />
+        </label>
+      </div>
+      {err ? <p className="cares-err">{err}</p> : null}
+      <div className="tf__row" style={{ marginTop: 9 }}>
+        <button type="submit" className="btn btn--go" disabled={busy}>Set the total</button>
+      </div>
+    </form>
+  );
+}
+
 function CaresCupTab({ isAdmin }) {
+  const cup = useCaresCup();
+  const [editing, setEditing] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  const board = caresRank(cup.teams);
+  const anyScore = board.ranked.length > 0;
+
+  const saveTeam = useCallback((clean) => {
+    if (!FB.ok) return;
+    setBusy(true);
+    const ref = editing && editing.id
+      ? FB.db.ref("caresCup/teams/" + editing.id)
+      : FB.db.ref("caresCup/teams").push();
+    const payload = editing && editing.id
+      ? clean
+      : Object.assign({}, clean, { thru: 0, ts: wallStamp() });
+    ref.update(payload)
+      .then(() => { setBusy(false); setEditing(null); })
+      .catch(() => setBusy(false));
+  }, [editing]);
+
+  const deleteTeam = useCallback((t) => {
+    if (!FB.ok) return;
+    if (!window.confirm("Take " + t.name + " off the board?")) return;
+    FB.db.ref("caresCup/teams/" + t.id).remove();
+  }, []);
+
+  /* A blank score clears the field rather than storing zero, because E is a
+     real round and blank is not. Firebase drops a null on update. */
+  const setScore = useCallback((t, score, thru) => {
+    if (!FB.ok) return;
+    FB.db.ref("caresCup/teams/" + t.id).update({ score: score, thru: thru });
+  }, []);
+
+  const saveFund = useCallback((total, goal) => {
+    if (!FB.ok) return;
+    setBusy(true);
+    FB.db.ref("caresCup/fundraising")
+      .update({ total: total, goal: goal, ts: wallStamp() })
+      .then(() => setBusy(false))
+      .catch(() => setBusy(false));
+  }, []);
+
+  const seed = useCallback(() => {
+    if (!FB.ok) return;
+    CARES_SEED.forEach((name) => {
+      FB.db.ref("caresCup/teams").push().update({
+        name: name, players: "", art: "", thru: 0, ts: wallStamp()
+      });
+    });
+  }, []);
+
   return (
     <TabFrame tabKey="cares">
-      <Empty>No scores posted. Nobody has shanked one yet.</Empty>
+      <CaresFund total={cup.total} goal={cup.goal} updated={cup.updated} />
+
+      {isAdmin ? (
+        <div className="cares-crew">
+          <p className="cares-crew__k">The board</p>
+          <div className="tf__row">
+            {cup.locked ? (
+              <button className="btn btn--go" onClick={() => caresWrite("locked", false)}>
+                Unlock the board
+              </button>
+            ) : (
+              <button className="btn btn--kill" onClick={() => caresWrite("locked", true)}>
+                Lock the board
+              </button>
+            )}
+            <button className="btn" onClick={() => caresWrite("art", !cup.art)}>
+              {cup.art ? "Poster art off" : "Poster art on"}
+            </button>
+            {!cup.teams.length ? (
+              <button className="btn" onClick={seed}>Add the two poster teams</button>
+            ) : null}
+          </div>
+          <p className="cares-crew__note">
+            {cup.locked
+              ? "Final. Nobody can post a score, including you, until you unlock it."
+              : "Open. Every score you post lands on every phone in about a second."}
+            {cup.art
+              ? " Poster art is on. Teams with no file fall back to the plain card."
+              : " Poster art is off. Cards are plain colour."}
+          </p>
+
+          <p className="cares-crew__k">Century Golf Cares total</p>
+          <CaresFundForm total={cup.total} goal={cup.goal} onSave={saveFund} busy={busy} />
+
+          <p className="cares-crew__k">{editing ? "Edit a team" : "Add a team"}</p>
+          <CaresTeamForm
+            key={editing ? editing.id : "new"}
+            initial={editing}
+            onSave={saveTeam}
+            onCancel={() => setEditing(null)}
+            busy={busy}
+          />
+        </div>
+      ) : null}
+
+      <div className="cares-board">
+        {cup.locked || anyScore ? (
+          <div className="cares-state">
+            {cup.locked ? (
+              <span className="cares-pill cares-pill--final">{"\u{1F3C6}"} Final</span>
+            ) : (
+              <span className="cares-pill">Scores are live</span>
+            )}
+          </div>
+        ) : null}
+
+        {!cup.teams.length ? (
+          <Empty>No scores posted. Nobody has shanked one yet.</Empty>
+        ) : null}
+
+        {board.ranked.length ? (
+          <div className="cares-list">
+            {board.ranked.map((t) => (
+              <CaresRow
+                key={t.id}
+                t={t}
+                artOn={cup.art}
+                isAdmin={isAdmin}
+                locked={cup.locked}
+                onEdit={setEditing}
+                onDelete={deleteTeam}
+                onScore={setScore}
+              />
+            ))}
+          </div>
+        ) : null}
+
+        {board.waiting.length ? (
+          <div>
+            <h3 className="cares-h">
+              {board.ranked.length ? "Not in yet" : "Teams are in. Scores are not."}
+            </h3>
+            <div className="cares-list">
+              {board.waiting.map((t) => (
+                <CaresRow
+                  key={t.id}
+                  t={t}
+                  artOn={cup.art}
+                  isAdmin={isAdmin}
+                  locked={cup.locked}
+                  onEdit={setEditing}
+                  onDelete={deleteTeam}
+                  onScore={setScore}
+                />
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </div>
+
       <BuildNote isAdmin={isAdmin} task="T2.6">
-        Leaderboard with position, team, score, thru. Gold, silver, bronze on the
-        top three. Century Golf Cares fundraising total on top. Admin only score
-        entry. Poster art use is still an open question, so build the solid
-        color fallback first.
+        Scores are to par, so lower wins and E is a real score. Ties share a
+        position and print as T2. Poster art is a switch here, not a rebuild:
+        drop files in assets/cares, type the filename on the team, tap Poster art
+        on. Locking the board stops score entry for everyone including crew.
       </BuildNote>
     </TabFrame>
   );
@@ -9187,42 +10055,1029 @@ function TenureSection({ isAdmin }) {
   );
 }
 
-function EncoreStub({ title, children }) {
+/* ==========================================================================
+   T2.7, PARTS TWO TO FOUR. AWARD WINNERS, HALL OF FAME, TOP VIDEOS.
+   Tenure came first and stays exactly as it was built, because its unlock is
+   Wednesday 8:20 AM at the Opening Cowbell and these three are Thursday night
+   after the 7 PM Awards Show. Four sections, four independent flags.
+
+   The read is gated, not the render. useEncoreEntries returns before it builds
+   a ref when the section is locked and the viewer is not crew, so a locked
+   award list is not sitting in an attendee's page waiting for dev tools. That
+   matters more here than it did for Tenure: the flier promises the awards
+   format is no longer predictable, and a leaked winner on the wall would undo
+   the whole bit.
+
+   Photos come off the phone. An award entry is an award name, a winner, a
+   citation and one tap on Take Photo. That is the "under a minute from a
+   phone" requirement in the acceptance criteria, and it is why the photo is a
+   compressed data URL on the entry rather than a repo path somebody has to
+   type on a phone keyboard while the room waits.
+   ========================================================================== */
+
+/* Shared by the Encore tab and the Vault Drops panel, so the panel cannot
+   drift out of step with the sections it controls. `planned` is what the
+   official agenda says. Encore never fires on the clock: somebody on stage
+   decides when the envelope is open, and the panel just says whether the
+   planned time has passed. */
+const ENCORE_SECTIONS = [
+  {
+    key: "tenure", title: "Tenure Recognition",
+    planned: Date.parse("2026-08-26T08:20:00-04:00"),
+    plannedLabel: "Wednesday 8:20 AM, Opening Cowbell"
+  },
+  {
+    key: "awards", title: "Award Winners",
+    planned: Date.parse("2026-08-27T19:00:00-04:00"),
+    plannedLabel: "Thursday, after the 7 PM Awards Show"
+  },
+  {
+    key: "hof", title: "Hall of Fame",
+    planned: Date.parse("2026-08-27T19:00:00-04:00"),
+    plannedLabel: "Thursday, after the 7 PM Awards Show"
+  },
+  {
+    key: "videos", title: "Top Videos",
+    planned: Date.parse("2026-08-27T19:00:00-04:00"),
+    plannedLabel: "Thursday, after the 7 PM Awards Show"
+  }
+];
+
+/* The flag is a bare boolean, so listening to it always is free and leaks
+   nothing. */
+function useEncoreFlag(section) {
+  const [unlocked, setUnlocked] = useState(false);
+  const [ready, setReady] = useState(!FB.ok);
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("encore/" + section + "/unlocked");
+    const handler = (snap) => { setUnlocked(snap.val() === true); setReady(true); };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, [section]);
+
+  return { unlocked, ready };
+}
+
+/* `enabled` gates the read. Called with false this never touches the entries
+   path. Do not turn this into a render guard. */
+function useEncoreEntries(section, enabled) {
+  const [entries, setEntries] = useState([]);
+
+  useEffect(() => {
+    if (!FB.ok || !enabled) {
+      setEntries([]);
+      return;
+    }
+    const ref = FB.db.ref("encore/" + section + "/entries");
+    const handler = (snap) => {
+      const all = snap.val() || {};
+      setEntries(Object.keys(all).map((id) => Object.assign({ id: id }, all[id])));
+    };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, [section, enabled]);
+
+  return entries;
+}
+
+function setEncoreFlag(section, next) {
+  if (!FB.ok) return;
+  FB.db.ref("encore/" + section + "/unlocked").set(next === true);
+}
+
+function saveEncoreEntry(section, id, clean, done) {
+  if (!FB.ok) { if (done) done(); return; }
+  const ref = id
+    ? FB.db.ref("encore/" + section + "/entries/" + id)
+    : FB.db.ref("encore/" + section + "/entries").push();
+  const payload = id ? clean : Object.assign({}, clean, { ts: wallStamp() });
+  ref.update(payload).then(() => { if (done) done(); }).catch(() => { if (done) done(); });
+}
+
+function removeEncoreEntry(section, id) {
+  if (!FB.ok) return;
+  FB.db.ref("encore/" + section + "/entries/" + id).remove();
+}
+
+/* One card frame for all three sections, so the padlock badge, the publish
+   button and the locked message read identically everywhere. Tenure has its
+   own copy of this chrome and is left alone on purpose. */
+function EncoreSection({ meta, isAdmin, unlocked, ready, canRead, now, lockedLine, admin, children }) {
+  const id = "enc-" + meta.key;
+  const late = isAdmin && !unlocked && typeof now === "number" && now > meta.planned;
+
+  if (!canRead) {
+    return (
+      <section className="enc glow-card" aria-labelledby={id}>
+        <h3 className="enc__h t-poster" id={id}>{meta.title}</h3>
+        <p className="enc__locked">{ready ? lockedLine : "Checking."}</p>
+      </section>
+    );
+  }
+
   return (
-    <section className="enc enc--stub">
-      <h3 className="enc__h t-poster">{title}</h3>
-      <p className="enc__locked">{children}</p>
+    <section className="enc glow-card" aria-labelledby={id}>
+      <div className="enc__head">
+        <h3 className="enc__h t-poster" id={id}>{meta.title}</h3>
+        {isAdmin && !unlocked ? (
+          <span className="enc__hidden">{"\u{1F512}"} The room cannot see this yet</span>
+        ) : null}
+      </div>
+
+      {isAdmin ? (
+        <div className="enc__crew">
+          <div className="tf__row">
+            {unlocked ? (
+              <button className="btn btn--kill" onClick={() => setEncoreFlag(meta.key, false)}>
+                Lock it again
+              </button>
+            ) : (
+              <button className="btn btn--go" onClick={() => setEncoreFlag(meta.key, true)}>
+                Publish to the room
+              </button>
+            )}
+          </div>
+          <p className="enc__note">
+            {unlocked
+              ? "Live on every phone in the room right now."
+              : late
+                ? "Only crew can see this. Planned for " + meta.plannedLabel + ", and that time has passed."
+                : "Only crew can see this. Planned for " + meta.plannedLabel + "."}
+          </p>
+          {admin}
+        </div>
+      ) : null}
+
+      {children}
     </section>
   );
 }
 
-function EncoreTab({ isAdmin }) {
+/* Camera and library both, per CLAUDE.md, because camera only was a real
+   limitation on the prior build. 640px long edge at JPEG 0.74 lands around
+   40KB, which is the right weight for a photo that renders inside a 96px vinyl
+   label and gets typed in from a phone in the room. */
+function encShrinkPhoto(file, cb) {
+  if (!file) { cb(null); return; }
+  const reader = new FileReader();
+  reader.onerror = function () { cb(null); };
+  reader.onload = function () {
+    const img = new Image();
+    img.onerror = function () { cb(null); };
+    img.onload = function () {
+      const max = 640;
+      const scale = Math.min(1, max / Math.max(img.width || max, img.height || max));
+      const w = Math.max(1, Math.round((img.width || max) * scale));
+      const h = Math.max(1, Math.round((img.height || max) * scale));
+      const cv = document.createElement("canvas");
+      cv.width = w;
+      cv.height = h;
+      const ctx = cv.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+      try {
+        cb(cv.toDataURL("image/jpeg", 0.74));
+      } catch (e) {
+        cb(null);
+      }
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function EncorePhotoField({ value, onChange }) {
+  const [working, setWorking] = useState(false);
+  const [typed, setTyped] = useState(false);
+
+  function take(e) {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+    setWorking(true);
+    encShrinkPhoto(file, (out) => {
+      setWorking(false);
+      if (out) onChange(out);
+    });
+  }
+
   return (
-    <TabFrame tabKey="encore">
-      {/* Tenure first, because it is the one that works and the first to go
-          live. Wednesday morning, not Thursday night. */}
-      <div className="enc-list">
-        <TenureSection isAdmin={isAdmin} />
-        <EncoreStub title="Award Winners">
-          Nothing yet. The envelopes are still sealed.
-        </EncoreStub>
-        <EncoreStub title="Hall of Fame">
-          Nothing yet. The plaques are still at the engraver.
-        </EncoreStub>
-        <EncoreStub title="Top Videos">
-          Nothing yet. Still in the edit.
-        </EncoreStub>
+    <div>
+      <div className="en2-pf">
+        {value ? (
+          <img className="en2-pf__pv" src={value} alt="" />
+        ) : (
+          <span className="en2-pf__pv" aria-hidden="true"></span>
+        )}
+
+        <label className="en2-file btn btn--tiny">
+          <span>{working ? "Working" : "Take photo"}</span>
+          <input type="file" accept="image/*" capture="environment" onChange={take} />
+        </label>
+
+        <label className="en2-file btn btn--tiny">
+          <span>Choose from library</span>
+          <input type="file" accept="image/*" onChange={take} />
+        </label>
+
+        {value ? (
+          <button type="button" className="btn btn--tiny btn--quiet" onClick={() => onChange("")}>
+            Remove
+          </button>
+        ) : null}
+
+        <button type="button" className="btn btn--tiny btn--quiet" onClick={() => setTyped(!typed)}>
+          {typed ? "Hide path" : "Use a file path"}
+        </button>
+
+        <p className="en2-pf__hint">
+          Shrunk to 640px on the phone before it goes anywhere. A card with no
+          photo still looks like a card.
+        </p>
       </div>
 
-      <BuildNote isAdmin={isAdmin} task="T2.7, part one">
-        Tenure only. It unlocks on its own at encore/tenure/unlocked, because the
-        Tenure Awards are Wednesday 8:20 AM and the other three are Thursday
-        night. While it is locked the wall does not fetch the entries at all, so
-        nothing confidential is sitting in an attendee's page. Every name in there
-        is a placeholder. Award Winners, Hall of Fame, and Top Videos are still
-        stubs and T2.7 is still open.
+      {typed ? (
+        <label className="tf__l">
+          <span>Photo path or link</span>
+          <input
+            className="tf__in"
+            value={value && value.slice(0, 5) === "data:" ? "" : value}
+            placeholder="assets/attendees/slug.jpg"
+            onChange={(e) => onChange(e.target.value)}
+          />
+        </label>
+      ) : null}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------- award winners */
+const AWARD_BLANK = { award: "", name: "", club: "", citation: "", photo: "" };
+
+function AwardForm({ initial, onSave, onCancel, busy }) {
+  const [form, setForm] = useState(() => Object.assign({}, AWARD_BLANK, initial || {}));
+  const awardRef = useRef(null);
+  const editing = !!(initial && initial.id);
+
+  function set(k, v) { setForm((prev) => Object.assign({}, prev, { [k]: v })); }
+
+  function submit(e) {
+    e.preventDefault();
+    const clean = {
+      award: form.award.trim(),
+      name: form.name.trim(),
+      club: form.club.trim(),
+      citation: form.citation.trim(),
+      photo: form.photo
+    };
+    if (!clean.award || !clean.name) return;
+    onSave(clean);
+    if (!editing) {
+      setForm(Object.assign({}, AWARD_BLANK));
+      if (awardRef.current) awardRef.current.focus();
+    }
+  }
+
+  return (
+    <form className="tf" onSubmit={submit}>
+      <label className="tf__l">
+        <span>Award</span>
+        <input ref={awardRef} className="tf__in" value={form.award}
+               placeholder="Award as it is read out"
+               onChange={(e) => set("award", e.target.value)} />
+      </label>
+
+      <label className="tf__l">
+        <span>Winner</span>
+        <input className="tf__in" value={form.name}
+               placeholder="Winner as announced"
+               onChange={(e) => set("name", e.target.value)} />
+      </label>
+
+      <label className="tf__l">
+        <span>Club, optional</span>
+        <input className="tf__in" value={form.club}
+               onChange={(e) => set("club", e.target.value)} />
+      </label>
+
+      <label className="tf__l">
+        <span>Citation, optional</span>
+        <textarea className="tf__in en2-ta" value={form.citation}
+                  placeholder="One line on why."
+                  onChange={(e) => set("citation", e.target.value)} />
+      </label>
+
+      <EncorePhotoField value={form.photo} onChange={(v) => set("photo", v)} />
+
+      <div className="tf__row">
+        <button type="submit" className="btn btn--go" disabled={busy}>
+          {editing ? "Save" : "Post the award"}
+        </button>
+        {editing ? (
+          <button type="button" className="btn" onClick={onCancel}>Cancel</button>
+        ) : null}
+      </div>
+    </form>
+  );
+}
+
+function AwardsSection({ isAdmin, now }) {
+  const meta = ENCORE_SECTIONS[1];
+  const { unlocked, ready } = useEncoreFlag("awards");
+  const canRead = unlocked || isAdmin;
+  const entries = useEncoreEntries("awards", canRead);
+  const [editing, setEditing] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  /* Newest first, like every other live list on the wall, so the award that
+     was just read out is the one at the top of the phone. */
+  const list = entries.slice().sort((a, b) => (b.ts || 0) - (a.ts || 0));
+
+  const save = useCallback((clean) => {
+    setBusy(true);
+    const id = editing && editing.id ? editing.id : null;
+    saveEncoreEntry("awards", id, clean, () => { setBusy(false); setEditing(null); });
+  }, [editing]);
+
+  const remove = useCallback((e) => {
+    if (!window.confirm("Delete the " + (e.award || "award") + " entry?")) return;
+    removeEncoreEntry("awards", e.id);
+  }, []);
+
+  return (
+    <EncoreSection
+      meta={meta}
+      isAdmin={isAdmin}
+      unlocked={unlocked}
+      ready={ready}
+      canRead={canRead}
+      now={now}
+      lockedLine="Sealed until Thursday night. The awards are not predictable this year, and neither is this page."
+      admin={
+        <AwardForm
+          key={editing ? editing.id : "new"}
+          initial={editing}
+          onSave={save}
+          onCancel={() => setEditing(null)}
+          busy={busy}
+        />
+      }
+    >
+      {!list.length ? (
+        <p className="enc__locked">
+          {isAdmin
+            ? "Nothing posted yet. Award, winner, citation, photo, post."
+            : "Nothing yet. The envelopes are still sealed."}
+        </p>
+      ) : null}
+
+      {list.map((e) => (
+        <article className="en2-award" key={e.id}>
+          <div className="vinyl">
+            {e.photo ? (
+              <img className="vinyl__photo" src={e.photo} alt="" />
+            ) : (
+              <span className="vinyl__photo" aria-hidden="true"></span>
+            )}
+          </div>
+          <div className="en2-award__b">
+            <h4 className="en2-award__aw t-poster">{e.award}</h4>
+            <p className="en2-award__n t-display">{e.name}</p>
+            {e.club ? <p className="en2-award__c">{e.club}</p> : null}
+            {e.citation ? <p className="en2-award__cit">{e.citation}</p> : null}
+            {isAdmin ? (
+              <div className="cares-rowbtns">
+                <button className="btn btn--tiny" onClick={() => setEditing(e)}>Edit</button>
+                <button className="btn btn--tiny btn--kill" onClick={() => remove(e)}>Delete</button>
+              </div>
+            ) : null}
+          </div>
+        </article>
+      ))}
+    </EncoreSection>
+  );
+}
+
+/* --------------------------------------------------------- hall of fame */
+const HOF_BLANK = { name: "", club: "", year: "", citation: "", photo: "" };
+
+function HofForm({ initial, onSave, onCancel, busy }) {
+  const [form, setForm] = useState(() => Object.assign({}, HOF_BLANK, initial || {}));
+  const nameRef = useRef(null);
+  const editing = !!(initial && initial.id);
+
+  function set(k, v) { setForm((prev) => Object.assign({}, prev, { [k]: v })); }
+
+  function submit(e) {
+    e.preventDefault();
+    const clean = {
+      name: form.name.trim(),
+      club: form.club.trim(),
+      year: form.year.trim(),
+      citation: form.citation.trim(),
+      photo: form.photo
+    };
+    if (!clean.name) return;
+    onSave(clean);
+    if (!editing) {
+      setForm(Object.assign({}, HOF_BLANK, { year: clean.year }));
+      if (nameRef.current) nameRef.current.focus();
+    }
+  }
+
+  return (
+    <form className="tf" onSubmit={submit}>
+      <label className="tf__l">
+        <span>Inductee</span>
+        <input ref={nameRef} className="tf__in" value={form.name}
+               placeholder="Inductee as announced"
+               onChange={(e) => set("name", e.target.value)} />
+      </label>
+
+      <div className="tf__row">
+        <label className="tf__l" style={{ flex: "1 1 150px" }}>
+          <span>Club, optional</span>
+          <input className="tf__in" value={form.club}
+                 onChange={(e) => set("club", e.target.value)} />
+        </label>
+        <label className="tf__l" style={{ flex: "0 0 110px" }}>
+          <span>Year</span>
+          <input className="tf__in t-data" value={form.year} inputMode="numeric"
+                 placeholder="2026"
+                 onChange={(e) => set("year", e.target.value)} />
+        </label>
+      </div>
+
+      <label className="tf__l">
+        <span>Citation, optional</span>
+        <textarea className="tf__in en2-ta" value={form.citation}
+                  placeholder="What put them in."
+                  onChange={(e) => set("citation", e.target.value)} />
+      </label>
+
+      <EncorePhotoField value={form.photo} onChange={(v) => set("photo", v)} />
+
+      <div className="tf__row">
+        <button type="submit" className="btn btn--go" disabled={busy}>
+          {editing ? "Save" : "Add inductee"}
+        </button>
+        {editing ? (
+          <button type="button" className="btn" onClick={onCancel}>Cancel</button>
+        ) : null}
+      </div>
+    </form>
+  );
+}
+
+function HofSection({ isAdmin, now }) {
+  const meta = ENCORE_SECTIONS[2];
+  const { unlocked, ready } = useEncoreFlag("hof");
+  const canRead = unlocked || isAdmin;
+  const entries = useEncoreEntries("hof", canRead);
+  const [editing, setEditing] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  /* The permanent record, so it reads newest class first, then alphabetically
+     inside a class. Anything with no year falls to the end. */
+  const list = entries.slice().sort((a, b) => {
+    const ya = parseInt(String(a.year || "").replace(/\D/g, ""), 10);
+    const yb = parseInt(String(b.year || "").replace(/\D/g, ""), 10);
+    const na = isNaN(ya) ? -1 : ya;
+    const nb = isNaN(yb) ? -1 : yb;
+    if (na !== nb) return nb - na;
+    return String(a.name || "").localeCompare(String(b.name || ""));
+  });
+
+  const save = useCallback((clean) => {
+    setBusy(true);
+    const id = editing && editing.id ? editing.id : null;
+    saveEncoreEntry("hof", id, clean, () => { setBusy(false); setEditing(null); });
+  }, [editing]);
+
+  const remove = useCallback((e) => {
+    if (!window.confirm("Delete " + e.name + " from the Hall of Fame?")) return;
+    removeEncoreEntry("hof", e.id);
+  }, []);
+
+  return (
+    <EncoreSection
+      meta={meta}
+      isAdmin={isAdmin}
+      unlocked={unlocked}
+      ready={ready}
+      canRead={canRead}
+      now={now}
+      lockedLine="Locked until Thursday night, with the rest of the awards show."
+      admin={
+        <HofForm
+          key={editing ? editing.id : "new"}
+          initial={editing}
+          onSave={save}
+          onCancel={() => setEditing(null)}
+          busy={busy}
+        />
+      }
+    >
+      {!list.length ? (
+        <p className="enc__locked">
+          {isAdmin
+            ? "Nothing in yet. Name, year, citation, photo."
+            : "Nothing yet. The plaques are still at the engraver."}
+        </p>
+      ) : null}
+
+      {list.map((e) => (
+        <article className="en2-hof" key={e.id}>
+          {e.photo ? <img className="en2-hof__ph" src={e.photo} alt="" /> : null}
+          <div className="en2-hof__b">
+            <p className="en2-hof__n">{e.name}</p>
+            {e.club || e.year ? (
+              <p className="en2-hof__m">
+                {[e.club, e.year].filter(Boolean).join(" \u00B7 ")}
+              </p>
+            ) : null}
+            {e.citation ? <p className="en2-hof__cit">{e.citation}</p> : null}
+            {isAdmin ? (
+              <div className="cares-rowbtns">
+                <button className="btn btn--tiny" onClick={() => setEditing(e)}>Edit</button>
+                <button className="btn btn--tiny btn--kill" onClick={() => remove(e)}>Delete</button>
+              </div>
+            ) : null}
+          </div>
+        </article>
+      ))}
+    </EncoreSection>
+  );
+}
+
+/* ----------------------------------------------------------- top videos */
+/* Embeds only. A video file has no business in this repo: GitHub Pages is not
+   a CDN. Takes a watch link, a share link, a shorts link, a youtu.be link or a
+   Vimeo link, and turns it into the embed URL. Anything else gets said out
+   loud rather than rendered as a broken frame. */
+function encEmbed(raw) {
+  const url = String(raw || "").trim();
+  if (!url) return null;
+
+  let m = url.match(
+    /(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/
+  );
+  if (m) return { kind: "YouTube", src: "https://www.youtube-nocookie.com/embed/" + m[1] };
+
+  m = url.match(/vimeo\.com\/(?:video\/)?(\d{6,})/);
+  if (m) return { kind: "Vimeo", src: "https://player.vimeo.com/video/" + m[1] };
+
+  return null;
+}
+
+const VIDEO_BLANK = { title: "", url: "", note: "" };
+
+function VideoForm({ initial, onSave, onCancel, busy }) {
+  const [form, setForm] = useState(() => Object.assign({}, VIDEO_BLANK, initial || {}));
+  const titleRef = useRef(null);
+  const editing = !!(initial && initial.id);
+  const probe = encEmbed(form.url);
+
+  function set(k, v) { setForm((prev) => Object.assign({}, prev, { [k]: v })); }
+
+  function submit(e) {
+    e.preventDefault();
+    const clean = {
+      title: form.title.trim(),
+      url: form.url.trim(),
+      note: form.note.trim()
+    };
+    if (!clean.title || !clean.url) return;
+    onSave(clean);
+    if (!editing) {
+      setForm(Object.assign({}, VIDEO_BLANK));
+      if (titleRef.current) titleRef.current.focus();
+    }
+  }
+
+  return (
+    <form className="tf" onSubmit={submit}>
+      <label className="tf__l">
+        <span>Title</span>
+        <input ref={titleRef} className="tf__in" value={form.title}
+               placeholder="Video of the Year, or the finalist's title"
+               onChange={(e) => set("title", e.target.value)} />
+      </label>
+
+      <label className="tf__l">
+        <span>YouTube or Vimeo link</span>
+        <input className="tf__in" value={form.url}
+               placeholder="https://youtu.be/..."
+               onChange={(e) => set("url", e.target.value)} />
+      </label>
+
+      <label className="tf__l">
+        <span>Line underneath, optional</span>
+        <input className="tf__in" value={form.note}
+               onChange={(e) => set("note", e.target.value)} />
+      </label>
+
+      <p className="en2-note">
+        {form.url
+          ? probe
+            ? probe.kind + " link. It will embed."
+            : "That link is not a YouTube or Vimeo video. It will post as a plain link."
+          : "Unlisted uploads work. Private ones do not embed."}
+      </p>
+
+      <div className="tf__row">
+        <button type="submit" className="btn btn--go" disabled={busy}>
+          {editing ? "Save" : "Add the video"}
+        </button>
+        {editing ? (
+          <button type="button" className="btn" onClick={onCancel}>Cancel</button>
+        ) : null}
+      </div>
+    </form>
+  );
+}
+
+function VideosSection({ isAdmin, now }) {
+  const meta = ENCORE_SECTIONS[3];
+  const { unlocked, ready } = useEncoreFlag("videos");
+  const canRead = unlocked || isAdmin;
+  const entries = useEncoreEntries("videos", canRead);
+  const [editing, setEditing] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  /* Oldest first. This is a playlist, not a feed, so it plays in the order
+     somebody built it. */
+  const list = entries.slice().sort((a, b) => (a.ts || 0) - (b.ts || 0));
+
+  const save = useCallback((clean) => {
+    setBusy(true);
+    const id = editing && editing.id ? editing.id : null;
+    saveEncoreEntry("videos", id, clean, () => { setBusy(false); setEditing(null); });
+  }, [editing]);
+
+  const remove = useCallback((e) => {
+    if (!window.confirm("Delete " + (e.title || "this video") + "?")) return;
+    removeEncoreEntry("videos", e.id);
+  }, []);
+
+  return (
+    <EncoreSection
+      meta={meta}
+      isAdmin={isAdmin}
+      unlocked={unlocked}
+      ready={ready}
+      canRead={canRead}
+      now={now}
+      lockedLine="Locked until Thursday night. The edit is not the part you want spoiled."
+      admin={
+        <VideoForm
+          key={editing ? editing.id : "new"}
+          initial={editing}
+          onSave={save}
+          onCancel={() => setEditing(null)}
+          busy={busy}
+        />
+      }
+    >
+      {!list.length ? (
+        <p className="enc__locked">
+          {isAdmin
+            ? "No links yet. Paste a YouTube or Vimeo link and it embeds."
+            : "Nothing yet. Still in the edit."}
+        </p>
+      ) : null}
+
+      {list.map((e) => {
+        const em = encEmbed(e.url);
+        return (
+          <article className="en2-vid" key={e.id}>
+            <p className="en2-vid__t">{e.title}</p>
+            {em ? (
+              <div className="en2-frame">
+                <iframe
+                  src={em.src}
+                  title={e.title || em.kind + " video"}
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            ) : (
+              <div>
+                <div className="chiprow" style={{ marginTop: 0 }}>
+                  <LinkChip href={e.url} glyph={"\u{25B6}"}>Open the video</LinkChip>
+                </div>
+                {isAdmin ? (
+                  <p className="en2-vid__bad">
+                    Not a YouTube or Vimeo link, so it cannot embed. Edit it to fix that.
+                  </p>
+                ) : null}
+              </div>
+            )}
+            {e.note ? <p className="en2-vid__note">{e.note}</p> : null}
+            {isAdmin ? (
+              <div className="cares-rowbtns">
+                <button className="btn btn--tiny" onClick={() => setEditing(e)}>Edit</button>
+                <button className="btn btn--tiny btn--kill" onClick={() => remove(e)}>Delete</button>
+              </div>
+            ) : null}
+          </article>
+        );
+      })}
+    </EncoreSection>
+  );
+}
+
+function EncoreTab({ isAdmin, now }) {
+  return (
+    <TabFrame tabKey="encore">
+      {/* Tenure first, because it is the first to go live. Wednesday morning,
+          not Thursday night. */}
+      <div className="enc-list">
+        <TenureSection isAdmin={isAdmin} />
+        <AwardsSection isAdmin={isAdmin} now={now} />
+        <HofSection isAdmin={isAdmin} now={now} />
+        <VideosSection isAdmin={isAdmin} now={now} />
+      </div>
+
+      <BuildNote isAdmin={isAdmin} task="T2.7">
+        Four sections, four separate unlocks. Tenure is Wednesday 8:20 AM at the
+        Opening Cowbell. Awards, Hall of Fame and Top Videos are Thursday, after
+        the 7 PM show, and none of them fire on a clock: you publish them from
+        here or from Vault Drops in the crew panel. While a section is locked the
+        wall does not fetch its entries at all, so nothing sits in an attendee's
+        page. Photos are taken on the phone and shrunk to 640px. Videos are
+        YouTube or Vimeo links only.
       </BuildNote>
     </TabFrame>
+  );
+}
+
+/* ==========================================================================
+   T2.8 ADMIN PANEL V2. VAULT DROPS.
+   Spec 4.1 calls this the single most important control during the meeting, and
+   ROADMAP T2.8 says it has to be two taps from the gear because it gets used
+   under time pressure. So it is the first block in the crew panel and it is
+   never behind a disclosure: tap the gear, tap the drop.
+
+   Six gated sections in one board. The two Vault drops run on the clock with a
+   three way override. The four Encore sections are manual only: the awards show
+   decides when an envelope is open, and an auto reveal on a schedule would
+   spoil a winner if the show ran early. The planned time is printed, and the
+   panel says out loud when it has passed.
+
+   Every time comparison here reads the server corrected `now` from
+   useServerNow. Nothing calls Date.now().
+   ========================================================================== */
+
+const VAULT_DROPS = [
+  {
+    key: "scenarios", title: "Core Fundamental Scenarios",
+    at: Date.parse("2026-08-26T09:30:00-04:00"),
+    when: "Wednesday 9:30 AM Eastern"
+  },
+  {
+    key: "personas", title: "Membership Funnel Personas",
+    at: Date.parse("2026-08-27T10:30:00-04:00"),
+    when: "Thursday 10:30 AM Eastern"
+  }
+];
+
+/* T2.8 reads the same node T2.3 already writes: settings/vaultDrops/{key},
+   holding { mode, unlockAt, ts } where mode is "scheduled", "open" or "shut".
+   This spec was drafted against settings/drops/{key} as a bare "auto" string.
+   That would have been a second, competing source of truth for the single most
+   important control in the build, so the four seam functions below were pointed
+   at the shipped shape instead, per this spec's own Edit 5. "auto" is
+   "scheduled" here. Nothing else in the block changed. */
+function useDropOverrides() {
+  const [modes, setModes] = useState({});
+
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("settings/vaultDrops");
+    const handler = (snap) => setModes(snap.val() || {});
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+
+  return modes;
+}
+
+/* The node is an object, and a bare string typed straight into the Firebase
+   console is also accepted, exactly as vaultDropState does it. Anything
+   unrecognised reads as scheduled, which keeps the clock in force rather than
+   letting a bad value open a section. */
+function dropMode(modes, key) {
+  const node = modes && modes[key];
+  let m = null;
+  if (typeof node === "string") m = node;
+  else if (node && typeof node === "object" && typeof node.mode === "string") m = node.mode;
+  if (m === "auto") m = "scheduled";
+  return m === "open" || m === "shut" ? m : "scheduled";
+}
+
+/* A test unlockAt set from the Vault tab has to move this panel too, or the two
+   would disagree about when a section opens. */
+function dropAt(modes, key, fallback) {
+  const node = modes && modes[key];
+  if (node && typeof node === "object" && typeof node.unlockAt === "number"
+      && isFinite(node.unlockAt)) {
+    return node.unlockAt;
+  }
+  return fallback;
+}
+
+/* The one function the Vault tab and this panel must agree on. `now` is the
+   server corrected clock, never the device clock. */
+function dropOpen(drop, mode, now, at) {
+  if (mode === "open") return true;
+  if (mode === "shut") return false;
+  const when = typeof at === "number" ? at : drop.at;
+  return typeof now === "number" && now >= when;
+}
+
+/* update, not set, so a test unlockAt and the server ts written by the Vault
+   tab survive a mode change made from here. */
+function setDropMode(key, mode) {
+  if (!FB.ok) return;
+  const body = { mode: mode };
+  try {
+    if (window.firebase && firebase.database && firebase.database.ServerValue) {
+      body.ts = firebase.database.ServerValue.TIMESTAMP;
+    }
+  } catch (e) { /* leave ts alone */ }
+  FB.db.ref("settings/vaultDrops/" + key).update(body);
+}
+
+/* clock() collapses days into hours, which is exactly right for a five minute
+   wait and unreadable two weeks out, where it prints 349:29:47. Days first
+   until the last day. */
+function dropLeft(ms) {
+  const t = breakdown(ms);
+  if (t.days > 0) return t.days + (t.days === 1 ? " day " : " days ") + t.hours + "h";
+  return clock(ms);
+}
+
+function VdropRow({ title, when, pill, note, buttons }) {
+  return (
+    <div className="vdrop-row">
+      <div className="vdrop-row__top">
+        <span className="vdrop-row__n">{title}</span>
+        {pill}
+      </div>
+      <p className="vdrop-row__when">{when}</p>
+      {note ? <p className="vdrop-row__when">{note}</p> : null}
+      <div className="vdrop-row__btns">{buttons}</div>
+    </div>
+  );
+}
+
+/* Renamed from VaultDropRow. T2.3 already shipped a VaultDropRow inside the
+   Vault tab that takes a different set of props entirely, and two function
+   declarations with one name means the second silently wins. This is the
+   crew panel row, so it says so. */
+function AdminVaultDropRow({ drop, mode, now, at }) {
+  /* `at` is the effective unlock time: the scheduled one, or a test time the
+     Vault tab has written. Both this panel and the tab have to read the same
+     one or they will disagree about when a section opens. */
+  const when = typeof at === "number" ? at : drop.at;
+  const isTest = when !== drop.at;
+  const open = dropOpen(drop, mode, now, when);
+  const waiting = mode === "scheduled" && !open;
+  const left = when - now;
+
+  const pill = open ? (
+    <span className="vdrop-pill vdrop-pill--open">Open to the room</span>
+  ) : mode === "shut" ? (
+    <span className="vdrop-pill vdrop-pill--held">Held shut</span>
+  ) : (
+    <span className="vdrop-pill">Locked</span>
+  );
+
+  const note = mode === "open"
+    ? "Forced open by crew. The clock is not deciding this one."
+    : mode === "shut"
+      ? "Held shut by crew. It will stay shut past its time until you put it back on the clock."
+      : waiting
+        ? (isTest ? "TEST TIME in force, not the real schedule. " : "On the clock. ")
+          + dropLeft(left) + " to go."
+        : isTest
+          ? "Opened on a TEST TIME, not the real schedule."
+          : "Opened on the clock.";
+
+  return (
+    <VdropRow
+      title={drop.title}
+      when={"Scheduled " + drop.when}
+      note={note}
+      pill={mode === "open" ? <span className="vdrop-pill vdrop-pill--forced">Forced open</span> : pill}
+      buttons={
+        <React.Fragment>
+          {!open ? (
+            <button className="btn btn--go" onClick={() => setDropMode(drop.key, "open")}>
+              Unlock now
+            </button>
+          ) : (
+            <button className="btn btn--kill" onClick={() => setDropMode(drop.key, "shut")}>
+              Re-lock
+            </button>
+          )}
+          {mode !== "scheduled" ? (
+            <button className="btn btn--quiet" onClick={() => setDropMode(drop.key, "scheduled")}>
+              Back on the clock
+            </button>
+          ) : null}
+        </React.Fragment>
+      }
+    />
+  );
+}
+
+function EncoreDropRow({ meta, now }) {
+  const { unlocked } = useEncoreFlag(meta.key);
+  const late = !unlocked && typeof now === "number" && now > meta.planned;
+
+  return (
+    <VdropRow
+      title={meta.title}
+      when={"Planned " + meta.plannedLabel}
+      note={
+        unlocked
+          ? "Live on every phone."
+          : late
+            ? "Still locked, and the planned time has passed."
+            : "Locked. Crew can see the content, the room cannot."
+      }
+      pill={
+        unlocked
+          ? <span className="vdrop-pill vdrop-pill--open">Live</span>
+          : <span className="vdrop-pill">Locked</span>
+      }
+      buttons={
+        unlocked ? (
+          <button className="btn btn--kill" onClick={() => setEncoreFlag(meta.key, false)}>
+            Lock it again
+          </button>
+        ) : (
+          <button className="btn btn--go" onClick={() => setEncoreFlag(meta.key, true)}>
+            Publish now
+          </button>
+        )
+      }
+    />
+  );
+}
+
+/* Everything T2.8 adds to the v1 panel, in one component, so the integrator
+   drops it in as the first child of the panel body and nothing else moves.
+   `onGoTab` is optional: without it the jump buttons are hidden and the rest
+   still works. */
+function AdminV2({ isAdmin, now, onGoTab }) {
+  const modes = useDropOverrides();
+  if (!isAdmin) return null;
+
+  return (
+    <div className="vdrop">
+      <h3 className="vdrop__h t-display">Vault Drops</h3>
+      <p className="vdrop__sub">
+        Everything on the wall that opens on a cue. Unlock early if a session
+        runs ahead. Re-lock if it runs behind.
+      </p>
+
+      <div className="vdrop__g">
+        <p className="vdrop__gh">The Vault, on the clock</p>
+        <p className="vdrop__gn">
+          These two fire on their own at the scheduled time, corrected against the
+          server clock. Override goes both ways.
+        </p>
+        {VAULT_DROPS.map((d) => (
+          <AdminVaultDropRow key={d.key} drop={d} mode={dropMode(modes, d.key)} now={now} at={dropAt(modes, d.key, d.at)} />
+        ))}
+      </div>
+
+      <div className="vdrop__g">
+        <p className="vdrop__gh">Encore, by hand</p>
+        <p className="vdrop__gn">
+          No clock on these. Somebody on stage decides when the envelope is open.
+        </p>
+        {ENCORE_SECTIONS.map((m) => (
+          <EncoreDropRow key={m.key} meta={m} now={now} />
+        ))}
+      </div>
+
+      {onGoTab ? (
+        <div className="vdrop__jump">
+          <button className="btn" onClick={() => onGoTab("encore")}>
+            Post an Encore entry
+          </button>
+          <button className="btn" onClick={() => onGoTab("cares")}>
+            Enter Cares Cup scores
+          </button>
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -9814,7 +11669,7 @@ function ApNuke() {
 /* Renders in the content flow, in place of the tab body, rather than as a fixed
    overlay. Five sections and ten switches in a fixed overlay needs an inner
    scroll container, and CLAUDE.md keeps those in Display Mode. */
-function AdminPanel({ now, vis, displayMode, onClose, onLock }) {
+function AdminPanel({ now, vis, displayMode, onClose, onLock, onGoTab }) {
   return (
     <div className="ap">
       <div className="ap__top">
@@ -9840,6 +11695,11 @@ function AdminPanel({ now, vis, displayMode, onClose, onLock }) {
           Device still works.
         </p>
       ) : null}
+
+      {/* T2.8. Vault Drops is the first thing in the panel and is never behind a
+          disclosure, an accordion or a scroll. Two taps from the gear is an
+          acceptance criterion, not a preference: gear, then the control. */}
+      <AdminV2 isAdmin={true} now={now} onGoTab={onGoTab} />
 
       <ApMarquee now={now} />
       <ApTabs vis={vis} />
@@ -10032,6 +11892,7 @@ function App() {
             displayMode={displayMode}
             onClose={() => setShowAdmin(false)}
             onLock={() => { setShowAdmin(false); setIsAdmin(false); }}
+            onGoTab={(key) => { setShowAdmin(false); setActive(key); }}
           />
         ) : TabView ? (
           <TabView isAdmin={isAdmin} now={now} />
