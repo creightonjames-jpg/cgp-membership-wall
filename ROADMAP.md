@@ -1237,17 +1237,85 @@ rather than an initials tile. That is exactly the hazard T1.3 documents: a lazil
 `tools/remove-attendee.py` keeps the file and the folder moving together. **The rule stands: never
 put a path in `photo` unless the file is in `assets/attendees/`.**
 
+**Eight more faces, Aug 12. 110 of 119 now have one, up from 102.** Gina Fabrizio, Andrew
+Montemayor, Aubrey Gillespie, Jeannette Walker, Juan Martinez, Krisno Bridge, Natalie Bratcher,
+Patrick Ryan. All eight were on the verified list and all eight were photoless, so nothing was
+overwritten. Verified on the live URL: all 110 attendee images load, zero failures.
+
+**Where they came from, because this changes what "Jim sent it" means.** Jim said three times
+that he had pasted these into the thread. Three times the answer was that a pasted image cannot
+become a file. **That was wrong.** Claude Code writes pasted images into the session transcript
+as base64, so they were recoverable the whole time:
+
+```
+~/.claude/projects/<project>/<session-id>.jsonl
+```
+
+Each `message.content` array holds `{"type":"image","source":{"type":"base64",...}}` blocks.
+Decode the `data` field and it is the original file. Identity came from the text block in the
+**same message**, one image per message, so no guessing was involved.
+
+**The rule that follows: when Jim says he sent something, go read the transcript before
+answering.** Do not explain a limitation without checking whether it is real.
+
+- **Two of the nine still missing are people Jim named as pasted, Gus Siggins and Rod Quintero.**
+  Their messages carry no image block. Same for Lindsey Jenkins and Duane Malinowski. Those four
+  were typed as names only, so the photos genuinely never arrived and still need to.
+- **Patrick Ryan's card does not match the others and it is a source problem.** His photo is a
+  266x266 full-body seated shot, so his face lands small in a grid where every neighbour is a
+  face. Cropping tighter would upscale a roughly 100px face to 400px and go to mush. Left as-is
+  and flagged. Wants a real headshot, not a code change.
+- **Soft, accepted, listed so nobody re-reports it:** jeannette-walker (341px short edge),
+  juan-martinez (293px), krisno-bridge (300px), patrick-ryan (266px) all upscaled to 400.
+  Krisno's crop also sits tight to the top of his hair.
+
+**Two pipeline bugs this batch exposed, both fixed and both verified.**
+
+1. **`tools/process-assets.sh` failed on every webp.** Both converters copied the source keeping
+   its extension and edited that copy in place. sips reads webp but will not write one back, so
+   `--resampleWidth` failed and the file was reported "conversion failed" with nothing wrong
+   with it. Two of the eight died this way. A new `stage_editable()` normalizes every input to a
+   PNG working copy first, with PIL as a fallback for webp variants sips cannot read. Also fixes
+   heic, gif and bmp. Verified by re-running the two failures: both convert straight from webp now.
+2. **The closing "on the roster with no photo" report lied, and expensively.** It tested for
+   `assets/attendees/{slug}.jpg`, but anyone matched by surname or by `OVERRIDE` has a face under
+   a different name (Cyndi Melfi is `melfi-0001.jpg`). It named **40** people when **9** were
+   photoless, which sends somebody chasing photos that shipped weeks ago. It now reads the
+   reconciled `photo` field. Verified: reports the same 9 that `reconcile-roster.py` reports.
+
+**The nine still without a face:** Lindsey Jenkins, TK Matthews, Gus Siggins, Rod Quintero,
+Duane Malinowski, James Hinckley, Jim Hinckley, Jim Creighton, Todd Keefer. The two Hinckleys are
+partly the held photo question below, not only a delivery gap.
+
 ### `[ ]` T3.2 Load club graphs
 - **Inputs:** Jeannette's graph files
 - **Output:** populated `/assets/graphs/`
 - **Acceptance:** every club in the picker resolves to a graph. Each graph is legible on a 380px screen at default zoom
 - **Blocked by:** T2.2, asset delivery
 
-### `[ ]` T3.3 Load Vault content
+### `[~]` T3.3 Load Vault content
 - **Inputs:** Membership Buckets image, Core Fundamentals image, Scenarios content, Personas content
 - **Output:** all five Vault sections populated
 - **Acceptance:** all sections render real content. Locked sections still show the correct countdown
 - **Blocked by:** T2.3, content delivery
+- **Two of four sections filled, Aug 12.** Both graphics Lisa asked for are in and live.
+  | Section | State |
+  |---|---|
+  | Core Fundamentals | `core-fundamentals.png`, the wheel. Renders |
+  | Invitation Sources | `invitation-sources.png`. Renders. This is the section Lisa renamed from Membership Buckets |
+  | Club Graphs | 87 SVGs, done earlier |
+  | Core Fundamental Scenarios | Empty. Content not delivered. Locked, padlock and countdown intact |
+  | Membership Funnel Personas | Empty. Content not delivered. Locked, padlock and countdown intact |
+- **Both were quantized to a 256 colour adaptive palette before committing.** The Core
+  Fundamentals export is 10052x15052 and came out of the pipeline at 1.7MB, three times the
+  size guide, on a wall that has to load over ballroom wifi. Flat colour artwork quantizes to
+  252KB with no visible loss and keeps text sharper than JPEG would. The invitation diagram
+  went 470KB to 155KB the same way. Do not re-run these through a plain PNG export.
+- **Content typo in the client artwork, flagged to Jim Aug 12, not ours to fix.** The wheel
+  reads `RENTENTION STRATEGY`. Should be RETENTION. It goes on a wall in front of 119 people,
+  so it wants a corrected export from Tyler rather than an edit here.
+- **Stays `[~]` until Scenarios and Personas content arrives.** Those two are the timed drops,
+  so they are also the two that matter most for T3.7.
 
 ### `[~]` T3.4 Final agenda swap
 - **Inputs:** Jeannette's final agenda
