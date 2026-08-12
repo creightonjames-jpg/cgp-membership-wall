@@ -820,12 +820,53 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 - **T2.8 can mount `VaultDropControls` inside the gear panel** to satisfy the two-taps-from-the-gear
   rule. Until then the path is gear, PIN, Vault tab.
 
-### `[ ]` T2.4 Crowd Vote
+### `[x]` T2.4 Crowd Vote
 - **Inputs:** spec Section 3.7
 - **Output:** live polling tab with four poll types
 - **Steps:** admin creates polls. Active polls as cards with question, full width option buttons, ON AIR badge. After voting the chosen option fills scarlet with a checkmark and results render as horizontal bars with percentage and count. One vote per device per poll via `mm26_pollvotes`. Closed polls dim with final results. Four types: multiple choice, knowledge check (carries a correct answer, reveals the correct-versus-incorrect split on close), ranking (drag to order, averaged rank results), word cloud (one word answers rendered live)
 - **Acceptance:** each of the four types creates, accepts votes, and displays results correctly. Vote lock persists through reload. Knowledge check reveals the answer only after admin closes the poll
 - **Blocked by:** T1.6
+- **Done Aug 11.** Polls live at `polls/{id}` with three states, not two: staged (crew only),
+  live, closed. `on` alone could not tell a poll nobody has shown yet from one that has
+  finished, and a fresh poll must not read to the room as a closed poll with zero votes.
+  | Acceptance criterion | Result |
+  |---|---|
+  | **Multiple choice** creates, accepts votes, displays results | Created staged with a dashed border and "🔒 Not on air yet". On air added the On Air badge and three full width option buttons. A vote replaced the buttons with three bars, the picked one scarlet filled with a ✓ and "Your pick.", reading "100% · 1", foot "1 vote" |
+  | **Knowledge check** | Created with a "Why, optional. Shown on close" field and a #1/#2/#3 right-answer picker. Crew saw "Right answer: Placeholder right" inside the crew block and nowhere else |
+  | **Ranking** | Four rows with position numbers. The ▲ and ▼ nudges moved a row one slot and greyed out at both ends. Lock in produced bars sorted by average rank reading "avg 1.0" through "avg 4.0", plus "You put Placeholder three first." |
+  | **Word cloud** | "two words" was refused with "One word. Pick the best one." and nothing was written. "loud" rendered in Anton, gold, scarlet underlined, with "You said loud." |
+  | Vote lock persists through reload | Reloaded with a vote cast. The card came back with bars and no option buttons, the pick still scarlet with its ✓, and the count still 1. Reloading did not add a vote |
+  | Storage shape | `mm26_pollvotes` held exactly the four documented records: `{"t":"choice","i":1}`, `{"t":"knowledge","i":1}`, `{"t":"ranking","order":[2,0,3,1]}`, `{"t":"wordcloud","w":"loud"}` |
+  | Closed polls dim and keep results | The closed knowledge card carried `is-done` and kept its bars |
+  | Display Mode | Question type went to 48px, `--cv-bar-min` to 58px, `--cv-cloud-base` to 30px, and the crew block and New poll form both computed to `display: none` while still in the DOM. Toggling back restored them to `block` |
+  | 380px | 0px overflow. The four elements measuring past the edge are poll-type pills inside the `.dayrow` scroller, the same intentional pattern as the tab bar |
+  | 1280px | 0px overflow, cards inside the 780px reading column |
+  | No fixed-height inner scroll outside Display Mode | The appended CSS contains zero `overflow-y` and zero `max-height`. The only element matching a fixed-height scroll box is the new-poll textarea at its `min-height`, which is a form field |
+  | No console errors | None across create, on air, four vote types, close, delete, reload, and Display Mode both ways |
+- **The knowledge answer does not leak, and this was the check worth running properly.** With the
+  poll **on air** and a **non-admin** device having voted for a wrong answer, scoped to that card:
+  zero `.cv-bar`, zero `.cv-bar--right`, no `%`, no `★`, and the explanation absent. Page wide,
+  the explanation string appears **nowhere** in the rendered document. All 42 occurrences of
+  `correctIndex` are in the inline component source; **zero** occur in the rendered markup once
+  script tags are excluded. The answer is stripped by the reader before it reaches attendee state
+  rather than merely hidden by a render guard, so dev tools do not get you the answer.
+- **On close the reveal is complete**, verified on the same non-admin device with no reload:
+  three bars, a ★ and a gold rule on the right answer, "Placeholder right. 0 of 1 got it, 0%. You
+  missed this one.", and the why underneath.
+- **Writes are atomic multi-path updates using `ServerValue.increment`**, so ninety phones tapping
+  the same option inside a second all count with no read-modify-write race. There is a transaction
+  fallback if the pinned SDK build lacks `increment`.
+- **All timestamps are `ServerValue.TIMESTAMP`.** Nothing in the feature calls `Date.now()`.
+- **Ranking ships both controls,** touch drag and up/down buttons. The nudge buttons are what was
+  verified here; the drag gesture needs a real finger and belongs to T3.6.
+- **Every crew control lives in the tab, not in the T1.6 panel.** That is where it gets used.
+  T2.8 can hang a shortcut off the gear.
+- **`data/polls.json` is read only and every question in it carries `draft: true`.** Nobody has
+  approved them. The library loader was not exercised in this pass, because the four polls were
+  typed by hand to test the create path. **T3.5 owns getting those questions approved**, and the
+  file's own note says no statistic, benchmark or club result is used as an answer anywhere in it.
+- **All test polls were deleted at the end of the session.** Every question used was
+  "Placeholder question one" through "four" with "Placeholder A/B/C" answers.
 
 ### `[ ]` T2.5 The Pit
 - **Inputs:** spec Section 3.8

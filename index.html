@@ -2377,6 +2377,309 @@ body.display-mode .ln-when { font-size: 15px; }
   .bnd-detail__shot { flex: 0 0 200px; max-width: 200px; }
   .bnd-detail__b { flex: 1 1 auto; }
 }
+/* ==========================================================================
+   T2.4 CROWD VOTE
+   Poll cards, option buttons, result bars, a drag-to-order list, and a word
+   cloud. No new motifs and no thirteenth palette token: bars and cloud words
+   are mixed from the same twelve tokens and the same warm-fill dials the tab
+   bar uses.
+
+   Two dials live on .cv-card, --cv-bar-min and --cv-cloud-base. Display Mode
+   retunes those two and every bar, every option button and every word in the
+   cloud follows, so the projector view is one override rather than a second
+   set of rules.
+   ========================================================================== */
+
+.cv-list { display: flex; flex-direction: column; gap: 16px; }
+
+.cv-card {
+  padding: 15px 16px 16px;
+  --cv-bar-min: 44px;      /* touch target floor for a bar or an option */
+  --cv-cloud-base: 16px;   /* the cloud sizes itself in em against this */
+}
+
+/* A poll nobody has put on air yet. Dashed, the same way The Setlist marks a
+   card the agenda has not filled in. Crew only, so the room never sees it. */
+.cv-card--staged { border-style: dashed; }
+
+.cv-head {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; margin: 0 0 9px;
+}
+
+.cv-kicker {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.16em; color: var(--dim);
+}
+
+.cv-flag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge); border-radius: 999px;
+  padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--dim);
+}
+
+.cv-flag--staged { color: var(--gold); border-color: var(--gold-rule); }
+
+.cv-q { margin: 0 0 13px; font-size: clamp(19px, 5.6vw, 25px); }
+
+/* ------------------------------------------------------- option buttons */
+/* Full width, one per row, at the flier's warm chrome. A tapped option turns
+   into the scarlet gradient with a gold rule, which is the same lit-pill move
+   the tab bar and the day pills already make. */
+.cv-opts { display: flex; flex-direction: column; gap: 9px; }
+
+.cv-opt {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; text-align: left;
+  min-height: var(--cv-bar-min);
+  padding: 13px 15px;
+  background-color: var(--input);
+  background-image: linear-gradient(var(--warm-fill), var(--warm-fill));
+  border: 1px solid var(--warm-edge); border-radius: 10px;
+  color: var(--cream); font-family: inherit; font-size: 15px; font-weight: 500;
+  cursor: pointer;
+}
+
+.cv-opt:active {
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+}
+
+.cv-opt:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* Same row, no longer a control. Used once a knowledge check is locked in and
+   the split is still under wraps. */
+.cv-opt--flat { cursor: default; }
+
+.cv-opt--mine {
+  background-color: transparent;
+  background-image: var(--grad-primary);
+  border-color: var(--gold);
+  font-weight: 600;
+}
+
+.cv-opt__tick { flex: 0 0 auto; color: var(--gold); font-size: 15px; line-height: 1; }
+.cv-opt__t { min-width: 0; overflow-wrap: anywhere; }
+
+/* ---------------------------------------------------------- result bars */
+.cv-res { display: flex; flex-direction: column; gap: 9px; }
+
+.cv-bar {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; gap: 10px;
+  min-height: var(--cv-bar-min);
+  padding: 10px 13px;
+  background: var(--input);
+  border: 1px solid var(--edge); border-radius: 10px;
+}
+
+.cv-bar__fill {
+  position: absolute; left: 0; top: 0; bottom: 0; z-index: 0;
+  background-image: linear-gradient(var(--warm-fill-strong), var(--warm-fill-strong));
+  border-right: 1px solid var(--warm-edge);
+  transition: width 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.cv-bar__lab, .cv-bar__n { position: relative; z-index: 1; }
+
+.cv-bar__lab {
+  flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere;
+  display: flex; align-items: baseline; gap: 7px;
+  font-size: 15px;
+}
+
+.cv-bar__n { flex: 0 0 auto; font-size: 13px; color: var(--dim); }
+.cv-bar__mark { flex: 0 0 auto; color: var(--gold); font-size: 13px; line-height: 1.3; }
+
+/* The bar this device voted for. Scarlet fill, gold rule, checkmark. */
+.cv-bar--mine { border-color: var(--gold); }
+.cv-bar--mine .cv-bar__fill {
+  background-image: var(--grad-primary);
+  border-right-color: var(--gold);
+}
+.cv-bar--mine .cv-bar__lab { font-weight: 600; }
+
+/* The right answer on a closed knowledge check. */
+.cv-bar--right { box-shadow: inset 0 0 0 1px var(--gold-rule); border-color: var(--gold); }
+
+/* A bar growing from 0 to 74% is the one animation in here worth switching off
+   for anyone who asked for less motion. It still reads standing still. */
+@media (prefers-reduced-motion: reduce) {
+  .cv-bar__fill { transition: none; }
+}
+
+/* ------------------------------------------------------------- ranking */
+.cv-rank {
+  list-style: none; margin: 0 0 12px; padding: 0;
+  display: flex; flex-direction: column; gap: 9px;
+}
+
+.cv-rank--dragging { -webkit-user-select: none; user-select: none; }
+
+.cv-rank__row {
+  display: flex; align-items: center; gap: 9px;
+  min-height: var(--cv-bar-min);
+  padding: 8px 9px 8px 12px;
+  background: var(--input);
+  border: 1px solid var(--warm-edge); border-radius: 10px;
+}
+
+/* The row under the finger. Lifts off the stack and follows the drag, while
+   the list reorders underneath it. */
+.cv-rank__row.is-lifted {
+  position: relative; z-index: 2;
+  transform: translateY(var(--cv-dy, 0px));
+  border-color: var(--gold);
+  box-shadow: 0 8px 20px rgba(10, 9, 12, 0.55);
+}
+
+.cv-rank__pos {
+  flex: 0 0 auto; width: 22px; text-align: center;
+  font-family: var(--font-display); font-size: 17px; color: var(--gold);
+}
+
+.cv-rank__t { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; font-size: 15px; }
+.cv-rank__ctl { flex: 0 0 auto; display: flex; align-items: center; gap: 4px; }
+
+/* touch-action: none is the whole reason drag works on a phone. Without it the
+   browser claims the gesture as a scroll and the row never moves. */
+.cv-grip {
+  flex: 0 0 auto;
+  width: 38px; min-height: 38px; padding: 0;
+  display: grid; place-items: center;
+  background: transparent;
+  border: 1px solid var(--edge); border-radius: 8px;
+  color: var(--dim); font-size: 15px; line-height: 1;
+  cursor: grab; touch-action: none;
+}
+
+.cv-grip:active { cursor: grabbing; color: var(--cream); border-color: var(--warm-edge); }
+.cv-grip:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Up and down, for anyone who does not get on with dragging. */
+.cv-nudge { width: 34px; min-height: 34px; padding: 0; font-size: 12px; }
+
+/* ---------------------------------------------------------- word cloud */
+/* Every word sizes itself in em against --cv-cloud-base, so the projector gets
+   the whole cloud bigger from one variable. Anton, all caps, because a cloud of
+   single words is a poster and this is the one place that reads as one. */
+.cv-cloud {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: 5px 14px; margin: 12px 0 0; padding: 2px 0;
+  font-size: var(--cv-cloud-base);
+}
+
+.cv-word {
+  font-family: var(--font-display); text-transform: uppercase;
+  line-height: 1.04; letter-spacing: 0.01em; color: var(--dim);
+}
+
+.cv-word--warm { color: var(--cream); }
+.cv-word--hot  { color: var(--gold); }
+
+.cv-word--mine {
+  text-decoration: underline;
+  text-decoration-color: var(--scarlet);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.cv-word__n {
+  font-family: var(--font-body); font-size: 0.4em; font-weight: 600;
+  color: var(--mute); margin-left: 4px; vertical-align: super;
+}
+
+/* ------------------------------------------------------- notes and foot */
+.cv-foot {
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  margin: 13px 0 0; font-size: 13px; color: var(--dim);
+}
+
+.cv-count { color: var(--cream); font-weight: 600; }
+
+.cv-note { margin: 11px 0 0; font-size: 13px; color: var(--dim); }
+.cv-note strong { color: var(--cream); }
+.cv-err { margin: 9px 0 0; font-size: 13px; color: var(--danger); }
+
+/* The correct versus incorrect line on a closed knowledge check. */
+.cv-score { margin: 13px 0 0; font-size: 15px; }
+
+.cv-score__k {
+  display: block; margin-bottom: 3px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+.cv-score__n { font-weight: 600; color: var(--cream); }
+
+/* ---------------------------------------------------------------- crew */
+/* Same treatment as the Encore crew block: --input with a scarlet left border,
+   so "this is a control panel, not content" reads the same in both tabs. */
+.cv-crew {
+  margin: 13px 0 0; padding: 12px 13px;
+  background: var(--input);
+  border-left: 3px solid var(--scarlet); border-radius: 6px;
+}
+
+.cv-crew__k {
+  margin: 0 0 9px;
+  font-family: var(--font-display); font-size: 10px;
+  letter-spacing: 0.14em; color: var(--scarlet);
+}
+
+.cv-crew .cv-res { margin-top: 9px; }
+.cv-crew .tf__row { margin-top: 11px; }
+
+.cv-new { margin: 0 0 18px; padding: 15px 16px; }
+.cv-new__h { margin: 0 0 4px; font-size: clamp(18px, 5vw, 22px); }
+.cv-new__hint { margin: 0; font-size: 12px; color: var(--mute); }
+.cv-ta { min-height: 96px; resize: vertical; line-height: 1.4; }
+
+/* The starter library out of data/polls.json. */
+.cv-libl {
+  list-style: none; margin: 11px 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.cv-lib {
+  display: block; width: 100%; text-align: left;
+  padding: 10px 12px;
+  background: var(--riser);
+  border: 1px solid var(--edge); border-radius: 9px;
+  color: var(--cream); font-family: inherit; font-size: 14px; cursor: pointer;
+}
+
+.cv-lib:active { border-color: var(--warm-edge); }
+
+.cv-lib__k {
+  display: block; margin-bottom: 3px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+/* ------------------------------------------------------- display mode */
+/* The projector view. Two dials and three type sizes. Crew controls go away
+   entirely: Display Mode is the room's screen, and a knowledge check's right
+   answer sits in the crew block. */
+body.display-mode .cv-card { --cv-bar-min: 58px; --cv-cloud-base: 30px; }
+body.display-mode .cv-q { font-size: clamp(28px, 4.6vw, 48px); }
+body.display-mode .cv-opt,
+body.display-mode .cv-bar__lab,
+body.display-mode .cv-rank__t { font-size: 20px; }
+body.display-mode .cv-bar__n { font-size: 17px; }
+body.display-mode .cv-foot { font-size: 16px; }
+body.display-mode .cv-score { font-size: 22px; }
+body.display-mode .cv-crew,
+body.display-mode .cv-new { display: none; }
+
+/* ------------------------------------------------------------- desktop */
+@media (min-width: 700px) {
+  .cv-card { padding: 18px 20px 20px; --cv-bar-min: 48px; }
+  .cv-q { font-size: clamp(23px, 2.6vw, 28px); }
+  .cv-opt, .cv-bar__lab, .cv-rank__t { font-size: 16px; }
+  .cv-new { padding: 18px 20px; }
+}
 </style>
 </head>
 <body>
@@ -2432,7 +2735,8 @@ const OPENS_AT = Date.parse("2026-08-25T12:00:00-04:00");
 const LS = {
   entered: "mm26_entered",
   reacted: "mm26_reacted",
-  voted: "mm26_voted"
+  voted: "mm26_voted",
+  pollvotes: "mm26_pollvotes"
 };
 
 /* Venue and contact facts, verbatim off the flier. One table, because The
@@ -6412,13 +6716,1213 @@ function LinerNotesTab({ isAdmin, now }) {
   );
 }
 
-function CrowdVoteTab({ isAdmin }) {
+/* ==========================================================================
+   T2.4 CROWD VOTE. Spec 3.7.
+   Four poll types, all live: multiple choice, knowledge check, ranking, word
+   cloud. Poll state lives in Firebase at polls/{id}. The starter question
+   library at data/polls.json is read only, and it is only fetched when a crew
+   member opens the picker, so an attendee's phone never pulls it.
+
+   One vote per device per poll, held in mm26_pollvotes. Storage is re-read at
+   the moment of the tap rather than trusted from state, so a second tab on the
+   same phone cannot double vote through a stale copy. Somebody determined can
+   clear their own storage and vote again. Ninety GMs in a ballroom is not an
+   election.
+
+   Every clock read comes from the server corrected `now` handed down by
+   useServerNow, and every timestamp written is ServerValue.TIMESTAMP, which is
+   the server's own clock. Nothing in here calls Date.now().
+   ========================================================================== */
+
+const POLL_TYPES = [
+  { key: "choice",    label: "Multiple choice",
+    hint: "Opinion. No right answer." },
+  { key: "knowledge", label: "Knowledge check",
+    hint: "Carries a right answer. The room sees it when you close the poll." },
+  { key: "ranking",   label: "Ranking",
+    hint: "Drag to order. Results are an averaged rank, so keep the list short." },
+  { key: "wordcloud", label: "Word cloud",
+    hint: "One word each, sized by how often it comes up." }
+];
+
+const POLL_TYPE_BY_KEY = {};
+POLL_TYPES.forEach(function (t) { POLL_TYPE_BY_KEY[t.key] = t; });
+
+/* ServerValue.increment does the arithmetic on the server, so a whole ballroom
+   tapping the same option inside one second all get counted with no read
+   first. Older SDK builds do not carry it, so there is a transaction fallback
+   and the feature cannot fail closed on a CDN pin. */
+const CAN_INCREMENT = !!(
+  window.firebase && firebase.database && firebase.database.ServerValue &&
+  typeof firebase.database.ServerValue.increment === "function"
+);
+
+function serverStamp() {
+  const SV = window.firebase && firebase.database && firebase.database.ServerValue;
+  return SV ? SV.TIMESTAMP : 0;
+}
+
+/* One atomic write per ballot. `bumps` are counters to add to, `sets` are plain
+   values. Every path is a disjoint leaf, which is what a multi-path update
+   requires. */
+function pollWrite(baseRef, bumps, sets) {
+  if (CAN_INCREMENT) {
+    const upd = {};
+    Object.keys(sets || {}).forEach(function (p) { upd[p] = sets[p]; });
+    Object.keys(bumps || {}).forEach(function (p) {
+      upd[p] = firebase.database.ServerValue.increment(bumps[p]);
+    });
+    return baseRef.update(upd);
+  }
+  Object.keys(sets || {}).forEach(function (p) { baseRef.child(p).set(sets[p]); });
+  Object.keys(bumps || {}).forEach(function (p) {
+    baseRef.child(p).transaction(function (cur) { return (cur || 0) + bumps[p]; });
+  });
+  return Promise.resolve();
+}
+
+/* Firebase keys cannot hold . # $ / [ ] or control characters. Words fold to
+   lower case so Family and family are one word in the cloud. Accents survive,
+   because stripping to a-z would turn a real word into a stub. */
+function wordKey(raw) {
+  return String(raw || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[.#$\/\[\]\x00-\x1f\x7f]/g, "")
+    .replace(/\s+/g, "-")
+    .slice(0, 32);
+}
+
+function cleanWord(raw) {
+  return String(raw || "").trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+/* staged, live, closed. `on` alone cannot tell a poll nobody has shown yet from
+   one that has finished, and the room must never see the first kind. */
+function pollPhase(raw) {
+  if (raw && raw.on) return "live";
+  return raw && raw.openedTs ? "closed" : "staged";
+}
+
+/* The knowledge answer is stripped here rather than at the point of render, so
+   correctIndex and explain are not in React state, not in props, and not in the
+   DOM until the poll is closed or the viewer is crew. See OPEN ITEMS 8.1 for
+   what this does and does not protect. */
+function normalizePoll(id, raw, isAdmin) {
+  const type = POLL_TYPE_BY_KEY[raw.type] ? raw.type : "choice";
+  const phase = pollPhase(raw);
+  const revealed = phase === "closed" || isAdmin;
+
+  const rawOpts = raw.options || {};
+  const options = Object.keys(rawOpts)
+    .filter(function (k) { return rawOpts[k]; })
+    .sort(function (a, b) { return Number(a) - Number(b); })
+    .map(function (k) {
+      const o = rawOpts[k];
+      const isText = typeof o === "string";
+      return {
+        i: Number(k),
+        label: isText ? o : String(o.label || ""),
+        count: (!isText && o.count) || 0,
+        rankSum: (!isText && o.rankSum) || 0,
+        rankVotes: (!isText && o.rankVotes) || 0
+      };
+    });
+
+  const rawWords = raw.words || {};
+  const words = Object.keys(rawWords)
+    .map(function (k) {
+      const w = rawWords[k] || {};
+      return { key: k, word: String(w.word || k), count: w.count || 0 };
+    })
+    .filter(function (w) { return w.count > 0; })
+    .sort(function (a, b) {
+      return (b.count - a.count) || a.word.localeCompare(b.word);
+    });
+
+  /* `votes` is authoritative, but a hand-made node in the console may not carry
+     it, so derive a floor from whatever counters exist. */
+  let ballots = raw.votes || 0;
+  if (type === "choice" || type === "knowledge") {
+    ballots = Math.max(ballots, options.reduce(function (s, o) { return s + o.count; }, 0));
+  } else if (type === "ranking") {
+    options.forEach(function (o) { ballots = Math.max(ballots, o.rankVotes); });
+  } else {
+    ballots = Math.max(ballots, words.reduce(function (s, w) { return s + w.count; }, 0));
+  }
+
+  return {
+    id: id,
+    type: type,
+    phase: phase,
+    question: String(raw.question || ""),
+    options: options,
+    words: words,
+    ballots: ballots,
+    wordLimit: raw.wordLimit || 1,
+    correctIndex: revealed && typeof raw.correctIndex === "number" ? raw.correctIndex : -1,
+    explain: revealed ? String(raw.explain || "") : "",
+    libId: String(raw.libId || ""),
+    ts: raw.ts || 0,
+    openedTs: raw.openedTs || 0,
+    closedTs: raw.closedTs || 0
+  };
+}
+
+/* Live, then staged, then closed. The poll the room is voting on belongs at the
+   top of the screen, because that is where a phone held at chest height is
+   already pointing. */
+const POLL_PHASE_RANK = { live: 0, staged: 1, closed: 2 };
+
+function sortPolls(list) {
+  return list.slice().sort(function (a, b) {
+    const d = POLL_PHASE_RANK[a.phase] - POLL_PHASE_RANK[b.phase];
+    if (d !== 0) return d;
+    if (a.phase === "closed") return (b.closedTs || 0) - (a.closedTs || 0);
+    return (b.ts || 0) - (a.ts || 0);
+  });
+}
+
+function usePolls(isAdmin) {
+  const [polls, setPolls] = useState([]);
+  const [ready, setReady] = useState(!FB.ok);
+
+  useEffect(function () {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("polls");
+    const handler = function (snap) {
+      const all = snap.val() || {};
+      setPolls(Object.keys(all)
+        .filter(function (id) { return all[id]; })
+        .map(function (id) { return normalizePoll(id, all[id], isAdmin); }));
+      setReady(true);
+    };
+    ref.on("value", handler);
+    return function () { ref.off("value", handler); };
+  }, [isAdmin]);
+
+  return { polls: polls, ready: ready };
+}
+
+/* The starter library. Fetched only once a crew member opens the picker, so an
+   attendee's phone never pulls a file it has no use for. */
+function useLibrary(open) {
+  const [state, setState] = useState({ status: "idle", polls: [], reason: "" });
+
+  useEffect(function () {
+    if (!open || state.status !== "idle") return;
+    let live = true;
+    setState({ status: "loading", polls: [], reason: "" });
+    fetch("data/polls.json", { cache: "no-cache" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("The file returned " + res.status + ".");
+        return res.json();
+      })
+      .then(function (data) {
+        if (!live) return;
+        setState({ status: "ready", polls: (data && data.polls) || [], reason: "" });
+      })
+      .catch(function (err) {
+        if (!live) return;
+        setState({
+          status: "failed", polls: [],
+          reason: (err && err.message) || String(err)
+        });
+      });
+    return function () { live = false; };
+  }, [open]);
+
+  return state;
+}
+
+/* ------------------------------------------------------------- writes */
+
+function castChoiceVote(poll, index) {
+  const bumps = { votes: 1 };
+  bumps["options/" + index + "/count"] = 1;
+  return pollWrite(FB.db.ref("polls/" + poll.id), bumps, null);
+}
+
+/* One ballot adds its 1-based position to every option's rankSum and one to
+   every option's rankVotes, so each option's average is self-consistent even if
+   a write lands late. */
+function castRankingVote(poll, order) {
+  const bumps = { votes: 1 };
+  order.forEach(function (optIndex, pos) {
+    bumps["options/" + optIndex + "/rankSum"] = pos + 1;
+    bumps["options/" + optIndex + "/rankVotes"] = 1;
+  });
+  return pollWrite(FB.db.ref("polls/" + poll.id), bumps, null);
+}
+
+function castWordVote(poll, display) {
+  const key = wordKey(display);
+  if (!key) return Promise.resolve();
+  const bumps = { votes: 1 };
+  bumps["words/" + key + "/count"] = 1;
+  const sets = {};
+  sets["words/" + key + "/word"] = display;
+  return pollWrite(FB.db.ref("polls/" + poll.id), bumps, sets);
+}
+
+function createPoll(draft) {
+  const body = {
+    question: draft.question,
+    type: draft.type,
+    on: false,
+    votes: 0,
+    ts: serverStamp()
+  };
+
+  if (draft.type === "wordcloud") {
+    body.wordLimit = draft.wordLimit || 1;
+  } else {
+    body.options = draft.options.map(function (label) {
+      return draft.type === "ranking"
+        ? { label: label, rankSum: 0, rankVotes: 0 }
+        : { label: label, count: 0 };
+    });
+  }
+
+  if (draft.type === "knowledge") {
+    body.correctIndex = draft.correctIndex;
+    if (draft.explain) body.explain = draft.explain;
+  }
+
+  if (draft.libId) body.libId = draft.libId;
+
+  return FB.db.ref("polls").push().set(body);
+}
+
+function setPollOn(poll, on) {
+  const upd = { on: on };
+  if (on) {
+    if (!poll.openedTs) upd.openedTs = serverStamp();
+    upd.closedTs = null;
+  } else {
+    upd.closedTs = serverStamp();
+  }
+  return FB.db.ref("polls/" + poll.id).update(upd);
+}
+
+/* ------------------------------------------------------------ results */
+
+/* One row shape for every type that has options, so the card body and the crew
+   panel read the same numbers out of the same function.
+   Choice and knowledge hold the order the crew typed, because the room just
+   looked at those buttons in that order. Ranking sorts by average rank, since
+   that ordering is the result. */
+function resultRows(poll, mine) {
+  if (poll.type === "ranking") {
+    const n = poll.options.length || 1;
+    const scored = poll.options.map(function (o) {
+      return Object.assign({}, o, { avg: o.rankVotes ? o.rankSum / o.rankVotes : 0 });
+    });
+    scored.sort(function (a, b) {
+      if (a.rankVotes && b.rankVotes) return (a.avg - b.avg) || (a.i - b.i);
+      if (a.rankVotes) return -1;
+      if (b.rankVotes) return 1;
+      return a.i - b.i;
+    });
+    return scored.map(function (o) {
+      return {
+        key: o.i,
+        label: o.label,
+        /* An average of 1 is a full bar, an average of last place is one nth.
+           Shorter average, longer bar, which is the way round people read it. */
+        pct: o.rankVotes ? Math.round(((n + 1 - o.avg) / n) * 100) : 0,
+        note: o.rankVotes ? "avg " + o.avg.toFixed(1) : "no votes",
+        mine: !!(mine && mine.order && mine.order[0] === o.i),
+        right: false
+      };
+    });
+  }
+
+  const total = poll.options.reduce(function (s, o) { return s + o.count; }, 0);
+  return poll.options.map(function (o) {
+    const pct = total ? Math.round((o.count / total) * 100) : 0;
+    return {
+      key: o.i,
+      label: o.label,
+      pct: pct,
+      note: pct + "% · " + o.count,
+      mine: !!(mine && typeof mine.i === "number" && mine.i === o.i),
+      right: poll.type === "knowledge" && poll.correctIndex === o.i
+    };
+  });
+}
+
+function ResultBars({ rows }) {
+  return (
+    <div className="cv-res">
+      {rows.map(function (r) {
+        return (
+          <div
+            key={r.key}
+            className={"cv-bar" + (r.mine ? " cv-bar--mine" : "") + (r.right ? " cv-bar--right" : "")}
+          >
+            <span className="cv-bar__fill" style={{ width: r.pct + "%" }} aria-hidden="true"></span>
+            <span className="cv-bar__lab">
+              {r.mine ? (
+                <span className="cv-bar__mark" aria-hidden="true">{"✓"}</span>
+              ) : null}
+              {r.right ? (
+                <span className="cv-bar__mark" aria-hidden="true">{"★"}</span>
+              ) : null}
+              <span>{r.label}</span>
+              {r.mine ? <span className="sr-only">Your pick.</span> : null}
+              {r.right ? <span className="sr-only">Right answer.</span> : null}
+            </span>
+            <span className="cv-bar__n t-data">{r.note}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------- bodies */
+
+function OptionButtons({ poll, onVote }) {
+  return (
+    <div className="cv-opts">
+      {poll.options.map(function (o) {
+        return (
+          <button key={o.i} className="cv-opt" onClick={function () { onVote(o.i); }}>
+            <span className="cv-opt__t">{o.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function ChoiceBody({ poll, mine, onVote }) {
+  const showResults = !!mine || poll.phase === "closed";
+  if (!showResults) return <OptionButtons poll={poll} onVote={onVote} />;
+  return <ResultBars rows={resultRows(poll, mine)} />;
+}
+
+/* The split stays under wraps until the crew closes the poll. Before that a
+   voter sees their own pick filled scarlet and nothing else, because a bar
+   chart with one option at 80% gives the answer away as surely as a gold star
+   would. */
+function KnowledgeBody({ poll, mine, onVote }) {
+  const closed = poll.phase === "closed";
+
+  if (!mine && !closed) return <OptionButtons poll={poll} onVote={onVote} />;
+
+  if (!closed) {
+    return (
+      <div>
+        <div className="cv-opts">
+          {poll.options.map(function (o) {
+            const isMine = mine.i === o.i;
+            return (
+              <div
+                key={o.i}
+                className={"cv-opt cv-opt--flat" + (isMine ? " cv-opt--mine" : "")}
+              >
+                {isMine ? (
+                  <span className="cv-opt__tick" aria-hidden="true">{"✓"}</span>
+                ) : null}
+                <span className="cv-opt__t">{o.label}</span>
+              </div>
+            );
+          })}
+        </div>
+        <p className="cv-note">Locked in. The answer lands when the crew closes it.</p>
+      </div>
+    );
+  }
+
+  const rows = resultRows(poll, mine);
+  const total = poll.options.reduce(function (s, o) { return s + o.count; }, 0);
+  const right = poll.options.filter(function (o) { return o.i === poll.correctIndex; })[0];
+  const rightN = right ? right.count : 0;
+  const pct = total ? Math.round((rightN / total) * 100) : 0;
+  const gotIt = !!(mine && mine.i === poll.correctIndex);
+
+  return (
+    <div>
+      <ResultBars rows={rows} />
+      {right ? (
+        <p className="cv-score">
+          <span className="cv-score__k">The answer</span>
+          <span className="cv-score__n">{right.label}.</span>{" "}
+          <span className="t-data">{rightN}</span> of{" "}
+          <span className="t-data">{total}</span> got it, {pct}%.
+          {mine ? (gotIt ? " You had it." : " You missed this one.") : ""}
+        </p>
+      ) : (
+        <p className="cv-score">
+          <span className="cv-score__k">The answer</span>
+          Nobody recorded one on this poll, so there is nothing to grade against.
+        </p>
+      )}
+      {poll.explain ? <p className="cv-note">{poll.explain}</p> : null}
+    </div>
+  );
+}
+
+/* Fisher-Yates. The list is shuffled once per device so a ballot cast without
+   dragging anything cannot quietly agree with the order the crew typed. See
+   OPEN ITEMS 8.4. */
+function shuffled(list) {
+  const out = list.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const swap = out[i];
+    out[i] = out[j];
+    out[j] = swap;
+  }
+  return out;
+}
+
+function moveItem(arr, from, to) {
+  const next = arr.slice();
+  const held = next.splice(from, 1)[0];
+  next.splice(to, 0, held);
+  return next;
+}
+
+/* Drag to order, by pointer events, which is the one input model iOS Safari,
+   Android Chrome and a desktop mouse all agree on. HTML5 drag and drop does
+   not fire on a touchscreen at all, which is why it is not used here.
+
+   Up and down buttons ship alongside the grip, and they are not a fallback for
+   old browsers. Some people will not work out that a row can be dragged, and
+   the buttons are the only part of this control a keyboard can reach.
+
+   The row centres are measured once, on pointer down. Slots are found by
+   nearest centre rather than by dividing by a row height, so an option that
+   wraps onto two lines does not throw the arithmetic out. */
+function RankList({ options, onSubmit, busy }) {
+  const [order, setOrder] = useState(function () {
+    return shuffled(options.map(function (o) { return o.i; }));
+  });
+  const [drag, setDrag] = useState(null);
+  const listRef = useRef(null);
+  const centres = useRef(null);
+
+  const byIndex = {};
+  options.forEach(function (o) { byIndex[o.i] = o; });
+
+  /* Defensive: if the crew edits the options while somebody is mid-order, keep
+     what still exists and put anything new on the end. */
+  const safe = order.filter(function (i) { return byIndex[i]; });
+  options.forEach(function (o) { if (safe.indexOf(o.i) < 0) safe.push(o.i); });
+
+  const shown = drag ? moveItem(safe, drag.from, drag.target) : safe;
+
+  function onDown(e, pos) {
+    if (busy) return;
+    const list = listRef.current;
+    if (!list) return;
+    centres.current = Array.prototype.map.call(list.children, function (el) {
+      const r = el.getBoundingClientRect();
+      return r.top + r.height / 2;
+    });
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) { /* no capture */ }
+    setDrag({ from: pos, target: pos, y0: e.clientY, dy: 0 });
+  }
+
+  function onMove(e) {
+    if (!drag || !centres.current) return;
+    const list = centres.current;
+    let target = 0;
+    let best = Infinity;
+    for (let i = 0; i < list.length; i++) {
+      const d = Math.abs(list[i] - e.clientY);
+      if (d < best) { best = d; target = i; }
+    }
+    setDrag(function (prev) {
+      if (!prev) return prev;
+      return Object.assign({}, prev, {
+        target: target,
+        /* What the finger has travelled, less the distance the row has already
+           been carried by the list reordering under it. */
+        dy: (e.clientY - prev.y0) - (list[target] - list[prev.from])
+      });
+    });
+  }
+
+  function onUp(e) {
+    if (!drag) return;
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch (err) { /* fine */ }
+    setOrder(moveItem(safe, drag.from, drag.target));
+    setDrag(null);
+    centres.current = null;
+  }
+
+  function nudge(pos, dir) {
+    const to = pos + dir;
+    if (to < 0 || to >= safe.length) return;
+    setOrder(moveItem(safe, pos, to));
+  }
+
+  return (
+    <div>
+      <ol className={"cv-rank" + (drag ? " cv-rank--dragging" : "")} ref={listRef}>
+        {shown.map(function (optIndex, pos) {
+          const o = byIndex[optIndex];
+          const lifted = !!drag && pos === drag.target;
+          return (
+            <li
+              key={optIndex}
+              className={"cv-rank__row" + (lifted ? " is-lifted" : "")}
+              style={lifted ? { "--cv-dy": drag.dy + "px" } : null}
+            >
+              <span className="cv-rank__pos t-data" aria-hidden="true">{pos + 1}</span>
+              <span className="cv-rank__t">{o.label}</span>
+              <span className="cv-rank__ctl">
+                <button
+                  type="button"
+                  className="btn btn--tiny cv-nudge"
+                  onClick={function () { nudge(pos, -1); }}
+                  disabled={pos === 0 || busy}
+                  aria-label={"Move " + o.label + " up"}
+                >
+                  {"▲"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--tiny cv-nudge"
+                  onClick={function () { nudge(pos, 1); }}
+                  disabled={pos === shown.length - 1 || busy}
+                  aria-label={"Move " + o.label + " down"}
+                >
+                  {"▼"}
+                </button>
+                <button
+                  type="button"
+                  className="cv-grip"
+                  onPointerDown={function (e) { onDown(e, pos); }}
+                  onPointerMove={onMove}
+                  onPointerUp={onUp}
+                  onPointerCancel={onUp}
+                  aria-label={"Drag " + o.label + " to reorder"}
+                >
+                  <span aria-hidden="true">{"≡"}</span>
+                </button>
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+      <div className="tf__row">
+        <button
+          type="button"
+          className="btn btn--go"
+          disabled={busy}
+          onClick={function () { onSubmit(shown.slice()); }}
+        >
+          Lock in this order
+        </button>
+      </div>
+      <p className="cv-note">
+        Drag the handle, or use the arrows. One order per phone, so get it how you want it.
+      </p>
+    </div>
+  );
+}
+
+function RankingBody({ poll, mine, onVote, busy }) {
+  const showResults = !!mine || poll.phase === "closed";
+  if (!showResults) return <RankList options={poll.options} onSubmit={onVote} busy={busy} />;
+
+  const rows = resultRows(poll, mine);
+  const top = mine && mine.order
+    ? poll.options.filter(function (o) { return o.i === mine.order[0]; })[0]
+    : null;
+
+  return (
+    <div>
+      <ResultBars rows={rows} />
+      {top ? <p className="cv-note">You put <strong>{top.label}</strong> first.</p> : null}
+    </div>
+  );
+}
+
+function WordForm({ limit, onSubmit, busy }) {
+  const [text, setText] = useState("");
+  const [err, setErr] = useState("");
+
+  function submit(e) {
+    e.preventDefault();
+    const clean = cleanWord(text);
+    if (!clean) { setErr("Type something first."); return; }
+    if (clean.split(" ").length > limit) {
+      setErr(limit === 1 ? "One word. Pick the best one." : "Keep it to " + limit + " words.");
+      return;
+    }
+    if (!wordKey(clean)) { setErr("That will not travel. Try letters and numbers."); return; }
+    onSubmit(clean);
+  }
+
+  return (
+    <form className="tf" onSubmit={submit}>
+      <label className="tf__l">
+        <span>{limit === 1 ? "One word" : limit + " words at most"}</span>
+        <input
+          className="tf__in"
+          value={text}
+          maxLength={28}
+          autoComplete="off"
+          autoCapitalize="none"
+          spellCheck={false}
+          placeholder={limit === 1 ? "loud" : ""}
+          onChange={function (e) { setText(e.target.value); setErr(""); }}
+        />
+      </label>
+      {err ? <p className="cv-err">{err}</p> : null}
+      <div className="tf__row">
+        <button type="submit" className="btn btn--go" disabled={busy}>Send it up</button>
+      </div>
+    </form>
+  );
+}
+
+/* Sized by frequency against the loudest word, in em, so Display Mode scales
+   the whole cloud from one variable. Three colour tiers only: gold for the top
+   third, cream for the middle, dim for the tail. */
+function WordCloud({ words, mineKey }) {
+  if (!words.length) {
+    return <p className="cv-note">Nothing up yet. First word sets the tone.</p>;
+  }
+  const top = words[0].count || 1;
+  return (
+    <div className="cv-cloud">
+      {words.map(function (w) {
+        const share = w.count / top;
+        const tier = share > 0.66 ? " cv-word--hot" : share > 0.33 ? " cv-word--warm" : "";
+        const mine = mineKey && w.key === mineKey;
+        return (
+          <span
+            key={w.key}
+            className={"cv-word" + tier + (mine ? " cv-word--mine" : "")}
+            style={{ fontSize: (0.95 + share * 1.45).toFixed(2) + "em" }}
+            title={w.count + (w.count === 1 ? " vote" : " votes")}
+          >
+            {w.word}
+            {w.count > 1 ? <span className="cv-word__n t-data">{w.count}</span> : null}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+/* The cloud is the point, so it is on screen whether or not this phone has
+   voted. There is no right answer to spoil. */
+function CloudBody({ poll, mine, onVote, busy }) {
+  return (
+    <div>
+      {!mine && poll.phase === "live" ? (
+        <WordForm limit={poll.wordLimit} onSubmit={onVote} busy={busy} />
+      ) : null}
+      {mine ? <p className="cv-note">You said <strong>{mine.w}</strong>.</p> : null}
+      <WordCloud words={poll.words} mineKey={mine ? wordKey(mine.w) : null} />
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------- poll card */
+
+const CREW_LINE = {
+  staged: "Only crew can see this one. Putting it on air reaches every phone in about a second.",
+  live: "On air. Closing it stops the voting and shows the room the result.",
+  closed: "Closed. The room sees the final result. Opening it again keeps the votes already in."
+};
+
+function PollCard({ poll, now, isAdmin, mine, onVote, onSetOn, onDelete, busy }) {
+  const type = POLL_TYPE_BY_KEY[poll.type];
+  const phase = poll.phase;
+  const Body = poll.type === "knowledge" ? KnowledgeBody
+    : poll.type === "ranking" ? RankingBody
+    : poll.type === "wordcloud" ? CloudBody
+    : ChoiceBody;
+
+  const right = poll.correctIndex >= 0
+    ? poll.options.filter(function (o) { return o.i === poll.correctIndex; })[0]
+    : null;
+
+  const closedAt = poll.closedTs ? etParts(poll.closedTs) : null;
+
+  return (
+    <article
+      className={
+        "cv-card glow-card grille" +
+        (phase === "closed" ? " is-done" : "") +
+        (phase === "staged" ? " cv-card--staged" : "")
+      }
+    >
+      <div className="cv-head">
+        {phase === "live" ? (
+          <span className="onair">
+            <span className="onair__dot" aria-hidden="true"></span>On Air
+          </span>
+        ) : null}
+        {phase === "closed" ? <span className="cv-flag">Closed</span> : null}
+        {phase === "staged" ? (
+          <span className="cv-flag cv-flag--staged">
+            {"\u{1F512}"} Not on air yet
+          </span>
+        ) : null}
+        <span className="cv-kicker">{type.label}</span>
+      </div>
+
+      <h3 className="cv-q t-display">{poll.question}</h3>
+
+      <Body poll={poll} mine={mine} onVote={onVote} busy={busy} />
+
+      <p className="cv-foot">
+        <span>
+          {poll.ballots === 0 ? "No votes yet." : (
+            <React.Fragment>
+              <span className="cv-count t-data">{poll.ballots}</span>{" "}
+              {poll.ballots === 1 ? "vote" : "votes"}
+            </React.Fragment>
+          )}
+        </span>
+        {phase === "closed" && closedAt ? (
+          <span>Closed {closedAt.hhmm} {closedAt.ap}</span>
+        ) : null}
+        {isAdmin && phase === "live" && poll.openedTs ? (
+          <span>
+            On air for{" "}
+            <span className="t-data">{clock(Math.max(0, now - poll.openedTs))}</span>
+          </span>
+        ) : null}
+      </p>
+
+      {isAdmin ? (
+        <div className="cv-crew">
+          <p className="cv-crew__k">Crew only</p>
+
+          {poll.type === "knowledge" ? (
+            <p className="cv-note">
+              Right answer: <strong>{right ? right.label : "not set"}</strong>. The room
+              cannot see this line. Keep the crew panel off the projector.
+            </p>
+          ) : null}
+
+          {poll.type === "wordcloud" ? null : <ResultBars rows={resultRows(poll, mine)} />}
+
+          <div className="tf__row">
+            {phase === "live" ? (
+              <button
+                className="btn btn--kill"
+                disabled={busy}
+                onClick={function () { onSetOn(poll, false); }}
+              >
+                Close voting
+              </button>
+            ) : (
+              <button
+                className="btn btn--go"
+                disabled={busy}
+                onClick={function () { onSetOn(poll, true); }}
+              >
+                {phase === "staged" ? "Put it on air" : "Open it again"}
+              </button>
+            )}
+            <button
+              className="btn btn--tiny btn--kill"
+              disabled={busy}
+              onClick={function () { onDelete(poll); }}
+            >
+              Delete
+            </button>
+          </div>
+
+          <p className="cv-note">{CREW_LINE[phase]}</p>
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
+/* --------------------------------------------------------- crew: create */
+
+const BLANK_DRAFT = {
+  type: "choice",
+  question: "",
+  optionsText: "",
+  correctIndex: -1,
+  explain: "",
+  wordLimit: 1,
+  libId: ""
+};
+
+function parseOptions(text) {
+  return String(text || "")
+    .split("\n")
+    .map(function (line) { return line.trim(); })
+    .filter(function (line) { return line.length > 0; });
+}
+
+function LibraryList({ onPick }) {
+  const lib = useLibrary(true);
+  const [filter, setFilter] = useState("");
+
+  if (lib.status === "loading") return <p className="cv-note">Fetching the library.</p>;
+
+  if (lib.status === "failed") {
+    return (
+      <p className="cv-note">
+        The library did not load. {lib.reason} Type the question in instead, it all
+        works the same.
+      </p>
+    );
+  }
+
+  const needle = filter.trim().toLowerCase();
+  const rows = lib.polls.filter(function (p) {
+    if (!needle) return true;
+    return (String(p.question || "") + " " + String(p.session || "") + " " + String(p.type || ""))
+      .toLowerCase().indexOf(needle) >= 0;
+  });
+
+  return (
+    <div>
+      <p className="setnote">
+        Every question in the library is a draft. Nobody has approved one. Check with
+        Carol, Lisa, or whoever is running the session before you put it on air.
+      </p>
+
+      <label className="tf__l">
+        <span>Filter</span>
+        <input
+          className="tf__in"
+          value={filter}
+          placeholder="breakout, culture, thu"
+          onChange={function (e) { setFilter(e.target.value); }}
+        />
+      </label>
+
+      {!rows.length ? <p className="cv-note">Nothing matches that.</p> : null}
+
+      <ul className="cv-libl">
+        {rows.map(function (p) {
+          const t = POLL_TYPE_BY_KEY[p.type];
+          return (
+            <li key={p.id}>
+              <button className="cv-lib" onClick={function () { onPick(p); }}>
+                <span className="cv-lib__k">
+                  {(t ? t.label : p.type) + (p.session ? " · " + p.session : "")}
+                </span>
+                {p.question}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
+function PollForm({ onCreate, busy }) {
+  const [draft, setDraft] = useState(BLANK_DRAFT);
+  const [picked, setPicked] = useState(null);
+  const [libOpen, setLibOpen] = useState(false);
+  const [err, setErr] = useState("");
+
+  function set(k, v) {
+    setDraft(function (prev) { return Object.assign({}, prev, { [k]: v }); });
+    setErr("");
+  }
+
+  const opts = parseOptions(draft.optionsText);
+  const needsOptions = draft.type !== "wordcloud";
+
+  function pick(item) {
+    setDraft({
+      type: POLL_TYPE_BY_KEY[item.type] ? item.type : "choice",
+      question: String(item.question || ""),
+      optionsText: (item.options || []).join("\n"),
+      correctIndex: typeof item.correctIndex === "number" ? item.correctIndex : -1,
+      explain: String(item.explain || ""),
+      wordLimit: item.wordLimit || 1,
+      libId: String(item.id || "")
+    });
+    setPicked(item);
+    setLibOpen(false);
+    setErr("");
+  }
+
+  function submit(e) {
+    e.preventDefault();
+    const question = draft.question.trim();
+    if (!question) { setErr("It needs a question."); return; }
+    if (needsOptions && opts.length < 2) { setErr("Two answers at least, one per line."); return; }
+    if (draft.type === "knowledge" && (draft.correctIndex < 0 || draft.correctIndex >= opts.length)) {
+      setErr("Mark which answer is the right one.");
+      return;
+    }
+
+    onCreate({
+      type: draft.type,
+      question: question,
+      options: opts,
+      correctIndex: draft.type === "knowledge" ? draft.correctIndex : -1,
+      explain: draft.explain.trim(),
+      wordLimit: draft.wordLimit,
+      libId: draft.libId
+    });
+
+    setDraft(BLANK_DRAFT);
+    setPicked(null);
+  }
+
+  return (
+    <section className="cv-new glow-card">
+      <h3 className="cv-new__h t-display">New poll</h3>
+      <p className="cv-new__hint">
+        It starts off air. Put it up when the presenter asks for it.
+      </p>
+
+      <div className="tf__row" style={{ marginTop: "12px" }}>
+        <button
+          type="button"
+          className={"btn" + (libOpen ? " btn--go" : "")}
+          onClick={function () { setLibOpen(!libOpen); }}
+        >
+          {libOpen ? "Hide the library" : "Load one from the library"}
+        </button>
+      </div>
+
+      {libOpen ? <LibraryList onPick={pick} /> : null}
+
+      <form className="tf" onSubmit={submit}>
+        <div className="dayrow" role="tablist" aria-label="Poll type">
+          {POLL_TYPES.map(function (t) {
+            return (
+              <button
+                key={t.key}
+                type="button"
+                role="tab"
+                className="daypill"
+                aria-selected={draft.type === t.key}
+                onClick={function () { set("type", t.key); }}
+              >
+                <span className="daypill__n">{t.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <p className="cv-new__hint">{POLL_TYPE_BY_KEY[draft.type].hint}</p>
+
+        <label className="tf__l" style={{ marginTop: "10px" }}>
+          <span>Question</span>
+          <input
+            className="tf__in"
+            value={draft.question}
+            placeholder="What does the room think?"
+            onChange={function (e) { set("question", e.target.value); }}
+          />
+        </label>
+
+        {needsOptions ? (
+          <label className="tf__l">
+            <span>{draft.type === "ranking" ? "Items to order, one per line" : "Answers, one per line"}</span>
+            <textarea
+              className="tf__in cv-ta"
+              value={draft.optionsText}
+              rows={4}
+              placeholder={"First answer\nSecond answer"}
+              onChange={function (e) { set("optionsText", e.target.value); }}
+            />
+          </label>
+        ) : (
+          <label className="tf__l">
+            <span>Words allowed in one answer</span>
+            <input
+              className="tf__in t-data"
+              inputMode="numeric"
+              value={String(draft.wordLimit)}
+              onChange={function (e) {
+                const n = parseInt(e.target.value.replace(/\D/g, ""), 10);
+                set("wordLimit", n > 0 && n < 6 ? n : 1);
+              }}
+            />
+          </label>
+        )}
+
+        {draft.type === "knowledge" ? (
+          <div>
+            <p className="cv-new__hint">
+              Which one is right. The room sees this the moment you close the poll,
+              and not one second before.
+            </p>
+            {!opts.length ? (
+              <p className="cv-note">Type the answers first.</p>
+            ) : (
+              <div className="dayrow" role="tablist" aria-label="Right answer">
+                {opts.map(function (label, i) {
+                  return (
+                    <button
+                      key={label + i}
+                      type="button"
+                      role="tab"
+                      className="daypill"
+                      aria-selected={draft.correctIndex === i}
+                      onClick={function () { set("correctIndex", i); }}
+                    >
+                      <span className="daypill__d t-display">{"#" + (i + 1)}</span>
+                      <span className="daypill__n">{label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+            <label className="tf__l" style={{ marginTop: "10px" }}>
+              <span>Why, optional. Shown on close</span>
+              <input
+                className="tf__in"
+                value={draft.explain}
+                onChange={function (e) { set("explain", e.target.value); }}
+              />
+            </label>
+          </div>
+        ) : null}
+
+        {picked && picked.crewNote ? (
+          <p className="cv-note">
+            <strong>From the library.</strong> {picked.crewNote}
+          </p>
+        ) : null}
+
+        {err ? <p className="cv-err">{err}</p> : null}
+
+        <div className="tf__row">
+          <button type="submit" className="btn btn--go" disabled={busy}>Create it</button>
+          <button
+            type="button"
+            className="btn btn--quiet"
+            onClick={function () { setDraft(BLANK_DRAFT); setPicked(null); setErr(""); }}
+          >
+            Clear
+          </button>
+        </div>
+      </form>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------- the tab */
+
+function CrowdVoteTab({ isAdmin, now }) {
+  const { polls, ready } = usePolls(isAdmin);
+  const [mine, setMine] = useState(function () { return readJSON(LS.pollvotes); });
+  const [busy, setBusy] = useState(false);
+
+  /* A staged poll is crew only, so it is filtered out before it renders rather
+     than hidden with CSS. */
+  const visible = sortPolls(
+    isAdmin ? polls : polls.filter(function (p) { return p.phase !== "staged"; })
+  );
+
+  const vote = useCallback(function (poll, payload) {
+    if (!FB.ok || poll.phase !== "live") return;
+
+    /* Read storage rather than state, so a second tab on the same phone cannot
+       double vote through a stale copy. */
+    const held = readJSON(LS.pollvotes);
+    if (held[poll.id]) return;
+
+    let record = null;
+    if (poll.type === "ranking") {
+      if (!payload || !payload.length) return;
+      record = { t: "ranking", order: payload };
+    } else if (poll.type === "wordcloud") {
+      if (!payload) return;
+      record = { t: "wordcloud", w: payload };
+    } else {
+      if (typeof payload !== "number") return;
+      record = { t: poll.type, i: payload };
+    }
+
+    /* Lock first, then write. A vote that fails to reach Firebase is a lost
+       vote. A lock that fails to land is a second vote from the same phone,
+       which is worse, and it is the one thing the acceptance test checks. */
+    held[poll.id] = record;
+    writeJSON(LS.pollvotes, held);
+    setMine(held);
+
+    if (poll.type === "ranking") castRankingVote(poll, payload);
+    else if (poll.type === "wordcloud") castWordVote(poll, payload);
+    else castChoiceVote(poll, payload);
+  }, []);
+
+  const create = useCallback(function (draft) {
+    if (!FB.ok) return;
+    setBusy(true);
+    createPoll(draft)
+      .then(function () { setBusy(false); })
+      .catch(function () { setBusy(false); });
+  }, []);
+
+  const setOn = useCallback(function (poll, on) {
+    if (!FB.ok) return;
+    setBusy(true);
+    setPollOn(poll, on)
+      .then(function () { setBusy(false); })
+      .catch(function () { setBusy(false); });
+  }, []);
+
+  const remove = useCallback(function (poll) {
+    if (!FB.ok) return;
+    const label = poll.question.length > 48 ? poll.question.slice(0, 48) + "…" : poll.question;
+    if (!window.confirm("Delete this poll and every vote in it?\n\n" + label)) return;
+    FB.db.ref("polls/" + poll.id).remove();
+  }, []);
+
   return (
     <TabFrame tabKey="vote">
-      <Empty>No polls open. Nothing to vote on until the room warms up.</Empty>
+      {isAdmin ? <PollForm onCreate={create} busy={busy} /> : null}
+
+      {!FB.ok ? (
+        <Empty>
+          Live updates are off, so voting is off with them. Nothing to do here until that
+          is sorted.
+        </Empty>
+      ) : null}
+
+      {FB.ok && !ready ? <Empty>Checking the desk for polls.</Empty> : null}
+
+      {FB.ok && ready && !visible.length ? (
+        <Empty>No polls open. Nothing to vote on until the room warms up.</Empty>
+      ) : null}
+
+      {visible.length ? (
+        <div className="cv-list">
+          {visible.map(function (p) {
+            return (
+              <PollCard
+                key={p.id}
+                poll={p}
+                now={now}
+                isAdmin={isAdmin}
+                mine={mine[p.id] || null}
+                busy={busy}
+                onVote={function (payload) { vote(p, payload); }}
+                onSetOn={setOn}
+                onDelete={remove}
+              />
+            );
+          })}
+        </div>
+      ) : null}
+
       <BuildNote isAdmin={isAdmin} task="T2.4">
-        Four poll types: multiple choice, knowledge check that reveals the split
-        on close, ranking by drag, and a live word cloud. One vote per device.
+        Polls live at polls/&#123;id&#125; in Firebase. A new poll starts off air and only crew
+        can see it. Ranking drags by touch and by the arrow buttons, and the list is shuffled
+        per device so a ballot cast without dragging does not just agree with the order you
+        typed. A knowledge check's right answer is stripped out of the data an attendee's phone
+        holds until you close the poll. Every question in data/polls.json is a draft nobody has
+        approved. One vote per phone, held in mm26_pollvotes.
       </BuildNote>
     </TabFrame>
   );

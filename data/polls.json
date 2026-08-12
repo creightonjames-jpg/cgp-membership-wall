@@ -1,0 +1,156 @@
+{
+  "_note": "DRAFT POLL LIBRARY. Nobody has approved these. Every question carries \"draft\": true and none of them should go on a screen until Carol, Lisa, or the presenter running that session says yes. Questions are drafted against data/agenda.json and nothing else. No statistic, no benchmark, and no club result is used as an answer anywhere in this file, because inventing one would put a fake number in front of the room.",
+  "meta": {
+    "task": "ROADMAP T3.5, starter library. Crowd Vote itself is T2.4.",
+    "types": {
+      "choice": "Multiple choice. Opinion, no right answer. options is an array of strings, rendered as full width buttons.",
+      "knowledge": "Knowledge check. Carries correctIndex, a zero based index into options, and explain, which is only shown once admin closes the poll. Every correct answer in here is a fact already in the repo, taken from data/agenda.json or the VENUES table in index.html. If a source changes, re-check the answer.",
+      "ranking": "Drag to order. options is the list to be ordered. Results are an averaged rank, so keep the list short. Ranking seven things on a phone is a slog.",
+      "wordcloud": "One word answers, rendered live. options is empty. wordLimit is how many words a single answer may hold."
+    },
+    "fields": {
+      "id": "Library id. Stable, so a question can be swapped without losing what it was.",
+      "type": "One of the four above.",
+      "session": "Session key from data/agenda.json, so admin can see which session a question belongs to. Empty means it is not tied to one session.",
+      "question": "What the room reads.",
+      "options": "Answers or items. Empty for wordcloud.",
+      "correctIndex": "knowledge only.",
+      "explain": "knowledge only. Shown on close, never before.",
+      "draft": "Always true in this file. Approval is a person saying yes, not a default.",
+      "crewNote": "Why the question exists and what still needs a decision. Crew only, never shown to the room."
+    },
+    "openQuestions": [
+      "Wednesday evening: Jim resolved the Smash Park versus hotel conflict in favour of Smash Park on Aug 11 (T1.1a). The denim question below leans on that and on the attire wording, which is still open at T1.1b. Re-check both before publishing it.",
+      "The seven Core Fundamentals breakout titles are used verbatim as answer options in three questions. If the breakout list changes, those three change with it.",
+      "Nothing is drafted for the Vault drops, the Cares Cup, or the Awards Show. Those want live polls written in the room, not a library."
+    ]
+  },
+  "polls": [
+    {
+      "id": "wed-breakout-pick",
+      "type": "choice",
+      "session": "wed-0945-breakouts",
+      "question": "Seven breakouts. Which one does your club need most?",
+      "options": [
+        "Backstage Reality Check Scenarios",
+        "Friends Inviting Friends Environment",
+        "Sponsorship Culture",
+        "Enrollment Process",
+        "Retention Strategy",
+        "Ambassador Committee",
+        "Operational Excellence"
+      ],
+      "draft": true,
+      "crewNote": "Options are the seven breakout titles verbatim from the agenda. Do not reword them, the room is about to see the same words on the schedule. Good opener for the 9:15 Core Fundamentals session, because it tells the breakout leads where the interest is before anyone splits up."
+    },
+    {
+      "id": "wed-breakout-count",
+      "type": "knowledge",
+      "session": "wed-0945-breakouts",
+      "question": "How many Core Fundamentals breakouts are on Wednesday?",
+      "options": ["Five", "Six", "Seven", "Eight"],
+      "correctIndex": 2,
+      "explain": "Seven. They are all on The Setlist under the 9:45 AM card.",
+      "draft": true,
+      "crewNote": "Deliberately easy. It is a warm-up that teaches people the voting control works, and it points them at The Setlist. Answer comes from data/agenda.json."
+    },
+    {
+      "id": "wed-cowbell-time",
+      "type": "knowledge",
+      "session": "wed-0820-cowbell",
+      "question": "What time is Wednesday's Opening Cowbell?",
+      "options": ["7:30 AM", "8:00 AM", "8:20 AM", "8:45 AM"],
+      "correctIndex": 2,
+      "explain": "8:20 AM, with the Tenure Awards. 7:30 is breakfast. 8:45 is Opening Remarks.",
+      "draft": true,
+      "crewNote": "Logistics dressed up as a poll. Best used Tuesday night at the mixer, not Wednesday morning, when knowing it is already too late."
+    },
+    {
+      "id": "week-denim-day",
+      "type": "knowledge",
+      "session": "wed-1800-smash-park",
+      "question": "Which day can you get away with denim?",
+      "options": ["Tuesday", "Wednesday", "Thursday", "None of them"],
+      "correctIndex": 1,
+      "explain": "Wednesday. Denim is in for the Dress-Up Day costumes and fine at the Evening Outing. Tuesday and Thursday are no denim.",
+      "draft": true,
+      "crewNote": "Leans on two things that are not fully settled: the attire wording at T1.1b and the Smash Park call at T1.1a. Confirm with Carol before this one runs, because the printed flier in the welcome packet may say something different."
+    },
+    {
+      "id": "wed-culture-teller",
+      "type": "choice",
+      "session": "wed-1515-culture-story",
+      "question": "Your club's culture story. Who tells it best right now?",
+      "options": [
+        "The members",
+        "The team",
+        "The golf itself",
+        "Nobody yet"
+      ],
+      "draft": true,
+      "crewNote": "Options are drafted, not from any source. Whoever runs Your Club's Culture Story should approve or replace them. \"Nobody yet\" is there on purpose, because a poll with no honest answer gets ignored."
+    },
+    {
+      "id": "wed-culture-word",
+      "type": "wordcloud",
+      "session": "wed-1515-culture-story",
+      "question": "One word for how your club feels on a Saturday morning.",
+      "options": [],
+      "wordLimit": 1,
+      "draft": true,
+      "crewNote": "Concrete on purpose. Asking for one word about culture gets you \"family\" from thirty clubs. Asking about Saturday morning gets you something a presenter can use."
+    },
+    {
+      "id": "thu-lead-source",
+      "type": "choice",
+      "session": "thu-0930-behaviors",
+      "question": "What creates most of your leads today?",
+      "options": [
+        "Members introducing friends",
+        "Sponsorship asks",
+        "Events with guests",
+        "Walk-ins and calls",
+        "Nothing repeatable yet"
+      ],
+      "draft": true,
+      "crewNote": "Drafted to open the 9:30 session, What behaviors create leads. The options are mine, not the source's, so the presenter should approve or swap them. Keep the last option. It is the honest answer for some rooms and the result is worthless without it."
+    },
+    {
+      "id": "thu-loss-rank",
+      "type": "ranking",
+      "session": "thu-1045-rotations",
+      "question": "Rank these by where your club loses the most people.",
+      "options": [
+        "Friends Inviting Friends Environment",
+        "Sponsorship Culture",
+        "Enrollment Process",
+        "Retention Strategy"
+      ],
+      "draft": true,
+      "crewNote": "Four of the seven breakout titles, verbatim. Four rather than seven because dragging seven rows on a phone is a slog and half the room gives up. Swap which four freely. Do not add an item that is not one of the seven."
+    },
+    {
+      "id": "thu-afternoon-rank",
+      "type": "ranking",
+      "session": "thu-1515-palmer-advantage",
+      "question": "Rank Thursday afternoon by what you want the most time on.",
+      "options": [
+        "Palmer Advantage",
+        "Business Development",
+        "Specific Group Fireside Chat"
+      ],
+      "draft": true,
+      "crewNote": "Three session titles verbatim off the agenda. Run it Thursday morning and the afternoon can flex. Run it Thursday afternoon and it is a survey nobody can act on."
+    },
+    {
+      "id": "thu-takeaway-word",
+      "type": "wordcloud",
+      "session": "thu-1430-wrap-up",
+      "question": "One word for what you are taking home.",
+      "options": [],
+      "wordLimit": 1,
+      "draft": true,
+      "crewNote": "Closes Wrap-Up and Follow-Up. Pair it with Liner Notes rather than replacing it: the cloud is the picture of the room, Liner Notes is the sentence somebody can act on."
+    }
+  ]
+}
