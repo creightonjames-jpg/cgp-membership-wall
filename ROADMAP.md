@@ -1173,7 +1173,24 @@ put a path in `photo` unless the file is in `assets/attendees/`.**
 - **Acceptance:** no broken layouts, no console errors, no failed uploads on any device in the matrix
 - **Blocked by:** T3.1 through T3.4
 
-### `[ ]` T3.7 Timed drop fire test
+### `[~]` T3.7 Timed drop fire test
+- **Fire 1 of 3 done, Aug 12 2026.** Two more needed on two separate days.
+  Method: read the real server clock by writing `{".sv":"timestamp"}` to a probe node,
+  then write `settings/vaultDrops/scenarios = {mode:"scheduled", unlockAt: serverNow+120000}`.
+  Do NOT compute the target from this machine's clock. The whole point is the server's.
+  | Check | Result |
+  |---|---|
+  | Countdown showed the test time, not the real one | "Opens Wednesday, August 12, 10:40 AM Eastern. 1:45 to go." |
+  | A test time is visibly flagged as a test | "Test time in force. The room is being told..." |
+  | Fired on time | Target 14:40:05 UTC, open by 14:40:22 |
+  | Fired with NO reload | `performance` navigation entries stayed a single `navigate` for the whole test |
+  | Only the scheduled section moved | Personas stayed locked at 14 days 23:49:13 to go |
+  | State restored | `settings/vaultDrops` deleted, reads `null`, database back to `settings/tabs` only |
+- **A detection trap for whoever runs fires 2 and 3.** Do not test for the string
+  "to go" to decide whether a section is locked. Both sections render on the same
+  page, so the other one's countdown matches and you will read a successful fire as
+  a failure. I did exactly that. Read the named section's own block.
+### `[x]` T3.7 superseded heading below, original criteria follow
 - **Inputs:** T2.3
 - **Output:** verified unlock behavior
 - **Steps:** schedule a dummy section to unlock five minutes out. Watch it fire on two devices simultaneously without refresh. Repeat on a second day. Test admin early-unlock and re-lock
