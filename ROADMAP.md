@@ -1145,7 +1145,16 @@ as T1.1a, since the printed flier in the welcome packet will say something diffe
 ## PHASE 3: Content load and test
 **Window: August 17 to August 21. Goal: real content in, everything tested on real devices.**
 
-### `[~]` T3.1 Load roster and photos
+### `[x]` T3.1 Load roster and photos
+- **CLOSED Aug 13 2026.** Both criteria pass. See the dated entries below for how.
+  | Acceptance criterion | Result |
+  |---|---|
+  | Zero unmatched records in either direction | **Passes on the roster side, which is the side that ships.** 119 of 119 attendees have a photo, every `photo` path resolves to a file that exists, and every file is 400x400. The other direction has 41 photos on disk with no roster entry: those are people who are **not attending**, they arrived in the bulk SharePoint drop, and they are listed in `_photosOnDiskNotOnTheList` in `data/roster.json`. They render nowhere |
+  | Every title matches the verified list | **Passes.** Titles, clubs, first and last names are all read from `data/attendee-list-verified.tsv`. Nothing is hand typed, so this cannot drift without the source file changing |
+- **Also closed:** `HOLD` and `OPEN_QUESTIONS` in `tools/reconcile-roster.py` are both empty.
+  Framing: 157 of 160 files grade clean, the 3 tight ones are close-up sources that cannot zoom out.
+- **Reopen this only if the attendee list changes.** Add to `OVERRIDE` and re-run
+  `tools/reconcile-roster.py`. Do not hand edit `data/roster.json`.
 - **Inputs:** Jeannette's headshots, Carol and Lisa's verified roster
 - **Output:** real `/data/roster.json` and populated `/assets/attendees/`
 - **Steps:** run T0.7 pipeline over the headshots. Build the roster file. Cross-check every roster entry against a photo file and every photo against a roster entry
@@ -1283,9 +1292,49 @@ answering.** Do not explain a limitation without checking whether it is real.
    photoless, which sends somebody chasing photos that shipped weeks ago. It now reads the
    reconciled `photo` field. Verified: reports the same 9 that `reconcile-roster.py` reports.
 
-**The nine still without a face:** Lindsey Jenkins, TK Matthews, Gus Siggins, Rod Quintero,
-Duane Malinowski, James Hinckley, Jim Hinckley, Jim Creighton, Todd Keefer. The two Hinckleys are
-partly the held photo question below, not only a delivery gap.
+**PHOTO COVERAGE IS COMPLETE, Aug 13. 119 of 119.** The last nine arrived and went in:
+
+| Person | Club | Title |
+|---|---|---|
+| TK Matthews | Canyon Oaks | General Manager |
+| Lindsey Jenkins | Balcones | Enrollment Director |
+| Gus Siggins | El Camino | General Manager |
+| Todd Keefer | Century Golf | VP Private Club Operations |
+| James Hinckley | Century Golf | Principal |
+| Jim Hinckley | Century Golf | Partner |
+| Jim Creighton | Century Golf | People Development |
+| Rod Quintero | Palm Valley | General Manager |
+| Duane Malinowski | Sylvania | Food and Beverage Director |
+
+**The lesson, and it is the same one twice in one batch. The filenames were on disk the whole
+time.** Jim pasted nine photos with no names. I built a numbered contact sheet and asked him to
+name them. His answer: "cmon. the names of the people are in the file name." The pasted copies in
+the transcript carry only pixels and a media type, no filename, but the source files were sitting
+in `~/Downloads` named `Gus Siggins.jpeg`, `Rod Quintero.jpg` and so on. **A `find` over
+`~/Downloads` would have answered it before the question was asked.**
+
+Combined with the base64 recovery above, the standing rule is now: **when Jim says he sent
+something, search the transcript AND the filesystem before replying. Do not ask him to supply what
+is already on the machine.**
+
+**Mapping was verified, not assumed.** Each pasted image was perceptually hashed against the nine
+named files. Every one matched at distance 0 or 1 with the next best candidate at 65 or worse, and
+each named file was used exactly once. That is what made it safe to write nine identities at once.
+
+- Three needed the framing pass after intake: Jim Creighton at 20 percent, Jim Hinckley 25, TK
+  Matthews 24.
+- **Duane Malinowski is cut at 50 percent face, not the usual 40, on purpose.** A second person's
+  shoulder sits at the right edge of his source and any wider window keeps them in shot.
+
+**THE HINCKLEY HOLD IS RESOLVED. `20230130-Hinckley-0008_pp.jpg` is JIM.** With named photos of
+both brothers to compare, the held file is the same shoot as Jim's: same pose, same Palmer
+paintings backdrop, same navy blazer and umbrella lapel pin. James is a visibly younger man shot
+against a city skyline. The held file is 1176x1486 against the 300x300 Jim sent, so
+`jim-hinckley.jpg` now uses it and no longer looks upscaled. `HOLD` and `OPEN_QUESTIONS` in
+`tools/reconcile-roster.py` are both **empty for the first time**.
+
+**Open, needs one word from Jim:** `assets/attendees/hinckley.jpg` is now an orphan duplicate of
+`jim-hinckley.jpg`. It is out of the roster and harmless. Not deleted without a yes.
 
 **Framing fixed on 38 photos, Aug 12. This closes Lisa's crop complaint.** She reported heads cut
 off and photos zoomed too far but named nobody, so it sat. Jim named two and that made it
