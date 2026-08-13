@@ -45,11 +45,9 @@ OVERRIDE = {
 # Photo slugs withheld from matching because the filename does not say WHICH
 # person it is, and two people on the list could claim it. A missing face is a
 # gap. A wrong face under a real name is a mistake somebody notices in the room.
-HOLD = {
-    "hinckley": ("20230130-Hinckley-0008_pp.jpg says only Hinckley, and Jim "
-                 "Hinckley and James Hinckley are two different people. "
-                 "SharePoint also holds a separate James Hinckley.jpg."),
-}
+#
+# Empty since Aug 13 2026. The one entry, "hinckley", is resolved: see RESOLVED.
+HOLD = {}
 
 # Rows in the list that are the same human as another row. Keyed by the row to
 # drop, valued by the row to keep, so a title clash gets decided once.
@@ -76,14 +74,18 @@ RESOLVED = [
     {"q": "Are Jim Hinckley and James Hinckley the same person?",
      "a": "NO. Jim, Aug 12 2026: two different people. Both stay in the roster "
           "as separate records. Do NOT collapse them."},
+    {"q": "Who is in 20230130-Hinckley-0008_pp.jpg, Jim Hinckley or James "
+          "Hinckley? The filename does not say.",
+     "a": "JIM Hinckley. Settled Aug 13 2026 once Jim sent named photos of both "
+          "brothers. The held file is the same shoot as his Jim Hinckley.jpg: "
+          "same pose, same Palmer paintings backdrop, same navy blazer and "
+          "umbrella lapel pin. James is visibly a different, younger man shot "
+          "against a city skyline. The held file is 1176x1486 against the 300x300 "
+          "Jim sent, so it is what jim-hinckley.jpg now uses."},
 ]
 
-OPEN_QUESTIONS = [
-    {"q": "Who is in 20230130-Hinckley-0008_pp.jpg, Jim Hinckley or James "
-          "Hinckley? The filename does not say and they are two people.",
-     "effect": "The photo is HELD BACK, so both Hinckleys currently show without "
-               "one rather than risk the wrong face under the wrong name."},
-]
+# Empty. Every question raised during T3.1 is answered above.
+OPEN_QUESTIONS = []
 
 
 def slug(s):

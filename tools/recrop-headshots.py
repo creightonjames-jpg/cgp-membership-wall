@@ -60,7 +60,9 @@ QUALITY = 82
 SOURCE_DIRS = [
     os.path.expanduser("~/Downloads/OneDrive_1_8-11-2026"),
     os.path.expanduser("~/Downloads/OneDrive_1_8-11-2026/Newbies Headshots"),
+    os.path.expanduser("~/Downloads"),          # Jim drops named one-offs straight in here
     os.path.join(REPO, "incoming", "headshots", "from-thread"),
+    os.path.join(REPO, "incoming", "headshots", "named"),
 ]
 SRC_EXT = {".jpg", ".jpeg", ".png", ".heic", ".heif", ".webp", ".tif", ".tiff", ".bmp", ".gif"}
 
