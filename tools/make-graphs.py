@@ -103,6 +103,64 @@ def parse_charts(path):
     return out
 
 
+def parse_fwwl(path):
+    """Club name -> the club's FWWL number, read out of the DRAWINGS.
+
+    FWWL is Full With a Wait List, the membership cap. Jim, Aug 13 2026: it belongs
+    on every membership graph as a line.
+
+    It is not a chart series and never was, which is why it went missing when these
+    graphs were redrawn. In the workbook somebody drew a straight line across each
+    membership chart by hand and put two text boxes beside it, one reading "FWWL"
+    and one holding the number. That lives in xl/drawings/, not in the chart XML, so
+    a redraw from series data cannot see it.
+
+    Reading the LABEL rather than the line's pixel anchor is deliberate. The anchor
+    would have to be converted from EMU offsets back through the plot area to a
+    value, which is guesswork with a membership cap as the output. The text box says
+    380, so the answer is 380.
+
+    Returns a dict keyed by a normalised sheet name, since the sheet is the club.
+    """
+    fwwl = {}
+    with zipfile.ZipFile(path) as z:
+        names = set(z.namelist())
+        book = z.read("xl/workbook.xml").decode("utf-8", "replace")
+        rels = z.read("xl/_rels/workbook.xml.rels").decode("utf-8", "replace")
+        rid = dict(re.findall(r'Id="([^"]+)"[^>]*Target="([^"]+)"', rels))
+
+        for m in re.finditer(r'<sheet name="([^"]+)"[^>]*r:id="([^"]+)"', book):
+            sheet = m.group(1).replace("&amp;", "&")
+            target = rid.get(m.group(2), "")
+            if not target:
+                continue
+            rel = "xl/worksheets/_rels/%s.rels" % os.path.basename(target)
+            if rel not in names:
+                continue
+            r = z.read(rel).decode("utf-8", "replace")
+            dm = re.search(r'Target="([^"]*drawing\d+\.xml)"', r)
+            if not dm:
+                continue
+            dpath = "xl/drawings/%s" % os.path.basename(dm.group(1))
+            if dpath not in names:
+                continue
+            d = z.read(dpath).decode("utf-8", "replace")
+            if "FWWL" not in d:
+                continue
+            runs = re.findall(r"<a:t>([^<]*)</a:t>", d)
+            nums = [t.strip().replace(",", "") for t in runs
+                    if re.match(r"^[\d,]+(?:\.\d+)?$", t.strip())]
+            if nums:
+                fwwl[fwwl_key(sheet)] = float(nums[0])
+    return fwwl
+
+
+def fwwl_key(s):
+    """Loose match, because the sheet tab and the chart title disagree on spacing,
+    apostrophes and ampersands. Eagle's Landing, Eagles Landing, PGA WEST & Citrus."""
+    return re.sub(r"[^a-z0-9]+", "", (s or "").lower().replace("&", "and"))
+
+
 def classify(title):
     """Returns (club, kind, unit, short_label)."""
     t = re.sub(r"\s+", " ", title).strip()
@@ -239,7 +297,7 @@ def esc(s):
 
 # ---------------------------------------------------------------- drawing
 
-def render(chart, club, kind, unit, subtitle):
+def render(chart, club, kind, unit, subtitle, ref=None):
     series = [s for s in chart["series"] if any(v is not None for v in s["values"])]
     if not series:
         return None
@@ -249,6 +307,15 @@ def render(chart, club, kind, unit, subtitle):
     lo, hi = min(flat), max(flat)
     if unit in (MONEY, COUNT):
         lo = min(0, lo)                 # counts and money read against zero
+
+    # The FWWL cap has to be inside the scale or the line lands outside the plot and
+    # gets clipped. It really does sit above the data on some clubs: Canyon Oaks
+    # tops out at 381 against a cap of 400, and Monterey at 382 against 400. Those
+    # are the two that prove the point, so widen the range before choosing ticks.
+    if ref is not None:
+        hi = max(hi, ref)
+        lo = min(lo, ref)
+
     ticks = nice_ticks(lo, hi)
     ylo, yhi = ticks[0], ticks[-1]
 
@@ -314,6 +381,24 @@ def render(chart, club, kind, unit, subtitle):
 
     colors = [SCARLET, GOLD]
 
+    # FWWL cap. Drawn before the data so the membership line stays on top of it,
+    # and in gold dashes because it is a threshold rather than a measurement. The
+    # label sits above the line when there is room and below it when the cap is
+    # near the top of the plot, so it cannot collide with the chart border.
+    if ref is not None:
+        ry = py(ref)
+        add('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" '
+            'stroke-width="1.5" stroke-dasharray="5 4" opacity="0.9"/>'
+            % (PAD_L, ry, W - PAD_R, ry, GOLD))
+        # Label on the LEFT, not the right. The membership line ends at the right
+        # edge with a dot on it, and clubs trend UP toward their cap over time, so
+        # the right hand end is exactly where the line and the label collide. On
+        # Canyon Oaks they overlapped outright. The left end is the low end.
+        above = ry - PAD_T > 16
+        add('<text x="%.1f" y="%.1f" fill="%s" font-family="%s" font-size="10" '
+            'font-weight="600" text-anchor="start">FWWL %s</text>'
+            % (PAD_L + 3, ry - 4 if above else ry + 12, GOLD, FONT, fmt(ref)))
+
     # single series gets a soft fill so the shape reads at a glance
     if len(series) == 1:
         pts = [(px(i), py(v)) for i, v in enumerate(series[0]["values"])
@@ -374,14 +459,21 @@ def main():
     os.makedirs(os.path.dirname(os.path.abspath(manifest_path)), exist_ok=True)
 
     charts = parse_charts(workbook)
+    fwwl = parse_fwwl(workbook)
     written, skipped, entries, dropped = [], [], {}, []
+    fwwl_used, fwwl_absent = [], []
 
     for c in charts:
         club, kind, unit, subtitle = classify(c["title"])
         if not club:
             skipped.append((c["title"], "no club in title"))
             continue
-        svg = render(c, club, kind, unit, subtitle)
+        # FWWL is a membership cap, so it only means anything on the members chart.
+        ref = fwwl.get(fwwl_key(club)) if kind == "members" else None
+        if kind == "members":
+            (fwwl_used if ref is not None else fwwl_absent).append(
+                "%s%s" % (club, "" if ref is None else " %g" % ref))
+        svg = render(c, club, kind, unit, subtitle, ref=ref)
         if svg is None:
             skipped.append((c["title"], "no usable values"))
             continue
@@ -442,6 +534,12 @@ def main():
     print("roll-ups:           %d  (%s)"
           % (len(manifest["rollups"]), ", ".join(r["slug"] for r in manifest["rollups"])))
     print()
+    print("FWWL line drawn:    %d of %d membership charts"
+          % (len(fwwl_used), len(fwwl_used) + len(fwwl_absent)))
+    if fwwl_absent:
+        print("  no FWWL in the workbook for: %s" % ", ".join(sorted(fwwl_absent)))
+    print()
+
     CORE = {"members", "rates"} - DROP_KINDS
     incomplete = {k: v["graphs"] for k, v in entries.items()
                   if not CORE.issubset(set(v["graphs"]))}
