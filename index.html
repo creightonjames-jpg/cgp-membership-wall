@@ -5417,11 +5417,13 @@ function BackstageTab({ isAdmin }) {
     <TabFrame tabKey="backstage">
       <div className="bs-list">
 
-        <Panel stub="Sleep" title="Where You Sleep">
+        {/* Jim retitled these two on Aug 13. The stubs stay short because they
+            are the ticket tab, not the heading. */}
+        <Panel stub="Crash" title="Where You Crash">
           <Venue v={VENUES.hotel} />
         </Panel>
 
-        <Panel stub="Play" title="Where You Play">
+        <Panel stub="Rock" title="Where You Rock Out">
           <Venue v={VENUES.club} note="Golf course and the Patio." />
           <Venue v={VENUES.hotel} note="Wednesday night. Karaoke, corn hole, cards and beer pong." />
         </Panel>
@@ -5433,10 +5435,9 @@ function BackstageTab({ isAdmin }) {
             <li>Wednesday night, cocktails and dinner are at the hotel.</li>
             <li>Thursday night, cocktails and dinner are at The Medallion Club.</li>
           </ul>
-          <p className="bs-fine">
-            Lunch is on the agenda both days. It does not say where. Ask Carol if
-            you need to know before you get there.
-          </p>
+          {/* The "ask Carol about lunch" note was cut by Jim on Aug 13. Lunch is
+              still on the agenda for both days, it just no longer sends people
+              to Carol from here. */}
         </Panel>
 
         <Panel stub="Fly" title="Getting Here">
