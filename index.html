@@ -367,9 +367,26 @@ button { font-family: inherit; }
   max-height: none;
 }
 
-/* Pyro needs vertical room to read as a fountain. In a 112px strip it is just
-   flecks, so the compact masthead keeps the flares and drops the sparks. */
-.masthead:not(.masthead--tall) .band__pyro { display: none; }
+/* Pyro on the compact strip too, scaled down to fit.
+
+   This used to be display:none, and that is why most people never saw the
+   fireworks. The tall hero only renders on a first ever visit, because
+   mm26_entered persists in localStorage and the app skips the welcome screen
+   after that. So from the second visit onward every page had a 112px masthead
+   with the pyro switched off, and the effect looked broken rather than absent.
+   Jim's call, Aug 13: scale it rather than gate it.
+
+   A 112px strip cannot hold a fountain, so it does not try to be one. Sparks
+   rise about 40 percent as far and run slightly smaller, which reads as a
+   crackle along the stage lip. The Roman candles are dropped here: their climb
+   is 112px and up, and a glowing ball squeezed into this strip reads as a smudge.
+   One set of timings still drives both sizes, so nothing can drift apart. */
+.masthead:not(.masthead--tall) .band__pyro {
+  --pyro-scale: 0.42;
+  --pyro-size: 0.8;
+}
+
+.masthead:not(.masthead--tall) .band__pyro .candle { display: none; }
 
 .masthead__banner {
   background: var(--grad-primary);
@@ -546,8 +563,12 @@ button { font-family: inherit; }
      an older phone, and transform and opacity are already fast paths. */
 }
 
+/* --pyro-scale and --pyro-size default to 1 here and are turned down for the
+   compact masthead. Both are read inside the keyframes, which resolve against
+   the animated element, so they inherit from .band__pyro without any JS. */
 .band__pyro .spark {
-  width: var(--size); height: var(--size);
+  width: calc(var(--size) * var(--pyro-size, 1));
+  height: calc(var(--size) * var(--pyro-size, 1));
   background: radial-gradient(circle,
     #FFF7E4 0 30%, var(--gold) 58%, rgba(226,116,58,0) 100%);
   animation: pyro-spark var(--dur) linear
@@ -584,10 +605,12 @@ button { font-family: inherit; }
 @keyframes pyro-spark {
   0%   { transform: translate(-50%, 0) scale(1); opacity: 0; }
   10%  { opacity: 1; }
-  62%  { transform: translate(calc(-50% + var(--drift)),
-                              calc(var(--rise) * -1)) scale(0.7); opacity: 0.9; }
-  100% { transform: translate(calc(-50% + var(--drift) * 1.4),
-                              calc(var(--rise) * -0.7)) scale(0.2); opacity: 0; }
+  62%  { transform: translate(calc(-50% + var(--drift) * var(--pyro-scale, 1)),
+                              calc(var(--rise) * -1 * var(--pyro-scale, 1)))
+                    scale(0.7); opacity: 0.9; }
+  100% { transform: translate(calc(-50% + var(--drift) * 1.4 * var(--pyro-scale, 1)),
+                              calc(var(--rise) * -0.7 * var(--pyro-scale, 1)))
+                    scale(0.2); opacity: 0; }
 }
 
 /* The action sits in the first half of the timeline. The dead second half is
@@ -624,14 +647,16 @@ button { font-family: inherit; }
   .band__pyro .candle { animation: none; }
 
   .band__pyro .spark {
-    transform: translate(calc(-50% + var(--drift) * 0.75),
-                         calc(var(--rise) * -0.78)) scale(0.75);
+    transform: translate(calc(-50% + var(--drift) * 0.75 * var(--pyro-scale, 1)),
+                         calc(var(--rise) * -0.78 * var(--pyro-scale, 1)))
+               scale(0.75);
     opacity: 0.85;
   }
 
   .band__pyro .candle {
-    transform: translate(calc(-50% + var(--drift)),
-                         calc(var(--rise) * -0.85)) scale(0.85);
+    transform: translate(calc(-50% + var(--drift) * var(--pyro-scale, 1)),
+                         calc(var(--rise) * -0.85 * var(--pyro-scale, 1)))
+               scale(0.85);
     opacity: 0.8;
   }
 }
