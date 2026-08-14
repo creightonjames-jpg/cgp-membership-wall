@@ -48,7 +48,12 @@
       "type": "knowledge",
       "session": "wed-0945-breakouts",
       "question": "How many Core Fundamentals breakouts are on Wednesday?",
-      "options": ["Five", "Six", "Seven", "Eight"],
+      "options": [
+        "Five",
+        "Six",
+        "Seven",
+        "Eight"
+      ],
       "correctIndex": 2,
       "explain": "Seven. They are all on The Setlist under the 9:45 AM card.",
       "draft": true,
@@ -59,7 +64,12 @@
       "type": "knowledge",
       "session": "wed-0820-cowbell",
       "question": "What time is Wednesday's Opening Cowbell?",
-      "options": ["7:30 AM", "8:00 AM", "8:20 AM", "8:45 AM"],
+      "options": [
+        "7:30 AM",
+        "8:00 AM",
+        "8:20 AM",
+        "8:45 AM"
+      ],
       "correctIndex": 2,
       "explain": "8:20 AM, with the Tenure Awards. 7:30 is breakfast. 8:45 is Opening Remarks.",
       "draft": true,
@@ -70,7 +80,12 @@
       "type": "knowledge",
       "session": "wed-1800-cocktails",
       "question": "Which day can you get away with denim?",
-      "options": ["Tuesday", "Wednesday", "Thursday", "None of them"],
+      "options": [
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "None of them"
+      ],
       "correctIndex": 1,
       "explain": "Wednesday. Denim is in for the Dress-Up Day costumes and fine at the hotel that evening. Tuesday and Thursday are no denim.",
       "draft": true,
@@ -88,7 +103,7 @@
         "Nobody yet"
       ],
       "draft": true,
-      "crewNote": "Options are drafted, not from any source. Whoever runs Your Club's Culture Story should approve or replace them. \"Nobody yet\" is there on purpose, because a poll with no honest answer gets ignored."
+      "crewNote": "Options are drafted, not from any source. Whoever runs Your Club's Culture Story should approve or replace them. \"Nobody yet\" is there on purpose, because a poll with no honest answer gets ignored. RENAMED Aug 13 2026: the 3:15 Wednesday session is no longer Your Club's Culture Story, it is The Missing Chapter on Lisa's 8.12 agenda. These two questions were written for the old title and may no longer fit. Whoever presents it should approve or replace them."
     },
     {
       "id": "wed-culture-word",
@@ -98,7 +113,7 @@
       "options": [],
       "wordLimit": 1,
       "draft": true,
-      "crewNote": "Concrete on purpose. Asking for one word about culture gets you \"family\" from thirty clubs. Asking about Saturday morning gets you something a presenter can use."
+      "crewNote": "Concrete on purpose. Asking for one word about culture gets you \"family\" from thirty clubs. Asking about Saturday morning gets you something a presenter can use. RENAMED Aug 13 2026: the 3:15 Wednesday session is no longer Your Club's Culture Story, it is The Missing Chapter on Lisa's 8.12 agenda. These two questions were written for the old title and may no longer fit. Whoever presents it should approve or replace them."
     },
     {
       "id": "thu-lead-source",

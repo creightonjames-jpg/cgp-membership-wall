@@ -18,7 +18,8 @@
     "endSource": {
       "stated": "The agenda states the end time.",
       "next": "The agenda states a start only. The end is the next item's start time, which is a derivation, not a fact. The card says so."
-    }
+    },
+    "agendaSource": "Dashboard Agenda 8.12.26.docx, from Lisa via Jim Aug 13 2026. Supersedes the 8.4 version. Two sessions still on the wall are absent from it, thu-0930-behaviors and thu-1000-leads-development. Left in place pending Jim's yes, and thu-0930-behaviors carries a poll in data/polls.json."
   },
   "days": [
     {
@@ -29,7 +30,10 @@
       "title": "Roadie Stop",
       "note": "Tour bus and all roadies check into the hotel.",
       "attire": [
-        { "k": "Attire", "v": "Country Club Casual and Appropriate Length Shorts (no denim)." }
+        {
+          "k": "Attire",
+          "v": "Country Club Casual and Appropriate Length Shorts (no denim)."
+        }
       ],
       "sessions": [
         {
@@ -42,7 +46,11 @@
           "room": "",
           "description": "Tour bus and all roadies check into the hotel. If arriving Monday, make sure Yolanda knows so she can save you a spot.",
           "links": [
-            { "kind": "mail", "label": "Email Yolanda", "value": "ynuncio@centurygolf.com" }
+            {
+              "kind": "mail",
+              "label": "Email Yolanda",
+              "value": "ynuncio@centurygolf.com"
+            }
           ]
         },
         {
@@ -69,6 +77,18 @@
           "venue": "club",
           "room": "On the Patio",
           "description": ""
+        },
+        {
+          "key": "tue-1830-name-that-tune",
+          "kind": "timed",
+          "start": "2026-08-25T18:30:00-04:00",
+          "end": "2026-08-25T20:00:00-04:00",
+          "endSource": "stated",
+          "title": "Name That Tune Newbie Game",
+          "presenter": "",
+          "venue": "club",
+          "room": "On the Patio",
+          "description": "Runs during the Opening Act Welcome Mixer."
         }
       ]
     },
@@ -80,8 +100,14 @@
       "title": "Rock n' Roll Takes the Stage",
       "note": "",
       "attire": [
-        { "k": "Attire", "v": "Rock N' Roll Team Dress-Up Day. Today only, denim is allowed for costumes." },
-        { "k": "Evening at the hotel", "v": "Casual attire, denim allowed." }
+        {
+          "k": "Attire",
+          "v": "Rock N' Roll Team Dress-Up Day. Today only, denim is allowed for costumes."
+        },
+        {
+          "k": "Evening at the hotel",
+          "v": "Casual attire, denim allowed."
+        }
       ],
       "sessions": [
         {
@@ -131,7 +157,8 @@
           "presenter": "",
           "venue": "",
           "room": "",
-          "description": ""
+          "description": "",
+          "subtitle": "Playlist 1"
         },
         {
           "key": "wed-0945-breakouts",
@@ -220,11 +247,12 @@
           "start": "2026-08-26T15:15:00-04:00",
           "end": "2026-08-26T17:15:00-04:00",
           "endSource": "next",
-          "title": "Your Club's Culture Story",
+          "title": "The Missing Chapter",
           "presenter": "",
           "venue": "",
           "room": "",
-          "description": ""
+          "description": "",
+          "subtitle": "Playlist 2"
         },
         {
           "key": "wed-1715-programming-ends",
@@ -282,7 +310,10 @@
       "title": "Backstage Pass",
       "note": "No early departures before Friday morning.",
       "attire": [
-        { "k": "Attire", "v": "Country Club Casual (no denim)." }
+        {
+          "k": "Attire",
+          "v": "Country Club Casual (no denim)."
+        }
       ],
       "sessions": [
         {
@@ -320,7 +351,8 @@
           "presenter": "",
           "venue": "",
           "room": "",
-          "description": ""
+          "description": "",
+          "subtitle": "Playlist 3"
         },
         {
           "key": "thu-0930-behaviors",
@@ -448,11 +480,17 @@
           "start": "2026-08-27T16:00:00-04:00",
           "end": "2026-08-27T17:00:00-04:00",
           "endSource": "next",
-          "title": "Specific Group Fireside Chat",
+          "title": "Specific Groups Fireside Chat",
           "presenter": "",
           "venue": "",
           "room": "",
-          "description": "General Managers, Enrollment Directors, Golf Professionals."
+          "description": "General Managers, Enrollment Directors, Golf Professionals.",
+          "itemsLabel": "Groups",
+          "items": [
+            "General Managers",
+            "Enrollment Directors",
+            "Golf Professionals"
+          ]
         },
         {
           "key": "thu-1700-cocktail-hour",
@@ -460,7 +498,7 @@
           "start": "2026-08-27T17:00:00-04:00",
           "end": "2026-08-27T18:00:00-04:00",
           "endSource": "next",
-          "title": "Cocktail Hour at Club",
+          "title": "Happy Hour at The Medallion Club",
           "presenter": "",
           "venue": "club",
           "room": "",
@@ -472,7 +510,7 @@
           "start": "2026-08-27T18:00:00-04:00",
           "end": "2026-08-27T19:00:00-04:00",
           "endSource": "next",
-          "title": "Dinner at Club",
+          "title": "Dinner at The Medallion Club",
           "presenter": "",
           "venue": "club",
           "room": "",
@@ -482,7 +520,7 @@
           "key": "thu-1900-awards",
           "kind": "open",
           "start": "2026-08-27T19:00:00-04:00",
-          "title": "Awards and Presentations",
+          "title": "Awards Presentation",
           "presenter": "",
           "venue": "",
           "room": "",
@@ -503,7 +541,7 @@
           "key": "fri-departures",
           "kind": "allday",
           "stubLabel": "Early",
-          "title": "Fond Farewells and Safe Travels",
+          "title": "The Setlist is Over. Safe Travels Everyone",
           "presenter": "",
           "venue": "cmh",
           "room": "",
