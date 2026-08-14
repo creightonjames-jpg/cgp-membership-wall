@@ -149,9 +149,22 @@ COMBINED = {"pga-west-and-citrus"}
 NOT_A_CLUB = {"all-clubs"}
 
 # Dropped at the client's request. Lisa, Aug 12 2026: "Graphs, we need to remove
-# club 23 and remove pga and citrus combined at bottom." Nothing is generated for
-# these and no SVG is left on disk for them.
-DROP = {"club-23", "pga-west-and-citrus"}
+# club 23 and remove pga and citrus combined at bottom." Jim, Aug 13 2026: "remove
+# all info for Huntington Club." Nothing is generated for these and no SVG is left
+# on disk for them.
+#
+# Huntington is safe to drop whole: nobody on the verified roster is from that club,
+# so no attendee card loses its graphs. Note that Shauna Huntington is a PERSON and
+# has nothing to do with this.
+DROP = {"club-23", "pga-west-and-citrus", "huntington-club"}
+
+# Chart families the client does not want on the wall. Jim, Aug 13 2026: "For all
+# clubs, remove the Dues graph and the Palmer graph."
+#
+# Dropped here, at generation, rather than hidden in the app. A file that is not
+# wanted should not be in a public repo waiting to be linked by accident, and the
+# workbook is still the source of truth if either family is ever asked for again.
+DROP_KINDS = {"dues", "palmer"}
 
 
 def slugify(s):
@@ -376,6 +389,9 @@ def main():
         if slug in DROP:
             dropped.append(c["title"])
             continue
+        if kind in DROP_KINDS:
+            dropped.append("%s  (%s family, dropped)" % (c["title"], kind))
+            continue
         name = "%s--%s.svg" % (slug, kind)
         with open(os.path.join(outdir, name), "w", encoding="utf-8") as fh:
             fh.write(svg)
@@ -426,7 +442,7 @@ def main():
     print("roll-ups:           %d  (%s)"
           % (len(manifest["rollups"]), ", ".join(r["slug"] for r in manifest["rollups"])))
     print()
-    CORE = {"members", "dues", "rates"}
+    CORE = {"members", "rates"} - DROP_KINDS
     incomplete = {k: v["graphs"] for k, v in entries.items()
                   if not CORE.issubset(set(v["graphs"]))}
     if incomplete:

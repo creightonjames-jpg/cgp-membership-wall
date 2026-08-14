@@ -6357,13 +6357,22 @@ const VAULT_EMPTY = {
   personas:     "Open and empty. The personas have not turned up yet."
 };
 
-/* The three types every club is meant to have. A club missing one gets a
-   "not in the pack" card rather than a broken image. Anything else in
-   graphs.json, which today is `other` on six clubs, renders after these. */
-const VAULT_GRAPH_TYPES = ["members", "dues", "rates"];
+/* The types every club is meant to have. A club missing one gets a "not in the
+   pack" card rather than a broken image. Anything else in graphs.json renders
+   after these.
+
+   Jim, Aug 13 2026: Dues and Palmer are off the wall entirely, so they are no
+   longer generated and no longer listed here. Rates is now labelled
+   Sales/Attrition, which is what the chart has always plotted: the workbook's only
+   two named series across all 95 charts are "Sales" and "Attrition".
+
+   The KEY stays `rates`. It is the filename on 27 SVGs and the child name in
+   data/graphs.json. Only the label changed. Renaming keys to match labels is how
+   you break every stored path at once. */
+const VAULT_GRAPH_TYPES = ["members", "rates"];
 
 const VAULT_GRAPH_LABELS = {
-  members: "Members", dues: "Dues", rates: "Rates", other: "Other"
+  members: "Members", rates: "Sales/Attrition", other: "Other"
 };
 
 const VAULT_LS = { section: "mm26_vaultsection", club: "mm26_vaultclub" };
