@@ -4840,10 +4840,11 @@ function useFbLive() {
    here as a filter with no code change.
 
    One club string is matched in code and only one: bandClubRank tests for a
-   "Century Golf" prefix, so corporate staff sort after the clubs instead of
-   between Canyon Oaks and Chenal. It is a prefix test rather than an exact
-   name, so a fuller spelling still lands last. Every other club is whatever
-   the file says it is.
+   "Century Golf" prefix, so corporate staff sort FIRST, above Anthem, instead of
+   between Canyon Oaks and Chenal. It is a prefix test rather than an exact name,
+   so a fuller spelling still lands first. Corporate is also the only group with a
+   hand set member order, BAND_CORPORATE_ORDER. Every other club is whatever the
+   file says it is, in the file's own order.
    ========================================================================== */
 
 /* Fold accents and case, so a search for "jose" finds "José". macOS hands over
@@ -4935,17 +4936,86 @@ function bandKeeps(rec, tokens, f) {
   return true;
 }
 
-/* Century Golf corporate staff sort after every club, because they are not a
-   club. Read off the record rather than named here: any club value that starts
+/* Century Golf corporate staff sort FIRST, above Anthem. Jim, Aug 13 2026. They
+   sat last until then, on the reasoning that corporate is not a club.
+
+   Read off the record rather than named here: any club value that starts
    "Century Golf" is corporate. That is the value the roster file carries today,
    and matching the prefix means "Century Golf Partners" lands in the same place
    if somebody spells it out in the crew panel.
 
-   Rank 0 clubs, 1 corporate, 2 nobody with a club at all. Two people in the
-   same rank sort by club name, so 27 clubs stay alphabetical. */
+   Rank 0 corporate, 1 clubs, 2 nobody with a club at all. Two groups in the same
+   rank sort by club name, so the 26 clubs stay alphabetical under corporate. */
 function bandClubRank(club) {
   if (!club) return 2;
-  return /^century golf\b/i.test(club) ? 1 : 0;
+  return /^century golf\b/i.test(club) ? 0 : 1;
+}
+
+/* Corporate is listed in an order Jim set by hand, not alphabetically. The first
+   nine are seniority. From Amy Spittle down it runs alphabetically by first name,
+   but the whole thing is written out rather than derived, because the rule is his
+   to change and a derived rule would quietly reorder people the day somebody new
+   arrives.
+
+   Keyed by roster slug so a title or club edit in the crew panel cannot break it.
+   Anyone at Century Golf who is NOT in this list sorts after everyone who is, by
+   name, so a new hire appears at the bottom of corporate instead of vanishing.
+
+   Look this up with record.KEY, not record.slug. bandRecord maps the roster's
+   slug onto `key` and does not carry `slug` through, so reading `.slug` here
+   returns undefined for everybody, every name falls into the unlisted branch, and
+   the group silently comes out alphabetical. It looks like the order was ignored
+   rather than like a bug, which is exactly how it got past me once already. */
+const BAND_CORPORATE_ORDER = [
+  "jim-hinckley",
+  "doug-howe",
+  "greg-adair",
+  "james-hinckley",
+  "mike-akeroyd",
+  "jimmy-han",
+  "john-martus",
+  "carol-ruskowski",
+  "bryan-stromme",
+  "amy-spittle",
+  "andrew-montemayor",
+  "bruce-gerlander",
+  "chris-may",
+  "dawne-romine",
+  "donny-darville",
+  "gene-miller",
+  "george-gdovin",
+  "jeannette-walker",
+  "jim-creighton",
+  "jim-kern",
+  "lisa-henrichsen",
+  "natalie-bratcher",
+  "patrick-ryan",
+  "todd-keefer",
+  "tyler-busey",
+  "yolanda-nuncio"
+];
+
+const BAND_CORPORATE_RANK = {};
+BAND_CORPORATE_ORDER.forEach((s, i) => { BAND_CORPORATE_RANK[s] = i; });
+
+/* Jim's order, applied to any list of corporate people.
+
+   Shared because there are two render paths and they must agree. The grouped grid
+   goes through bandByClub, and selecting a club in the select drops the headings
+   and renders the filtered list flat, skipping bandByClub entirely. Sorting in
+   only one of them meant Century Golf read in Jim's order under its heading and
+   alphabetically the moment you filtered to it. */
+function bandCorporateSort(people) {
+  return people.slice().sort((a, b) => {
+    const ra = BAND_CORPORATE_RANK[a.key];
+    const rb = BAND_CORPORATE_RANK[b.key];
+    const ha = ra === undefined ? 1 : 0;
+    const hb = rb === undefined ? 1 : 0;
+    /* Listed people first in Jim's order, then anyone unlisted by name. */
+    if (ha !== hb) return ha - hb;
+    if (ha) return String(a.name).localeCompare(String(b.name));
+    return ra - rb;
+  });
 }
 
 /* Lisa asked for club order instead of alphabetical, so the grid is grouped
@@ -4964,12 +5034,18 @@ function bandByClub(list) {
   });
 
   return order
-    .map((club) => ({
-      club: club,
-      label: club || "No club on the roster",
-      rank: bandClubRank(club),
-      people: bag[club]
-    }))
+    .map((club) => {
+      const rank = bandClubRank(club);
+      /* Corporate only. Every club keeps the roster's own order, which is what
+         makes a club heading scannable. */
+      const people = rank === 0 ? bandCorporateSort(bag[club]) : bag[club];
+      return {
+        club: club,
+        label: club || "No club on the roster",
+        rank: rank,
+        people: people
+      };
+    })
     .sort((a, b) => (a.rank - b.rank) || a.club.localeCompare(b.club));
 }
 
@@ -5117,6 +5193,11 @@ function BandTab({ isAdmin }) {
      the two first timers you can see are not from the same place. */
   const grouped = !club;
   const groups = grouped ? bandByClub(shown) : [];
+
+  /* The flat path, used when a club filter is on, has to honour the same order.
+     Only corporate has a hand set order, so every other club is untouched. */
+  const flat = grouped ? shown
+    : (bandClubRank(club) === 0 ? bandCorporateSort(shown) : shown);
 
   /* A club that stops existing, because the crew corrected the last record that
      carried it, would otherwise leave the select pointing at nothing and the
@@ -5311,7 +5392,7 @@ function BandTab({ isAdmin }) {
             ))
           ) : (
             <div className="bnd-grid">
-              {shown.map((r) => (
+              {flat.map((r) => (
                 <BandCard
                   key={r.key}
                   rec={r}
@@ -5329,9 +5410,10 @@ function BandTab({ isAdmin }) {
         Headshots over data/roster.json, with the crew panel's edits at
         roster/{"{slug}"} merged on top field by field. Names came off filenames
         and are not verified, so fix them in the Roster section of the crew
-        panel. Grouped by club since Aug 12, per Lisa, with Century Golf
-        corporate after the clubs. The headings come off when the club select is
-        set, because they would all say the same word. Club and region are
+        panel. Grouped by club since Aug 12, per Lisa. Century Golf corporate
+        leads, above Anthem, in the order Jim set by hand on Aug 13. The headings
+        come off when the club select is set, because they would all say the same
+        word. Club and region are
         selects because the clubs will not fit in a pill row. Newbies stacks
         with a club. Every count on this tab is counted off the file, so
         regenerating the roster changes them on its own. Cards carry club and
