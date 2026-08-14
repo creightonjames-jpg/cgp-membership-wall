@@ -74,6 +74,45 @@ SRC_EXT = {".jpg", ".jpeg", ".png", ".heic", ".heif", ".webp", ".tif", ".tiff", 
 TARGET_FACE = 0.40      # face height as a share of the finished square
 FACE_CENTRE_V = 0.44    # where the face centre sits, top to bottom. Leaves headroom
 
+# ------------------------------------------------------- per photo tuning
+#
+# Jim reviewed the whole roster on Aug 13 2026 and named these by hand. Run with
+# --tune to apply them. Keyed by PHOTO FILE STEM, not by roster slug, because the
+# 2023 studio batch is filed by surname: Gene Miller is miller.jpg.
+#
+#   face    target face height as a share of the crop. LOWER is a wider shot
+#   centre  where the face centre sits top to bottom. HIGHER leaves more room
+#           above the head, which is the actual fix for a clipped crown
+#
+# Both dials matter and they are not interchangeable. Eight of the fourteen "zoom
+# out" sources are already cropped to the full width of the file, so there is no
+# zoom left to give. On those the crown is recovered by sliding the window up,
+# which is what centre does. Vision's face box runs forehead to chin and excludes
+# hair, so the crown always sits above the box and headroom is what protects it.
+FRAME_TUNE = {
+    # Top of the head was cut. Wider where the source allows, more headroom always.
+    "katie-robinson":     {"face": 0.34, "centre": 0.52},
+    "todd-leonard":       {"face": 0.34, "centre": 0.52},
+    "mary-fina":          {"face": 0.34, "centre": 0.52},
+    "domenic-provenzano": {"face": 0.34, "centre": 0.52},
+    "crystal-daniel":     {"face": 0.34, "centre": 0.52},
+    "kristina-karoll":    {"face": 0.34, "centre": 0.52},
+    "chelsea-pariseau":   {"face": 0.34, "centre": 0.52},
+    "anai-romero":        {"face": 0.34, "centre": 0.52},
+    "stromme":            {"face": 0.34, "centre": 0.52},
+    "miller":             {"face": 0.34, "centre": 0.52},
+    "howe":               {"face": 0.34, "centre": 0.52},
+    "jeannette-walker":   {"face": 0.34, "centre": 0.52},
+    "james-hinckley":     {"face": 0.34, "centre": 0.52},
+    "todd-keefer":        {"face": 0.34, "centre": 0.52},
+
+    # Face read too small in the grid. Tighter crop, standard headroom.
+    "kevin-paluch":       {"face": 0.47, "centre": 0.45},
+    "spittle":            {"face": 0.47, "centre": 0.45},
+    "han":                {"face": 0.47, "centre": 0.45},
+    "darville":           {"face": 0.47, "centre": 0.45},
+}
+
 MIN_FACE = 0.26         # below this the subject is not featured
 MAX_FACE = 0.58         # above this it is uncomfortably tight
 EDGE_PAD = 6            # px. face box nearer than this to an edge counts as clipped
@@ -90,6 +129,33 @@ MAX_OFF_CENTRE = 0.14   # horizontal drift from the middle, as a share of width
 OK_FACE = (0.30, 0.55)
 OK_FACE_MAXED = 0.72   # ceiling once we are already as wide as the source allows
 OK_OFF_CENTRE = 0.10
+
+# Hamming distance out of 1024 between the FACE in the repo and the face in a
+# candidate source, see face_print. Measured, not guessed.
+#
+# Same person, verified by eye:      22, 59, 60, 98, 164
+# Different person, same surname:    400 (Bryan Miller), 507 (Dave Miller)
+#
+# miller.jpg is Gene Miller and the folder holds three Millers, so this is the
+# case that decides the number. 250 sits 86 above the worst real match and 150
+# below the nearest wrong one. Raising it toward 400 is how you put Dave Miller's
+# face on Gene Miller's card.
+SAME_FACE_MAX = 250
+
+# Sources confirmed BY EYE, for the cases where the face hash is too strict.
+#
+# Keyed by photo stem, valued by the exact source filename. Checked one at a time
+# by opening both images and comparing them, not by nudging SAME_FACE_MAX until
+# the number went green. Raising the threshold to admit these would also admit
+# Dave Miller at 400, which is the whole thing this guard exists to stop.
+#
+#   domenic-provenzano  distance 301. Same photo beyond any doubt: same grey
+#     jacket, same glasses, same hedge and mountain background. The hash misfires
+#     because the file in the repo is a tight face crop out of a 3549x4968
+#     original, so the two faces differ in sharpness more than in shape.
+CONFIRMED_SOURCE = {
+    "domenic-provenzano": "Domenic Provenzano.jpg",
+}
 
 
 def slug(s):
@@ -194,19 +260,23 @@ def normalized(path):
     return im, tmp.name
 
 
-def crop_to_face(im, face):
-    """Square crop placed on the face, clamped inside the image."""
+def crop_to_face(im, face, target=TARGET_FACE, centre=FACE_CENTRE_V):
+    """Square crop placed on the face, clamped inside the image.
+
+    target and centre come from FRAME_TUNE when a photo has been hand tuned,
+    otherwise from the module defaults.
+    """
     W, H = im.size
     fx, fy, fw, fh = face["x"], face["y"], face["w"], face["h"]
 
-    S = fh / TARGET_FACE
+    S = fh / target
     S = min(S, float(min(W, H)))          # never invent pixels outside the frame
     S = max(S, 1.0)
 
     cx = fx + fw / 2.0
     cy = fy + fh / 2.0
     left = cx - S / 2.0
-    top = cy - FACE_CENTRE_V * S
+    top = cy - centre * S
 
     # Slide inside the frame rather than shrinking, so the face stays the size we
     # asked for even when the subject stands near an edge.
@@ -217,6 +287,99 @@ def crop_to_face(im, face):
            int(round(left + S)), int(round(top + S)))
     maxed = S >= float(min(W, H)) - 1.0      # already as wide as the source allows
     return im.crop(box), S, maxed
+
+
+def ahash(path, n=16):
+    """Average hash. Cheap, and enough to tell one shoot from another."""
+    im = Image.open(path).convert("L").resize((n, n), Image.LANCZOS)
+    px = list(im.getdata())
+    avg = sum(px) / float(len(px))
+    return [1 if v > avg else 0 for v in px]
+
+
+def hamming(a, b):
+    return sum(1 for x, y in zip(a, b) if x != y)
+
+
+def face_print(path):
+    """Hash of just the FACE, normalised, so framing does not enter into it.
+
+    The first attempt at this hashed the whole frame and was measuring the wrong
+    thing. Files that had already been through the face aware re-crop matched
+    their source at distance 0, and files still carrying the ORIGINAL centred crop
+    scored 60 to 120 against the very same photo, purely because the two crops
+    frame differently. That is a framing signal, not an identity signal.
+
+    Cutting both sides down to the detected face box removes framing from the
+    comparison entirely. Same person in the same shot matches tightly whatever the
+    crop around them was.
+    """
+    tmp = None
+    try:
+        im, tmp = normalized(path)
+    except Exception:
+        return None
+    try:
+        det = facefind([tmp]).get(tmp)
+        if not det or not det[2]:
+            return None
+        f = det[2][0]
+        # a little context around the box, so hair and jaw line count too
+        pad = 0.18 * f["h"]
+        box = (max(0, int(f["x"] - pad)), max(0, int(f["y"] - pad)),
+               min(im.width, int(f["x"] + f["w"] + pad)),
+               min(im.height, int(f["y"] + f["h"] + pad)))
+        if box[2] - box[0] < 8 or box[3] - box[1] < 8:
+            return None
+        face = im.crop(box).convert("L").resize((32, 32), Image.LANCZOS)
+        px = list(face.getdata())
+        avg = sum(px) / float(len(px))
+        return [1 if v > avg else 0 for v in px]
+    finally:
+        im.close()
+        if tmp and os.path.exists(tmp):
+            os.unlink(tmp)
+
+
+def pick_matching_source(stem, cands, existing, verbose=False):
+    """Of several same surname candidates, the one showing the SAME FACE.
+
+    Re-tuning an existing photo must not change WHICH photo it is. Name matching
+    alone cannot promise that. Gene Miller's file is miller.jpg, and the sources
+    on disk include both a 2023 studio frame of him and a completely different
+    person's "Dave Miller.jpg". Scoring on the surname picks either, and the
+    newest-first tie break picks Dave.
+
+    Returns (name, path, distance), or (None, None, closest) when nothing is close
+    enough, in which case the caller leaves the photo alone and says so.
+    """
+    if stem in CONFIRMED_SOURCE:
+        wanted = CONFIRMED_SOURCE[stem]
+        for src_name, src in cands:
+            if src_name == wanted:
+                return src_name, src, "eye"
+        return None, None, "confirmed source %r is not on disk" % wanted
+
+    want = face_print(existing)
+    if want is None:
+        return None, None, None
+
+    scored = []
+    for src_name, src in cands:
+        got = face_print(src)
+        if got is None:
+            continue
+        scored.append((hamming(want, got), src_name, src))
+
+    scored.sort()
+    if verbose:
+        for d, n, _p in scored:
+            print("        candidate %-42s face distance %d" % (n[:42], d))
+    if not scored:
+        return None, None, None
+    if scored[0][0] > SAME_FACE_MAX:
+        return None, None, scored[0][0]
+    return scored[0][1], scored[0][2], scored[0][0]
 
 
 def build_source_index():
@@ -303,10 +466,107 @@ def find_sources(stem, name, index):
     return [(fn, path) for _, fn, path in top], note
 
 
+def tune(dry_run, only):
+    """Apply FRAME_TUNE to the photos Jim named. Same photo, new framing."""
+    stems = [s for s in FRAME_TUNE if not only or s in set(only)]
+    index = build_source_index()
+    names = roster_names()
+    skip = excluded_slugs()
+
+    print("Tuning %d photo(s)%s\n" % (len(stems), " (dry run)" if dry_run else ""))
+    print("%-22s %-34s %-5s %-13s %s"
+          % ("PHOTO", "SOURCE", "MATCH", "FACE WAS", "FACE NOW"))
+    print("-" * 96)
+
+    done, refused = [], []
+    for stem in sorted(stems):
+        dest = os.path.join(OUT_DIR, stem + ".jpg")
+        if stem in skip or not os.path.exists(dest):
+            refused.append((stem, "no such photo in the repo"))
+            continue
+
+        before = facefind([dest]).get(dest)
+        before_frac = (before[2][0]["h"] / float(before[1])) if (before and before[2]) else None
+
+        cands, _note = find_sources(stem, names.get(stem, ""), index)
+        if not cands:
+            refused.append((stem, "no source file on disk"))
+            continue
+
+        src_name, src, dist = pick_matching_source(stem, cands, dest)
+        if not src:
+            refused.append((stem, "no source matches the current photo, closest %s. "
+                                  "NOT touched, this is the Gene Miller guard"
+                            % (dist if dist is not None else "n/a")))
+            continue
+
+        dials = FRAME_TUNE[stem]
+        tmp = None
+        try:
+            im, tmp = normalized(src)
+            det = facefind([tmp]).get(tmp)
+            if not det or not det[2]:
+                refused.append((stem, "no face in the source"))
+                continue
+            out, _S, maxed = crop_to_face(im, det[2][0],
+                                          target=dials["face"], centre=dials["centre"])
+            out = out.resize((SIZE, SIZE), Image.LANCZOS)
+
+            probe = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
+            probe.close()
+            out.save(probe.name, "JPEG", quality=QUALITY, optimize=True)
+            pd = facefind([probe.name]).get(probe.name)
+
+            ok, why, frac = False, "no face in the result", None
+            if pd and pd[2]:
+                f = pd[2][0]
+                frac = f["h"] / float(SIZE)
+                hi = OK_FACE_MAXED if maxed else OK_FACE[1]
+                cx = (f["x"] + f["w"] / 2.0) / float(SIZE)
+                if f["y"] < EDGE_PAD or f["y"] + f["h"] > SIZE - EDGE_PAD:
+                    why = "result clips the face vertically"
+                elif frac < OK_FACE[0] or frac > hi:
+                    why = "result face %.0f%%, outside %d to %d" % (
+                        frac * 100, OK_FACE[0] * 100, hi * 100)
+                elif abs(cx - 0.5) > OK_OFF_CENTRE:
+                    why = "result face %.0f%% off centre" % (abs(cx - 0.5) * 100)
+                else:
+                    ok, why = True, ""
+
+            if not ok:
+                refused.append((stem, why))
+                os.unlink(probe.name)
+                continue
+
+            print("%-22s %-34s %-5s %-13s %.0f%%%s"
+                  % (stem, src_name[:34], dist,
+                     ("%.0f%%" % (before_frac * 100)) if before_frac else "no face",
+                     frac * 100, "  (source maxed)" if maxed else ""))
+            if dry_run:
+                os.unlink(probe.name)
+            else:
+                shutil.move(probe.name, dest)
+            done.append(stem)
+        finally:
+            im.close()
+            if tmp and os.path.exists(tmp):
+                os.unlink(tmp)
+
+    print("\n%s: %d" % ("would tune" if dry_run else "tuned", len(done)))
+    if refused:
+        print("\nLEFT ALONE (%d)" % len(refused))
+        for stem, why in refused:
+            print("    %-22s %s" % (stem, why))
+
+
 def main():
     audit_only = "--audit" in sys.argv
     dry_run = "--dry-run" in sys.argv
     only = [a for a in sys.argv[1:] if not a.startswith("-")]
+
+    if "--tune" in sys.argv:
+        tune(dry_run, only)
+        return
 
     skip = excluded_slugs()
     current = sorted(f for f in os.listdir(OUT_DIR) if f.endswith(".jpg"))
