@@ -99,6 +99,10 @@ FRAME_TUNE = {
     "kristina-karoll":    {"face": 0.34, "centre": 0.52},
     "chelsea-pariseau":   {"face": 0.34, "centre": 0.52},
     "anai-romero":        {"face": 0.34, "centre": 0.52},
+    # "romine" was here. Jim replaced Dawne Romine's photo entirely on Aug 13, and
+    # the new one sits at the standard 40 percent with her crown fully in frame, so
+    # the zoom-out dial that fixed the OLD photo would now just crop her loose for
+    # no reason. Removed rather than left to fire on a photo it was not written for.
     "stromme":            {"face": 0.34, "centre": 0.52},
     "miller":             {"face": 0.34, "centre": 0.52},
     "howe":               {"face": 0.34, "centre": 0.52},
