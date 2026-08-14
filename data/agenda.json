@@ -64,7 +64,13 @@
           "presenter": "",
           "venue": "club",
           "room": "Golf Course",
-          "description": "Proudly benefiting Century Golf Cares. Already in town? Come cheer on your favorite team. Members will be out on the course too, so keep it respectful, no disruptions."
+          "description": "Proudly benefiting Century Golf Cares. Already in town? Come cheer on your favorite team. Members will be out on the course too, so keep it respectful, no disruptions.",
+          "graphic": {
+            "file": "assets/agenda/shank-showdown.png",
+            "alt": "The Shank Showdown II tournament graphic",
+            "pending": true,
+            "_note": "pending true renders the place marker instead of the image. When the artwork arrives, drop it at the path above and set pending to false. No code change needed."
+          }
         },
         {
           "key": "tue-welcome-mixer",

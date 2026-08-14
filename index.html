@@ -1128,6 +1128,42 @@ body.display-mode .stubnote { font-size: 20px; }
    the ticket stays identical: same stub, same title, same reactions underneath. */
 .set-ticket--flat { cursor: default; }
 
+/* ----------------------------------------- artwork on a session card */
+/* One image belonging to one session, from agenda.json `graphic`. */
+.set-art { margin: 12px 0 0; }
+
+.set-art img {
+  display: block; width: 100%; height: auto;
+  border: 1px solid var(--edge); border-radius: 10px;
+  background: var(--input);
+}
+
+/* The place marker, shown while `pending` is true. Deliberately looks like a
+   reserved frame rather than a failure: dashed gold on the amp grille, sized to a
+   16:9 hole so the layout does not jump when the real artwork lands. */
+.set-art--pending {
+  border: 1px dashed var(--gold-rule);
+  border-radius: 10px;
+  background: var(--input);
+  aspect-ratio: 16 / 9;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px; padding: 14px; text-align: center;
+}
+
+.set-art__k {
+  font-family: var(--font-display); text-transform: uppercase;
+  letter-spacing: 0.08em; font-size: 13px; color: var(--gold);
+}
+
+.set-art__p { font-size: 12px; color: var(--dim); margin: 0; }
+
+/* Crew only. Attendees have no use for a file path. */
+.set-art__path {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 11px; color: var(--mute); margin: 2px 0 0; word-break: break-all;
+}
+
 .set-stub__t { font-family: var(--font-display); font-size: 20px; line-height: 1; }
 .set-stub__m { font-size: 10px; letter-spacing: 0.16em; color: var(--dim); }
 
@@ -4202,7 +4238,10 @@ function LinkChip({ href, glyph, children }) {
    button and a button may not hold a p or a div. Reactions and links sit
    outside it for the same reason. */
 function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
-                       tenureReady, onGoTab }) {
+                       tenureReady, onGoTab, isAdmin }) {
+  /* Set only if a declared graphic fails to load, which falls back to the place
+     marker rather than leaving a broken frame on the card. */
+  const [artBroken, setArtBroken] = useState(false);
   const st = sessionState(sess, day, now);
   const venue = sess.venue ? VENUES[sess.venue] : null;
   const clocked = !!sess.start;
@@ -4227,6 +4266,7 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
     || venue
     || (sess.links && sess.links.length)
     || sess.kind === "open"
+    || sess.graphic
     || showTenureLink);
 
   const badges = (
@@ -4341,6 +4381,39 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
         <div className="set-detail" id={panelId}>
           {sess.description ? (
             <p className="set-detail__d">{sess.description}</p>
+          ) : null}
+
+          {/* Session artwork, or a reserved frame while it is still coming.
+
+              `pending` drives this rather than a failed image load. Pointing an
+              img at a file that is not there yet would 404 in every attendee's
+              console, and a lazily loaded 404 fires no error event at all, so the
+              card could not detect it anyway. That is the trap T1.3 documents and
+              the reason cole.jpg once rendered as a blank square.
+
+              The onError is a second line of defence for the opposite case: the
+              file is declared present but has gone missing. loading is left eager
+              on purpose so that error actually fires. */}
+          {sess.graphic ? (
+            <div className="set-art">
+              {sess.graphic.pending || artBroken ? (
+                <div className="set-art--pending">
+                  <span className="set-art__k">Artwork to come</span>
+                  <p className="set-art__p">
+                    {sess.graphic.alt || "A graphic for this session"}.
+                  </p>
+                  {isAdmin ? (
+                    <p className="set-art__path">{sess.graphic.file}</p>
+                  ) : null}
+                </div>
+              ) : (
+                <img
+                  src={sess.graphic.file}
+                  alt={sess.graphic.alt || ""}
+                  onError={() => setArtBroken(true)}
+                />
+              )}
+            </div>
           ) : null}
 
           {/* The seven Core Fundamentals breakouts sit under one session, so
@@ -4568,6 +4641,7 @@ function SetlistTab({ isAdmin, now, onGoTab }) {
                 open={!!open[sess.key]}
                 tenureReady={tenureReady}
                 onGoTab={onGoTab}
+                isAdmin={isAdmin}
                 onToggle={() => setOpen((prev) => {
                   const next = Object.assign({}, prev);
                   next[sess.key] = !prev[sess.key];
