@@ -5,7 +5,7 @@ Images that belong to a single session on The Setlist, referenced from
 
 ## Waiting on
 
-- `shank-showdown.png` — the Shank Showdown II tournament graphic, for the 12:00
+- `shank-showdown.png`, the Shank Showdown II tournament graphic, for the 12:00
   Tuesday session. Until it lands, the card shows a labelled place marker. When it
   arrives, put it here and set `graphic.pending` to `false` on
   `tue-shank-showdown`. Nothing else needs changing.
