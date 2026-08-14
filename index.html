@@ -603,10 +603,37 @@ button { font-family: inherit; }
   100% { opacity: 0; }
 }
 
-/* Pyro is motion and nothing else. Frozen sparks read as dust on the lens, so
-   for anyone who asked for less motion it goes away entirely. */
+/* Reduced motion gets a FROZEN BURST, not an empty stage.
+
+   This used to be display:none, on the theory that frozen sparks read as dust on
+   the lens. That was wrong in practice. Jim reported the fireworks "don't work
+   for all users" and this was why: anyone with Reduce Motion switched on at the
+   OS level saw a plain photo with no pyro at all, which reads as broken rather
+   than as considerate. Reduce Motion is common, people turn it on for motion
+   sickness and iOS suggests it.
+
+   So the sparks stay lit and stay put. Each one already carries its own --rise
+   and --drift, so parking them part way up their own arc gives a spray rather
+   than a row. No animation, so the preference is still honoured.
+
+   Do not add a display declaration here. The base rule already shows the pyro,
+   and the compact masthead rule above hides it with three classes to this
+   block's two, so tab pages stay sparkless either way. */
 @media (prefers-reduced-motion: reduce) {
-  .band--pyro .band__pyro { display: none; }
+  .band__pyro .spark,
+  .band__pyro .candle { animation: none; }
+
+  .band__pyro .spark {
+    transform: translate(calc(-50% + var(--drift) * 0.75),
+                         calc(var(--rise) * -0.78)) scale(0.75);
+    opacity: 0.85;
+  }
+
+  .band__pyro .candle {
+    transform: translate(calc(-50% + var(--drift)),
+                         calc(var(--rise) * -0.85)) scale(0.85);
+    opacity: 0.8;
+  }
 }
 
 /* Footlights along the stage lip. Same bulb values as the marquee, so the
