@@ -88,7 +88,7 @@
           "presenter": "",
           "venue": "club",
           "room": "On the Patio",
-          "description": "Runs during the Opening Act Welcome Mixer."
+          "description": "All newbies will participate. Be there to cheer on your teammates."
         }
       ]
     },
@@ -133,7 +133,8 @@
           "presenter": "",
           "venue": "",
           "room": "",
-          "description": ""
+          "description": "",
+          "tenureLink": true
         },
         {
           "key": "wed-0845-opening-remarks",
@@ -158,7 +159,11 @@
           "venue": "",
           "room": "",
           "description": "",
-          "subtitle": "Playlist 1"
+          "subtitle": "Playlist 1",
+          "preread": {
+            "url": "assets/resources/core-fundamentals-booklet-2026.pdf",
+            "label": "Private Club Membership Core Fundamentals Booklet, PDF"
+          }
         },
         {
           "key": "wed-0945-breakouts",

@@ -1123,6 +1123,11 @@ body.display-mode .stubnote { font-size: 20px; }
 
 .set-ticket:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
+/* A session with nothing to open renders as a div rather than a button, so the
+   pointer must stop promising a dropdown that is not there. Everything else about
+   the ticket stays identical: same stub, same title, same reactions underneath. */
+.set-ticket--flat { cursor: default; }
+
 .set-stub__t { font-family: var(--font-display); font-size: 20px; line-height: 1; }
 .set-stub__m { font-size: 10px; letter-spacing: 0.16em; color: var(--dim); }
 
@@ -4196,7 +4201,8 @@ function LinkChip({ href, glyph, children }) {
 /* Everything inside the ticket is a span, because the ticket itself is a
    button and a button may not hold a p or a div. Reactions and links sit
    outside it for the same reason. */
-function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle }) {
+function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
+                       tenureReady, onGoTab }) {
   const st = sessionState(sess, day, now);
   const venue = sess.venue ? VENUES[sess.venue] : null;
   const clocked = !!sess.start;
@@ -4204,6 +4210,24 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle }
   const panelId = "sess-" + sess.key;
   const where = [venue ? venue.name : "", sess.room].filter(Boolean).join(", ");
   const mine = counts[sess.key] || {};
+
+  /* The tenure link only counts as detail once the crew has unlocked it, so a
+     locked card does not offer a dropdown that opens onto nothing. */
+  const showTenureLink = !!(sess.tenureLink && tenureReady);
+
+  /* Does this card have anything worth opening?
+     Jim, Aug 13: if there is no detail, do not offer the dropdown at all. It used
+     to be offered on every card and then apologise with "Nothing else on the
+     agenda for this one."
+     Venue, links and the open-ended note are in the test on purpose. They render
+     inside the panel, so leaving them out would have hidden real content behind a
+     dropdown that no longer existed. */
+  const hasDetail = !!(sess.description || where || sess.presenter || sess.preread
+    || (sess.items && sess.items.length)
+    || venue
+    || (sess.links && sess.links.length)
+    || sess.kind === "open"
+    || showTenureLink);
 
   const badges = (
     <span className="set-row">
@@ -4245,7 +4269,9 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle }
           {[sess.presenter, where].filter(Boolean).join(" · ")}
         </span>
       ) : null}
-      <span className="set-more">{open ? "Close ▴" : "Detail ▾"}</span>
+      {hasDetail ? (
+        <span className="set-more">{open ? "Close ▴" : "Detail ▾"}</span>
+      ) : null}
     </span>
   );
 
@@ -4266,8 +4292,38 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle }
     );
   }
 
-  const anyDetail = sess.description || where || sess.presenter || sess.preread
-    || (sess.items && sess.items.length);
+  /* Nothing to open means no button and no dropdown. A plain div, so it is not
+     announced as an interactive control that does nothing. */
+  if (!hasDetail) {
+    return (
+      <article className={"set-card" + (st.phase === "done" ? " is-done" : "")}>
+        <div className="ticket set-ticket set-ticket--flat">
+          {stub}
+          {body}
+        </div>
+        <div className="reacts">
+          {REACTIONS.map((r) => {
+            const n = mine[r.key] || 0;
+            const cast = !!castMap[sess.key + ":" + r.key];
+            return (
+              <button
+                key={r.key}
+                className={"react" + (cast ? " is-cast" : "")}
+                disabled={!FB.ok || cast}
+                onClick={() => onCast(sess.key, r.key)}
+                title={cast ? "Already counted" : r.label}
+                data-label={cast ? "Already counted" : r.label}
+              >
+                <span aria-hidden="true">{r.glyph}</span>
+                <span className="react__n t-data">{FB.ok ? n : "–"}</span>
+                <span className="sr-only">{r.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className={"set-card" + (st.phase === "done" ? " is-done" : "")}>
@@ -4285,10 +4341,6 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle }
         <div className="set-detail" id={panelId}>
           {sess.description ? (
             <p className="set-detail__d">{sess.description}</p>
-          ) : null}
-
-          {!anyDetail ? (
-            <p className="set-detail__d">Nothing else on the agenda for this one.</p>
           ) : null}
 
           {/* The seven Core Fundamentals breakouts sit under one session, so
@@ -4324,6 +4376,21 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle }
             </dl>
           ) : null}
 
+          {/* Hidden until the crew unlocks tenure, which is the same switch the
+              Encore tenure section already uses, encore/tenure/unlocked. One
+              flag, one place to flip it, and it cannot go live here while the
+              Encore list is still sealed. Jim, Aug 13. */}
+          {showTenureLink ? (
+            <div className="tf__row">
+              <button
+                className="btn btn--tiny"
+                onClick={() => onGoTab && onGoTab("encore")}
+              >
+                See the Tenure Award list
+              </button>
+            </div>
+          ) : null}
+
           {venue || (sess.links && sess.links.length) ? (
             <div className="chiprow">
               {venue ? (
@@ -4350,12 +4417,11 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle }
             </div>
           ) : null}
 
-          {sess.endSource === "next" ? (
-            <p className="set-fine">
-              The agenda gives a start time only. The end used here is the next
-              item's start, so the live badge is a derivation.
-            </p>
-          ) : null}
+          {/* The endSource === "next" footnote used to print here, explaining that
+              the end time is derived from the next item's start. Jim cut it on
+              Aug 13: it appeared on most cards and told attendees nothing they
+              needed. endSource is still honoured for the live badge, it just no
+              longer narrates itself. */}
 
           {sess.kind === "open" ? (
             <p className="set-fine">No end time on the agenda. It runs until the night is done.</p>
@@ -4387,9 +4453,22 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle }
   );
 }
 
-function SetlistTab({ isAdmin, now }) {
+function SetlistTab({ isAdmin, now, onGoTab }) {
   const agenda = useAgenda();
   const counts = useReactions();
+
+  /* One listener for the whole setlist, not one per card. Thirty seven cards
+     each opening their own Firebase subscription for the same boolean would be
+     thirty six wasted sockets. */
+  const tenure = useTenureUnlocked();
+  const vis = useTabVisibility();
+  const encoreTab = TABS.filter((t) => t.key === "encore")[0];
+
+  /* Two conditions, both required. Tenure has to be unlocked, AND the Encore tab
+     has to be reachable for whoever is looking, or the link would send attendees
+     to a tab they cannot see. Crew see every tab, so for them the unlock alone
+     is enough. */
+  const tenureReady = tenure.unlocked && (isAdmin || isTabOn(vis, encoreTab));
   const [castMap, setCastMap] = useState(() => readJSON(LS.reacted));
   const [dayKey, setDayKey] = useState(null);
   const [open, setOpen] = useState({});
@@ -4487,6 +4566,8 @@ function SetlistTab({ isAdmin, now }) {
                 castMap={castMap}
                 onCast={onCast}
                 open={!!open[sess.key]}
+                tenureReady={tenureReady}
+                onGoTab={onGoTab}
                 onToggle={() => setOpen((prev) => {
                   const next = Object.assign({}, prev);
                   next[sess.key] = !prev[sess.key];
@@ -13278,7 +13359,7 @@ function App() {
             onGoTab={(key) => { setShowAdmin(false); setActive(key); }}
           />
         ) : TabView ? (
-          <TabView isAdmin={isAdmin} now={now} />
+          <TabView isAdmin={isAdmin} now={now} onGoTab={setActive} />
         ) : (
           <Empty>Every tab is switched off. The crew is between songs.</Empty>
         )}
