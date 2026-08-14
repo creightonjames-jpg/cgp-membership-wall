@@ -285,10 +285,21 @@ def find_sources(stem, name, index):
 
     if not scored:
         return [], "no source file matches"
-    scored.sort(key=lambda x: (-x[0], x[1]))
+
+    # Newest file first within a score tie, and the caller now takes the FIRST
+    # candidate that grades acceptably rather than the best framed one.
+    #
+    # This cost Jim a replacement. He sent a new Tyler Busey headshot. It scored
+    # identically to the year old "Tyler Busey.png" still sitting in the
+    # SharePoint drop, because both filenames carry the same two name tokens. The
+    # old caller kept whichever cropped closest to 40 percent face, that happened
+    # to be the old photo, and the replacement was silently undone AFTER the
+    # intake pipeline had written the right file. A newer file is a newer photo,
+    # so on a tie recency wins over framing.
+    scored.sort(key=lambda x: (-x[0], -os.path.getmtime(x[2]), x[1]))
     best = scored[0][0]
     top = [x for x in scored if x[0] == best]
-    note = "" if len(top) == 1 else "%d sources tied, tried each" % len(top)
+    note = "" if len(top) == 1 else "%d sources tied, newest first" % len(top)
     return [(fn, path) for _, fn, path in top], note
 
 
@@ -393,13 +404,11 @@ def main():
                             reason += ", source is a tight close-up"
 
                 if accept:
-                    dist = abs(frac - TARGET_FACE)
-                    if best is None or dist < best[0]:
-                        if best is not None:
-                            os.unlink(best[1])
-                        best = (dist, probe.name, reason, src_name)
-                    else:
-                        os.unlink(probe.name)
+                    # First acceptable candidate wins, and candidates arrive
+                    # newest first. Do not keep hunting for a better framed one:
+                    # that is how a fresh replacement lost to an older file.
+                    best = (0, probe.name, reason, src_name)
+                    break
                 else:
                     last_fail = reason
                     os.unlink(probe.name)
