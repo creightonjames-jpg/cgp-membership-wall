@@ -1815,6 +1815,37 @@ body.display-mode .stubnote { font-size: 20px; }
 /* -------------------------------------------------------------- art cards */
 .vt-cards { display: flex; flex-direction: column; gap: 16px; }
 
+/* ------------------------------------------------ a document as pages */
+/* A booklet split into page images. Reads as one continuous document rather than
+   a stack of cards, so the gap is tight and there is no chrome between pages. */
+.vt-pages { display: flex; flex-direction: column; gap: 10px; }
+
+.vt-page {
+  display: block; width: 100%; padding: 0; margin: 0;
+  background: none; border: 0; cursor: zoom-in;
+  -webkit-appearance: none; appearance: none;
+}
+
+.vt-page img {
+  display: block; width: 100%; height: auto;
+  border: 1px solid var(--edge); border-radius: 8px;
+  background: var(--cream);   /* paper, so a page shows its shape before it loads */
+
+  /* RESERVE THE SPACE. Without this the whole thing is broken, not merely jumpy.
+     A lazy image with no intrinsic size lays out at zero height, so all 28 pages
+     collapsed into a 2px stack, none of them ever came far enough into view to
+     trigger loading, and the section rendered as an empty strip. US Letter, which
+     every page in this booklet is, measured rather than assumed: 1100x1423. */
+  aspect-ratio: 1100 / 1423;
+}
+
+.vt-page:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* The whole document, above the pages. */
+.vt-doc { margin: 0 0 6px; }
+.vt-doc__a { display: inline-block; }
+.vt-doc__n { margin: 6px 0 0; font-size: 12px; color: var(--mute); }
+
 figure.vt-card { margin: 0; padding: 14px; }
 
 .vt-card__k {
@@ -6482,7 +6513,7 @@ const VAULT_SECTIONS = [
   { key: "buckets",      name: "Invitation Sources",         icon: "\u{1F5C2}", kind: "images" },
   { key: "graphs",       name: "Club Graphs",                icon: "\u{1F4C8}", kind: "graphs" },
   { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "images", drop: "scenarios" },
-  { key: "personas",     name: "Membership Funnel Personas",  icon: "\u{1F465}", kind: "images", drop: "personas" }
+  { key: "personas",     name: "Invitation Source Personas",  icon: "\u{1F465}", kind: "images", drop: "personas" }
 ];
 
 /* These are the two times CLAUDE.md and the spec both give. August in Ohio is
@@ -7165,12 +7196,59 @@ function VaultImageSection({ section, manifest, onZoom }) {
   const sec = (data.sections && data.sections[section.key]) || null;
   const items = (sec && sec.items) || [];
 
-  if (!items.length) {
+  const doc = sec && sec.document;
+
+  if (!items.length && !doc) {
     return <Empty>{VAULT_EMPTY[section.key] || "Nothing here yet."}</Empty>;
+  }
+
+  /* The original document the pages came from, offered whole. Rendered above the
+     pages so somebody who just wants the file does not scroll 28 images to find
+     it. `download` is deliberately NOT set: on a phone, opening the PDF in the
+     native viewer is the useful thing, and iOS ignores the download attribute on
+     a cross-document link anyway. Long press still saves it. */
+  const docRow = doc ? (
+    <div className="vt-doc">
+      <a className="btn btn--go vt-doc__a"
+         href={dir + "/" + doc.file}
+         target="_blank" rel="noopener noreferrer">
+        {"↓"} {doc.label || "Download the PDF"}
+      </a>
+      {doc.note ? <p className="vt-doc__n">{doc.note}</p> : null}
+    </div>
+  ) : null;
+
+  /* A document split into page images. One continuous flow, no card chrome and no
+     per page title, because "Page 7" over every image is noise when you are
+     reading a booklet. Tap any page to open it in the same zoom viewer the rest of
+     the Vault uses. Lazy loading matters here: 28 pages is 4.4MB and almost nobody
+     reads to the end, so pages are paid for as they are reached. */
+  if (sec && sec.layout === "pages") {
+    return (
+      <div className="vt-pages">
+        {docRow}
+        {items.map((item, i) => {
+          const src = dir + "/" + item.file;
+          const title = item.title || item.file;
+          return (
+            <button
+              type="button"
+              className="vt-page"
+              key={item.file || i}
+              onClick={() => onZoom({ title: title, src: src, download: item.file })}
+            >
+              <img src={src} alt={title} loading="lazy" decoding="async" />
+              <span className="sr-only">{title}, open bigger</span>
+            </button>
+          );
+        })}
+      </div>
+    );
   }
 
   return (
     <div className="vt-cards">
+      {docRow}
       {items.map((item, i) => {
         const title = item.title || item.file;
         return (
@@ -11755,7 +11833,7 @@ const VAULT_DROPS = [
     when: "Wednesday 9:30 AM Eastern"
   },
   {
-    key: "personas", title: "Membership Funnel Personas",
+    key: "personas", title: "Invitation Source Personas",
     at: Date.parse("2026-08-27T10:30:00-04:00"),
     when: "Thursday 10:30 AM Eastern"
   }

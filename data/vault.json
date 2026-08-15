@@ -4,17 +4,132 @@
   "itemShape": {
     "file": "filename inside dir. png, jpg, webp or svg. An svg is inlined so the wall's fonts apply, with an img tag as the fallback.",
     "title": "what the card is called. Falls back to the filename when missing.",
-    "note": "optional one line under the title. Leave it out rather than padding it."
+    "note": "optional one line under the title. Leave it out rather than padding it.",
+    "layout": "optional on a section. \"pages\" renders the items as a continuous page flow with no per item chrome, for a document that was split into images. Anything else renders one titled card per item.",
+    "document": "optional on a section. The original file the images came from, offered as a download above the pages."
   },
   "sections": {
     "fundamentals": {
       "items": [
         {
-          "file": "core-fundamentals.png",
-          "title": "Private Club Membership Core Fundamentals",
-          "note": "The wheel. Effective, inspirational execution at the centre."
+          "file": "booklet/core-fundamentals-01.jpg",
+          "title": "Page 1"
+        },
+        {
+          "file": "booklet/core-fundamentals-02.jpg",
+          "title": "Page 2"
+        },
+        {
+          "file": "booklet/core-fundamentals-03.jpg",
+          "title": "Page 3"
+        },
+        {
+          "file": "booklet/core-fundamentals-04.jpg",
+          "title": "Page 4"
+        },
+        {
+          "file": "booklet/core-fundamentals-05.jpg",
+          "title": "Page 5"
+        },
+        {
+          "file": "booklet/core-fundamentals-06.jpg",
+          "title": "Page 6"
+        },
+        {
+          "file": "booklet/core-fundamentals-07.jpg",
+          "title": "Page 7"
+        },
+        {
+          "file": "booklet/core-fundamentals-08.jpg",
+          "title": "Page 8"
+        },
+        {
+          "file": "booklet/core-fundamentals-09.jpg",
+          "title": "Page 9"
+        },
+        {
+          "file": "booklet/core-fundamentals-10.jpg",
+          "title": "Page 10"
+        },
+        {
+          "file": "booklet/core-fundamentals-11.jpg",
+          "title": "Page 11"
+        },
+        {
+          "file": "booklet/core-fundamentals-12.jpg",
+          "title": "Page 12"
+        },
+        {
+          "file": "booklet/core-fundamentals-13.jpg",
+          "title": "Page 13"
+        },
+        {
+          "file": "booklet/core-fundamentals-14.jpg",
+          "title": "Page 14"
+        },
+        {
+          "file": "booklet/core-fundamentals-15.jpg",
+          "title": "Page 15"
+        },
+        {
+          "file": "booklet/core-fundamentals-16.jpg",
+          "title": "Page 16"
+        },
+        {
+          "file": "booklet/core-fundamentals-17.jpg",
+          "title": "Page 17"
+        },
+        {
+          "file": "booklet/core-fundamentals-18.jpg",
+          "title": "Page 18"
+        },
+        {
+          "file": "booklet/core-fundamentals-19.jpg",
+          "title": "Page 19"
+        },
+        {
+          "file": "booklet/core-fundamentals-20.jpg",
+          "title": "Page 20"
+        },
+        {
+          "file": "booklet/core-fundamentals-21.jpg",
+          "title": "Page 21"
+        },
+        {
+          "file": "booklet/core-fundamentals-22.jpg",
+          "title": "Page 22"
+        },
+        {
+          "file": "booklet/core-fundamentals-23.jpg",
+          "title": "Page 23"
+        },
+        {
+          "file": "booklet/core-fundamentals-24.jpg",
+          "title": "Page 24"
+        },
+        {
+          "file": "booklet/core-fundamentals-25.jpg",
+          "title": "Page 25"
+        },
+        {
+          "file": "booklet/core-fundamentals-26.jpg",
+          "title": "Page 26"
+        },
+        {
+          "file": "booklet/core-fundamentals-27.jpg",
+          "title": "Page 27"
+        },
+        {
+          "file": "booklet/core-fundamentals-28.jpg",
+          "title": "Page 28"
         }
-      ]
+      ],
+      "layout": "pages",
+      "document": {
+        "file": "core-fundamentals-booklet-2026.pdf",
+        "label": "Download the booklet",
+        "note": "28 pages, PDF, 1.2MB"
+      }
     },
     "buckets": {
       "items": [
