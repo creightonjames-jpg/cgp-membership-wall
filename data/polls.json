@@ -118,7 +118,7 @@
     {
       "id": "thu-lead-source",
       "type": "choice",
-      "session": "thu-0930-behaviors",
+      "session": "thu-0915-invitation-pathway",
       "question": "What creates most of your leads today?",
       "options": [
         "Members introducing friends",
@@ -128,7 +128,7 @@
         "Nothing repeatable yet"
       ],
       "draft": true,
-      "crewNote": "Drafted to open the 9:30 session, What behaviors create leads. The options are mine, not the source's, so the presenter should approve or swap them. Keep the last option. It is the honest answer for some rooms and the result is worthless without it."
+      "crewNote": "Drafted to open the 9:30 session, What behaviors create leads. The options are mine, not the source's, so the presenter should approve or swap them. Keep the last option. It is the honest answer for some rooms and the result is worthless without it. MOVED Aug 13 2026: this was written for the 9:30 session What behaviors create leads, which is not on the approved agenda and has been removed. The question still fits the 9:15 Leads to the Invitation Pathway session, so it was reattached rather than thrown away. Delete it instead if the presenter does not want it."
     },
     {
       "id": "thu-loss-rank",

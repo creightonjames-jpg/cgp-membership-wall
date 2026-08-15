@@ -19,7 +19,7 @@
       "stated": "The agenda states the end time.",
       "next": "The agenda states a start only. The end is the next item's start time, which is a derivation, not a fact. The card says so."
     },
-    "agendaSource": "Dashboard Agenda 8.12.26.docx, from Lisa via Jim Aug 13 2026. Supersedes the 8.4 version. Two sessions still on the wall are absent from it, thu-0930-behaviors and thu-1000-leads-development. Left in place pending Jim's yes, and thu-0930-behaviors carries a poll in data/polls.json."
+    "agendaSource": "Dashboard Agenda 8.12.26.docx, reconfirmed by Jim on Aug 13 2026 as the most recent APPROVED agenda. Verified title by title against his paste: Tuesday 4, Wednesday 15, Thursday 15, Friday 1, no extras and nothing missing. Two Thursday sessions that predated it, thu-0930-behaviors and thu-1000-leads-development, were removed on his say so."
   },
   "days": [
     {
@@ -363,30 +363,6 @@
           "room": "",
           "description": "",
           "subtitle": "Playlist 3"
-        },
-        {
-          "key": "thu-0930-behaviors",
-          "kind": "timed",
-          "start": "2026-08-27T09:30:00-04:00",
-          "end": "2026-08-27T10:00:00-04:00",
-          "endSource": "next",
-          "title": "What behaviors create leads?",
-          "presenter": "",
-          "venue": "",
-          "room": "",
-          "description": ""
-        },
-        {
-          "key": "thu-1000-leads-development",
-          "kind": "timed",
-          "start": "2026-08-27T10:00:00-04:00",
-          "end": "2026-08-27T10:30:00-04:00",
-          "endSource": "next",
-          "title": "Leads Development Meeting with Gene",
-          "presenter": "Gene",
-          "venue": "",
-          "room": "",
-          "description": ""
         },
         {
           "key": "thu-1030-break",
