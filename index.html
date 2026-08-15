@@ -3621,7 +3621,9 @@ const TABS = [
   { key: "backstage",  icon: "\u{1F39F}", name: "Backstage Pass", phase: "pre" },
   { key: "soundcheck", icon: "\u{1F399}", name: "Soundcheck",     phase: "pre" },
   { key: "vault",      icon: "\u{1F512}", name: "The Vault",      phase: "pre" },
-  { key: "liner",      icon: "\u{1F4DD}", name: "Liner Notes",    phase: "pre" },
+  /* Liner Notes was the tenth tab until Aug 13 2026. Jim merged it into
+     Soundcheck, so it is a pill in that tab now, not a tab of its own. Nine
+     tabs. Its Firebase node, takeaways/, is untouched and so is its data. */
   { key: "vote",       icon: "\u{1F4CA}", name: "Crowd Vote",     phase: "during" },
   { key: "pit",        icon: "\u{1F4F7}", name: "The Pit",        phase: "during" },
   { key: "cares",      icon: "\u{1F3C6}", name: "The Cares Cup",  phase: "during" },
@@ -6343,6 +6345,24 @@ function SoundcheckTab({ isAdmin, now }) {
   const [cat, setCat] = useState("all");
   const [showAnswered, setShowAnswered] = useState(false);
 
+  /* Two tools, one tab, since Aug 13 2026. Questions and takeaways stay separate
+     lists on separate Firebase nodes, because they are separate things: a question
+     is asked, voted on and answered, a takeaway is shared and pinned. The pills
+     just decide which one you are looking at.
+
+     Display Mode is deliberately NOT part of this. It is the one feature a
+     presenter drives live in front of the room, its job is surfacing top voted
+     questions, and it has no business changing during a layout tidy. When Display
+     Mode is on the pills are gone and this is the questions wall, full stop.
+
+     THIS HOOK BELONGS UP HERE WITH THE OTHERS, above the `if (displayMode)` early
+     return further down. I first put it just before the main return, which is after
+     that early return, so switching Display Mode on rendered one fewer hook than
+     the previous pass and React threw error #300 and blanked the whole wall. It
+     only reproduced from the Liner Notes pill, which is exactly the sort of path a
+     quick click-through misses. */
+  const [pane, setPane] = useState("questions");
+
   const post = useCallback((clean) => {
     if (!FB.ok) return Promise.resolve(false);
     return FB.db.ref("questions").push().set({
@@ -6437,8 +6457,28 @@ function SoundcheckTab({ isAdmin, now }) {
   pool.forEach((q) => { counts[q.category] = (counts[q.category] || 0) + 1; });
   const answeredCount = items.filter((q) => q.answered).length;
 
+  const onQuestions = displayMode || pane === "questions";
+
   return (
     <TabFrame tabKey="soundcheck">
+      {!displayMode ? (
+        <div className="dayrow" role="tablist" aria-label="Soundcheck tools">
+          {[["questions", "Questions"], ["liner", "Liner Notes"]].map(([k, label]) => (
+            <button
+              key={k}
+              role="tab"
+              aria-selected={pane === k}
+              className={"daypill" + (pane === k ? " is-on" : "")}
+              onClick={() => setPane(k)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      {!onQuestions ? <LinerNotesPanel isAdmin={isAdmin} now={now} /> : (
+      <React.Fragment>
       {FB.ok ? (
         <ScAsk onPost={post} live={FB.ok} />
       ) : (
@@ -6538,8 +6578,11 @@ function SoundcheckTab({ isAdmin, now }) {
         orders a list, it is not a ballot. Display Mode shows the top 12 unanswered,
         ignores the sort and filter pills on purpose, and only auto scrolls when the
         list is taller than the screen. ts is written by the server, not by the
-        phone.
+        phone. Liner Notes shares this tab since Aug 13 and keeps its own node,
+        takeaways/, untouched.
       </BuildNote>
+      </React.Fragment>
+      )}
     </TabFrame>
   );
 }
@@ -8193,7 +8236,12 @@ function LnCard({ t, now, isAdmin, onPin, onDelete }) {
   );
 }
 
-function LinerNotesTab({ isAdmin, now }) {
+/* Liner Notes lives INSIDE Soundcheck as of Aug 13 2026, Jim's call, so this
+   returns a panel rather than a whole tab. It kept its name because the room has
+   seen "Liner Notes" on the flier and the agenda, and it kept its own Firebase
+   node, `takeaways`, because the merge is a presentation change and nothing about
+   the data moved. Wiring, and only wiring, changed. */
+function LinerNotesPanel({ isAdmin, now }) {
   const { items, ready } = useTakeaways();
   const [filter, setFilter] = useState("all");
 
@@ -8239,7 +8287,7 @@ function LinerNotesTab({ isAdmin, now }) {
   }, []);
 
   return (
-    <TabFrame tabKey="liner">
+    <React.Fragment>
       <div className="dayrow" role="tablist" aria-label="Takeaway days">
         {LN_FILTERS.map((f) => (
           <button
@@ -8302,7 +8350,7 @@ function LinerNotesTab({ isAdmin, now }) {
         shows under All only. Export takes the whole board, not the filtered view. Append
         ?clock=2026-08-26T09:15:00-04:00 to test the Wednesday tag without waiting.
       </BuildNote>
-    </TabFrame>
+    </React.Fragment>
   );
 }
 
@@ -12283,7 +12331,7 @@ function useTabVisibility() {
 }
 
 /* 8:20 on a Wednesday morning is the wrong time to flip ten switches. */
-const PRE_TABS = ["setlist", "band", "backstage", "soundcheck", "vault", "liner"];
+const PRE_TABS = ["setlist", "band", "backstage", "soundcheck", "vault"];
 
 const TAB_PRESETS = [
   {
@@ -13593,7 +13641,6 @@ const TAB_VIEWS = {
   backstage:  BackstageTab,
   soundcheck: SoundcheckTab,
   vault:      VaultTab,
-  liner:      LinerNotesTab,
   vote:       CrowdVoteTab,
   pit:        PitTab,
   cares:      CaresCupTab,
