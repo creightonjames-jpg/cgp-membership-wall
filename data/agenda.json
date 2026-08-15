@@ -66,10 +66,9 @@
           "room": "Golf Course",
           "description": "Proudly benefiting Century Golf Cares. Already in town? Come cheer on your favorite team. Members will be out on the course too, so keep it respectful, no disruptions.",
           "graphic": {
-            "file": "assets/agenda/shank-showdown.png",
-            "alt": "The Shank Showdown II tournament graphic",
-            "pending": true,
-            "_note": "pending true renders the place marker instead of the image. When the artwork arrives, drop it at the path above and set pending to false. No code change needed."
+            "file": "assets/agenda/shank-showdown.jpg",
+            "alt": "Shank Showdown II matchup poster. Team Total Consciousness, Mike Akeroyd and Donny Darville, against Spalding's Revenge Team, Todd Keefer and Jimmy Han. Both playing for the Century Cares Cup.",
+            "pending": false
           }
         },
         {
