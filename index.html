@@ -1815,6 +1815,69 @@ body.display-mode .stubnote { font-size: 20px; }
 /* -------------------------------------------------------------- art cards */
 .vt-cards { display: flex; flex-direction: column; gap: 16px; }
 
+/* ------------------------------------------------- invitation personas */
+/* Reading matter, so it gets a measure and real paragraph rhythm rather than the
+   card grid the image sections use. */
+.pv { display: flex; flex-direction: column; gap: 14px; }
+
+.pv__lede {
+  margin: 0; color: var(--gold); font-size: 14px; letter-spacing: 0.04em;
+}
+
+.pv__p { margin: 0; max-width: var(--measure); line-height: 1.6; color: var(--cream); }
+
+.pv__mission { padding: 14px; }
+.pv__k { margin: 0 0 8px; font-size: 13px; letter-spacing: 0.14em; color: var(--gold); }
+.pv__ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.pv__ul li { line-height: 1.5; }
+
+.pv-card { padding: 0; overflow: hidden; }
+
+.pv-card__head {
+  width: 100%; display: flex; align-items: center; gap: 12px;
+  padding: 14px; text-align: left; font: inherit; color: inherit;
+  background: none; border: 0; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+}
+
+.pv-card__head:focus-visible { outline: 2px solid var(--gold); outline-offset: -3px; }
+
+/* The number reads as a track listing, which is the joke the whole wall runs on. */
+.pv-card__n {
+  flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--scarlet); color: var(--cream);
+  font-size: 17px; line-height: 1;
+}
+
+.pv-card__t { flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pv-card__src { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+.pv-card__name { font-size: 17px; line-height: 1.15; }
+.pv-card__more { flex: 0 0 auto; font-size: 12px; color: var(--gold); }
+
+.pv-card__hook {
+  margin: 0; padding: 0 14px 14px; color: var(--dim);
+  font-style: italic; line-height: 1.5; max-width: var(--measure);
+}
+
+.pv-card__body {
+  padding: 0 14px 16px; display: flex; flex-direction: column; gap: 12px;
+  border-top: 1px solid var(--edge); padding-top: 14px;
+}
+
+.pv-card__pull {
+  margin: 0; padding-left: 12px; border-left: 3px solid var(--gold);
+  color: var(--gold); font-style: italic; line-height: 1.5;
+}
+
+/* The discussion question is the point of the whole card, so it is the one thing
+   that stays loud when somebody skims. */
+.pv-card__q {
+  margin: 0; padding: 12px 14px; border-radius: 8px;
+  background: var(--glow); border: 1px solid var(--gold-rule);
+  color: var(--cream); line-height: 1.5; max-width: var(--measure);
+}
+
 /* ------------------------------------------------ a document as pages */
 /* A booklet split into page images. Reads as one continuous document rather than
    a stack of cards, so the gap is tight and there is no chrome between pages. */
@@ -6513,7 +6576,7 @@ const VAULT_SECTIONS = [
   { key: "buckets",      name: "Invitation Sources",         icon: "\u{1F5C2}", kind: "images" },
   { key: "graphs",       name: "Club Graphs",                icon: "\u{1F4C8}", kind: "graphs" },
   { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "images", drop: "scenarios" },
-  { key: "personas",     name: "Invitation Source Personas",  icon: "\u{1F465}", kind: "images", drop: "personas" }
+  { key: "personas",     name: "Invitation Source Personas",  icon: "\u{1F465}", kind: "personas", drop: "personas" }
 ];
 
 /* These are the two times CLAUDE.md and the spec both give. August in Ohio is
@@ -7268,6 +7331,106 @@ function VaultImageSection({ section, manifest, onZoom }) {
   );
 }
 
+/* The six invitation source personas, from data/personas.json.
+
+   TEXT, not page images. The booklet next door is rendered as pictures of pages
+   because it is a designed document and its layout is the point. This is prose
+   somebody reads on a phone in a breakout room and then argues about, so it wants
+   to reflow, scale with the reader's own type size, and be selectable. A picture of
+   a paragraph does none of that.
+
+   The client's wording is reproduced exactly, em-dashes and all. The no-em-dash
+   rule is for copy we write. */
+function useJsonFile(path) {
+  const [state, setState] = useState({ status: "loading", data: null, reason: "" });
+  useEffect(() => {
+    let alive = true;
+    fetch(path, { cache: "no-cache" })
+      .then((r) => {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then((d) => { if (alive) setState({ status: "ready", data: d, reason: "" }); })
+      .catch((e) => {
+        if (alive) setState({ status: "failed", data: null, reason: String(e.message || e) });
+      });
+    return () => { alive = false; };
+  }, [path]);
+  return state;
+}
+
+function VaultPersonas() {
+  const file = useJsonFile("data/personas.json");
+  const [open, setOpen] = useState(null);
+
+  if (file.status === "loading") return <Empty>Reading the packet.</Empty>;
+  if (file.status === "failed") {
+    return (
+      <Empty>
+        The personas file did not load. {file.reason} Everything else on the wall
+        still works.
+      </Empty>
+    );
+  }
+
+  const d = file.data || {};
+  const people = d.personas || [];
+
+  return (
+    <div className="pv">
+      <p className="pv__lede">{d.subtitle}</p>
+
+      {(d.howToUse || []).map((p, i) => (
+        <p className="pv__p" key={"h" + i}>{p}</p>
+      ))}
+
+      {(d.mission || []).length ? (
+        <div className="pv__mission glow-card grille">
+          <p className="pv__k t-display">{d.missionLabel}</p>
+          <ul className="pv__ul">
+            {d.mission.map((m, i) => <li key={i}>{m}</li>)}
+          </ul>
+        </div>
+      ) : null}
+
+      {people.map((p) => {
+        const isOpen = open === p.n;
+        return (
+          <article className="pv-card glow-card grille" key={p.n}>
+            <button
+              type="button"
+              className="pv-card__head"
+              aria-expanded={isOpen}
+              onClick={() => setOpen(isOpen ? null : p.n)}
+            >
+              <span className="pv-card__n t-display">{p.n}</span>
+              <span className="pv-card__t">
+                <span className="pv-card__src">{p.source}</span>
+                <span className="pv-card__name t-display">{p.title}</span>
+              </span>
+              <span className="pv-card__more">{isOpen ? "Close ▴" : "Read ▾"}</span>
+            </button>
+
+            {p.hook ? <p className="pv-card__hook">{p.hook}</p> : null}
+
+            {isOpen ? (
+              <div className="pv-card__body">
+                {p.pull ? <p className="pv-card__pull">{p.pull}</p> : null}
+                {(p.story || []).map((s, i) => (
+                  <p className="pv__p" key={i}>{s}</p>
+                ))}
+                {p.question ? (
+                  <p className="pv-card__q">{p.question}</p>
+                ) : null}
+              </div>
+            ) : null}
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
 /* What an attendee sees on a section that has not opened. Greyed, padlocked,
    the time in plain language, and a countdown that moves. It does not repeat
    the section name: the heading directly above it already says it. */
@@ -7548,6 +7711,8 @@ function VaultTab({ isAdmin, now }) {
             />
           ) : section.kind === "graphs" ? (
             <VaultGraphPicker onZoom={onZoom} />
+          ) : section.kind === "personas" ? (
+            <VaultPersonas />
           ) : (
             <VaultImageSection section={section} manifest={manifest} onZoom={onZoom} />
           )}
