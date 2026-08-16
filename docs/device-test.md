@@ -1,91 +1,60 @@
 # Physical phone test
 
-ROADMAP T0.8 and T3.6. About twenty minutes per device.
+ROADMAP T0.8 and T3.6.
 
 Live URL: https://creightonjames-jpg.github.io/cgp-membership-wall/
 
-**Why this cannot be skipped or done on a laptop.** Six things on this wall only
-behave truthfully on a real handset. Everything else has been checked in a desktop
-browser at 380px and at desktop width, so this list is deliberately short and it is
-all the stuff a browser on a Mac physically cannot do.
+## Result
 
-## Devices
+**The six device-only items were tested by Jim on Aug 13 2026. Five passed. The
+sixth was not reported on.**
 
-At minimum one iOS and one Android. A tablet if you have one. Do one pass on wifi
-and one on cellular, because the booklet is 4.4MB and the headshots are another 5.4MB.
+These are the things a desktop browser physically cannot prove, which is why they
+needed a handset at all. Everything else on the wall has been checked in a browser
+at 380px and at desktop width.
 
-| Device | OS and browser | Who | Date |
-|---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
+| # | Item | Result |
+|---|---|---|
+| 1 | Camera upload in The Pit, `capture="environment"` opens the camera | **Passed** |
+| 2 | Library upload, the second input with no capture attribute | **Passed** |
+| 3 | Tappable phone numbers, hotel and club, dialer pre-filled | **Passed** |
+| 4 | Maps handoff, Apple Maps on iOS and Google Maps on Android | **Passed** |
+| 5 | Fonts, Anton, Alfa Slab One and Inter arriving rather than falling back | **Passed** |
+| 6 | Lazy image loading on cellular, 119 headshots and 28 booklet pages | Not reported |
 
-## The six things
+## Still open, and worth being precise about it
 
-Tick each one, and write what happened if it is not a clean pass.
+**Which devices.** Jim confirmed the five items but did not say which handsets. T0.8
+asks for three phones with at least one iOS and one Android, and T3.6 adds a tablet.
+So the items are proven, the matrix is not.
 
-### 1. Camera upload, The Pit
+**Cellular.** T3.6 asks for a pass on cellular data, not only wifi. That matters more
+now than when it was written: the wall carries roughly 10MB of images, 5.4MB of
+headshots and 4.4MB of booklet pages, all lazily loaded. Item 6 above is the same
+question from the other side.
 
-- [ ] "Take a photo" opens the CAMERA, not a file browser
-- [ ] The photo uploads and appears in the gallery
-- [ ] "Choose from library" opens the photo library
-- [ ] That photo uploads too
+**Item 6 specifically.** Nobody has watched the lazy images load on a real handset.
+It cannot be checked from here at all: the automated browser reports
+`document.visibilityState` as hidden and Chrome refuses to trigger lazy loading for a
+hidden page. The crew font check in the header will now say out loud if a font failed,
+so item 5 stays observable at the venue, but lazy loading has no such readout.
 
-Both paths have to work. Camera-only was a real limitation on the previous build,
-which is why there are two separate inputs.
+## Anything else, quickly
 
-### 2. Tappable phone numbers
+Not device-dependent, and all verified in a browser at both widths rather than on a
+phone:
 
-- [ ] Backstage Pass, the hotel number opens the dialer with (614) 890-8600 in it
-- [ ] The Medallion Club number opens the dialer with (614) 794-6999 in it
-
-Nothing should need copying and pasting.
-
-### 3. Maps handoff
-
-- [ ] Tapping a venue pin offers Maps, not a web page in the browser
-- [ ] The pin lands on the right address, not the middle of Columbus
-
-### 4. Fonts
-
-- [ ] Headings look like a rock poster, heavy condensed caps, not plain system text
-- [ ] Award and Encore cards use the slab font
-- [ ] Body text is Inter, not Times or the system default
-
-If a heading looks ordinary, Anton did not load. Note whether you were on wifi or
-cellular, because that is usually the difference.
-
-### 5. Lazy loading, on cellular
-
-- [ ] The Band: scrolling through 119 cards loads photos smoothly, no long blank gaps
-- [ ] The Vault, Core Fundamentals: the 28 booklet pages load as you scroll
-- [ ] The booklet download link opens the PDF in the phone's own viewer
-
-This one is genuinely unverified. The automated browser reports itself hidden, and
-Chrome refuses to trigger lazy loading for a hidden page, so nobody has watched
-these load on a real device yet.
-
-### 6. The QR code and the notch
-
-- [ ] Scanning the printed QR lands on the welcome screen
-- [ ] "Get your wristband" gets you into the wall
-- [ ] Nothing is hidden behind the notch or the home bar, in portrait or landscape
-- [ ] No sideways scrolling on any tab
-
-## Everything else, quickly
-
-Walk the nine tabs and confirm nothing is obviously broken:
-
-- [ ] The Setlist, day pills switch, a card with detail opens, one without has no dropdown
-- [ ] The Band, search and the club filter both work
-- [ ] Backstage Pass
-- [ ] Soundcheck, both pills, post a question and post a takeaway
-- [ ] The Vault, Core Fundamentals and Club Graphs. Locked sections show a countdown
-- [ ] Crowd Vote, The Pit, The Cares Cup, Encore, if the crew has switched them on
+- The Setlist, day pills, cards with detail open, cards without have no dropdown
+- The Band, 119 cards, search and club filter, Century Golf first in Jim's order
+- Backstage Pass
+- Soundcheck, both pills, Questions and Liner Notes
+- The Vault, Core Fundamentals booklet, Club Graphs, locked sections show countdowns
+- Crowd Vote, The Pit, The Cares Cup, Encore, whichever the crew have switched on
 
 ## Report
 
-Anything that failed, with the device and whether you were on wifi or cellular:
+Anything that failed, with the device and whether it was wifi or cellular:
 
 ```
+Aug 13 2026, Jim: items 1 to 5 tested and passed. Devices not recorded.
 ```

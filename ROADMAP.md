@@ -235,11 +235,19 @@ taken at face value. Corrected.
   `pngquant`. Charts and line art should land well under.
 - **Note:** `-n` does a dry run. Use it first on any batch from Jeannette.
 
-### `[ ]` T0.8 Deploy and verify
+### `[~]` T0.8 Deploy and verify
 - **Inputs:** all of Phase 0
 - **Output:** working skeleton on the live URL
 - **Acceptance:** the URL loads on three different physical phones (at minimum one iOS, one Android). All ten tabs reachable. No console errors. Fonts render, not fallbacks
 - **Blocked by:** T0.6
+- **Aug 13 2026. The device-only half passes. The matrix is unproven.**
+  | Criterion | Result |
+  |---|---|
+  | Fonts render, not fallbacks | **Passes.** Jim tested on a handset. Anton, Alfa Slab One and Inter all arrive. A crew-only readout in the header now says out loud if one ever fails, so this stays observable at the venue rather than failing silently |
+  | Tabs reachable, no console errors | **Passes**, verified in a browser at 380px and at desktop, repeatedly. Note the count is NINE now, not ten: Liner Notes became a pill inside Soundcheck on Aug 13 |
+  | Three different physical phones, one iOS and one Android | **Unproven.** Jim confirmed the behaviour but did not record which devices. The items are proven, the matrix is not |
+- **Stays `[~]` for that last row only.** Everything the task actually tests works. See
+  `docs/device-test.md` for the report.
 
 **Phase 0 definition of done:** a person can open the URL on their phone, see the themed welcome screen, tap into all ten tabs, and the design system is fully implemented.
 
@@ -1440,12 +1448,27 @@ python3 tools/recrop-headshots.py --audit
 - **Acceptance:** each session that wants a poll has one drafted. Presenters are not writing polls on stage
 - **Blocked by:** T2.4, T2.6
 
-### `[ ]` T3.6 Device matrix test
+### `[~]` T3.6 Device matrix test
 - **Inputs:** complete build
 - **Output:** test report
 - **Steps:** test every tab on at minimum iPhone Safari, Android Chrome, and one tablet. Test both photo upload paths. Test with cellular data, not just Wi-Fi
 - **Acceptance:** no broken layouts, no console errors, no failed uploads on any device in the matrix
 - **Blocked by:** T3.1 through T3.4
+- **Aug 13 2026, Jim on a handset. Five of the six device-only items pass.** Report in
+  `docs/device-test.md`. Camera upload, library upload, `tel:` links, the maps handoff
+  and the fonts are all confirmed working. **Both photo upload paths pass, which is the
+  acceptance criterion that mattered most here**, and camera-only was a real shortfall
+  on the prior build.
+- **THREE THINGS STILL OPEN, and none of them is a code question:**
+  - **Cellular.** Only wifi is confirmed. This matters more than when the task was
+    written: the wall now carries about 10MB of images, 5.4MB of headshots and 4.4MB
+    of booklet pages, every one lazily loaded.
+  - **Lazy loading on a real handset.** Never observed. It CANNOT be checked from
+    here: the automated browser reports `document.visibilityState` hidden and Chrome
+    will not trigger lazy loading for a hidden page. Proven by flipping images to
+    eager, which loaded instantly. The mechanism is not in doubt, 110 Band headshots
+    work on the live site, but nobody has watched 28 booklet pages load on hotel wifi.
+  - **The tablet, and which phones.** Not recorded.
 
 ### `[~]` T3.7 Timed drop fire test
 - **Fire 1 of 3 done, Aug 12 2026.** Two more needed on two separate days.
