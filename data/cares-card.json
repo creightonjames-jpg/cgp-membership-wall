@@ -1,0 +1,270 @@
+{
+  "_note": "The Century Cares Cup card, from Jim's roster paste on Aug 13 2026. Display only, no picks and no wagers: Jim's call after seeing the betting slip, which is a paper form for in person handling. Handicaps, tees and club names are reproduced as the sheet wrote them. Names are shown as data/roster.json verifies them, with asWritten kept wherever the sheet differed, so nothing is lost and the wall stays internally consistent.",
+  "meta": {
+    "title": "The Century Cares Cup",
+    "subtitle": "Shank Showdown II",
+    "date": "Tuesday, August 25, 2026",
+    "venue": "The Medallion Club",
+    "benefiting": "Century Golf Cares",
+    "sortNote": "Sorted by handicap, low to high, as on the sheet.",
+    "_sourceDateTypo": "Jim's sheet header reads August 25, 2025. The meeting is 2026, so the year is corrected here. Flagged to Jim rather than changed silently.",
+    "_sourceVenueName": "The sheet says Medallion Country Club. The wall calls it The Medallion Club everywhere else, which is the name in the VENUES table, so that is used."
+  },
+  "teams": [
+    {
+      "key": "consciousness",
+      "name": "Team Total Consciousness",
+      "captains": "Mike Akeroyd and Donny Darville"
+    },
+    {
+      "key": "spalding",
+      "name": "Spalding's Revenge",
+      "captains": "Todd Keefer and Jimmy Han"
+    }
+  ],
+  "matches": [
+    {
+      "n": 1,
+      "format": "Partner's Better Ball / Match Play",
+      "consciousness": [
+        {
+          "name": "Casey Lewis",
+          "slug": "casey-lewis",
+          "club": "Sycamore Creek",
+          "handicap": "-0.8",
+          "tee": "Combo",
+          "photo": "assets/attendees/casey-lewis.jpg"
+        },
+        {
+          "name": "Chas Holmes",
+          "slug": "chas-holmes",
+          "club": "Bear Creek",
+          "handicap": "-0.2",
+          "tee": "Combo",
+          "photo": "assets/attendees/chas.jpg"
+        }
+      ],
+      "spalding": [
+        {
+          "name": "Jay McEuen",
+          "asWritten": "Jay McLuen",
+          "slug": "jay-mceuen",
+          "club": "Eagles Landing",
+          "handicap": "-4.8",
+          "tee": "Combo",
+          "photo": "assets/attendees/jay-mcluen.jpg"
+        },
+        {
+          "name": "Erik Mettille",
+          "slug": "erik-mettille",
+          "club": "OGC",
+          "handicap": "+0.6",
+          "tee": "Combo",
+          "photo": "assets/attendees/erik-mettille.jpg"
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "format": "Partner's Better Ball / Match Play",
+      "consciousness": [
+        {
+          "name": "Tom Pyeatt",
+          "slug": "tom-pyeatt",
+          "club": "Canyon Oaks",
+          "handicap": "+0.1",
+          "tee": "Combo",
+          "photo": "assets/attendees/tom-pyeatt.jpg"
+        },
+        {
+          "name": "Cole Clearman",
+          "slug": "cole-clearman",
+          "club": "Bear Creek",
+          "handicap": "+2.4",
+          "tee": "Combo",
+          "photo": "assets/attendees/cole-clearman.jpg"
+        }
+      ],
+      "spalding": [
+        {
+          "name": "Todd Leonard",
+          "slug": "todd-leonard",
+          "club": "Balcones",
+          "handicap": "+1.6",
+          "tee": "Combo",
+          "photo": "assets/attendees/todd-leonard.jpg"
+        },
+        {
+          "name": "Eddie Collins",
+          "slug": "eddie-collins",
+          "club": "Eagles Landing",
+          "handicap": "+2.0",
+          "tee": "Combo",
+          "photo": "assets/attendees/eddie-collins.jpg"
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "format": "Partner's Better Ball / Match Play",
+      "consciousness": [
+        {
+          "name": "Jeff Kragt",
+          "slug": "jeff-kragt",
+          "club": "OGC",
+          "handicap": "+2.7",
+          "tee": "Combo",
+          "photo": "assets/attendees/jeff-kragt.jpg"
+        },
+        {
+          "name": "Zac Casey",
+          "slug": "zac-casey",
+          "club": "Citrus",
+          "handicap": "+5.1",
+          "tee": "Combo",
+          "photo": "assets/attendees/zac-casey.jpg"
+        }
+      ],
+      "spalding": [
+        {
+          "name": "Sidney Ormsby",
+          "asWritten": "Sydney Ormsby",
+          "slug": "sidney-ormsby",
+          "club": "Eagles Landing",
+          "handicap": "+3.0",
+          "tee": "Combo",
+          "photo": "assets/attendees/sydney-ormsby.jpg"
+        },
+        {
+          "name": "Mike Feeney",
+          "slug": "mike-feeney",
+          "club": "Monterey",
+          "handicap": "+4.6",
+          "tee": "Combo",
+          "photo": "assets/attendees/mike-feeney.jpg"
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "format": "Scramble Match Play",
+      "consciousness": [
+        {
+          "name": "Andrew Knepper",
+          "slug": "andrew-knepper",
+          "club": "Citrus",
+          "handicap": "+5.6",
+          "tee": "White",
+          "photo": "assets/attendees/andrew-knepper.jpg"
+        },
+        {
+          "name": "Ken Blidy",
+          "slug": "ken-blidy",
+          "club": "Monterey",
+          "handicap": "+9.7",
+          "tee": "White",
+          "photo": "assets/attendees/ken-blidy.jpg"
+        }
+      ],
+      "spalding": [
+        {
+          "name": "Dylan Campy",
+          "slug": "dylan-campy",
+          "club": "OGC",
+          "handicap": "+7.0",
+          "tee": "White",
+          "photo": "assets/attendees/dylan-campy.jpg"
+        },
+        {
+          "name": "Walsh Trujillo",
+          "slug": "walsh-trujillo",
+          "club": "Citrus",
+          "handicap": "+15.0",
+          "tee": "White",
+          "photo": "assets/attendees/walsh-trujillo.jpg"
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "format": "Scramble Match Play",
+      "consciousness": [
+        {
+          "name": "Gabe Bancroft",
+          "slug": "gabe-bancroft",
+          "club": "PGA West",
+          "handicap": "+10.5",
+          "tee": "White",
+          "photo": "assets/attendees/gabe-bancroft.jpg"
+        },
+        {
+          "name": "Garry Cramer",
+          "slug": "garry-cramer",
+          "club": "Medallion",
+          "handicap": "+16.0",
+          "tee": "White",
+          "photo": "assets/attendees/garry-cramer.jpg"
+        }
+      ],
+      "spalding": [
+        {
+          "name": "Nikki Ernenwein",
+          "slug": "nikki-ernenwein",
+          "club": "Canyon Oaks",
+          "handicap": "+20.0",
+          "tee": "Red",
+          "photo": "assets/attendees/nikki-ernenwein.jpg"
+        },
+        {
+          "name": "Patrick McGraw",
+          "slug": "patrick-mcgraw",
+          "club": "Balcones",
+          "handicap": "+25.0",
+          "tee": "White",
+          "photo": "assets/attendees/patrick-mcgraw.jpg"
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "format": "Partner's Better Ball / Match Play",
+      "consciousness": [
+        {
+          "name": "Mike Akeroyd",
+          "slug": "mike-akeroyd",
+          "club": "Century",
+          "handicap": "Captain",
+          "tee": "Combo",
+          "photo": "assets/attendees/akeroyd.jpg"
+        },
+        {
+          "name": "Donny Darville",
+          "slug": "donny-darville",
+          "club": "Century",
+          "handicap": "Captain",
+          "tee": "Combo",
+          "photo": "assets/attendees/darville.jpg"
+        }
+      ],
+      "spalding": [
+        {
+          "name": "Todd Keefer",
+          "slug": "todd-keefer",
+          "club": "Century",
+          "handicap": "Captain",
+          "tee": "Combo",
+          "photo": "assets/attendees/todd-keefer.jpg"
+        },
+        {
+          "name": "Jimmy Han",
+          "asWritten": "Bruce Han",
+          "slug": "jimmy-han",
+          "club": "Century",
+          "handicap": "Captain",
+          "tee": "Combo",
+          "photo": "assets/attendees/han.jpg"
+        }
+      ]
+    }
+  ]
+}
