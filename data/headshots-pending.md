@@ -23,3 +23,10 @@ That is 11 of the 17 without a photo. Loading them takes the wall to 113 of 119.
 Fastest route: export the OneDrive folder
   1_Projects / 26 Strategic Priorities / Draft Board / GM Headshots
 to Downloads, then run tools/add-headshots.sh against it.
+
+## Added Aug 13 2026
+
+- **Dave Horn**, Golf Professional, Prescott Lakes. Replaced Noah Daher on Jim's
+  instruction. No photo supplied yet, so his card shows the DH initials tile. Drop a
+  file in and run `bash tools/process-assets.sh attendees <folder>` then
+  `python3 tools/reconcile-roster.py`.

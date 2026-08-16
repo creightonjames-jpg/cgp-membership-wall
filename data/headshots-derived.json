@@ -1,6 +1,6 @@
 {
   "_note": "Photos are loaded. Names and clubs here are DERIVED FROM FILENAMES and are UNVERIFIED. Reconcile against the roster from Carol and Lisa, then rebuild data/roster.json. T3.1.",
-  "photos_loaded": 112,
+  "photos_loaded": 111,
   "newbie_from_folder": 21,
   "needs_a_name_before_it_can_be_loaded": [
     {
@@ -748,13 +748,6 @@
       "source_file": "Nikki Ernenwein.jpg"
     },
     {
-      "slug": "noah-daher",
-      "name_from_filename": "Noah Daher",
-      "club_from_filename": "",
-      "newbie_from_folder": false,
-      "source_file": "Noah Daher.png"
-    },
-    {
       "slug": "patrick-mcgraw",
       "name_from_filename": "Patrick - Mcgraw",
       "club_from_filename": "",
@@ -953,6 +946,10 @@
     {
       "slug": "cole",
       "why": "Removed by Jim, Aug 12 2026. Not attending, or a duplicate in Cole's case."
+    },
+    {
+      "slug": "noah-daher",
+      "why": "Replaced by Dave Horn, Golf Professional at Prescott Lakes. Jim, Aug 13 2026."
     }
   ]
 }
