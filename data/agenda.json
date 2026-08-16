@@ -69,6 +69,11 @@
             "file": "assets/agenda/shank-showdown.jpg",
             "alt": "Shank Showdown II matchup poster. Team Total Consciousness, Mike Akeroyd and Donny Darville, against Spalding's Revenge Team, Todd Keefer and Jimmy Han. Both playing for the Century Cares Cup.",
             "pending": false
+          },
+          "goTab": {
+            "key": "cares",
+            "label": "The teams and the card",
+            "_note": "Jumps to The Cares Cup tab. The button hides itself when that tab is switched off for the viewer, so it cannot point at a tab the room cannot open. Crew always see it."
           }
         },
         {

@@ -3303,6 +3303,40 @@ body.display-mode .cv-new { display: none; }
 .pit-box__cap { margin: 11px 0 0; font-size: 15px; overflow-wrap: anywhere; }
 .pit-box__by { margin: 5px 0 0; font-size: 13px; color: var(--dim); overflow-wrap: anywhere; }
 
+/* ------------------------------------------------ comments on a photo */
+/* Inside the lightbox only. Sits under the caption, above nothing, so the form is
+   the last thing a thumb reaches. */
+.pit-cm { margin: 16px 0 0; padding: 14px 0 0; border-top: 1px solid var(--edge); }
+
+.pit-cm__k {
+  margin: 0 0 8px; font-size: 12px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold);
+}
+
+.pit-cm__none, .pit-cm__off { margin: 0 0 10px; font-size: 13px; color: var(--mute); }
+
+.pit-cm__l { list-style: none; margin: 0 0 12px; padding: 0;
+             display: flex; flex-direction: column; gap: 10px; }
+
+.pit-cm__i { padding: 9px 11px; background: var(--input);
+             border: 1px solid var(--edge); border-radius: 9px; }
+
+.pit-cm__t { margin: 0; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+
+.pit-cm__by { margin: 4px 0 0; font-size: 12px; color: var(--dim); }
+
+.pit-cm__kill {
+  margin-left: 8px; padding: 0; border: 0; background: none;
+  color: var(--danger); font: inherit; font-size: 12px;
+  text-decoration: underline; cursor: pointer;
+}
+
+.pit-cm__f { display: flex; flex-direction: column; gap: 8px; }
+.pit-cm__count { margin: 0; font-size: 11px; color: var(--mute); text-align: right; }
+
+.pit-by__cm { color: var(--gold); }
+
+
 @media (min-width: 700px) {
   .pit-grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 16px; }
   .pit-stage__img { max-width: 340px; max-height: 260px; }
@@ -4448,7 +4482,7 @@ function LinkChip({ href, glyph, children, newTab }) {
    button and a button may not hold a p or a div. Reactions and links sit
    outside it for the same reason. */
 function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
-                       tenureEntries, tenureOpen, onGoTab, isAdmin }) {
+                       tenureEntries, tenureOpen, onGoTab, canGoTab, isAdmin }) {
   /* Set only if a declared graphic fails to load, which falls back to the place
      marker rather than leaving a broken frame on the card. */
   const [artBroken, setArtBroken] = useState(false);
@@ -4468,6 +4502,9 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
   const tenureRows = (sess.tenureLink && tenureOpen && tenureEntries) ? tenureEntries : [];
   const showTenure = tenureRows.length > 0;
 
+  /* A jump to another tab, when the session declares one and that tab is reachable. */
+  const goTab = sess.goTab && canGoTab && canGoTab(sess.goTab.key) ? sess.goTab : null;
+
   /* Does this card have anything worth opening?
      Jim, Aug 13: if there is no detail, do not offer the dropdown at all. It used
      to be offered on every card and then apologise with "Nothing else on the
@@ -4481,6 +4518,7 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
     || (sess.links && sess.links.length)
     || sess.kind === "open"
     || sess.graphic
+    || goTab
     || showTenure);
 
   const badges = (
@@ -4694,6 +4732,19 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
             </div>
           ) : null}
 
+          {/* A jump to the tab that carries the rest of this session's detail. */}
+          {goTab ? (
+            <div className="tf__row">
+              <button
+                type="button"
+                className="btn btn--tiny"
+                onClick={() => onGoTab && onGoTab(goTab.key)}
+              >
+                {goTab.label || "Open the tab"}
+              </button>
+            </div>
+          ) : null}
+
           {venue || (sess.links && sess.links.length) ? (
             <div className="chiprow">
               {venue ? (
@@ -4778,6 +4829,21 @@ function SetlistTab({ isAdmin, now, onGoTab }) {
      nothing to find. */
   const tenureOpen = tenure.unlocked || isAdmin;
   const tenureEntries = useTenureEntries(tenureOpen);
+
+  /* A session can point at another tab, `goTab` in agenda.json. Today that is the
+     12:00 tournament pointing at The Cares Cup so people can find the teams.
+
+     Gated on the target tab actually being reachable, which is the mistake the old
+     tenure link made: settings/tabs has cares:false right now, so without this the
+     button would offer attendees a tab that does not exist for them. Crew see every
+     tab, so for them it is always live. */
+  const vis = useTabVisibility();
+  const canGoTab = useCallback((key) => {
+    if (!key) return false;
+    if (isAdmin) return true;
+    const tab = TABS.filter((t) => t.key === key)[0];
+    return !!tab && isTabOn(vis, tab);
+  }, [isAdmin, vis]);
   const [castMap, setCastMap] = useState(() => readJSON(LS.reacted));
   const [dayKey, setDayKey] = useState(null);
   const [open, setOpen] = useState({});
@@ -4878,6 +4944,7 @@ function SetlistTab({ isAdmin, now, onGoTab }) {
                 tenureEntries={tenureEntries}
                 tenureOpen={tenureOpen}
                 onGoTab={onGoTab}
+                canGoTab={canGoTab}
                 isAdmin={isAdmin}
                 onToggle={() => setOpen((prev) => {
                   const next = Object.assign({}, prev);
@@ -10090,6 +10157,74 @@ function pitPost(fields) {
   });
 }
 
+/* ------------------------------------------------------ comments, T2.5b
+ *
+ * Comments live at photoComments/{photoId}/{id}, NOT inside the photo record, and
+ * that is the whole design decision. Every photo carries its own image as base64,
+ * roughly 80KB, and the grid pulls 24 at a time. Nesting comments would drag every
+ * comment on every photo into a payload that never renders one. The lightbox reads a
+ * single photo's comments when it opens, and nothing else ever reads them.
+ *
+ * The COUNT is denormalised onto the photo as `comments`, a plain number, exactly
+ * the way `likes` already works, so the grid can say "3 comments" without loading
+ * any. Both are transactions, because two people posting in the same second must both
+ * count, and both clamp at zero so a stale device cannot drive the number negative.
+ *
+ * The name is remembered in the same place Liner Notes keeps it, mm26_liner_who, so
+ * somebody who has already posted a takeaway never types their name twice. A blank
+ * name still posts and simply reads as unattributed.
+ */
+const PIT_COMMENT_MAX = 300;
+
+function usePhotoComments(photoId, enabled) {
+  const [items, setItems] = useState([]);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (!FB.ok || !enabled || !photoId) {
+      setItems([]);
+      setReady(!FB.ok);
+      return;
+    }
+    const ref = FB.db.ref("photoComments/" + photoId);
+    const handler = (snap) => {
+      const all = snap.val() || {};
+      setItems(Object.keys(all)
+        .map((id) => Object.assign({ id: id }, all[id]))
+        .sort((a, b) => (a.ts || 0) - (b.ts || 0)));
+      setReady(true);
+    };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, [photoId, enabled]);
+
+  return { items, ready };
+}
+
+function pitComment(photoId, text, name) {
+  if (!FB.ok || !photoId) return Promise.resolve();
+  const clean = String(text || "").replace(/\s+/g, " ").trim().slice(0, PIT_COMMENT_MAX);
+  if (!clean) return Promise.resolve();
+  return FB.db.ref("photoComments/" + photoId).push({
+    text: clean,
+    name: String(name || "").trim().slice(0, LN_NAME_MAX),
+    ts: firebase.database.ServerValue.TIMESTAMP
+  }).then(() => pitCommentCount(photoId, 1));
+}
+
+function pitCommentRemove(photoId, id) {
+  if (!FB.ok) return Promise.resolve();
+  return FB.db.ref("photoComments/" + photoId + "/" + id).remove()
+    .then(() => pitCommentCount(photoId, -1));
+}
+
+function pitCommentCount(photoId, delta) {
+  return FB.db.ref("photos/" + photoId + "/comments").transaction((cur) => {
+    const n = typeof cur === "number" ? cur : 0;
+    return Math.max(0, n + delta);
+  });
+}
+
 /* A transaction, because two people liking the same photo in the same second
    must both count. Clamped at zero so a stale device cannot drive it negative. */
 function pitLike(id, on) {
@@ -10334,6 +10469,14 @@ function PitCell({ p, now, mine, onLike, onOpen }) {
       <p className="pit-by">
         {who ? <span>{who} · </span> : null}
         <span className="pit-by__t">{pitWhen(p.ts, now)}</span>
+        {/* The count is the denormalised number on the photo record, the same trick
+            `likes` uses, so the grid never loads a single comment to know there are
+            some. Tapping the photo is what fetches them. */}
+        {p.comments > 0 ? (
+          <span className="pit-by__cm">
+            {" · "}{p.comments === 1 ? "1 comment" : p.comments + " comments"}
+          </span>
+        ) : null}
       </p>
     </li>
   );
@@ -10344,6 +10487,100 @@ function PitCell({ p, now, mine, onLike, onOpen }) {
    its own overflow-y so that a tall photo plus a long caption on a short screen
    scrolls inside the overlay instead of being clipped, and closing it leaves the
    grid exactly where it was. */
+/* Comments on one photo. Only mounted inside the open lightbox, which is what keeps
+   the listener off the grid. Name is pre-filled from the same store Liner Notes uses,
+   so most people never type it twice, and a blank name posts as unattributed. */
+function PitComments({ photoId, now, isAdmin }) {
+  const { items, ready } = usePhotoComments(photoId, true);
+  const [text, setText] = useState("");
+  const [name, setName] = useState(() => String(readJSON(LN_WHO_KEY).name || ""));
+  const [busy, setBusy] = useState(false);
+
+  const post = useCallback((e) => {
+    e.preventDefault();
+    const clean = text.replace(/\s+/g, " ").trim();
+    if (!clean || busy) return;
+    setBusy(true);
+    /* Remember the name for next time, and for Liner Notes, the same way that tab
+       remembers it. Only the name: a photo comment has no club field to fill. */
+    const held = readJSON(LN_WHO_KEY);
+    writeJSON(LN_WHO_KEY, { name: name.trim(), club: String(held.club || "") });
+    pitComment(photoId, clean, name)
+      .then(() => { setText(""); })
+      .catch(() => {})
+      .then(() => setBusy(false));
+  }, [text, name, busy, photoId]);
+
+  if (!FB.ok) {
+    return <p className="pit-cm__off">Comments need the live connection, and it is off right now.</p>;
+  }
+
+  const left = PIT_COMMENT_MAX - text.length;
+
+  return (
+    <div className="pit-cm">
+      <p className="pit-cm__k t-display">
+        {items.length === 0 ? "Comments" : items.length === 1 ? "1 comment" : items.length + " comments"}
+      </p>
+
+      {ready && items.length === 0 ? (
+        <p className="pit-cm__none">Nothing said yet. Go on then.</p>
+      ) : null}
+
+      <ul className="pit-cm__l">
+        {items.map((c) => (
+          <li className="pit-cm__i" key={c.id}>
+            <p className="pit-cm__t">{c.text}</p>
+            <p className="pit-cm__by">
+              {c.name ? <span>{c.name} · </span> : null}
+              <span className="pit-by__t">{pitWhen(c.ts, now)}</span>
+              {isAdmin ? (
+                <button
+                  type="button"
+                  className="pit-cm__kill"
+                  onClick={() => pitCommentRemove(photoId, c.id)}
+                >
+                  Delete
+                </button>
+              ) : null}
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <form className="pit-cm__f" onSubmit={post}>
+        <label className="tf__l">
+          <span className="sr-only">Your comment</span>
+          <textarea
+            className="tf__in"
+            rows="2"
+            value={text}
+            maxLength={PIT_COMMENT_MAX}
+            placeholder="Say something."
+            onChange={(e) => setText(e.target.value)}
+          />
+        </label>
+        <div className="tf__row">
+          <label className="tf__l" style={{ flex: "1 1 140px", margin: 0 }}>
+            <span className="sr-only">Your name, optional</span>
+            <input
+              className="tf__in"
+              value={name}
+              maxLength={LN_NAME_MAX}
+              placeholder="Your name, optional"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </label>
+          <button type="submit" className="btn btn--go" disabled={busy || !text.trim()}>
+            {busy ? "Posting" : "Post"}
+          </button>
+        </div>
+        {left < 60 ? <p className="pit-cm__count t-data">{left} left</p> : null}
+      </form>
+    </div>
+  );
+}
+
 function PitBox({ p, now, mine, onLike, onClose, isAdmin, onDelete }) {
   const closeRef = useRef(null);
 
@@ -10393,6 +10630,8 @@ function PitBox({ p, now, mine, onLike, onClose, isAdmin, onDelete }) {
             {who ? <span>{who} · </span> : null}
             <span className="pit-by__t">{pitWhen(p.ts, now)}</span>
           </p>
+
+          <PitComments photoId={p.id} now={now} isAdmin={isAdmin} />
         </div>
       </div>
     </div>
@@ -10431,6 +10670,10 @@ function PitTab({ isAdmin, now }) {
     if (!FB.ok) return;
     if (!window.confirm("Delete this photo? It does not come back.")) return;
     FB.db.ref("photos/" + p.id).remove();
+    /* Comments live in their own node, so removing the photo does not take them
+       with it. Without this, deleting a photo would leave its comments behind
+       forever, invisible and unreachable. */
+    FB.db.ref("photoComments/" + p.id).remove();
     close();
   }, [close]);
 
@@ -11034,26 +11277,35 @@ function CaresCupTab({ isAdmin }) {
               <button className="btn" onClick={seed}>Add the two poster teams</button>
             ) : null}
           </div>
-          <p className="cares-crew__note">
-            {cup.locked
-              ? "Final. Nobody can post a score, including you, until you unlock it."
-              : "Open. Every score you post lands on every phone in about a second."}
-            {cup.art
-              ? " Poster art is on. Teams with no file fall back to the plain card."
-              : " Poster art is off. Cards are plain colour."}
-          </p>
+          {/* Jim, Aug 13: cut the "Open. Every score you post lands on every phone in
+              about a second. Poster art is on..." line. The buttons directly above it
+              already say which state each switch is in, so it was narrating them back.
+              The locked warning stays, because it tells the crew something no button
+              does: while it is Final, it stops THEM posting too. */}
+          {cup.locked ? (
+            <p className="cares-crew__note">
+              Final. Nobody can post a score, including you, until you unlock it.
+            </p>
+          ) : null}
 
           <p className="cares-crew__k">Century Golf Cares total</p>
           <CaresFundForm total={cup.total} goal={cup.goal} onSave={saveFund} busy={busy} />
 
-          <p className="cares-crew__k">{editing ? "Edit a team" : "Add a team"}</p>
-          <CaresTeamForm
-            key={editing ? editing.id : "new"}
-            initial={editing}
-            onSave={saveTeam}
-            onCancel={() => setEditing(null)}
-            busy={busy}
-          />
+          {/* "Add a team" removed on Jim's instruction, Aug 13. EDITING an existing
+              team stays, because that is how a wrong score gets corrected mid round,
+              and the "Add the two poster teams" button above still seeds the board. */}
+          {editing ? (
+            <React.Fragment>
+              <p className="cares-crew__k">Edit a team</p>
+              <CaresTeamForm
+                key={editing.id}
+                initial={editing}
+                onSave={saveTeam}
+                onCancel={() => setEditing(null)}
+                busy={busy}
+              />
+            </React.Fragment>
+          ) : null}
         </div>
       ) : null}
 
