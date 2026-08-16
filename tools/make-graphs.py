@@ -103,6 +103,52 @@ def parse_charts(path):
     return out
 
 
+def year_table(chart, unit):
+    """Year by year values for a multi series chart, for rendering beside it.
+
+    Jim asked for the sales and attrition percentages back, "as it appears with the
+    graph". Twenty four data labels on a 380px plot is not readable, so the numbers
+    live here and the app draws a table under the chart, where they reflow and can be
+    read out by a screen reader.
+
+    Returns None for a single series chart, which already prints its latest value.
+    """
+    series = [s for s in chart["series"] if any(v is not None for v in s["values"])]
+    if len(series) < 2:
+        return None
+    fmt = VALUE_FORMATTERS[unit]
+
+    cats = series[0]["cats"]
+    rows = []
+    n = max(len(s["values"]) for s in series)
+    for i in range(n):
+        label = cats[i] if i < len(cats) else ""
+        try:
+            label = excel_date(float(label)).strftime("%Y")
+        except Exception:
+            label = str(label)
+        cells = []
+        for s in series:
+            v = s["values"][i] if i < len(s["values"]) else None
+            cells.append(fmt(v) if v is not None else "")
+        if any(cells):
+            rows.append([label] + cells)
+
+    return {
+        "columns": ["Year"] + [(s["label"] or "series") for s in series],
+        "rows": rows,
+    }
+
+
+def club_entry(slug, e):
+    """One manifest row. `tables` is only present when the club has one, so a club
+    with nothing extra stays exactly the shape it was before."""
+    row = {"slug": slug, "name": e["name"], "graphs": e["graphs"]}
+    if e.get("tables"):
+        row["tables"] = e["tables"]
+    return row
+
+
 def parse_fwwl(path):
     """Club name -> the club's FWWL number, read out of the DRAWINGS.
 
@@ -261,7 +307,22 @@ def fmt_pct(v):
     return "%.0f%%" % (v * 100)
 
 
+def fmt_pct_value(v):
+    """One decimal, for a rate somebody is actually reading.
+
+    The axis keeps whole numbers, because "0% 5% 10% 15%" is a cleaner ruler than
+    "0.0% 5.0%". A VALUE is different: Anthem's 2026 sales rate is 3.16 percent and
+    printing it as "3%" throws away the part Jim asked to see. Attrition at 4.43 and
+    5.00 would both read "4%" and "5%" and look like a bigger gap than there is.
+    """
+    return "%.1f%%" % (v * 100)
+
+
+# Axis ticks.
 FORMATTERS = {MONEY: fmt_money, COUNT: fmt_count, PERCENT: fmt_pct}
+
+# Individual values, in a legend or a table. Only percent differs.
+VALUE_FORMATTERS = {MONEY: fmt_money, COUNT: fmt_count, PERCENT: fmt_pct_value}
 
 
 def nice_ticks(lo, hi, want=4):
@@ -425,7 +486,19 @@ def render(chart, club, kind, unit, subtitle, ref=None):
     # Legend for two series, latest value callout for one. Both sit top right,
     # measured from the right edge so they cannot run into the title.
     if len(series) > 1:
-        labels = [(s["label"] or "series") for s in series]
+        # Jim, Aug 13: "you neglected to include the sales and attrition
+        # percentages". He was right. A two series chart drew a legend and no
+        # numbers at all, so the shape was readable and the actual rate was not.
+        # Each legend entry now carries its own latest value. The full year by year
+        # table goes into the manifest and is rendered under the chart in the app,
+        # because twelve years times two series is twenty four labels and putting
+        # those on the plot at 380px wide is unreadable.
+        vfmt = VALUE_FORMATTERS[unit]
+        labels = []
+        for s in series:
+            vals = [v for v in s["values"] if v is not None]
+            name = s["label"] or "series"
+            labels.append((name + "  " + vfmt(vals[-1])) if vals else name)
         widths = [11 + 4 + int(len(t) * 5.4) for t in labels]
         x = W - PAD_R - sum(widths) - 12 * (len(labels) - 1)
         for si, t in enumerate(labels):
@@ -490,6 +563,12 @@ def main():
         written.append(name)
         e = entries.setdefault(slug, {"name": club, "graphs": {}})
         e["graphs"][kind] = name
+        # The year by year numbers for any chart that has more than one series,
+        # which in practice is every rates chart. Keyed by kind so the app can find
+        # the table that belongs to the graph it is showing.
+        tbl = year_table(c, unit)
+        if tbl:
+            e.setdefault("tables", {})[kind] = tbl
         # Prefer the longest spelling as the display name, so "Huntington Club"
         # wins over "Huntington".
         if len(club) > len(e["name"]):
@@ -507,11 +586,11 @@ def main():
         "generated_from": os.path.basename(workbook),
         "dir": web_dir,
         "clubs": [
-            {"slug": k, "name": entries[k]["name"], "graphs": entries[k]["graphs"]}
+            club_entry(k, entries[k])
             for k in sorted(clubs, key=lambda s: entries[s]["name"].lower())
         ],
         "rollups": [
-            {"slug": k, "name": entries[k]["name"], "graphs": entries[k]["graphs"]}
+            club_entry(k, entries[k])
             for k in sorted(NOT_A_CLUB | COMBINED) if k in entries
         ],
     }

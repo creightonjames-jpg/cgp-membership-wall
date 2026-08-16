@@ -20,8 +20,8 @@
 <circle cx="368.0" cy="127.5" r="2.6" fill="#C8102E"/>
 <path d="M44.0,109.7 L73.5,116.4 L102.9,127.4 L132.4,136.2 L161.8,140.3 L191.3,141.5 L220.7,156.3 L250.2,169.4 L279.6,172.2 L309.1,156.3 L338.5,161.6 L368.0,177.6" fill="none" stroke="#D9A94C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="368.0" cy="177.6" r="2.6" fill="#D9A94C"/>
-<rect x="251.0" y="14" width="11" height="3" rx="1.5" fill="#C8102E"/>
-<text x="266.0" y="19" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10">Sales</text>
-<rect x="305.0" y="14" width="11" height="3" rx="1.5" fill="#D9A94C"/>
-<text x="320.0" y="19" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10">Attrition</text>
+<rect x="176.0" y="14" width="11" height="3" rx="1.5" fill="#C8102E"/>
+<text x="191.0" y="19" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10">Sales  30.2%</text>
+<rect x="267.0" y="14" width="11" height="3" rx="1.5" fill="#D9A94C"/>
+<text x="282.0" y="19" fill="#A39B92" font-family="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="10">Attrition  12.7%</text>
 </svg>

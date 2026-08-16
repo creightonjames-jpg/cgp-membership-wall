@@ -1818,6 +1818,37 @@ body.display-mode .stubnote { font-size: 20px; }
 /* -------------------------------------------------------------- art cards */
 .vt-cards { display: flex; flex-direction: column; gap: 16px; }
 
+/* ------------------------------------------- year by year under a graph */
+/* Sales and attrition percentages. Narrow columns and small figures, because it
+   sits under a 380px chart and has to stay readable without sideways scrolling. */
+.vt-tbl {
+  width: 100%; margin: 12px 0 0; border-collapse: collapse; font-size: 12px;
+}
+
+.vt-tbl__cap {
+  caption-side: top; text-align: left;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--gold);
+  padding: 0 0 6px;
+}
+
+.vt-tbl th, .vt-tbl td {
+  padding: 5px 6px; text-align: right;
+  border-bottom: 1px solid var(--edge);
+}
+
+.vt-tbl thead th {
+  color: var(--dim); font-weight: 600;
+  font-size: 11px; letter-spacing: 0.04em;
+  border-bottom-color: var(--gold-rule);
+}
+
+/* The year is the row's own label, so it reads as a heading and sits left. */
+.vt-tbl tbody th { text-align: left; color: var(--dim); font-weight: 600; }
+.vt-tbl tbody td { color: var(--cream); }
+.vt-tbl tbody tr:last-child th,
+.vt-tbl tbody tr:last-child td { border-bottom: 0; }
+
 /* ------------------------------------------------- invitation personas */
 /* Reading matter, so it gets a measure and real paragraph rhythm rather than the
    card grid the image sections use. */
@@ -6757,8 +6788,12 @@ function vaultMatch(entry, query) {
    carries for this club. */
 function vaultGraphSlots(club) {
   const have = (club && club.graphs) || {};
+  /* Year by year numbers for the graphs that have more than one line, which is
+     every Sales/Attrition chart. Jim, Aug 13: the percentages were missing. */
+  const tables = (club && club.tables) || {};
   const slots = VAULT_GRAPH_TYPES.map((key) => ({
-    key: key, label: VAULT_GRAPH_LABELS[key] || key, file: have[key] || null
+    key: key, label: VAULT_GRAPH_LABELS[key] || key,
+    file: have[key] || null, table: tables[key] || null
   }));
 
   Object.keys(have).forEach((key) => {
@@ -6766,7 +6801,8 @@ function vaultGraphSlots(club) {
     slots.push({
       key: key,
       label: VAULT_GRAPH_LABELS[key] || (key.charAt(0).toUpperCase() + key.slice(1)),
-      file: have[key]
+      file: have[key],
+      table: tables[key] || null
     });
   });
 
@@ -7186,6 +7222,32 @@ function VaultGraphCard({ club, slot, onZoom }) {
         download={slot.file}
         onZoom={onZoom}
       />
+      {/* The numbers behind the lines. The chart itself now prints each series'
+          latest value beside the legend, which answers "where are we", and this
+          answers "what happened". Twelve years times two series is twenty four
+          labels, which is unreadable on a 380px plot, so they live here as a real
+          table that reflows and that a screen reader can read out. */}
+      {slot.table && slot.table.rows && slot.table.rows.length ? (
+        <table className="vt-tbl">
+          <caption className="vt-tbl__cap">Year by year</caption>
+          <thead>
+            <tr>
+              {slot.table.columns.map((c) => <th key={c} scope="col">{c}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {slot.table.rows.map((row) => (
+              <tr key={row[0]}>
+                {row.map((cell, i) => (
+                  i === 0
+                    ? <th key={i} scope="row" className="t-data">{cell}</th>
+                    : <td key={i} className="t-data">{cell}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : null}
     </figure>
   );
 }
