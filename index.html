@@ -925,6 +925,9 @@ body.display-mode .stubnote { font-size: 20px; }
 .adminbar__t { font-size: 13px; font-weight: 600; margin: 0 0 4px; }
 .adminbar__p { font-size: 12px; color: var(--dim); margin: 0; }
 
+/* A font that silently fell back is worth shouting about, quietly, to the crew. */
+.adminbar__p--warn { color: var(--danger); margin-top: 6px; }
+
 .pinwrap {
   position: fixed; inset: 0; z-index: 60;
   background: rgba(10,9,12,0.86);
@@ -4314,15 +4317,19 @@ function sessionState(sess, day, now) {
   return now < end ? { phase: "live" } : { phase: "done" };
 }
 
-function LinkChip({ href, glyph, children }) {
+/* `newTab` is for links that are not http but should still leave the wall open,
+   which in practice means a PDF. A phone that opens a 28 page booklet in the same
+   tab has thrown the wall away, and getting back is a Back tap that people do not
+   always find. The default is unchanged: only absolute http links open a new tab. */
+function LinkChip({ href, glyph, children, newTab }) {
   if (!href) return null;
-  const external = /^https?:/.test(href);
+  const away = newTab || /^https?:/.test(href);
   return (
     <a
       className="linkchip"
       href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
+      target={away ? "_blank" : undefined}
+      rel={away ? "noopener noreferrer" : undefined}
     >
       <span className="linkchip__i" aria-hidden="true">{glyph}</span>
       <span>{children}</span>
@@ -4536,9 +4543,21 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
                 <React.Fragment>
                   <dt>Pre-read</dt>
                   <dd>
-                    <a href={sess.preread.url} target="_blank" rel="noopener noreferrer">
+                    {/* A linkchip, not a bare anchor. Jim, Aug 13: the booklet link
+                        was rendering purple, because it was the only plain <a> on
+                        the whole wall and nothing styled it, so it got the browser's
+                        default visited colour.
+
+                        Plain scarlet text was the obvious fix and it is a bad one.
+                        Measured against the card background it comes out at 2.8:1,
+                        where readable body text wants 4.5:1. The chip is the
+                        treatment every other link on the wall already uses: an
+                        oxblood fill inside a scarlet edge, so it reads red, with
+                        cream text at 14.9:1 on top. It is also a far bigger thing
+                        to hit with a thumb. */}
+                    <LinkChip href={sess.preread.url} glyph={"\u{1F4C4}"} newTab>
                       {sess.preread.label}
-                    </a>
+                    </LinkChip>
                   </dd>
                 </React.Fragment>
               ) : null}
@@ -13647,6 +13666,66 @@ const TAB_VIEWS = {
   encore:     EncoreTab
 };
 
+/* Did the three Google fonts actually arrive? Crew only.
+ *
+ * This is the one item on the "needs a real phone" list that fails INVISIBLY. A
+ * missing camera intent or a dead tel: link announces itself the moment somebody
+ * taps it. A font that never loaded just makes every heading look ordinary, and on
+ * a rock poster wall that is a whole design gone without a single error anywhere.
+ * Nobody would report it, they would just think it looked plain.
+ *
+ * So the crew get told. On a phone, on hotel wifi, at the venue, which is the only
+ * place and time the answer actually matters.
+ *
+ * DO NOT USE document.fonts.check() FOR THIS. It answers "can this text be drawn
+ * with this specification", and a fallback counts as yes, so it returns true for a
+ * font that does not exist anywhere. I wrote it that way first and proved it by
+ * pointing the Anton check at "AntonDefinitelyNotAFont". It cheerfully reported
+ * every font loaded.
+ *
+ * Reading the FontFaceSet instead is the honest test. Each @font-face the
+ * stylesheet declares appears as a FontFace with a status, so a family that is
+ * absent has no entry at all and one that failed is not "loaded". load() runs first
+ * because a face nothing has drawn with yet sits at "unloaded" quite legitimately.
+ */
+function FontCheck() {
+  const [state, setState] = useState(null);
+
+  useEffect(() => {
+    if (!document.fonts || !document.fonts.load) return;
+    let alive = true;
+    const want = ["Anton", "Alfa Slab One", "Inter"];
+
+    const loaded = (family) => {
+      let seen = false;
+      document.fonts.forEach((f) => {
+        const fam = String(f.family || "").replace(/["']/g, "");
+        if (fam === family && f.status === "loaded") seen = true;
+      });
+      return seen;
+    };
+
+    Promise.all(want.map((family) =>
+      document.fonts.load('16px "' + family + '"', "Aa").catch(() => null)
+    )).then(() => {
+      if (alive) setState(want.map((f) => ({ name: f, ok: loaded(f) })));
+    });
+    return () => { alive = false; };
+  }, []);
+
+  if (!state) return null;
+  const missing = state.filter((r) => !r.ok).map((r) => r.name);
+  if (!missing.length) {
+    return <p className="adminbar__p">Fonts loaded. Anton, Alfa Slab One, Inter.</p>;
+  }
+  return (
+    <p className="adminbar__p adminbar__p--warn">
+      {"⚠"} Font did not load: {missing.join(", ")}. Headings are showing a
+      fallback. Check the connection, then reload.
+    </p>
+  );
+}
+
 function App() {
   const [entered, setEntered] = useState(() => readLS(LS.entered) === "1");
   const [active, setActive] = useState(TABS[0].key);
@@ -13782,6 +13861,7 @@ function App() {
               Tabs the room cannot see carry a gold padlock. The gear opens the
               panel.
             </p>
+            <FontCheck />
             <div className="tf__row ap-open">
               <button className="btn btn--tiny" onClick={() => setShowAdmin(true)}>
                 Open the crew panel
