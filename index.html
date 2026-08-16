@@ -1818,6 +1818,30 @@ body.display-mode .stubnote { font-size: 20px; }
 /* -------------------------------------------------------------- art cards */
 .vt-cards { display: flex; flex-direction: column; gap: 16px; }
 
+/* ----------------------------------- tenure names on the 8:20 Setlist card */
+/* An awards moment, so it gets the poster font and a gold rule, not the plain
+   list treatment the rest of the detail panel uses. */
+.set-tenure {
+  margin: 12px 0 0; padding: 12px 0 0;
+  border-top: 1px solid var(--gold-rule);
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.set-tenure__k {
+  margin: 0 0 6px; font-size: 12px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gold);
+}
+
+.set-tenure__l {
+  margin: 0; padding: 0; list-style: none;
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+.set-tenure__l li {
+  font-family: var(--font-poster); font-size: 15px; line-height: 1.25;
+  color: var(--cream);
+}
+
 /* ------------------------------------------------- the Cares Cup card */
 .cc { margin: 20px 0 0; }
 .cc__h { margin: 0 0 4px; font-size: clamp(18px, 5vw, 22px); }
@@ -4424,7 +4448,7 @@ function LinkChip({ href, glyph, children, newTab }) {
    button and a button may not hold a p or a div. Reactions and links sit
    outside it for the same reason. */
 function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
-                       tenureReady, onGoTab, isAdmin }) {
+                       tenureEntries, tenureOpen, onGoTab, isAdmin }) {
   /* Set only if a declared graphic fails to load, which falls back to the place
      marker rather than leaving a broken frame on the card. */
   const [artBroken, setArtBroken] = useState(false);
@@ -4438,7 +4462,11 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
 
   /* The tenure link only counts as detail once the crew has unlocked it, so a
      locked card does not offer a dropdown that opens onto nothing. */
-  const showTenureLink = !!(sess.tenureLink && tenureReady);
+  /* Only on the card that carries the marker, and only once there is something to
+     show. An unlocked node with no entries in it yet must not turn this card into a
+     dropdown that opens onto an empty heading. */
+  const tenureRows = (sess.tenureLink && tenureOpen && tenureEntries) ? tenureEntries : [];
+  const showTenure = tenureRows.length > 0;
 
   /* Does this card have anything worth opening?
      Jim, Aug 13: if there is no detail, do not offer the dropdown at all. It used
@@ -4453,7 +4481,7 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
     || (sess.links && sess.links.length)
     || sess.kind === "open"
     || sess.graphic
-    || showTenureLink);
+    || showTenure);
 
   const badges = (
     <span className="set-row">
@@ -4647,18 +4675,22 @@ function SessionCard({ sess, day, now, counts, castMap, onCast, open, onToggle,
             </dl>
           ) : null}
 
-          {/* Hidden until the crew unlocks tenure, which is the same switch the
-              Encore tenure section already uses, encore/tenure/unlocked. One
-              flag, one place to flip it, and it cannot go live here while the
-              Encore list is still sealed. Jim, Aug 13. */}
-          {showTenureLink ? (
-            <div className="tf__row">
-              <button
-                className="btn btn--tiny"
-                onClick={() => onGoTab && onGoTab("encore")}
-              >
-                See the Tenure Award list
-              </button>
+          {/* The tenure list itself, on the card, once it is open. Same switch the
+              Encore section uses, encore/tenure/unlocked, now on a 9:00 AM Wednesday
+              schedule with the crew override still winning in both directions.
+
+              Names only, no club and no photo, even though the entries carry both.
+              Jim, Aug 12: "use names only for tenure." */}
+          {showTenure ? (
+            <div className="set-tenure">
+              {groupByMilestone(tenureRows).map((g) => (
+                <div className="set-tenure__g" key={g.milestone}>
+                  <p className="set-tenure__k t-display">{g.milestone}</p>
+                  <ul className="set-tenure__l">
+                    {g.people.map((e) => <li key={e.id}>{e.name}</li>)}
+                  </ul>
+                </div>
+              ))}
             </div>
           ) : null}
 
@@ -4731,15 +4763,21 @@ function SetlistTab({ isAdmin, now, onGoTab }) {
   /* One listener for the whole setlist, not one per card. Thirty seven cards
      each opening their own Firebase subscription for the same boolean would be
      thirty six wasted sockets. */
-  const tenure = useTenureUnlocked();
-  const vis = useTabVisibility();
-  const encoreTab = TABS.filter((t) => t.key === "encore")[0];
+  const tenure = useTenureUnlocked(now);
 
-  /* Two conditions, both required. Tenure has to be unlocked, AND the Encore tab
-     has to be reachable for whoever is looking, or the link would send attendees
-     to a tab they cannot see. Crew see every tab, so for them the unlock alone
-     is enough. */
-  const tenureReady = tenure.unlocked && (isAdmin || isTabOn(vis, encoreTab));
+  /* THE NAMES ARE READ HERE, INLINE, and this used to be a link to Encore instead.
+     Jim, Aug 13. The link was the wrong answer: Encore is a post-meeting tab and
+     settings/tabs has encore:false, so at 9:00 on Wednesday morning the awards would
+     have landed in a tab the room could not open, and the link hid itself for the
+     same reason. Everyone is on The Setlist at 9:00 following the agenda, and that
+     tab is always on. Encore stays the permanent home for afterwards.
+
+     `enabled` is the whole confidentiality guard and it is not a render check. While
+     tenure is locked and the viewer is not crew, the listener is never attached, so
+     the names are not in the page at all. Anyone opening dev tools early finds
+     nothing to find. */
+  const tenureOpen = tenure.unlocked || isAdmin;
+  const tenureEntries = useTenureEntries(tenureOpen);
   const [castMap, setCastMap] = useState(() => readJSON(LS.reacted));
   const [dayKey, setDayKey] = useState(null);
   const [open, setOpen] = useState({});
@@ -4837,7 +4875,8 @@ function SetlistTab({ isAdmin, now, onGoTab }) {
                 castMap={castMap}
                 onCast={onCast}
                 open={!!open[sess.key]}
-                tenureReady={tenureReady}
+                tenureEntries={tenureEntries}
+                tenureOpen={tenureOpen}
                 onGoTab={onGoTab}
                 isAdmin={isAdmin}
                 onToggle={() => setOpen((prev) => {
@@ -10491,17 +10530,11 @@ function PitTab({ isAdmin, now }) {
         />
       ) : null}
 
-      <BuildNote isAdmin={isAdmin} task="T2.5">
-        Both upload paths ship, camera and library, as two separate inputs.
-        Compression runs on the phone to roughly 800px on the long edge and steps
-        down a quality ladder until the stored string is under 190KB, so a 4MB
-        photo lands around 80KB. EXIF rotation is applied here only when the
-        browser has not already applied it, decided by a probe image rather than
-        a user agent guess. Likes are a Firebase transaction with the device half
-        in mm26_liked. The lightbox never touches body overflow, which is the
-        acceptance criterion. The grid pulls {PIT_PAGE} photos at a time, because
-        every photo is base64 inside its own record.
-      </BuildNote>
+      {/* The T2.5 build note was removed on Jim's instruction, Aug 13. It described
+          the two upload paths, the on-phone compression ladder, the EXIF probe, the
+          like transaction and the 24 photo page size. All of that is still true and
+          still documented in ROADMAP T2.5, which is where it belongs. It was crew
+          only, so no attendee ever saw it. */}
     </TabFrame>
   );
 }
@@ -11184,20 +11217,44 @@ function CaresCard() {
    repo, which is public.
    ========================================================================== */
 
-/* The unlock flag is a bare boolean, so it is safe to listen to always. */
-function useTenureUnlocked() {
-  const [unlocked, setUnlocked] = useState(false);
+/* Tenure opens on the clock, 9:00 AM Eastern on Wednesday August 26. Jim, Aug 13.
+   It used to be a crew toggle and nothing else, which meant somebody had to
+   remember to flip it during the Opening Cowbell. */
+const TENURE_UNLOCK_AT = Date.parse("2026-08-26T09:00:00-04:00");
+
+/* The unlock flag is a bare boolean, so it is safe to listen to always: reading it
+   reveals nothing, and the NAMES are gated separately in useTenureEntries.
+
+   THREE STATES, not two, and the node already supported them without a migration:
+
+     absent or null   follow the clock. This is where it sits today
+     true             crew forced it open early
+     false            crew forced it shut
+
+   So the existing crew button still works and still wins in both directions, which
+   is the same rule the Vault drops follow. A section that will not open because a
+   phone cannot reach the server is a worse failure in front of a room than one that
+   opens on the phone's own clock, so trust comes from useVaultClock, which grants it
+   after a grace period rather than waiting forever. */
+function useTenureUnlocked(now) {
+  const [raw, setRaw] = useState(null);
   const [ready, setReady] = useState(!FB.ok);
+  const clock = useVaultClock();
 
   useEffect(() => {
     if (!FB.ok) return;
     const ref = FB.db.ref("encore/tenure/unlocked");
-    const handler = (snap) => { setUnlocked(snap.val() === true); setReady(true); };
+    const handler = (snap) => { setRaw(snap.val()); setReady(true); };
     ref.on("value", handler);
     return () => ref.off("value", handler);
   }, []);
 
-  return { unlocked, ready };
+  const mode = raw === true ? "open" : raw === false ? "shut" : "scheduled";
+  const unlocked = mode === "open" ? true
+    : mode === "shut" ? false
+    : (clock.trusted && typeof now === "number" && now >= TENURE_UNLOCK_AT);
+
+  return { unlocked, ready, mode, at: TENURE_UNLOCK_AT, clock: clock };
 }
 
 /* `enabled` gates the read, not the render. Called with false, this never
@@ -11222,11 +11279,16 @@ function useTenureEntries(enabled) {
   return entries;
 }
 
-/* Milestones sort by the number in them, longest tenure first, because that is
-   the order they get read out in. Anything without a number falls to the end. */
+/* Milestones sort by the number in them, SHORTEST tenure first, so the list builds
+   to the longest service rather than opening with it. Anything without a number
+   falls to the end.
+
+   This was longest-first until Aug 13, on my own guess about the running order. Jim's
+   actual list has the 5 year awards above the 10 year ones, which is his document and
+   beats my guess. Flip the sign here if the stage order ever changes. */
 function milestoneRank(label) {
   const m = String(label || "").match(/\d+/);
-  return m ? -parseInt(m[0], 10) : 1e6;
+  return m ? parseInt(m[0], 10) : 1e6;
 }
 
 function groupByMilestone(entries) {
@@ -11362,8 +11424,8 @@ function TenureRow({ e, isAdmin, onEdit, onDelete }) {
   );
 }
 
-function TenureSection({ isAdmin }) {
-  const { unlocked, ready } = useTenureUnlocked();
+function TenureSection({ isAdmin, now }) {
+  const { unlocked, ready } = useTenureUnlocked(now);
   const canRead = unlocked || isAdmin;
   const entries = useTenureEntries(canRead);
   const [editing, setEditing] = useState(null);
@@ -12214,7 +12276,7 @@ function EncoreTab({ isAdmin, now }) {
       {/* Tenure first, because it is the first to go live. Wednesday morning,
           not Thursday night. */}
       <div className="enc-list">
-        <TenureSection isAdmin={isAdmin} />
+        <TenureSection isAdmin={isAdmin} now={now} />
         <AwardsSection isAdmin={isAdmin} now={now} />
         <HofSection isAdmin={isAdmin} now={now} />
         <VideosSection isAdmin={isAdmin} now={now} />
