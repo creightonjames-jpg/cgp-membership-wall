@@ -115,6 +115,7 @@ FRAME_TUNE = {
     "spittle":            {"face": 0.47, "centre": 0.45},
     "han":                {"face": 0.47, "centre": 0.45},
     "darville":           {"face": 0.47, "centre": 0.45},
+    "taytem-bowles":      {"face": 0.47, "centre": 0.45},   # Jim, Aug 13
 }
 
 MIN_FACE = 0.26         # below this the subject is not featured
