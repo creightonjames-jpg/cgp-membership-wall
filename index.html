@@ -1110,6 +1110,54 @@ body.display-mode .stubnote { font-size: 20px; }
 
 .attire__v { margin: 0; color: var(--cream); }
 
+/* ------------------------------------------ weather, one strip per day */
+/* Sits between the day note and the attire lines, because attire is the reason
+   anybody reads the weather. A warm fill and a gold rule so it reads as its own
+   panel inside the header without introducing a second card. */
+.wx {
+  margin: 12px 0 0; padding: 9px 11px;
+  display: flex; align-items: center; gap: 11px;
+  background: var(--warm-fill);
+  border: 1px solid var(--warm-edge);
+  border-left: 3px solid var(--gold-rule);
+  border-radius: 8px;
+}
+
+/* Emoji, not an icon font. It carries colour on every platform, needs no asset,
+   and cannot fail to load on a phone in a ballroom. */
+.wx__g { flex: 0 0 auto; font-size: 27px; line-height: 1; }
+
+.wx__t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+.wx__temps { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+
+.wx__hi { font-size: 21px; color: var(--cream); line-height: 1; }
+
+.wx__lo { font-size: 15px; color: var(--dim); line-height: 1; }
+
+.wx__c {
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+.wx__n { color: var(--cream); font-size: 13px; }
+
+.wx__est { color: var(--mute); font-size: 11px; font-style: italic; }
+
+/* Crew only. Same field furniture as every other admin form on the wall. */
+.wx-ed {
+  margin: 11px 0 0; padding: 11px;
+  border: 1px dashed var(--edge); border-radius: 8px;
+}
+
+.wx-ed__k {
+  margin: 0 0 9px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.14em; color: var(--dim);
+}
+
+.wx-ed__said { align-self: center; color: var(--dim); font-size: 12px; }
+
 /* ---------------------------------------------------- session cards */
 .set-list { display: flex; flex-direction: column; gap: 16px; }
 .set-card { --ticket-stub-w: 78px; }
@@ -4815,6 +4863,7 @@ function SetlistTab({ isAdmin, now, onGoTab }) {
      each opening their own Firebase subscription for the same boolean would be
      thirty six wasted sockets. */
   const tenure = useTenureUnlocked(now);
+  const weather = useWeather();
 
   /* THE NAMES ARE READ HERE, INLINE, and this used to be a link to Encore instead.
      Jim, Aug 13. The link was the wrong answer: Encore is a post-meeting tab and
@@ -4913,6 +4962,10 @@ function SetlistTab({ isAdmin, now, onGoTab }) {
           <div className="dayhead glow-card grille">
             <h3 className="dayhead__t t-display">{day.title}</h3>
             {day.note ? <p className="dayhead__note">{day.note}</p> : null}
+            <WeatherLine w={weather ? weather[day.key] : null} />
+            {isAdmin ? (
+              <WeatherEdit dayKey={day.key} w={weather ? weather[day.key] : null} />
+            ) : null}
             <div className="dayhead__attire">
               {day.attire.length ? (
                 day.attire.map((a) => (
@@ -11468,6 +11521,171 @@ function CaresCard() {
    Every name in here is a placeholder. The real list is handled outside this
    repo, which is public.
    ========================================================================== */
+
+/* ==========================================================================
+   WEATHER, one line per day. Columbus, Ohio, August 25 to 28.
+
+   Firebase, at weather/{dayKey}, not the repo. It changes right up to the morning
+   of, and the person who updates it is standing in a ballroom with a phone, so it
+   has to be editable from the crew panel rather than by a commit. That is the same
+   rule the rest of the wall follows: fixed before the meeting lives in the repo,
+   anything that moves during it lives in Firebase.
+
+   NOTHING HERE IS A FORECAST. Jim asked me to fill it with a best guess, so the seed
+   values are Columbus climate normals for late August, and every seeded day carries
+   `estimate: true`, which prints "Seasonal average, not a forecast" under the
+   numbers. Crew clear that flag by saving a real one. Inventing numbers is fine.
+   Inventing numbers that LOOK like a forecast is not, when 119 people are deciding
+   whether to bring a jacket.
+   ========================================================================== */
+
+const WX_CONDS = [
+  { key: "sun",     label: "Sunny",          glyph: "☀️" },
+  { key: "partly",  label: "Partly cloudy",  glyph: "⛅" },
+  { key: "cloud",   label: "Cloudy",         glyph: "☁️" },
+  { key: "rain",    label: "Rain",           glyph: "\u{1F327}️" },
+  { key: "storm",   label: "Storms",         glyph: "⛈️" },
+  { key: "hot",     label: "Hot and humid",  glyph: "\u{1F321}️" },
+  { key: "wind",    label: "Windy",          glyph: "\u{1F32C}️" }
+];
+
+function wxCond(key) {
+  return WX_CONDS.filter((c) => c.key === key)[0] || WX_CONDS[1];
+}
+
+/* The seed lives here in the repo rather than being written into Firebase once.
+   Two reasons. It survives a Firebase wipe, so the days are never blank. And there
+   is exactly one copy of the guess, so nobody has to wonder whether the number on
+   screen came from a person or from me. Firebase wins wherever a crew record exists.
+
+   These are Columbus climate normals for the last week of August, high near 82,
+   low near 62. Not a forecast, and every one of them says so on screen. */
+const WX_SEED = {
+  tue: { hi: "84", lo: "64", cond: "partly", note: "Warm for the range and the shotgun.", estimate: true },
+  wed: { hi: "82", lo: "63", cond: "sun",    note: "", estimate: true },
+  thu: { hi: "83", lo: "65", cond: "storm",  note: "Afternoon storms are common this week.", estimate: true },
+  fri: { hi: "81", lo: "62", cond: "partly", note: "Good flying weather.", estimate: true }
+};
+
+function useWeather() {
+  const [live, setLive] = useState(null);
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("weather");
+    const handler = (snap) => setLive(snap.val() || {});
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+  /* Merge per day, not per field. A crew record replaces the guess outright, so a
+     saved day cannot end up wearing half of my estimate. */
+  const out = {};
+  Object.keys(WX_SEED).forEach((k) => { out[k] = WX_SEED[k]; });
+  if (live) Object.keys(live).forEach((k) => { if (live[k]) out[k] = live[k]; });
+  return out;
+}
+
+function wxWrite(dayKey, body) {
+  if (!FB.ok) return Promise.resolve();
+  return FB.db.ref("weather/" + dayKey).update(body);
+}
+
+/* One day's line. Renders nothing at all when there is no record, so a day nobody
+   has filled in is silent rather than showing an empty widget. */
+function WeatherLine({ w }) {
+  if (!w || (!w.hi && !w.lo && !w.cond && !w.note)) return null;
+  const c = wxCond(w.cond);
+  return (
+    <div className="wx">
+      <span className="wx__g" aria-hidden="true">{c.glyph}</span>
+      <span className="wx__t">
+        <span className="wx__temps">
+          {w.hi ? <span className="wx__hi t-data">{w.hi}&deg;</span> : null}
+          {w.lo ? <span className="wx__lo t-data">{w.lo}&deg;</span> : null}
+          <span className="wx__c">{c.label}</span>
+        </span>
+        {w.note ? <span className="wx__n">{w.note}</span> : null}
+        {w.estimate ? (
+          <span className="wx__est">Seasonal average, not a forecast.</span>
+        ) : null}
+      </span>
+    </div>
+  );
+}
+
+/* Crew editor, inline under the day header where they are already looking. Two
+   numbers, a condition and an optional line. Saving clears the estimate flag,
+   because a human has now put a real number in. */
+function WeatherEdit({ dayKey, w }) {
+  const [hi, setHi] = useState(String((w && w.hi) || ""));
+  const [lo, setLo] = useState(String((w && w.lo) || ""));
+  const [cond, setCond] = useState(String((w && w.cond) || "partly"));
+  const [note, setNote] = useState(String((w && w.note) || ""));
+  const [busy, setBusy] = useState(false);
+  const [said, setSaid] = useState("");
+
+  /* Re-seed the fields when the crew switch day pills, or Wednesday's editor would
+     keep showing Tuesday's numbers. */
+  useEffect(() => {
+    setHi(String((w && w.hi) || ""));
+    setLo(String((w && w.lo) || ""));
+    setCond(String((w && w.cond) || "partly"));
+    setNote(String((w && w.note) || ""));
+    setSaid("");
+  }, [dayKey]);
+
+  const save = (e) => {
+    e.preventDefault();
+    setBusy(true);
+    wxWrite(dayKey, {
+      hi: hi.replace(/\D/g, "").slice(0, 3),
+      lo: lo.replace(/\D/g, "").slice(0, 3),
+      cond: cond,
+      note: note.replace(/\s+/g, " ").trim().slice(0, 90),
+      estimate: false
+    }).then(() => setSaid("Saved.")).catch(() => setSaid("Did not save."))
+      .then(() => setBusy(false));
+  };
+
+  return (
+    <form className="wx-ed" onSubmit={save}>
+      <p className="wx-ed__k">Weather for this day</p>
+      <div className="tf__row">
+        <label className="tf__l" style={{ flex: "0 0 74px", margin: 0 }}>
+          <span>High</span>
+          <input className="tf__in t-data" value={hi} inputMode="numeric"
+                 placeholder="84" onChange={(e) => setHi(e.target.value)} />
+        </label>
+        <label className="tf__l" style={{ flex: "0 0 74px", margin: 0 }}>
+          <span>Low</span>
+          <input className="tf__in t-data" value={lo} inputMode="numeric"
+                 placeholder="64" onChange={(e) => setLo(e.target.value)} />
+        </label>
+      </div>
+      {/* Sky gets its own row. Sharing one with the two temperatures squeezed it
+          narrow enough to clip "Partly cloudy" at 390px. */}
+      <label className="tf__l">
+        <span>Sky</span>
+        <select className="tf__in" value={cond} onChange={(e) => setCond(e.target.value)}>
+          {WX_CONDS.map((c) => (
+            <option key={c.key} value={c.key}>{c.glyph + " " + c.label}</option>
+          ))}
+        </select>
+      </label>
+      <label className="tf__l">
+        <span>One line, optional</span>
+        <input className="tf__in" value={note} maxLength={90}
+               placeholder="Showers clearing by the shotgun."
+               onChange={(e) => setNote(e.target.value)} />
+      </label>
+      <div className="tf__row" style={{ marginTop: 8 }}>
+        <button type="submit" className="btn btn--go" disabled={busy}>
+          {busy ? "Saving" : "Save the weather"}
+        </button>
+        {said ? <span className="wx-ed__said">{said}</span> : null}
+      </div>
+    </form>
+  );
+}
 
 /* Tenure opens on the clock rather than on somebody remembering to flip a switch
    during the Opening Cowbell.

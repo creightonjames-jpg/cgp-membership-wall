@@ -506,6 +506,48 @@ the filter pills. Not sticky, no scroll container. Twenty seven headings makes a
 long page on a phone, which is fine, because the club select is the shortcut for
 anybody who does not want to scroll it.
 
+### Aug 17, weather on each day of the meeting
+**From:** Jim. "The meeting is in Columbus Ohio. Can we add weather forecasts to
+each day of the meeting, include appropriate visuals and emojis." Then: "Create
+the space and graphics and give me a way to update manually," and "you can fill
+the weather data with your best guess for now."
+
+**Done.** A strip in The Setlist day header, sitting between the day note and the
+attire lines. High, low, a sky emoji with its label, and an optional one line
+note. Attire is the reason anybody checks the weather, so the two live together.
+
+**Where the data lives.** Firebase at `weather/{tue,wed,thu,fri}`, which follows
+the data split rule in CLAUDE.md. Weather moves right up to the morning of, and
+the person updating it is holding a phone in a ballroom, not making a commit.
+
+**Manual update.** Crew only, inline under the day header, one form per day. Two
+number fields, a sky dropdown with the seven emoji options, and the note line.
+Switch day pills to edit a different day. Saving writes that day and nothing else.
+
+**The seed is labelled as a guess, deliberately.** `WX_SEED` in `index.html` holds
+Columbus climate normals for the last week of August, high near 82 and low near 62.
+Every seeded day carries `estimate: true`, which prints "Seasonal average, not a
+forecast" under the numbers. The flag clears the moment crew save a real one.
+Inventing numbers when asked to is fine. Inventing numbers that look like a
+forecast is not, when 119 people are deciding whether to pack a jacket.
+
+**The seed is in the repo rather than written into Firebase once.** It survives a
+Firebase wipe, so no day is ever blank, and there is one copy of the guess, so
+nobody has to work out whether a number came from a person or from me. Firebase
+wins per day wherever a crew record exists, and the merge is per day rather than
+per field, so a saved day cannot wear half an estimate.
+
+**No new token and no new motif.** `--warm-fill`, `--warm-edge` and the
+`--gold-rule` left border, the same dials the rest of the wall already uses. Emoji
+rather than an icon font, because it carries colour everywhere and cannot fail to
+load in a ballroom.
+
+**Verified:** four days switch and the editor re-seeds with each; a save through
+the real form wrote to Firebase and cleared the estimate line; the test record was
+removed and the seed came back; the editor is invisible to attendees; no console
+errors; no horizontal overflow at 390px or 1280px. Sky moved to its own row after
+it clipped "Partly cloudy" when it shared a row with the two temperatures.
+
 ---
 
 ## PHASE 1: Static and text tabs
