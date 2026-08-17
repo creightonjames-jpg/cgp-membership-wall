@@ -41,7 +41,7 @@
         "Operational Excellence"
       ],
       "draft": true,
-      "crewNote": "Options are the seven breakout titles verbatim from the agenda. Do not reword them, the room is about to see the same words on the schedule. Good opener for the 9:15 Core Fundamentals session, because it tells the breakout leads where the interest is before anyone splits up."
+      "crewNote": "Options are the seven breakout titles verbatim from the agenda. Do not reword them, the room is about to see the same words on the schedule. Good opener for the 9:30 Core Fundamentals session, because it tells the breakout leads where the interest is before anyone splits up."
     },
     {
       "id": "wed-breakout-count",
@@ -65,15 +65,15 @@
       "session": "wed-0820-cowbell",
       "question": "What time is Wednesday's Opening Cowbell?",
       "options": [
-        "7:30 AM",
-        "8:00 AM",
-        "8:20 AM",
-        "8:45 AM"
+        "7:45 AM",
+        "8:45 AM",
+        "9:05 AM",
+        "9:30 AM"
       ],
-      "correctIndex": 2,
-      "explain": "8:20 AM, with the Tenure Awards. 7:30 is breakfast. 8:45 is Opening Remarks.",
+      "correctIndex": 1,
+      "explain": "8:45 AM. 7:45 is breakfast, 9:05 is Opening Remarks, 9:30 is Playlist 1.",
       "draft": true,
-      "crewNote": "Logistics dressed up as a poll. Best used Tuesday night at the mixer, not Wednesday morning, when knowing it is already too late."
+      "crewNote": "Logistics dressed up as a poll. Best used Tuesday night at the mixer, not Wednesday morning, when knowing it is already too late. REWRITTEN Aug 13 2026 after Carol moved the times. Every fact in the old version had gone stale at once: the cowbell was 8:20, breakfast 7:30 and Opening Remarks 8:45, and the stored correct answer still pointed at 8:20. A knowledge poll with a wrong answer, in front of the room. Re-check this one whenever the Wednesday morning times move."
     },
     {
       "id": "week-denim-day",
@@ -128,7 +128,7 @@
         "Nothing repeatable yet"
       ],
       "draft": true,
-      "crewNote": "Drafted to open the 9:30 session, What behaviors create leads. The options are mine, not the source's, so the presenter should approve or swap them. Keep the last option. It is the honest answer for some rooms and the result is worthless without it. MOVED Aug 13 2026: this was written for the 9:30 session What behaviors create leads, which is not on the approved agenda and has been removed. The question still fits the 9:15 Leads to the Invitation Pathway session, so it was reattached rather than thrown away. Delete it instead if the presenter does not want it."
+      "crewNote": "Drafted to open the 9:15 session, Leads to the Invitation Pathway. It was written for a 9:30 session called What behaviors create leads, which is not on the approved agenda and was removed. The options are mine, not the source's, so the presenter should approve or swap them. Keep the last option. It is the honest answer for some rooms and the result is worthless without it. MOVED Aug 13 2026: this was written for the 9:30 session What behaviors create leads, which is not on the approved agenda and has been removed. The question still fits the 9:15 Leads to the Invitation Pathway session, so it was reattached rather than thrown away. Delete it instead if the presenter does not want it."
     },
     {
       "id": "thu-loss-rank",

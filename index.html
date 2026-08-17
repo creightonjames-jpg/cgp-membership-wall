@@ -11469,10 +11469,26 @@ function CaresCard() {
    repo, which is public.
    ========================================================================== */
 
-/* Tenure opens on the clock, 9:00 AM Eastern on Wednesday August 26. Jim, Aug 13.
-   It used to be a crew toggle and nothing else, which meant somebody had to
-   remember to flip it during the Opening Cowbell. */
-const TENURE_UNLOCK_AT = Date.parse("2026-08-26T09:00:00-04:00");
+/* Tenure opens on the clock rather than on somebody remembering to flip a switch
+   during the Opening Cowbell.
+
+   MOVED TO THURSDAY, and this needs Jim's confirmation.
+
+   He asked for 9:00 AM on Wednesday August 26, and at the time that was right: the
+   Wednesday 8:20 session was called "Welcome and Tenure Awards Presentation", so 9:00
+   was shortly after the awards were read out. Carol's Aug 13 update moved the Tenure
+   Awards Presentation to THURSDAY 8:45, inside that day's Opening Cowbell, and took
+   them off Wednesday entirely.
+
+   Leaving the unlock on Wednesday would publish the eight names a full day before
+   they are announced, which is the one thing Lisa asked us not to do. So it follows
+   the presentation: 9:15 AM Thursday, when the Cowbell block ends and Playlist 3
+   starts, which is the same "just after it is read out" position 9:00 held on the old
+   Wednesday schedule.
+
+   Erring later, never earlier. If Jim wants a different moment it is this one line,
+   and the crew override still opens it early on the day regardless. */
+const TENURE_UNLOCK_AT = Date.parse("2026-08-27T09:15:00-04:00");
 
 /* The unlock flag is a bare boolean, so it is safe to listen to always: reading it
    reveals nothing, and the NAMES are gated separately in useTenureEntries.

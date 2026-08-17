@@ -19,7 +19,7 @@
       "stated": "The agenda states the end time.",
       "next": "The agenda states a start only. The end is the next item's start time, which is a derivation, not a fact. The card says so."
     },
-    "agendaSource": "Dashboard Agenda 8.12.26.docx, reconfirmed by Jim on Aug 13 2026 as the most recent APPROVED agenda. Verified title by title against his paste: Tuesday 4, Wednesday 15, Thursday 15, Friday 1, no extras and nothing missing. Two Thursday sessions that predated it, thu-0930-behaviors and thu-1000-leads-development, were removed on his say so."
+    "agendaSource": "Carol's update, relayed by Jim on Aug 13 2026. Supersedes the 8.12 version. Session KEYS are unchanged on purpose even where the time in the key is now wrong, for example wed-0820-cowbell now starts at 08:45: the keys are referenced by data/polls.json and renaming them would orphan those polls. The key is plumbing, the start time is the truth. THE TENURE AWARDS MOVED from Wednesday to Thursday 8:45."
   },
   "days": [
     {
@@ -123,8 +123,8 @@
         {
           "key": "wed-0730-breakfast",
           "kind": "timed",
-          "start": "2026-08-26T07:30:00-04:00",
-          "end": "2026-08-26T08:20:00-04:00",
+          "start": "2026-08-26T07:45:00-04:00",
+          "end": "2026-08-26T08:45:00-04:00",
           "endSource": "next",
           "title": "Breakfast and Photo Op",
           "presenter": "",
@@ -135,22 +135,27 @@
         {
           "key": "wed-0820-cowbell",
           "kind": "timed",
-          "start": "2026-08-26T08:20:00-04:00",
-          "end": "2026-08-26T08:45:00-04:00",
+          "start": "2026-08-26T08:45:00-04:00",
+          "end": "2026-08-26T09:05:00-04:00",
           "endSource": "next",
           "subtitle": "Opening Cowbell",
-          "title": "Welcome and Tenure Awards Presentation",
+          "title": "Opening Cowbell",
           "presenter": "",
           "venue": "",
           "room": "",
           "description": "",
-          "tenureLink": true
+          "itemsLabel": "Includes",
+          "items": [
+            "Century Golf Cares Cup Results",
+            "Sister Clubs Gift Exchange",
+            "Today's Setlist"
+          ]
         },
         {
           "key": "wed-0845-opening-remarks",
           "kind": "timed",
-          "start": "2026-08-26T08:45:00-04:00",
-          "end": "2026-08-26T09:15:00-04:00",
+          "start": "2026-08-26T09:05:00-04:00",
+          "end": "2026-08-26T09:30:00-04:00",
           "endSource": "next",
           "title": "Opening Remarks",
           "presenter": "Jim Hinckley, Founder and CEO Century Golf Partners. Doug Howe, COO Century Golf Partners",
@@ -161,7 +166,7 @@
         {
           "key": "wed-0915-core-fundamentals",
           "kind": "timed",
-          "start": "2026-08-26T09:15:00-04:00",
+          "start": "2026-08-26T09:30:00-04:00",
           "end": "2026-08-26T09:45:00-04:00",
           "endSource": "next",
           "title": "The Century Core Fundamentals Reignited",
@@ -260,7 +265,7 @@
           "key": "wed-1515-culture-story",
           "kind": "timed",
           "start": "2026-08-26T15:15:00-04:00",
-          "end": "2026-08-26T17:15:00-04:00",
+          "end": "2026-08-26T17:00:00-04:00",
           "endSource": "next",
           "title": "The Missing Chapter",
           "presenter": "",
@@ -272,7 +277,7 @@
         {
           "key": "wed-1715-programming-ends",
           "kind": "instant",
-          "start": "2026-08-26T17:15:00-04:00",
+          "start": "2026-08-26T17:00:00-04:00",
           "title": "Membership Programming ends",
           "presenter": "",
           "venue": "hotel",
@@ -285,7 +290,7 @@
           "start": "2026-08-26T18:00:00-04:00",
           "end": "2026-08-26T18:30:00-04:00",
           "endSource": "next",
-          "title": "Cocktails at Hotel Bar",
+          "title": "Cocktails at Hotel",
           "presenter": "",
           "venue": "hotel",
           "room": "",
@@ -309,7 +314,7 @@
           "start": "2026-08-26T19:00:00-04:00",
           "end": "2026-08-26T21:00:00-04:00",
           "endSource": "stated",
-          "title": "Karaoke, Corn Hole, Cards and Beer Pong",
+          "title": "Karaoke, Corn Hole, Cards and Beer Pong at hotel",
           "presenter": "",
           "venue": "hotel",
           "room": "",
@@ -350,17 +355,24 @@
           "end": "2026-08-27T09:15:00-04:00",
           "endSource": "next",
           "subtitle": "Welcome",
-          "title": "FWWL Pinning Ceremonies",
+          "title": "Opening Cowbell",
           "presenter": "",
           "venue": "",
           "room": "",
-          "description": ""
+          "description": "",
+          "itemsLabel": "Includes",
+          "items": [
+            "Tenure Awards Presentation",
+            "FWWL Pinning Ceremonies",
+            "Today's Setlist"
+          ],
+          "tenureLink": true
         },
         {
           "key": "thu-0915-invitation-pathway",
           "kind": "timed",
           "start": "2026-08-27T09:15:00-04:00",
-          "end": "2026-08-27T09:30:00-04:00",
+          "end": "2026-08-27T10:30:00-04:00",
           "endSource": "next",
           "title": "Leads to the Invitation Pathway",
           "presenter": "",
