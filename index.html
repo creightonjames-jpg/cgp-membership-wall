@@ -5281,8 +5281,14 @@ function useFbLive() {
    "Century Golf" prefix, so corporate staff sort FIRST, above Anthem, instead of
    between Canyon Oaks and Chenal. It is a prefix test rather than an exact name,
    so a fuller spelling still lands first. Corporate is also the only group with a
-   hand set member order, BAND_CORPORATE_ORDER. Every other club is whatever the
-   file says it is, in the file's own order.
+   hand set member order, BAND_CORPORATE_ORDER. Every other club renders in
+   alphabetical order by name, because the whole roster is sorted by name as it
+   loads and the club bags inherit that order.
+
+   This comment used to claim other clubs kept the file's own order. That was wrong
+   and it cost a wrong conclusion on Aug 17, when moving Natalie Bratcher to
+   Balcones looked like it needed her record physically relocated. It did not.
+   Position in data/roster.json has no effect on where anybody appears.
    ========================================================================== */
 
 /* Fold accents and case, so a search for "jose" finds "José". macOS hands over
@@ -5426,7 +5432,8 @@ const BAND_CORPORATE_ORDER = [
   "jim-creighton",
   "jim-kern",
   "lisa-henrichsen",
-  "natalie-bratcher",
+  /* natalie-bratcher was here. Jim moved her to Balcones on Aug 17, so she is no
+     longer sorted by this list. Her name coming out of it is the whole change. */
   "patrick-ryan",
   "todd-keefer",
   "tyler-busey",
