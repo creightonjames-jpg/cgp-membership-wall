@@ -575,12 +575,12 @@ and the Wednesday breakouts are what it is for. It opens Wednesday 9:30 AM Easte
 15 minutes before the breakouts start, and the crew override still beats the clock
 both ways.
 
-**Open question for Jim, not a defect.** The room now meets the same six personas
+**Both sections stay. Jim's call, Aug 17.** The room meets the same six personas
 twice: Wednesday 9:30 as Core Fundamental Scenarios, Thursday 10:30 as Invitation
-Source Personas. Two padlocks, two unlock times, identical content. That was two
-separate drops in the spec and CLAUDE.md, planned when they were expected to be two
-separate documents. Collapsing them into one section is a small change and it needs
-his call, because it removes a section.
+Source Personas. Two padlocks, two unlock times, identical content. He was offered
+the choice of collapsing them and chose to keep both, so somebody following the
+agenda finds the material where the agenda says it is. This is settled. It is not
+drift to be tidied up later, and the note in `VAULT_SECTIONS` says so.
 
 **Verified:** six persona cards render under Core Fundamental Scenarios; a card opens
 to its story and its closing question; crew see it with the "the room cannot see this
