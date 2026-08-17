@@ -6886,7 +6886,16 @@ const VAULT_SECTIONS = [
      the stored value. The name is what the room reads. The key is plumbing. */
   { key: "buckets",      name: "Invitation Sources",         icon: "\u{1F5C2}", kind: "images" },
   { key: "graphs",       name: "Club Graphs",                icon: "\u{1F4C8}", kind: "graphs" },
-  { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "images", drop: "scenarios" },
+  /* Jim, Aug 17 2026: the breakout scenarios ARE the six personas. He sent the
+     personas document a second time to say so. So this section reads the same
+     data/personas.json rather than waiting on artwork that was never coming.
+
+     `kind: "personas"` on both means one file, one component, no second copy of
+     the prose to drift. The names differ because the room meets this content twice
+     under two different headings: Wednesday as the breakout material, Thursday as
+     the reference. Whether it should be two sections at all is Jim's call, noted
+     in ROADMAP. */
+  { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "personas", drop: "scenarios" },
   { key: "personas",     name: "Invitation Source Personas",  icon: "\u{1F465}", kind: "personas", drop: "personas" }
 ];
 
@@ -6914,6 +6923,8 @@ const VAULT_GRACE_MS = 8000;
 const VAULT_EMPTY = {
   fundamentals: "Empty shelf. The Core Fundamentals artwork has not turned up yet.",
   buckets:      "Empty shelf. Tyler is sending the Invitation Sources artwork.",
+  /* Unreachable while scenarios renders as personas. Kept because it is the copy
+     that ships the moment that section goes back to being artwork. */
   scenarios:    "Open and empty. The scenarios have not turned up yet.",
   personas:     "Open and empty. The personas have not turned up yet."
 };

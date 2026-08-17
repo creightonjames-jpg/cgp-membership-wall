@@ -554,6 +554,39 @@ removed and the seed came back; the editor is invisible to attendees; no console
 errors; no horizontal overflow at 390px or 1280px. Sky moved to its own row after
 it clipped "Partly cloudy" when it shared a row with the two temperatures.
 
+### Aug 17, the breakout scenarios are the personas
+**From:** Jim, who sent the personas document a second time. "No. These are the
+scenarios we're using for the breakouts."
+
+**The file was a duplicate.** Byte for byte identical to the personas document from
+Aug 15, same SHA-256, same 28,337 bytes, and the word "scenario" appears nowhere in
+it. Every string already in `data/personas.json` was verified present in it. So there
+was nothing new to load. What was new was the instruction: one document serves both
+Vault drops.
+
+**Done.** `scenarios` is now `kind: "personas"` in `VAULT_SECTIONS`, reading the same
+`data/personas.json` through the same `VaultPersonas` component. One file, one
+component, no second copy of the prose to drift out of sync. The shelf that has been
+empty since the build started now holds all six personas.
+
+**The scenarios drop was found forced shut,** stamped Aug 17 10:36 AM Eastern, left
+over from testing. Set back to `scheduled`, because the section now has real content
+and the Wednesday breakouts are what it is for. It opens Wednesday 9:30 AM Eastern,
+15 minutes before the breakouts start, and the crew override still beats the clock
+both ways.
+
+**Open question for Jim, not a defect.** The room now meets the same six personas
+twice: Wednesday 9:30 as Core Fundamental Scenarios, Thursday 10:30 as Invitation
+Source Personas. Two padlocks, two unlock times, identical content. That was two
+separate drops in the spec and CLAUDE.md, planned when they were expected to be two
+separate documents. Collapsing them into one section is a small change and it needs
+his call, because it removes a section.
+
+**Verified:** six persona cards render under Core Fundamental Scenarios; a card opens
+to its story and its closing question; crew see it with the "the room cannot see this
+yet" badge; attendees see the padlock, "Opens Wednesday, August 26, 9:30 AM Eastern"
+and a live countdown; no console errors; no horizontal overflow.
+
 ---
 
 ## PHASE 1: Static and text tabs
