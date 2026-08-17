@@ -520,16 +520,22 @@ note. Attire is the reason anybody checks the weather, so the two live together.
 the data split rule in CLAUDE.md. Weather moves right up to the morning of, and
 the person updating it is holding a phone in a ballroom, not making a commit.
 
-**Manual update.** Crew only, inline under the day header, one form per day. Two
-number fields, a sky dropdown with the seven emoji options, and the note line.
+**Manual update.** Crew only, inline under the day header, one form per day. High,
+low, rain percent, a sky dropdown with the seven emoji options, and the note line.
 Switch day pills to edit a different day. Saving writes that day and nothing else.
 
-**The seed is labelled as a guess, deliberately.** `WX_SEED` in `index.html` holds
-Columbus climate normals for the last week of August, high near 82 and low near 62.
-Every seeded day carries `estimate: true`, which prints "Seasonal average, not a
-forecast" under the numbers. The flag clears the moment crew save a real one.
-Inventing numbers when asked to is fine. Inventing numbers that look like a
-forecast is not, when 119 people are deciding whether to pack a jacket.
+**Real numbers, same day.** Jim sent an actual Columbus forecast within the hour,
+so the climate normals never shipped. `WX_SEED` now holds his figures: Tue 80/62,
+Wed 81/65, Thu 81/64, Fri 79/61, partly cloudy every day, rain chance 22, 24, 24
+and 21 percent. Rain chance was added to the record, the display and the crew form
+to carry it.
+
+**Every day is stamped with its age.** These were pulled eight days out, and an
+eight day forecast moves, so the strip prints "Forecast as of Aug 17" rather than
+letting stale numbers read as current. A crew save writes `ts` from the server and
+the line follows it, so refreshing on the Sunday before re-dates itself with no
+extra step. The `estimate: true` path and its "Seasonal average, not a forecast"
+line are still in the code for any day that ever falls back to a guess.
 
 **The seed is in the repo rather than written into Firebase once.** It survives a
 Firebase wipe, so no day is ever blank, and there is one copy of the guess, so

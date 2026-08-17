@@ -1140,6 +1140,13 @@ body.display-mode .stubnote { font-size: 20px; }
   font-size: 10px; letter-spacing: 0.14em; color: var(--gold);
 }
 
+/* Chance of rain. Reads as metadata rather than as a headline number, because the
+   high and the low are what people are actually deciding their shoes on. */
+.wx__pop {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 13px; color: var(--dim);
+}
+
 .wx__n { color: var(--cream); font-size: 13px; }
 
 .wx__est { color: var(--mute); font-size: 11px; font-style: italic; }
@@ -11553,18 +11560,21 @@ function wxCond(key) {
   return WX_CONDS.filter((c) => c.key === key)[0] || WX_CONDS[1];
 }
 
-/* The seed lives here in the repo rather than being written into Firebase once.
+/* The default lives here in the repo rather than being written into Firebase once.
    Two reasons. It survives a Firebase wipe, so the days are never blank. And there
-   is exactly one copy of the guess, so nobody has to wonder whether the number on
-   screen came from a person or from me. Firebase wins wherever a crew record exists.
+   is exactly one copy of it, so nobody has to work out where a number came from.
+   Firebase wins wherever a crew record exists.
 
-   These are Columbus climate normals for the last week of August, high near 82,
-   low near 62. Not a forecast, and every one of them says so on screen. */
+   Jim, Aug 17 2026: a real Columbus forecast, supplied by him, replaces the climate
+   normals that were here. So `estimate` is false and the "seasonal average" line is
+   gone. `asOf` is stamped instead, because this was pulled eight days out and an
+   eight day forecast will move. Whoever refreshes it on the Sunday before gets a
+   fresh stamp from the crew form automatically. */
 const WX_SEED = {
-  tue: { hi: "84", lo: "64", cond: "partly", note: "Warm for the range and the shotgun.", estimate: true },
-  wed: { hi: "82", lo: "63", cond: "sun",    note: "", estimate: true },
-  thu: { hi: "83", lo: "65", cond: "storm",  note: "Afternoon storms are common this week.", estimate: true },
-  fri: { hi: "81", lo: "62", cond: "partly", note: "Good flying weather.", estimate: true }
+  tue: { hi: "80", lo: "62", pop: "22", cond: "partly", note: "Warm for the range and the shotgun.", asOf: "Aug 17" },
+  wed: { hi: "81", lo: "65", pop: "24", cond: "partly", note: "", asOf: "Aug 17" },
+  thu: { hi: "81", lo: "64", pop: "24", cond: "partly", note: "", asOf: "Aug 17" },
+  fri: { hi: "79", lo: "61", pop: "21", cond: "partly", note: "Good flying weather.", asOf: "Aug 17" }
 };
 
 function useWeather() {
@@ -11591,9 +11601,19 @@ function wxWrite(dayKey, body) {
 
 /* One day's line. Renders nothing at all when there is no record, so a day nobody
    has filled in is silent rather than showing an empty widget. */
+/* "Updated Aug 17". A crew save stamps `ts` from the server, the repo default
+   carries a plain `asOf` string. Either way the room can see how old the numbers
+   are, which matters for a forecast pulled days before the meeting. */
+function wxAsOf(w) {
+  if (w && typeof w.ts === "number") return lnEtFormat(w.ts, { month: "short", day: "numeric" });
+  if (w && w.asOf) return String(w.asOf);
+  return "";
+}
+
 function WeatherLine({ w }) {
   if (!w || (!w.hi && !w.lo && !w.cond && !w.note)) return null;
   const c = wxCond(w.cond);
+  const asOf = wxAsOf(w);
   return (
     <div className="wx">
       <span className="wx__g" aria-hidden="true">{c.glyph}</span>
@@ -11602,10 +11622,18 @@ function WeatherLine({ w }) {
           {w.hi ? <span className="wx__hi t-data">{w.hi}&deg;</span> : null}
           {w.lo ? <span className="wx__lo t-data">{w.lo}&deg;</span> : null}
           <span className="wx__c">{c.label}</span>
+          {w.pop ? (
+            <span className="wx__pop t-data">
+              <span aria-hidden="true">{"\u{1F4A7}"}</span>
+              <span className="sr-only">Chance of rain </span>{w.pop}%
+            </span>
+          ) : null}
         </span>
         {w.note ? <span className="wx__n">{w.note}</span> : null}
         {w.estimate ? (
           <span className="wx__est">Seasonal average, not a forecast.</span>
+        ) : asOf ? (
+          <span className="wx__est">Forecast as of {asOf}.</span>
         ) : null}
       </span>
     </div>
@@ -11618,6 +11646,7 @@ function WeatherLine({ w }) {
 function WeatherEdit({ dayKey, w }) {
   const [hi, setHi] = useState(String((w && w.hi) || ""));
   const [lo, setLo] = useState(String((w && w.lo) || ""));
+  const [pop, setPop] = useState(String((w && w.pop) || ""));
   const [cond, setCond] = useState(String((w && w.cond) || "partly"));
   const [note, setNote] = useState(String((w && w.note) || ""));
   const [busy, setBusy] = useState(false);
@@ -11628,6 +11657,7 @@ function WeatherEdit({ dayKey, w }) {
   useEffect(() => {
     setHi(String((w && w.hi) || ""));
     setLo(String((w && w.lo) || ""));
+    setPop(String((w && w.pop) || ""));
     setCond(String((w && w.cond) || "partly"));
     setNote(String((w && w.note) || ""));
     setSaid("");
@@ -11636,12 +11666,18 @@ function WeatherEdit({ dayKey, w }) {
   const save = (e) => {
     e.preventDefault();
     setBusy(true);
+    /* The server stamps it, not the phone. Crew are at the venue so their own clock
+       is probably right, but every other timestamp on the wall comes from the server
+       and this one has no reason to be the exception. */
     wxWrite(dayKey, {
       hi: hi.replace(/\D/g, "").slice(0, 3),
       lo: lo.replace(/\D/g, "").slice(0, 3),
+      pop: pop.replace(/\D/g, "").slice(0, 3),
       cond: cond,
       note: note.replace(/\s+/g, " ").trim().slice(0, 90),
-      estimate: false
+      estimate: false,
+      asOf: null,
+      ts: scServerStamp()
     }).then(() => setSaid("Saved.")).catch(() => setSaid("Did not save."))
       .then(() => setBusy(false));
   };
@@ -11653,12 +11689,17 @@ function WeatherEdit({ dayKey, w }) {
         <label className="tf__l" style={{ flex: "0 0 74px", margin: 0 }}>
           <span>High</span>
           <input className="tf__in t-data" value={hi} inputMode="numeric"
-                 placeholder="84" onChange={(e) => setHi(e.target.value)} />
+                 placeholder="80" onChange={(e) => setHi(e.target.value)} />
         </label>
         <label className="tf__l" style={{ flex: "0 0 74px", margin: 0 }}>
           <span>Low</span>
           <input className="tf__in t-data" value={lo} inputMode="numeric"
-                 placeholder="64" onChange={(e) => setLo(e.target.value)} />
+                 placeholder="62" onChange={(e) => setLo(e.target.value)} />
+        </label>
+        <label className="tf__l" style={{ flex: "0 0 84px", margin: 0 }}>
+          <span>Rain %</span>
+          <input className="tf__in t-data" value={pop} inputMode="numeric"
+                 placeholder="22" onChange={(e) => setPop(e.target.value)} />
         </label>
       </div>
       {/* Sky gets its own row. Sharing one with the two temperatures squeezed it
