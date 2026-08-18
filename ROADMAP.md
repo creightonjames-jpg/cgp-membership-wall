@@ -740,6 +740,72 @@ auto scroll make it discoverable, they do not make it visible at a glance. Wrapp
 pills onto multiple lines would show all six with no swipe, at the cost of vertical
 space. Jim's call, not taken here.
 
+### Aug 18, five Band corrections and the Vault reordered
+**From:** Jim, a batch under "The Band" and "The Vault".
+
+**Garry Cramer, Medallion GM.** No longer a newbie. NOTES cleared in the TSV, which
+clears the flag and the FIRST TOUR badge together. His photo also came off, per his
+own request not to be shown with one. The processed file moved to
+`incoming/headshots/removed-by-request/` rather than being deleted, and the removal
+is recorded in `data/headshots-derived.json` so a future headshot run does not
+silently regenerate it. His original source file is still in Jim's OneDrive Newbies
+folder, so if it ever gets reprocessed that record is what explains why it should not
+have been.
+
+**Erik Mettille, Oregon GC.** Same fix, same reasoning. He attended last year, so the
+newbie flag was wrong on top of him not wanting the photo.
+
+**Jay McEuen corrected to Jay McLuen.** Confirmed two ways before touching it: the
+donation slip Jim sent and `data/cares-card.json`'s own `asWritten` field, recorded
+back on Aug 13 when the sheet and the roster first disagreed. The processed photo
+file was already named `jay-mcluen.jpg`, matched to the old spelling only by the
+reconciler's near-spelling pass. After the fix it matches as a full name, which is
+itself a small confirmation the correction is right.
+
+**Sidney Ormsby corrected to Sydney Ormsby.** Same double confirmation, same tell:
+the photo file was already `sydney-ormsby.jpg`. `cares-card.json` updated to match on
+both, `asWritten` removed from both entries since name and sheet no longer disagree.
+
+**Pete Ulliman added to Medallion.** Title read directly off his own name badge in
+the photo he supplied: "PETE ULLIMAN, Asst. General Manager," Medallion Club patch
+on the jacket. Not a guess. Not marked as a newbie, since nothing said he was one.
+
+**Dave Horn still has no photo.** Nothing arrived. Still a placeholder, waiting on
+Jim.
+
+**Ballantyne, not touched.** "Remove Ballantyne and photos in All" would take out an
+entire club and four people: Matt Saggio, Katie Robinson, Payton Williamson, Dan
+Cordaro. CLAUDE.md's hard rule is never delete without approval, and this is the
+kind of removal that rule exists for. Confirmed with Jim first rather than guessed
+at.
+
+**The Vault reordered to match the agenda,** rather than the order sections were
+built in:
+
+```
+Wed  9:30   The Century Core Fundamentals Reignited   -> Core Fundamentals
+Wed  9:45   Core Fundamentals Breakouts Session        -> Core Fundamental Scenarios
+Wed 15:15   The Missing Chapter                        -> The Medallion Club Story
+Thu  9:15   Leads to the Invitation Pathway             -> Invitation Sources
+Thu 10:30   (Invitation Pathway breakout content)       -> Invitation Source Personas
+```
+
+Club Graphs has no session anywhere in `data/agenda.json`. It is reference material
+the room dips into on demand, not tied to a moment on the clock, so it goes last
+rather than being wedged between two sections that do have a time. That reasoning is
+in the code comment, so a future reorder request has the "why" to work from instead
+of just a list.
+
+Two stale comments calling this "Five sections" (it has been six since The Medallion
+Club Story was added on Aug 17) were caught in the same pass and corrected.
+
+**Verified:** roster 121, 118 with photos; Garry, Erik and Dave Horn are the three
+without one; Garry and Erik show no FIRST TOUR badge; Jay McLuen and Sydney Ormsby
+render correctly with no old spelling anywhere; Pete Ulliman's card renders under
+Medallion; Vault nav reads Core Fundamentals, Core Fundamental Scenarios, The
+Medallion Club Story, Invitation Sources, Invitation Source Personas, Club Graphs in
+that order; no console errors.
+
 ---
 
 ## PHASE 1: Static and text tabs

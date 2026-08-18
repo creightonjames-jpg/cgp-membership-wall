@@ -46,9 +46,8 @@
       ],
       "spalding": [
         {
-          "name": "Jay McEuen",
-          "asWritten": "Jay McLuen",
-          "slug": "jay-mceuen",
+          "name": "Jay McLuen",
+          "slug": "jay-mcluen",
           "club": "Eagles Landing",
           "handicap": "-4.8",
           "tee": "Combo",
@@ -127,9 +126,8 @@
       ],
       "spalding": [
         {
-          "name": "Sidney Ormsby",
-          "asWritten": "Sydney Ormsby",
-          "slug": "sidney-ormsby",
+          "name": "Sydney Ormsby",
+          "slug": "sydney-ormsby",
           "club": "Eagles Landing",
           "handicap": "+3.0",
           "tee": "Combo",

@@ -1877,7 +1877,7 @@ body.display-mode .stubnote { font-size: 20px; }
 
 /* ==========================================================================
    T2.1 to T2.3 THE VAULT
-   Five sections, club graph picker, timed drops.
+   Six sections, club graph picker, timed drops.
    No new motifs and no thirteenth palette token. The section nav reuses .tab
    from the top tab bar, cards sit on .glow-card and .grille, and every chip is
    the existing .linkchip. Everything below is layout plus the same warm chrome
@@ -6935,7 +6935,7 @@ function SoundcheckTab({ isAdmin, now }) {
 
 /* ==========================================================================
    T2.1 to T2.3 THE VAULT. Spec 3.5.
-   Five sections, a club graph picker, and the timed drop engine.
+   Six sections, a club graph picker, and the timed drop engine.
 
    The drop engine is the highest risk feature in the build, so three rules run
    through all of it.
@@ -6952,18 +6952,26 @@ function SoundcheckTab({ isAdmin, now }) {
       is in force, because it gets used with a room watching.
    ========================================================================== */
 
-/* Five sections in the order the meeting uses them. `drop` names the child
-   under settings/vaultDrops for the two that open on a clock. */
+/* Six sections, ordered to match the agenda rather than the order they were built
+   in. Jim, Aug 18 2026: "Put documents in order of agenda." Reasoning against the
+   agenda, session by session:
+
+     Wed  9:30   The Century Core Fundamentals Reignited   -> fundamentals
+     Wed  9:45   Core Fundamentals Breakouts Session       -> scenarios
+     Wed 15:15   The Missing Chapter                       -> story
+     Thu  9:15   Leads to the Invitation Pathway           -> buckets
+     Thu 10:30   (Invitation Pathway breakout content)     -> personas
+
+   Club Graphs has no session of its own anywhere in data/agenda.json. It is
+   reference material the room dips into on demand rather than something tied to
+   a moment on the clock, so it goes last rather than being wedged between two
+   sections that do have a time. If a future agenda gives it a home, move it.
+
+   `drop` names the child under settings/vaultDrops for the two that open on a
+   clock. */
 const VAULT_SECTIONS = [
   { key: "fundamentals", name: "Core Fundamentals",          icon: "\u{1F4D8}", kind: "images" },
-  /* Lisa renamed this on Aug 12. The display name is "Invitation Sources".
-     The key stays `buckets` on purpose: it is the child name in
-     data/vault.json, the value stored in mm26_vaultsection on every phone
-     that has already opened the tab, and the id on the nav button. Renaming
-     the key would mean editing a data file somebody else owns and stranding
-     the stored value. The name is what the room reads. The key is plumbing. */
-  { key: "buckets",      name: "Invitation Sources",         icon: "\u{1F5C2}", kind: "images" },
-  { key: "graphs",       name: "Club Graphs",                icon: "\u{1F4C8}", kind: "graphs" },
+
   /* Jim, Aug 17 2026: the breakout scenarios ARE the six personas. He sent the
      personas document a second time to say so. So this section reads the same
      data/personas.json rather than waiting on artwork that was never coming.
@@ -6979,12 +6987,23 @@ const VAULT_SECTIONS = [
      then put it back within the hour. It has been questioned and answered. If it
      needs to go again he will say so. */
   { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "personas", drop: "scenarios" },
-  { key: "personas",     name: "Invitation Source Personas",  icon: "\u{1F465}", kind: "personas", drop: "personas" },
 
   /* Jim, Aug 17 2026. Sets up the Wednesday afternoon segment The Missing Chapter.
      No `drop`, so it is open the moment the wall goes live: the caption tells people
      to read it before they arrive, and a padlock would defeat the point. */
-  { key: "story",        name: "The Medallion Club Story",    icon: "\u{1F4D6}", kind: "images" }
+  { key: "story",        name: "The Medallion Club Story",    icon: "\u{1F4D6}", kind: "images" },
+
+  /* Lisa renamed this on Aug 12. The display name is "Invitation Sources".
+     The key stays `buckets` on purpose: it is the child name in
+     data/vault.json, the value stored in mm26_vaultsection on every phone
+     that has already opened the tab, and the id on the nav button. Renaming
+     the key would mean editing a data file somebody else owns and stranding
+     the stored value. The name is what the room reads. The key is plumbing. */
+  { key: "buckets",      name: "Invitation Sources",         icon: "\u{1F5C2}", kind: "images" },
+
+  { key: "personas",     name: "Invitation Source Personas",  icon: "\u{1F465}", kind: "personas", drop: "personas" },
+
+  { key: "graphs",       name: "Club Graphs",                icon: "\u{1F4C8}", kind: "graphs" }
 ];
 
 /* These are the two times CLAUDE.md and the spec both give. August in Ohio is
