@@ -7,7 +7,15 @@
     "venue": "The Medallion Club",
     "benefiting": "Century Golf Cares",
     "_sourceDateTypo": "Jim's sheet header reads August 25, 2025. The meeting is 2026, so the year is corrected here. Flagged to Jim rather than changed silently.",
-    "_sourceVenueName": "The sheet says Medallion Country Club. The wall calls it The Medallion Club everywhere else, which is the name in the VENUES table, so that is used."
+    "_sourceVenueName": "The sheet says Medallion Country Club. The wall calls it The Medallion Club everywhere else, which is the name in the VENUES table, so that is used.",
+    "about": [
+      "The Century Golf Cares relief fund was created in 2008 after Hurricane Ike, when many of our own Century Golf Team Members lost homes, belongings, and stability. Team Members across the country stepped up immediately and contributed more than $14,000 in direct relief in the very first year.",
+      "Century Golf Cares continues to be a helping hand for Team Members facing unexpected emergencies such as natural disasters, fires, or personal hardship, and has distributed over $200,000 in grants since inception.",
+      "How you can help: pledge a one time contribution for your favorite team, Team Total Consciousness or Spalding's Revenge, or on any individual match below.",
+      "Century Golf Partners will match the pledges for the winning team and for the winning side of every match. Last year raised over $10,000. Let's crush last year."
+    ],
+    "eligibility": "Open to Century Golf employees only.",
+    "_aboutSource": "Jim, Aug 18 2026. Reproduced with light cleanup for the wall's voice rules: no shouted capitals, 'Spaulding' corrected to the team's real name Spalding's Revenge. Every figure, date, and the Hurricane Ike history are his, unchanged."
   },
   "teams": [
     {

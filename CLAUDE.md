@@ -160,7 +160,7 @@ Themed names only. No plain-English subtitles.
 | Liner Notes | Key takeaways board | Pre and During |
 | Crowd Vote | Live polls, four types | During |
 | The Pit | Photo gallery with likes | During |
-| The Cares Cup | Shank Showdown II leaderboard | During |
+| Century Golf Cares Cup | Shank Showdown II leaderboard and donation pledges | During |
 | Encore | Awards, Hall of Fame, Top Videos, Tenure | Post |
 
 ---

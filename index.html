@@ -1110,6 +1110,20 @@ body.display-mode .stubnote { font-size: 20px; }
 
 .attire__v { margin: 0; color: var(--cream); }
 
+/* -------------------------------------------- the mission, Cares Cup */
+.cares-about { margin: 0 0 16px; padding: 14px 16px; }
+
+.cares-about__p { margin: 0 0 10px; color: var(--cream); font-size: 13px; line-height: 1.55; }
+
+.cares-about__p:last-of-type { margin-bottom: 0; }
+
+.cares-about__elig {
+  margin: 12px 0 0; padding: 9px 11px;
+  background: var(--warm-fill); border: 1px solid var(--warm-edge);
+  border-left: 3px solid var(--gold-rule); border-radius: 8px;
+  color: var(--gold); font-size: 12px; font-weight: 600;
+}
+
 /* --------------------------------------- the donation slip, Cares Cup */
 .pl { margin: 22px 0 0; }
 
@@ -1137,6 +1151,12 @@ body.display-mode .stubnote { font-size: 20px; }
 .pl-form { padding: 15px 16px; }
 
 .pl-form__note { margin: 0 0 13px; color: var(--dim); font-size: 13px; }
+
+.pl-form__note--elig {
+  padding: 8px 10px; color: var(--gold); font-weight: 600;
+  background: var(--warm-fill); border: 1px solid var(--warm-edge);
+  border-left: 3px solid var(--gold-rule); border-radius: 8px;
+}
 
 .pl-form__k {
   margin: 17px 0 9px;
@@ -1218,6 +1238,8 @@ body.display-mode .stubnote { font-size: 20px; }
 .pl-ledger__n { color: var(--cream); font-weight: 600; font-size: 14px; }
 
 .pl-ledger__c { color: var(--dim); font-size: 12px; }
+
+.pl-ledger__email { margin: 2px 0 0; color: var(--mute); font-size: 12px; }
 
 .pl-ledger__t { margin-left: auto; color: var(--gold); font-size: 14px; }
 
@@ -4027,8 +4049,13 @@ const TABS = [
      Soundcheck, so it is a pill in that tab now, not a tab of its own. Nine
      tabs. Its Firebase node, takeaways/, is untouched and so is its data. */
   { key: "vote",       icon: "\u{1F4CA}", name: "Crowd Vote",     phase: "during" },
+  /* Cares Cup sits above The Pit on purpose, Jim Aug 18 2026: it reads as
+     "Century Golf Cares Cup" now, not "The Cares Cup", and he wanted the pill
+     placed right before the photos tab rather than after it. Order here drives
+     the tab bar, the crew Tab visibility list, and the Reset by Section list,
+     all three read straight off this array. */
+  { key: "cares",      icon: "\u{1F3C6}", name: "Century Golf Cares Cup", phase: "during" },
   { key: "pit",        icon: "\u{1F4F7}", name: "The Pit",        phase: "during" },
-  { key: "cares",      icon: "\u{1F3C6}", name: "The Cares Cup",  phase: "during" },
   { key: "encore",     icon: "⭐",         name: "Encore",         phase: "post" }
 ];
 
@@ -11604,6 +11631,26 @@ function CaresFundForm({ total, goal, onSave, busy }) {
   );
 }
 
+/* The mission, above everything else on the tab. Jim, Aug 18 2026: the room
+   should read why this exists before it reads a dollar total. Comes from the
+   same data/cares-card.json the match card and the pledge form already read,
+   so the eligibility line is authored once and shown wherever it matters. */
+function CaresAbout() {
+  const file = useJsonFile("data/cares-card.json");
+  if (file.status !== "ready" || !file.data) return null;
+  const meta = file.data.meta || {};
+  const about = meta.about || [];
+  if (!about.length) return null;
+  return (
+    <div className="cares-about glow-card grille">
+      {about.map((p, i) => <p className="cares-about__p" key={i}>{p}</p>)}
+      {meta.eligibility ? (
+        <p className="cares-about__elig">{meta.eligibility}</p>
+      ) : null}
+    </div>
+  );
+}
+
 function CaresCupTab({ isAdmin }) {
   const cup = useCaresCup();
   const [hero, setHero] = useState(false);
@@ -11694,6 +11741,8 @@ function CaresCupTab({ isAdmin }) {
           onClose={() => setHero(false)}
         />
       ) : null}
+
+      <CaresAbout />
 
       <CaresFund total={cup.total} goal={cup.goal} updated={cup.updated} />
 
@@ -11948,6 +11997,7 @@ function CaresPledgeForm({ card }) {
   const teams = card.teams || [];
   const matches = card.matches || [];
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [club, setClub] = useState("");
   const [overall, setOverall] = useState({ pick: "", amt: "" });
   const [rows, setRows] = useState({});
@@ -11988,6 +12038,10 @@ function CaresPledgeForm({ card }) {
     setErr("");
 
     if (!name.trim()) { setErr("The slip needs your name."); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setErr("The slip needs a real email address.");
+      return;
+    }
 
     /* A line counts when it has both a pick and an amount. One without the
        other is a half-filled line, and the message names which one. */
@@ -12010,6 +12064,7 @@ function CaresPledgeForm({ card }) {
 
     const body = {
       name: name.trim().slice(0, 60),
+      email: email.trim().slice(0, 120),
       club: club.trim().slice(0, 60),
       overall: null,
       matches: {},
@@ -12032,7 +12087,7 @@ function CaresPledgeForm({ card }) {
       .then(() => {
         setBusy(false);
         setDone({ total: body.total, name: body.name, lines: described });
-        setName(""); setClub(""); setOverall({ pick: "", amt: "" }); setRows({});
+        setName(""); setEmail(""); setClub(""); setOverall({ pick: "", amt: "" }); setRows({});
       })
       .catch(() => { setBusy(false); setErr("That did not save. Try again."); });
   };
@@ -12065,6 +12120,9 @@ function CaresPledgeForm({ card }) {
 
   return (
     <form className="pl-form glow-card grille" onSubmit={submit}>
+      <p className="pl-form__note pl-form__note--elig">
+        {(card.meta && card.meta.eligibility) || "Open to Century Golf employees only."}
+      </p>
       <p className="pl-form__note">
         A pledge, not a checkout. Nothing gets charged here. Century Golf Cares
         collects in person, same as the paper slip.
@@ -12075,6 +12133,12 @@ function CaresPledgeForm({ card }) {
           <span>Your name</span>
           <input className="tf__in" value={name} maxLength={60}
                  autoComplete="name" onChange={(e) => setName(e.target.value)} />
+        </label>
+        <label className="tf__l" style={{ flex: "1 1 170px", margin: 0 }}>
+          <span>Your email</span>
+          <input className="tf__in" value={email} maxLength={120}
+                 type="email" inputMode="email" autoComplete="email"
+                 onChange={(e) => setEmail(e.target.value)} />
         </label>
         <label className="tf__l" style={{ flex: "1 1 130px", margin: 0 }}>
           <span>Home club</span>
@@ -12129,10 +12193,10 @@ function CaresPledgeLedger({ pledges, teams }) {
   };
 
   const csv = () => {
-    const rows = [["Name", "Home club", "Line", "Pick", "Amount"]];
+    const rows = [["Name", "Email", "Home club", "Line", "Pick", "Amount"]];
     pledges.forEach((pl) => {
       pledgeLines(pl).forEach((ln) => {
-        rows.push([pl.name || "", pl.club || "", ln.what, teamName(ln.pick), String(ln.amt)]);
+        rows.push([pl.name || "", pl.email || "", pl.club || "", ln.what, teamName(ln.pick), String(ln.amt)]);
       });
     });
     const text = rows.map((r) =>
@@ -12164,6 +12228,7 @@ function CaresPledgeLedger({ pledges, teams }) {
                     Delete
                   </button>
                 </div>
+                {pl.email ? <p className="pl-ledger__email">{pl.email}</p> : null}
                 <p className="pl-ledger__lines">
                   {pledgeLines(pl).map((ln) =>
                     ln.what + ": " + teamName(ln.pick) + ", " + plMoney(ln.amt)
@@ -14023,7 +14088,7 @@ const RESET_NODES = [
   { node: "takeaways",     label: "Liner Notes",         note: "Every takeaway." },
   { node: "photos",        label: "The Pit",             note: "Every uploaded photo." },
   { node: "reactions",     label: "Setlist reactions",   note: "Every session reaction counter." },
-  { node: "caresCup",      label: "The Cares Cup",       note: "Teams, scores, and the fundraising total." },
+  { node: "caresCup",      label: "Century Golf Cares Cup", note: "Teams, scores, pledges, and the fundraising total." },
   { node: "encore",        label: "Encore",              note: "Awards, Hall of Fame, videos, tenure, and their unlock flags." }
 ];
 

@@ -983,6 +983,52 @@ cleared browser, lands on Cares Cup with the pledge form scrolled to top of
 viewport, welcome screen skipped; a plain visit with no `go` param unaffected; no
 console errors; no horizontal overflow at 390px.
 
+### Aug 18, Century Golf Cares Cup: renamed, reordered, the mission on the tab, email on the slip
+**From:** Jim, in three messages: rename the tab and move it, put the fund's history
+and the eligibility rule on the tab, add an email field, and swap the pledge form's
+generic note for something else.
+
+**The tab is "Century Golf Cares Cup" now, and sits before The Pit.** One name
+change in `TABS` drives the tab bar pill, the page heading, the crew Tab visibility
+list, and the Reset by Section list, since all four read the same array. The Reset
+by Section note was stale on top of being renamed: it said "Teams, scores, and the
+fundraising total" with no mention of pledges, even though wiping that node deletes
+them too. Both fixed together.
+
+**The mission is on the tab, above the fundraising total.** Jim's own copy: the fund
+started in 2008 after Hurricane Ike, over $14,000 raised the first year, over
+$200,000 distributed since. How to help, the Century Golf Partners match on the
+winning team and every winning match, and last year's $10,000 to beat. Lives in
+`data/cares-card.json` meta, not hardcoded, same pattern the rest of this tab
+already follows. Every figure and the Hurricane Ike history are his, unchanged;
+"Spaulding" corrected to the team's real name, Spalding's Revenge, and the SEE
+BELOW shout turned into a plain sentence, per the no shouted capitals voice rule.
+
+**"Open to Century Golf employees only" is now authored once and shown twice:** in
+the mission block, and again right on the pledge form, replacing the form's old
+generic note. The not a checkout, collected in person line stays under it, because
+it is still true and still the reason this feature does not touch the no wagers
+rule from Aug 13.
+
+**Email joins name on the slip.** Required, validated as a real address shape,
+stored on the pledge record, shown to crew in the ledger and in the CSV. Not shown
+on the public board, same reasoning as names: crew need it to follow up, the room
+does not need to see it.
+
+**No domain check.** Nothing stops somebody typing any address into that field.
+Eligibility here is enforced by a human at the venue, the same as it already was for
+who is even allowed to pledge in person, not by a browser trusting a string it
+cannot verify. A gate that is easy to fake and also blocks a real employee typing an
+address it does not expect would be worse than no gate.
+
+**Verified:** tab renders as "Century Golf Cares Cup" ahead of The Pit in the tab
+order; the mission block shows all four paragraphs and the eligibility line; a
+missing or malformed email blocks submission by name, a real one succeeds; the
+confirmation, the crew ledger, and a fresh CSV all carry the email; real pledges
+already on the sheet (Jim, Krisno Bridge, Yolanda Nuncio, and others) were left
+untouched while the test record was added and removed; no console errors; no
+horizontal overflow at 390px.
+
 ---
 
 ## PHASE 1: Static and text tabs
