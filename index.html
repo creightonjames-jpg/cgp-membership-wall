@@ -1185,6 +1185,30 @@ body.display-mode .stubnote { font-size: 20px; }
 
 .pl-done__p { margin: 0 0 14px; color: var(--cream); font-size: 14px; }
 
+.pl-done__lines {
+  list-style: none; margin: 0 0 16px; padding: 12px;
+  background: var(--warm-fill); border: 1px solid var(--warm-edge);
+  border-left: 3px solid var(--gold-rule); border-radius: 8px;
+  text-align: left;
+}
+
+.pl-done__lines li {
+  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  padding: 5px 0; border-bottom: 1px solid var(--edge);
+}
+
+.pl-done__lines li:last-child { border-bottom: 0; }
+
+.pl-done__lk {
+  flex: 0 0 auto;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.12em; color: var(--gold);
+}
+
+.pl-done__lw { flex: 1 1 140px; color: var(--cream); font-size: 13px; }
+
+.pl-done__la { color: var(--dim); font-size: 13px; }
+
 .pl-ledger { list-style: none; margin: 0 0 12px; padding: 0; }
 
 .pl-ledger__i { padding: 9px 0; border-bottom: 1px solid var(--edge); }
@@ -2065,12 +2089,26 @@ body.display-mode .stubnote { font-size: 20px; }
 .cc__sub { margin: 0 0 12px; font-size: 12px; color: var(--dim); }
 .cc__fine { margin: 10px 0 0; font-size: 11px; color: var(--mute); }
 
+/* Two team names, meant to sit directly above the two columns of players in
+   every match card below. Jim, Aug 18 2026: Spalding's Revenge was drifting left,
+   clustered right next to Team Total Consciousness instead of sitting over its
+   own column once the cards go two-up.
+
+   Fixed by giving this row the SAME grid as .cc-m__sides below: 1fr auto 1fr past
+   620px, one column short of that. The middle track holds a ghost "vs", same
+   markup and class as the real one but invisible, so it reserves exactly the
+   width the real dividers reserve and the two team columns land on the same
+   boundaries as the two player columns under them. Matching padding for the same
+   reason: .cc-m has 12px on each side and this row did not, so the two grids were
+   computing their fr widths against different containers. */
 .cc-teams {
-  display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0 0 14px;
+  display: grid; grid-template-columns: 1fr; gap: 10px; margin: 0 0 14px;
 }
 .cc-team { margin: 0; display: flex; flex-direction: column; gap: 1px; }
 .cc-team__n { font-size: 14px; color: var(--gold); }
 .cc-team__c { font-size: 11px; color: var(--mute); }
+
+.cc-vs--ghost { display: none; }
 
 .cc-m { padding: 12px; margin: 0 0 10px; }
 
@@ -2097,6 +2135,9 @@ body.display-mode .stubnote { font-size: 20px; }
 @media (min-width: 620px) {
   .cc-m__sides { grid-template-columns: 1fr auto 1fr; align-items: start; gap: 14px; }
   .cc-vs { border-top: 0; padding-top: 0; align-self: center; }
+
+  .cc-teams { grid-template-columns: 1fr auto 1fr; gap: 14px; padding: 0 12px; }
+  .cc-vs--ghost { display: block; visibility: hidden; }
 }
 
 .cc-p { display: flex; align-items: center; gap: 9px; min-width: 0; }
@@ -4164,6 +4205,25 @@ const SIM_CLOCK = (function () {
     if (!raw) return null;
     const at = Date.parse(raw);
     return isNaN(at) ? null : at;
+  } catch (e) { return null; }
+})();
+
+/* A shareable link straight to one place on the wall, for texting or emailing
+   rather than reading a QR code off a screen. `?go=cares-pledge` is the first
+   one, for the donation slip: https://<the wall>/?go=cares-pledge
+
+   Same shape as SIM_CLOCK on purpose. Add another target by adding another key
+   to GO_TARGETS below and nothing else: App() reads GO_TARGET once at load,
+   switches to that tab, skips the welcome screen so a first time visitor lands
+   straight in rather than at a wristband button, and scrolls to the element the
+   target names. */
+const GO_TARGETS = {
+  "cares-pledge": { tab: "cares", scrollTo: "pl-h" }
+};
+const GO_TARGET = (function () {
+  try {
+    const raw = new URLSearchParams(window.location.search).get("go");
+    return raw && GO_TARGETS[raw] ? GO_TARGETS[raw] : null;
   } catch (e) { return null; }
 })();
 
@@ -11747,17 +11807,6 @@ function CaresCupTab({ isAdmin }) {
       <CaresCard />
 
       <CaresPledges isAdmin={isAdmin} />
-
-      <BuildNote isAdmin={isAdmin} task="T2.6">
-        Scores are to par, so lower wins and E is a real score. Ties share a
-        position and print as T2. Poster art is a switch here, not a rebuild:
-        drop files in assets/cares, type the filename on the team, tap Poster art
-        on. Locking the board stops score entry for everyone including crew.
-        The match card below the board is static, from data/cares-card.json. The
-        donation slip under it writes pledges to caresCup/pledges: promises, not
-        payments, totalled live, collected in person by Century Golf Cares. Crew
-        see the named ledger and the CSV, the room sees totals only.
-      </BuildNote>
     </TabFrame>
   );
 }
@@ -11908,6 +11957,32 @@ function CaresPledgeForm({ card }) {
 
   const setMatch = (n, v) => setRows((r) => Object.assign({}, r, { [n]: v }));
 
+  /* Each match side's two names together, in card order, so a pledge on a match
+     can be described by the pairing rather than only by the team. Moved above
+     submit so the confirmation can name what was actually picked. */
+  const sideNames = (m) => [
+    m.consciousness.map((p) => p.name).join(" & "),
+    m.spalding.map((p) => p.name).join(" & ")
+  ];
+
+  const teamName = (key) => {
+    const t = teams.filter((x) => x.key === key)[0];
+    return t ? t.name : key;
+  };
+
+  /* Jim, Aug 18 2026: the "On the sheet" confirmation named a dollar total and
+     nothing else, so a pledge on Match 3 read the same as a pledge on Match 6.
+     This resolves a pick to what a person actually reads as the thing they
+     backed: the team name for Overall, the pairing for a match. */
+  const pickWho = (label, pick) => {
+    if (label === "Overall") return teamName(pick);
+    const n = label.replace("Match ", "");
+    const m = matches.filter((x) => String(x.n) === n)[0];
+    if (!m) return teamName(pick);
+    const i = teams[0] && teams[0].key === pick ? 0 : 1;
+    return sideNames(m)[i];
+  };
+
   const submit = (e) => {
     e.preventDefault();
     setErr("");
@@ -11947,12 +12022,16 @@ function CaresPledgeForm({ card }) {
       else body.matches[ln.label.replace("Match ", "")] = { pick: ln.pick, amt: ln.amt };
     });
 
+    const described = lines.map((ln) => ({
+      label: ln.label, who: pickWho(ln.label, ln.pick), amt: ln.amt
+    }));
+
     if (!FB.ok) { setErr("The wall cannot reach the database right now. Try again in a minute."); return; }
     setBusy(true);
     FB.db.ref("caresCup/pledges").push(body)
       .then(() => {
         setBusy(false);
-        setDone({ total: body.total, name: body.name });
+        setDone({ total: body.total, name: body.name, lines: described });
         setName(""); setClub(""); setOverall({ pick: "", amt: "" }); setRows({});
       })
       .catch(() => { setBusy(false); setErr("That did not save. Try again."); });
@@ -11966,17 +12045,23 @@ function CaresPledgeForm({ card }) {
           {plMoney(done.total)} pledged for Century Golf Cares. Somebody will find
           you to collect, {done.name.split(" ")[0]}. They always do.
         </p>
+        {done.lines && done.lines.length ? (
+          <ul className="pl-done__lines">
+            {done.lines.map((ln, i) => (
+              <li key={i}>
+                <span className="pl-done__lk">{ln.label}</span>
+                <span className="pl-done__lw">{ln.who}</span>
+                <span className="pl-done__la t-data">{plMoney(ln.amt)}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <button type="button" className="btn" onClick={() => setDone(null)}>
           Add another pledge
         </button>
       </div>
     );
   }
-
-  const sideNames = (m) => [
-    m.consciousness.map((p) => p.name).join(" & "),
-    m.spalding.map((p) => p.name).join(" & ")
-  ];
 
   return (
     <form className="pl-form glow-card grille" onSubmit={submit}>
@@ -12161,12 +12246,19 @@ function CaresCard() {
       </p>
 
       <div className="cc-teams">
-        {teams.map((t) => (
-          <p className="cc-team" key={t.key}>
-            <span className="cc-team__n t-display">{t.name}</span>
-            {t.captains ? <span className="cc-team__c">Captains: {t.captains}</span> : null}
-          </p>
-        ))}
+        <p className="cc-team" key={(teams[0] || {}).key}>
+          <span className="cc-team__n t-display">{(teams[0] || {}).name}</span>
+          {teams[0] && teams[0].captains ? (
+            <span className="cc-team__c">Captains: {teams[0].captains}</span>
+          ) : null}
+        </p>
+        <p className="cc-vs cc-vs--ghost" aria-hidden="true">vs</p>
+        <p className="cc-team" key={(teams[1] || {}).key}>
+          <span className="cc-team__n t-display">{(teams[1] || {}).name}</span>
+          {teams[1] && teams[1].captains ? (
+            <span className="cc-team__c">Captains: {teams[1].captains}</span>
+          ) : null}
+        </p>
       </div>
 
       {(d.matches || []).map((m) => (
@@ -15268,8 +15360,8 @@ function FontCheck() {
 }
 
 function App() {
-  const [entered, setEntered] = useState(() => readLS(LS.entered) === "1");
-  const [active, setActive] = useState(TABS[0].key);
+  const [entered, setEntered] = useState(() => readLS(LS.entered) === "1" || !!GO_TARGET);
+  const [active, setActive] = useState(GO_TARGET ? GO_TARGET.tab : TABS[0].key);
   const [displayMode, setDisplayMode] = useState(false);
   /* Survives a reload, per T1.6. Re-entering the PIN after every refresh during
      a four day event is the kind of friction that gets a panel left open. */
@@ -15307,11 +15399,32 @@ function App() {
     document.body.classList.toggle("display-mode", displayMode);
   }, [displayMode]);
 
-  /* Keep the stored tab honest after a redirect, so the pill highlight and the
-     scroll-into-view in TabBar both follow. */
   useEffect(() => {
+    if (!GO_TARGET || !GO_TARGET.scrollTo) return;
+    const t = setTimeout(() => {
+      const el = document.getElementById(GO_TARGET.scrollTo);
+      if (el) el.scrollIntoView({ block: "start" });
+    }, 700);
+    return () => clearTimeout(t);
+  }, []);
+
+  /* Keep the stored tab honest after a redirect, so the pill highlight and the
+     scroll-into-view in TabBar both follow.
+
+     Gated on vis !== null. useTabVisibility starts at null before its first
+     Firebase callback, and isTabOn's fallback during that gap treats every
+     during/post tab as hidden, which is right for a genuinely empty database
+     but wrong for the first instant of every page load. Aug 18 2026: this cost
+     the Cares Cup deep link its whole point. GO_TARGET sets active to "cares"
+     at mount, vis is still null for that first paint, visibleTabs excludes
+     "cares" on the fallback, shownKey falls back to Setlist, and this effect
+     used to make that permanent by writing it into active before the real
+     settings/tabs value ever arrived. Now it waits for vis to be a real object,
+     even an empty one, before correcting anything. */
+  useEffect(() => {
+    if (vis === null) return;
     if (shownKey && shownKey !== active) setActive(shownKey);
-  }, [shownKey, active]);
+  }, [shownKey, active, vis]);
 
   const enter = useCallback(() => {
     writeLS(LS.entered, "1");

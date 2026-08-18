@@ -939,6 +939,50 @@ photo**, the first time every attendee has one.
 **Verified:** his card renders with the photo and the FIRST TOUR badge intact; no
 console errors.
 
+### Aug 18, T2.6 build note off, team headers aligned, pledge confirmation names the pairing, a direct link, and a real race caught
+**From:** Jim, four requests in a row on the Cares Cup, the last one a bug he
+noticed rather than a feature he asked for.
+
+**The T2.6 build note removed.** Crew only text at the bottom of the tab, gone.
+
+**Team headers now line up over their own columns.** "Spalding's Revenge" was
+clustering left, next to "Team Total Consciousness", instead of sitting above the
+column of Jay McLuen, Erik Mettille and the rest once match cards go two-up past
+620px. Fixed by giving the header row the same grid as the match cards below it,
+`1fr auto 1fr`, with an invisible "vs" in the middle track so it reserves the exact
+width the real dividers reserve. Measured in the browser: both columns land within
+a pixel of the match card columns beneath them.
+
+**The pledge confirmation now names what was actually picked.** It read "$75
+pledged" and nothing else, so a pledge on Match 3 looked identical to one on Match
+6. Now every line says which team for an Overall pledge, and the actual pairing
+(both names) for a match pledge: "Match 3: Sydney Ormsby & Mike Feeney, $15."
+
+**A direct link to the slip.** `?go=cares-pledge` on the wall's URL jumps straight
+to The Cares Cup and scrolls to the donation slip, skipping the welcome screen
+entirely. Built the same way the existing `?clock=` test hook works, a URL param
+read once at load. It follows the same tab visibility rules as tapping the tab by
+hand: if Cares Cup is off for the room, the link lands wherever a hidden tab
+normally would.
+
+**Building that link exposed a real race, now fixed.** `useTabVisibility` starts at
+null before its first Firebase callback, and the fallback for that gap treats every
+during or post tab as hidden, which is correct for a genuinely empty database and
+wrong for the first instant of every page load. The deep link set `active` to
+"cares" at mount, hit that null window, got corrected to Setlist, and the real
+settings arriving a moment later come too late because the correction had already
+been written back into `active`. The correcting effect now waits for `vis` to be a
+real object, even an empty one, before acting. This was latent before today:
+nothing previously set `active` to a during/post tab at mount, so the gap never
+mattered until a link needed to.
+
+**Verified:** T2.6 confirmed absent from the crew view; team header columns measured
+against match columns and aligned; a real pledge submitted through the form with a
+match pick, confirmation named the exact pairing; the deep link tested from a
+cleared browser, lands on Cares Cup with the pledge form scrolled to top of
+viewport, welcome screen skipped; a plain visit with no `go` param unaffected; no
+console errors; no horizontal overflow at 390px.
+
 ---
 
 ## PHASE 1: Static and text tabs
