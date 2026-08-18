@@ -1029,6 +1029,32 @@ already on the sheet (Jim, Krisno Bridge, Yolanda Nuncio, and others) were left
 untouched while the test record was added and removed; no console errors; no
 horizontal overflow at 390px.
 
+### Aug 18, the fund total box removed, the checkout line cut
+**From:** Jim, a screenshot of the "Century Golf Cares / The total posts when the
+money is counted." card, asking for it gone, then separately asking to cut the
+pledge form's "A pledge, not a checkout..." line.
+
+**The public card is gone.** `<CaresFund>` no longer renders on the tab, in either
+its empty or filled state. It sat between the mission block and the crew panel,
+saying nothing useful until a number was typed in, which is exactly what he
+flagged.
+
+**Left in place, flagged rather than silently orphaned: the crew's manual total
+entry.** `CaresFundForm`, under "Century Golf Cares total," still writes to
+`caresCup/fundraising`, but nothing on the wall shows that number anymore now that
+the card is gone. Relabelled to say so in the crew panel itself, and commented in
+the code, rather than leaving a form that quietly does nothing. Whether crew still
+want a hand typed final total at all, given the live pledge board already shows a
+running number, is Jim's call, not one to guess at.
+
+**The pledge form's second note line cut.** "A pledge, not a checkout. Nothing gets
+charged here..." removed. The eligibility line above it stays, since that is a rule,
+not a caveat.
+
+**Verified:** neither the fund card nor the checkout line appear anywhere on the
+tab; the mission block and the eligibility line are unaffected; the crew panel
+shows the relabelled fund control; no console errors.
+
 ---
 
 ## PHASE 1: Static and text tabs

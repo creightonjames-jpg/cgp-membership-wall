@@ -11744,8 +11744,6 @@ function CaresCupTab({ isAdmin }) {
 
       <CaresAbout />
 
-      <CaresFund total={cup.total} goal={cup.goal} updated={cup.updated} />
-
       {isAdmin ? (
         <div className="cares-crew">
           <p className="cares-crew__k">The board</p>
@@ -11777,7 +11775,15 @@ function CaresCupTab({ isAdmin }) {
             </p>
           ) : null}
 
-          <p className="cares-crew__k">Century Golf Cares total</p>
+          {/* Jim, Aug 18 2026: removed the public CaresFund card, the box that read
+              "Century Golf Cares / The total posts when the money is counted."
+              before a number was ever entered. This crew control still writes to
+              the same caresCup/fundraising node, but nothing on the wall displays
+              it anymore now that the card is gone. Left in rather than deleted,
+              since whether crew still want a hand typed final total at all, on top
+              of the live pledge board, is Jim's call and not one to make silently.
+              Ask him before either wiring this into a new display or removing it. */}
+          <p className="cares-crew__k">Century Golf Cares total (currently not shown on the wall)</p>
           <CaresFundForm total={cup.total} goal={cup.goal} onSave={saveFund} busy={busy} />
 
           {/* "Add a team" removed on Jim's instruction, Aug 13. EDITING an existing
@@ -12122,10 +12128,6 @@ function CaresPledgeForm({ card }) {
     <form className="pl-form glow-card grille" onSubmit={submit}>
       <p className="pl-form__note pl-form__note--elig">
         {(card.meta && card.meta.eligibility) || "Open to Century Golf employees only."}
-      </p>
-      <p className="pl-form__note">
-        A pledge, not a checkout. Nothing gets charged here. Century Golf Cares
-        collects in person, same as the paper slip.
       </p>
 
       <div className="tf__row">
