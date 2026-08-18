@@ -6925,7 +6925,7 @@ function SoundcheckTab({ isAdmin, now }) {
    ========================================================================== */
 
 /* Five sections in the order the meeting uses them. `drop` names the child
-   under settings/vaultDrops for the one that opens on a clock. */
+   under settings/vaultDrops for the two that open on a clock. */
 const VAULT_SECTIONS = [
   { key: "fundamentals", name: "Core Fundamentals",          icon: "\u{1F4D8}", kind: "images" },
   /* Lisa renamed this on Aug 12. The display name is "Invitation Sources".
@@ -6936,18 +6936,21 @@ const VAULT_SECTIONS = [
      the stored value. The name is what the room reads. The key is plumbing. */
   { key: "buckets",      name: "Invitation Sources",         icon: "\u{1F5C2}", kind: "images" },
   { key: "graphs",       name: "Club Graphs",                icon: "\u{1F4C8}", kind: "graphs" },
-  /* Core Fundamental Scenarios lived here and is gone, Jim Aug 17 2026.
+  /* Jim, Aug 17 2026: the breakout scenarios ARE the six personas. He sent the
+     personas document a second time to say so. So this section reads the same
+     data/personas.json rather than waiting on artwork that was never coming.
 
-     The short history, because the key still appears in stored values and in
-     Firebase. It was spec'd as its own timed drop expecting its own document. The
-     document never came. Jim then said the breakout scenarios ARE these six
-     personas, so for a few hours both sections rendered the same personas file
-     under two headings, which he first chose to keep and then cut. One section,
-     one heading, one unlock.
+     `kind: "personas"` on both means one file, one component, no second copy of
+     the prose to drift.
 
-     A phone that stored "scenarios" in mm26_vaultsection is fine: the picker
-     validates the held value against this list and falls back to the first
-     section. */
+     Two sections is deliberate. The room meets the same six personas twice under two
+     headings: Wednesday 9:30 as the breakout material, Thursday 10:30 as the
+     reference. Anybody following the agenda finds it where the agenda says it is.
+
+     Do not "fix" this by collapsing them. On Aug 17 Jim kept both, then cut this one,
+     then put it back within the hour. It has been questioned and answered. If it
+     needs to go again he will say so. */
+  { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "personas", drop: "scenarios" },
   { key: "personas",     name: "Invitation Source Personas",  icon: "\u{1F465}", kind: "personas", drop: "personas" },
 
   /* Jim, Aug 17 2026. Sets up the Wednesday afternoon segment The Missing Chapter.
@@ -6956,14 +6959,15 @@ const VAULT_SECTIONS = [
   { key: "story",        name: "The Medallion Club Story",    icon: "\u{1F4D6}", kind: "images" }
 ];
 
-/* One timed drop now that Core Fundamental Scenarios is gone. August in Ohio is
-   EDT, so the stamp is anchored at -04:00 and the device's own zone never enters
-   into it.
+/* These are the two times CLAUDE.md and the spec both give. August in Ohio is
+   EDT, so both stamps are anchored at -04:00 and the device's own zone never
+   enters into it.
    NOT yet confirmed in writing by the organizers. ROADMAP records that gate as
    passed on August 5 with no confirmation received, and T4.5 is the task that
-   closes it. If the time moves, it is this constant and VAULT_DROPS below.
+   closes it. If either time moves, it is these two constants and nothing else.
    The override buttons cover the drift on the day either way. */
 const VAULT_DROP_SCHEDULE = {
+  scenarios: Date.parse("2026-08-26T09:30:00-04:00"),
   personas:  Date.parse("2026-08-27T10:30:00-04:00")
 };
 
@@ -6979,6 +6983,9 @@ const VAULT_GRACE_MS = 8000;
 const VAULT_EMPTY = {
   fundamentals: "Empty shelf. The Core Fundamentals artwork has not turned up yet.",
   buckets:      "Empty shelf. Tyler is sending the Invitation Sources artwork.",
+  /* Unreachable while scenarios renders as personas. Kept because it is the copy
+     that ships the moment that section goes back to being artwork. */
+  scenarios:    "Open and empty. The scenarios have not turned up yet.",
   personas:     "Open and empty. The personas have not turned up yet."
 };
 
@@ -8160,15 +8167,15 @@ function VaultTab({ isAdmin, now }) {
       {zoom ? <VaultZoom view={zoom} onClose={closeZoom} /> : null}
 
       <BuildNote isAdmin={isAdmin} task="T2.1 to T2.3">
-        The drop lives at settings/vaultDrops/personas. Scheduled,
+        Drops live at settings/vaultDrops/scenarios and /personas. Scheduled,
         forced open, or forced shut, and the override beats the clock both ways.
         Lock state is derived from the server corrected clock on every tick, so
         it fires with no refresh. A section stays shut until this device has
         talked to the server and the override state has arrived, with an eight
         second grace before it gives up and uses this phone's clock. Artwork
-        comes from data/vault.json. Graphs come from data/graphs.json, 29 clubs
-        and 2 rollups. The unlock time is not yet confirmed in writing. T4.5
-        closes that.
+        comes from data/vault.json, which is empty for all four image sections
+        until T3.3. Graphs come from data/graphs.json, 29 clubs and 2 rollups.
+        The two unlock times are not yet confirmed in writing. T4.5 closes that.
         Membership Buckets reads Invitation Sources since Aug 12, per Lisa. The
         key in data/vault.json is still buckets, so drop Tyler's files there.
       </BuildNote>
@@ -12960,7 +12967,7 @@ function EncoreTab({ isAdmin, now }) {
    under time pressure. So it is the first block in the crew panel and it is
    never behind a disclosure: tap the gear, tap the drop.
 
-   Five gated sections in one board. The one Vault drop runs on the clock with a
+   Six gated sections in one board. The two Vault drops run on the clock with a
    three way override. The four Encore sections are manual only: the awards show
    decides when an envelope is open, and an auto reveal on a schedule would
    spoil a winner if the show ran early. The planned time is printed, and the
@@ -12971,6 +12978,11 @@ function EncoreTab({ isAdmin, now }) {
    ========================================================================== */
 
 const VAULT_DROPS = [
+  {
+    key: "scenarios", title: "Core Fundamental Scenarios",
+    at: Date.parse("2026-08-26T09:30:00-04:00"),
+    when: "Wednesday 9:30 AM Eastern"
+  },
   {
     key: "personas", title: "Invitation Source Personas",
     at: Date.parse("2026-08-27T10:30:00-04:00"),
@@ -13183,7 +13195,7 @@ function AdminV2({ isAdmin, now, onGoTab }) {
       <div className="vdrop__g">
         <p className="vdrop__gh">The Vault, on the clock</p>
         <p className="vdrop__gn">
-          This fires on its own at the scheduled time, corrected against the
+          These two fire on their own at the scheduled time, corrected against the
           server clock. Override goes both ways.
         </p>
         {VAULT_DROPS.map((d) => (

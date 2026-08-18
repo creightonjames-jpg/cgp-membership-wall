@@ -156,7 +156,7 @@ Themed names only. No plain-English subtitles.
 | The Band | Attendee roster and directory | Pre |
 | Backstage Pass | Venues, travel, logistics, contacts | Pre |
 | Soundcheck | Q&A with upvoting and Display Mode | Pre |
-| The Vault | Resources, including one timed drop | Pre and During |
+| The Vault | Resources, including two timed drops | Pre and During |
 | Liner Notes | Key takeaways board | Pre and During |
 | Crowd Vote | Live polls, four types | During |
 | The Pit | Photo gallery with likes | During |
@@ -167,14 +167,10 @@ Themed names only. No plain-English subtitles.
 
 ## The timed drop system
 
-The highest risk feature in the build. One Vault section unlocks on a clock.
+The highest risk feature in the build. Two Vault sections unlock on a clock.
 
-- Invitation Source Personas: Thursday August 27, 10:30 AM Eastern
-
-Two were spec'd. Core Fundamental Scenarios was cut by Jim on Aug 17: its document
-never arrived, the breakout material turned out to be the personas, and one heading
-beat two showing the same six people. Lisa renamed the surviving one from Membership
-Funnel Personas to Invitation Source Personas on Aug 12.
+- Core Fundamental Scenarios: Wednesday August 26, 9:30 AM Eastern
+- Membership Funnel Personas: Thursday August 27, 10:30 AM Eastern
 
 Requirements:
 - Compute the device clock offset against a Firebase server timestamp on load. Do not trust the device clock outright. Attendees fly in from multiple time zones.
