@@ -901,6 +901,33 @@ confirmed back on the match card. No console errors, no horizontal overflow at
 **Still owed on this tab:** the live weather fetch (promised Aug 17, next up) and
 Jim's answer on Match 6.
 
+### Aug 18, the weather updates itself
+**From:** Jim, Aug 17: "can the daily weather be updated live every day?" Promised
+then, delivered now.
+
+**How.** Every phone pulls a real forecast from Open-Meteo when it loads: free, no
+API key, CORS open, so a static page calls it directly with no server and no secret
+to leak in a public repo. Coordinates are Westerville, where The Medallion Club is.
+Cached in sessionStorage (`mm26_wx_auto`) for 30 minutes so tab-hopping does not
+refetch. The line under the numbers reads "Live forecast, updated Aug 18" and
+re-dates itself daily on its own.
+
+**The merge order is the design.** Repo default under everything, live forecast
+over it, crew record over both. A crew save is a human at the venue saying "the
+shotgun is delayed", and no API talks over that. Proven in the browser, not
+assumed: a crew record for Tuesday beat the API on every phone, and deleting it
+brought the live forecast straight back.
+
+**Failure is quiet.** No fetch means no auto layer, and the merge falls through to
+crew records and the Aug 17 numbers. The weather line is never the reason the
+Setlist looks broken. The request asks for 16 forecast days and matches the four
+meeting dates out of the response, rather than requesting a date range that errors
+once a meeting day is in the past mid-week.
+
+**Verified:** all four days showing live Open-Meteo numbers that differ from the
+static seed, which proves the fetch; the cache holds all four days; crew override
+wins and yields; no console errors.
+
 ---
 
 ## PHASE 1: Static and text tabs

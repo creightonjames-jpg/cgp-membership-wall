@@ -12253,8 +12253,85 @@ const WX_SEED = {
   fri: { hi: "79", lo: "61", pop: "21", cond: "partly", note: "Good flying weather.", asOf: "Aug 17" }
 };
 
+/* WMO weather codes, from the Open-Meteo docs, folded onto the wall's seven
+   conditions. Snow codes fold into rain: if it snows in Columbus in August, the
+   weather line is not the headline. */
+function wxCondFromCode(code) {
+  if (code === 0) return "sun";
+  if (code === 1 || code === 2) return "partly";
+  if (code === 3 || code === 45 || code === 48) return "cloud";
+  if (code >= 95) return "storm";
+  if (code >= 51) return "rain";
+  return "partly";
+}
+
+/* The meeting's four days, ISO date to day key, one place. */
+const WX_DAYS = {
+  "2026-08-25": "tue", "2026-08-26": "wed",
+  "2026-08-27": "thu", "2026-08-28": "fri"
+};
+
+/* Jim, Aug 18 2026: "can the daily weather be updated live every day?" Yes, like
+   this. Every phone pulls a real forecast from Open-Meteo when the tab loads: free,
+   no API key, CORS open, so a static page can call it directly. The result is
+   cached in sessionStorage for 30 minutes so tab-hopping does not refetch.
+
+   Coordinates are Westerville, where The Medallion Club is, not downtown Columbus.
+
+   No start or end date on the request, 16 forecast days and match our four dates
+   out of whatever comes back. Asking for a date range breaks once a meeting day is
+   in the past, mid-week, which is exactly when the room is looking at it.
+
+   Failure is quiet by design: no fetch, no auto layer, and the merge below falls
+   through to crew records and the repo default. The weather line must never be the
+   reason the Setlist looks broken. */
+function useAutoWeather() {
+  const [auto, setAuto] = useState(null);
+  useEffect(() => {
+    const KEY = "mm26_wx_auto";
+    try {
+      const held = JSON.parse(sessionStorage.getItem(KEY) || "null");
+      if (held && held.at && Date.now() - held.at < 30 * 60 * 1000) {
+        setAuto(held.days);
+        return;
+      }
+    } catch (e) { /* a bad cache is just a refetch */ }
+
+    let alive = true;
+    const url = "https://api.open-meteo.com/v1/forecast" +
+      "?latitude=40.126&longitude=-82.929" +
+      "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max" +
+      "&temperature_unit=fahrenheit&timezone=America%2FNew_York&forecast_days=16";
+    fetch(url)
+      .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then((d) => {
+        const t = (d.daily && d.daily.time) || [];
+        const days = {};
+        const asOf = lnEtFormat(Date.now(), { month: "short", day: "numeric" });
+        t.forEach((iso, i) => {
+          const k = WX_DAYS[iso];
+          if (!k) return;
+          days[k] = {
+            hi: String(Math.round(d.daily.temperature_2m_max[i])),
+            lo: String(Math.round(d.daily.temperature_2m_min[i])),
+            pop: String(Math.round(d.daily.precipitation_probability_max[i])),
+            cond: wxCondFromCode(d.daily.weather_code[i]),
+            live: true,
+            asOf: asOf
+          };
+        });
+        try { sessionStorage.setItem(KEY, JSON.stringify({ at: Date.now(), days: days })); } catch (e) {}
+        if (alive) setAuto(days);
+      })
+      .catch(() => { /* quiet, see above */ });
+    return () => { alive = false; };
+  }, []);
+  return auto;
+}
+
 function useWeather() {
   const [live, setLive] = useState(null);
+  const auto = useAutoWeather();
   useEffect(() => {
     if (!FB.ok) return;
     const ref = FB.db.ref("weather");
@@ -12262,10 +12339,15 @@ function useWeather() {
     ref.on("value", handler);
     return () => ref.off("value", handler);
   }, []);
-  /* Merge per day, not per field. A crew record replaces the guess outright, so a
-     saved day cannot end up wearing half of my estimate. */
+  /* Merge per day, not per field, strongest source last: repo default under
+     everything, then the live forecast, then a crew record, which beats both. A
+     crew save is a human at the venue saying "the shotgun is delayed", and no API
+     should talk over that. The auto layer deliberately drops the default's note:
+     "warm for the range" next to a fetched 61 and rain would be the wall arguing
+     with itself. */
   const out = {};
   Object.keys(WX_SEED).forEach((k) => { out[k] = WX_SEED[k]; });
+  if (auto) Object.keys(auto).forEach((k) => { if (auto[k]) out[k] = auto[k]; });
   if (live) Object.keys(live).forEach((k) => { if (live[k]) out[k] = live[k]; });
   return out;
 }
@@ -12308,6 +12390,8 @@ function WeatherLine({ w }) {
         {w.note ? <span className="wx__n">{w.note}</span> : null}
         {w.estimate ? (
           <span className="wx__est">Seasonal average, not a forecast.</span>
+        ) : w.live ? (
+          <span className="wx__est">Live forecast, updated {asOf}.</span>
         ) : asOf ? (
           <span className="wx__est">Forecast as of {asOf}.</span>
         ) : null}
