@@ -851,6 +851,56 @@ was explaining a number nobody could see anymore.
 the Cares Cup footer renders nothing where the sort line was, and the element does
 not render at all now that the field is gone; no console errors; no em-dashes.
 
+### Aug 18, the donation slip: pledges on the Cares Cup
+**From:** Jim, with Carol's paper slip. "Give people an opportunity to pledge
+donations for the Century Golf Cares Golf tournament... People can pledge on a
+team, and/or a specific pairing." Asked on Aug 17, buried under a run of roster
+corrections, called out and delivered Aug 18.
+
+**What it is.** A digital version of the paper slip, on The Cares Cup below the
+match card. Name, home club, an overall team line, and all six matches, each line a
+pick plus a dollar amount. Fill any or all. A pledge is a promise, not a payment:
+no checkout, no card number, nothing charged. Century Golf Cares collects in
+person, exactly as the paper slip intended. That is also why this does not
+contradict the Aug 13 "no picks, no wagers" call, which was about the wall
+handling money. It still handles none.
+
+**Live totals.** A board above the form: total pledged, how many people, and the
+split by team. Appears with the first pledge, absent before it, so the tab does not
+open on a wall of zeros.
+
+**Who sees what.** The room sees totals only. Crew see the named ledger with each
+pledge's lines, a delete for fat-fingered duplicates, and a CSV download for
+reconciling at the table. A donation amount next to a name on 119 phones is a
+different thing from one on a clipboard.
+
+**Validation that names the problem.** A line with a pick but no amount, or an
+amount but no pick, blocks the submit and says which line. At least one complete
+line and a name are required. Amounts are whole dollars, capped at five digits.
+
+**Data.** `caresCup/pledges/{id}`, per the data split: created during the meeting,
+so Firebase. The form reads the same `data/cares-card.json` the match card reads,
+so the pairings on the slip cannot drift from the pairings on the card.
+
+**Name cross-check, the slip against the wall.** All 24 slip names checked against
+cares-card.json and roster.json: 23 agree everywhere, McLuen and Ormsby having been
+fixed Aug 18. The one holdout is Match 6, where the slip says "Bruce Han" twice now
+and the wall says Jimmy Han. The roster has a Jimmy Han and a Bruce Gerlander and no
+Bruce Han, and Jim's own captains line says "Todd Keefer and Jimmy Han", so the wall
+stays internally consistent and the question is with Jim. `asWritten` preserves the
+sheet's version in the data.
+
+**Verified end to end in the browser:** a test pledge submitted through the real
+form (half-filled line blocked with the line named, then $50 overall plus $25 on
+Match 3), board appeared live reading $75 from 1 person split $50/$25 by team,
+crew ledger showed the named entry with both lines, delete asked first and cleared
+Firebase to null, board vanished and the empty copy returned. Erik Mettille's photo
+confirmed back on the match card. No console errors, no horizontal overflow at
+390px.
+
+**Still owed on this tab:** the live weather fetch (promised Aug 17, next up) and
+Jim's answer on Match 6.
+
 ---
 
 ## PHASE 1: Static and text tabs
