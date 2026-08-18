@@ -1087,6 +1087,14 @@ from the tool's summary line alone.
 card renders it under Century Golf; framing passed the gate first time; no console
 errors.
 
+### Aug 18, matching language narrowed on the mission block
+**From:** Jim. "Century Golf Partners will match the total pledges for the winning
+team" replaces "...the pledges for the winning team and for the winning side of
+every match." The match program is now scoped to the overall team result only,
+not each of the six matches individually.
+
+**Verified:** the fourth paragraph on the mission block reads the new sentence.
+
 ---
 
 ## PHASE 1: Static and text tabs
