@@ -1896,6 +1896,34 @@ body.display-mode .stubnote { font-size: 20px; }
 
 .vt-nav__scroll::-webkit-scrollbar { display: none; }
 
+/* Six sections at 1100px inside a 358px phone means two thirds of the row is off
+   screen, and the scrollbar above is deliberately hidden. Without an edge fade
+   there is nothing on screen saying the row moves, so a section that is not the
+   first two reads as missing. Jim hit exactly that: "I don't see it in the vault."
+
+   The fades are driven by classes rather than always on, because a permanent fade
+   over a row that does not scroll is a lie about there being more. */
+.vt-nav { position: relative; }
+
+.vt-nav::before,
+.vt-nav::after {
+  content: ""; position: absolute; top: 0; bottom: 19px; width: 34px;
+  pointer-events: none; opacity: 0; transition: opacity 140ms linear;
+}
+
+.vt-nav::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--stage) 12%, rgba(23, 22, 26, 0) 100%);
+}
+
+.vt-nav::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--stage) 12%, rgba(23, 22, 26, 0) 100%);
+}
+
+.vt-nav--more-l::before,
+.vt-nav--more-r::after { opacity: 1; }
+
 /* Five long section names, so one notch down from the top bar. The top bar has
    to stay the loudest control on the page. */
 .vt-nav .tab { font-size: 12px; padding: 7px 12px; }
@@ -8054,9 +8082,52 @@ function VaultDropControls({ states, seen, now, clock }) {
 }
 
 function VaultSectionNav({ active, onPick, locked }) {
+  const scroller = useRef(null);
+  const [edge, setEdge] = useState({ l: false, r: false });
+
+  /* Which fades to show. Recomputed on scroll, on resize, and whenever the section
+     list or the active pill changes. The 2px slack stops a fade flickering at the
+     ends from sub pixel scroll positions. */
+  const measure = useCallback(() => {
+    const el = scroller.current;
+    if (!el) return;
+    setEdge({
+      l: el.scrollLeft > 2,
+      r: el.scrollLeft + el.clientWidth < el.scrollWidth - 2
+    });
+  }, []);
+
+  /* Bring the selected pill into view. Without this you can be reading a section
+     whose own pill is off screen, which is what made a present section look absent.
+     scrollLeft rather than scrollIntoView, because scrollIntoView on a horizontal
+     child also yanks the PAGE vertically on iOS. */
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    const pill = el.querySelector('[aria-selected="true"]');
+    if (pill) {
+      const pad = 12;
+      const left = pill.offsetLeft - pad;
+      const right = pill.offsetLeft + pill.offsetWidth + pad;
+      if (left < el.scrollLeft) el.scrollLeft = Math.max(0, left);
+      else if (right > el.scrollLeft + el.clientWidth) {
+        el.scrollLeft = right - el.clientWidth;
+      }
+    }
+    measure();
+  }, [active, measure]);
+
+  useEffect(() => {
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [measure]);
+
   return (
-    <nav className="vt-nav" aria-label="Vault sections">
-      <div className="vt-nav__scroll" role="tablist">
+    <nav
+      className={"vt-nav" + (edge.l ? " vt-nav--more-l" : "") + (edge.r ? " vt-nav--more-r" : "")}
+      aria-label="Vault sections"
+    >
+      <div className="vt-nav__scroll" role="tablist" ref={scroller} onScroll={measure}>
         {VAULT_SECTIONS.map((s) => (
           <button
             key={s.key}

@@ -706,6 +706,40 @@ file serves 200 and decodes at 1200 by 875; tap opens the zoom viewer titled "Th
 Shank Showdown matchup" and Close returns; the awards card opens to both sentences; no
 console errors; no horizontal overflow at 390px.
 
+### Aug 17, the Vault section row hid four of its six sections
+**From:** Jim. "I don't see it in the vault." Said about Core Fundamental Scenarios,
+minutes after it was put back.
+
+**It was there.** The live site was serving it: `key: "scenarios"` present in
+index.html, `sections.scenarios` present in vault.json, `last-modified` stamped after
+the reinstating push. Not a cache problem, and worth checking before blaming one.
+
+**Measured at 390px, the section row is 1100px wide inside 358px of visible space.**
+742px, two thirds of it, sits off screen to the right. The scrollbar is deliberately
+hidden and there was no fade, so nothing on screen said the row moves. Four of the six
+sections were unreachable unless you happened to swipe a row that looked complete.
+
+**Worse, the active pill could be off screen.** The tab restores the last section from
+`mm26_vaultsection`, so it opened showing Invitation Source Personas while its pill sat
+outside the visible row. The panel heading said one thing and the only visible pills
+said another.
+
+**Two fixes.** The selected pill is now scrolled into view whenever it changes, using
+`scrollLeft` rather than `scrollIntoView`, because scrollIntoView on a horizontal child
+also drags the page vertically on iOS. And the row carries edge fades, driven by scroll
+position rather than always on, because a permanent fade over a row that does not
+scroll is a lie about there being more.
+
+**Verified at 390px:** first section shows a right fade only; last section shows a left
+fade only and sits flush at the end; middle sections show both; picking Core Fundamental
+Scenarios scrolls it fully into view; the restored-section case now opens with its own
+pill visible; no console errors.
+
+**Still worth a decision.** Six sections is a lot for one row on a phone. Fades and
+auto scroll make it discoverable, they do not make it visible at a glance. Wrapping the
+pills onto multiple lines would show all six with no swipe, at the cost of vertical
+space. Jim's call, not taken here.
+
 ---
 
 ## PHASE 1: Static and text tabs
