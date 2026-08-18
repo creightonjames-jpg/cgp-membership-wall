@@ -744,13 +744,14 @@ space. Jim's call, not taken here.
 **From:** Jim, a batch under "The Band" and "The Vault".
 
 **Garry Cramer, Medallion GM.** No longer a newbie. NOTES cleared in the TSV, which
-clears the flag and the FIRST TOUR badge together. His photo also came off, per his
-own request not to be shown with one. The processed file moved to
-`incoming/headshots/removed-by-request/` rather than being deleted, and the removal
-is recorded in `data/headshots-derived.json` so a future headshot run does not
-silently regenerate it. His original source file is still in Jim's OneDrive Newbies
-folder, so if it ever gets reprocessed that record is what explains why it should not
-have been.
+clears the flag and the FIRST TOUR badge together.
+
+His photo came off in the same pass, on a misread. Jim's next message: "Garry Cramer
+will stay in. Just remove as a newbie." The photo was restored from
+`incoming/headshots/removed-by-request/` back to `assets/attendees/`, the exclusion
+record in `data/headshots-derived.json` was cleared, and the roster regenerated.
+Re-audited afterward rather than assumed fine: framing still passes, same as before
+the round trip. Erik Mettille's removal stands, he asked for it directly.
 
 **Erik Mettille, Oregon GC.** Same fix, same reasoning. He attended last year, so the
 newbie flag was wrong on top of him not wanting the photo.
