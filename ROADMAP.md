@@ -1073,6 +1073,20 @@ human and sends nobody anywhere. Ran it here too:
 **Files:** `assets/brand/qr-cares-pledge.png` and `.svg`. Confirmed the run touched
 only these two new files, nothing else in assets/brand regenerated differently.
 
+### Aug 18, Patrick Ryan's photo replaced
+**From:** Jim, a new photo, replacing an old black and white headshot.
+
+**Checked for the Tyler Busey trap before running it.** That earlier replacement
+silently reverted because a same-scored older source file won a newest-first tie
+break. An old `patrick-ryan.png` already existed in
+`incoming/headshots/from-thread`, dated Aug 12. The new file is dated today, so it
+wins the tie on mtime, and the result was opened and looked at rather than trusted
+from the tool's summary line alone.
+
+**Verified:** the color photo on disk now, not the old black and white one; his
+card renders it under Century Golf; framing passed the gate first time; no console
+errors.
+
 ---
 
 ## PHASE 1: Static and text tabs
