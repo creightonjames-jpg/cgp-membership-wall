@@ -928,6 +928,17 @@ once a meeting day is in the past mid-week.
 static seed, which proves the fetch; the cache holds all four days; crew override
 wins and yields; no console errors.
 
+### Aug 18, Dave Horn's photo, and the roster reaches full coverage
+**From:** Jim, a headshot for Dave Horn. His polo reads "The Club at Prescott
+Lakes," matching the club already on his card.
+
+**Done.** Ran through `tools/add-headshots.sh` like every other photo. Framing
+passed the gate first time, no recrop needed. Roster is now **117 of 117 with a
+photo**, the first time every attendee has one.
+
+**Verified:** his card renders with the photo and the FIRST TOUR badge intact; no
+console errors.
+
 ---
 
 ## PHASE 1: Static and text tabs
