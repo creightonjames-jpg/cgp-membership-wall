@@ -619,6 +619,36 @@ guessed at either way.
 no horizontal overflow; underline matches the existing booklet PDF row; no console
 errors.
 
+### Aug 17, Thea Jordan joins Medallion, and a generated file bit back
+**From:** Jim. "Add thea to the Medallion group. She is a newbie." Thea Jordan,
+Catering Sales Director, The Medallion Club, with a pasted headshot.
+
+**Done.** Row added to `data/attendee-list-verified.tsv` with NOTES "NEW", which is
+what sets the newbie flag. Roster is 120, Medallion is 5, newbies are 23. Her card
+carries the FIRST TOUR badge and the "First tour." line.
+
+**Her photo was pasted, not filed.** Recovered from the session transcript at
+267,969 bytes, 1331 by 2000, run through `tools/add-headshots.sh`, and the framing
+gate passed it first time at 400 by 400. 119 of 120 now have a photo. Dave Horn is
+still the one placeholder.
+
+**The real finding: roster.json is generated and three of today's changes had been
+made in the wrong file.** Amy Spittle to VP Marketing, John Martus to CFO, Chris May
+to VP Operations and Natalie Bratcher to Balcones were all edited directly in
+`data/roster.json` and committed. `tools/add-headshots.sh` finishes by running
+`tools/reconcile-roster.py`, which rebuilds roster.json from the TSV, so adding
+Thea's headshot silently reverted all four. They were caught because Thea herself
+disappeared in the same regeneration.
+
+All four are now in the TSV, where they survive a rebuild. Verified by regenerating
+and reading back every one. `CLAUDE.md` now says roster.json is generated in the file
+layout and in its own paragraph, because the reconciler's own header said so and that
+was not enough to stop the mistake.
+
+**Verified:** roster 120, 119 with photos, Medallion 5, Balcones 5; all five of
+today's roster changes read back correct after a full regeneration; Thea renders in
+the Medallion group with the newbie badge; her file serves 200 at 400 by 400.
+
 ---
 
 ## PHASE 1: Static and text tabs

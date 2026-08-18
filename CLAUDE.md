@@ -67,7 +67,8 @@ These apply to every word that ships: interface copy, empty states, confirmation
 **File layout**
 ```
 /index.html                            app logic
-/data/roster.json                      attendee records
+/data/attendee-list-verified.tsv       SOURCE OF TRUTH for who is attending
+/data/roster.json                      GENERATED from the tsv. Never hand edit
 /data/agenda.json                      session schedule
 /assets/attendees/{slug}.jpg           headshots, 400x400
 /assets/graphs/{club-slug}.png         per-club membership graphs
@@ -76,6 +77,14 @@ These apply to every word that ships: interface copy, empty states, confirmation
 /CLAUDE.md
 /ROADMAP.md
 ```
+
+**data/roster.json is generated, not authored.** `tools/reconcile-roster.py` rebuilds
+it from `data/attendee-list-verified.tsv`, the list from Carol and Lisa. A title fix,
+a club move, or a new attendee goes in the TSV, then rerun the reconciler. Editing
+roster.json directly appears to work and then vanishes the next time anybody adds a
+headshot, because `tools/add-headshots.sh` runs the reconciler at the end. This
+happened on Aug 17: three title changes and a club move were made in roster.json,
+committed, and silently reverted an hour later.
 
 **The data split.** This is the rule that keeps the wall fast. Anything created during the meeting goes in Firebase. Anything fixed before the meeting lives in the repo as a static file.
 
