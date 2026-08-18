@@ -774,11 +774,19 @@ on the jacket. Not a guess. Not marked as a newbie, since nothing said he was on
 **Dave Horn still has no photo.** Nothing arrived. Still a placeholder, waiting on
 Jim.
 
-**Ballantyne, not touched.** "Remove Ballantyne and photos in All" would take out an
-entire club and four people: Matt Saggio, Katie Robinson, Payton Williamson, Dan
-Cordaro. CLAUDE.md's hard rule is never delete without approval, and this is the
-kind of removal that rule exists for. Confirmed with Jim first rather than guessed
-at.
+**Ballantyne removed, confirmed first.** Jim: "Ballantyne is no longer attending. Go
+ahead and delete." All four rows dropped from
+`data/attendee-list-verified.tsv`: Matt Saggio, Katie Robinson, Payton Williamson,
+Dan Cordaro. Their photo files moved to `incoming/headshots/removed-by-request/`,
+not deleted, and recorded in `data/headshots-derived.json` for the same reason as
+Garry Cramer and Erik Mettille above: their originals are still in Jim's OneDrive
+folder, so a future headshot batch needs the record to know not to bring them back.
+Roster drops from 121 to 117, clubs from 27 to 26.
+
+**Club Graphs left untouched.** Ballantyne's membership performance chart is still
+in `data/graphs.json`. That section is whole company reference data, driven by its
+own club list rather than by who is attending this meeting, and the request was
+specifically about The Band. Not deleting data outside what was asked.
 
 **The Vault reordered to match the agenda,** rather than the order sections were
 built in:
