@@ -11545,11 +11545,10 @@ function CaresCard() {
         : <span className="cc-p__img cc-p__img--none" aria-hidden="true" />}
       <span className="cc-p__t">
         <span className="cc-p__n">{p.name}</span>
-        <span className="cc-p__m">
-          {p.club}
-          {p.handicap ? " · " + p.handicap : ""}
-          {p.tee ? " · " + p.tee : ""}
-        </span>
+        {/* Name and club only. Jim, Aug 17 2026: handicap and tee came off the
+            card. The values are still in data/cares-card.json, because they are
+            what Carol supplied and putting them back is a two line change. */}
+        <span className="cc-p__m">{p.club}</span>
       </span>
     </li>
   ));

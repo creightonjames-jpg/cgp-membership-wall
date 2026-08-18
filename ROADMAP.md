@@ -589,12 +589,13 @@ and a live countdown; no console errors; no horizontal overflow.
 
 ### Aug 17, The Medallion Club Story in the Vault
 **From:** Jim, who sent the link and then the caption to go with it.
-`https://simplebooklet.com/themedallionclubversion5#page=19`
+`https://simplebooklet.com/themedallionclubversion5#page=1`
 
 **Done.** A sixth Vault section, "The Medallion Club Story", holding his caption and
 one button out to the booklet. His wording is reproduced exactly as sent, curly
 quotes and ellipsis included, the same rule the personas follow. The `#page=19`
-anchor is his and was left alone.
+anchor is his. He first sent it as `#page=19` and changed it to `#page=1` the same
+day, so the booklet opens at the cover instead of partway in.
 
 **Not open, not padlocked.** No `drop` on this section, so it is live the moment the
 wall is. The caption tells people to read it before they arrive, which a countdown
@@ -648,6 +649,22 @@ was not enough to stop the mistake.
 **Verified:** roster 120, 119 with photos, Medallion 5, Balcones 5; all five of
 today's roster changes read back correct after a full regeneration; Thea renders in
 the Medallion group with the newbie badge; her file serves 200 at 400 by 400.
+
+### Aug 17, two small ones on the Story link and the Cares Cup card
+**From:** Jim, two requests in a row.
+
+**The booklet link opens at the cover.** `#page=19` became `#page=1`. One value in
+`data/vault.json`, plus the two places the roadmap quoted the old anchor.
+
+**Name and club only on the card.** Handicap and tee are off the player lines, so
+"Casey Lewis · Sycamore Creek · -0.8 · Combo" now reads "Casey Lewis / Sycamore
+Creek". A display change, not a data one: the values stay in
+`data/cares-card.json` because they are what Carol supplied, and putting them back
+is a two line change.
+
+**Verified:** link renders as `#page=1` with target and rel intact; all 24 player
+rows show two lines, no decimal handicap and no tee word anywhere on the tab; no
+console errors; no horizontal overflow at 390px.
 
 ---
 
