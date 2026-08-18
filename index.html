@@ -1110,6 +1110,28 @@ body.display-mode .stubnote { font-size: 20px; }
 
 .attire__v { margin: 0; color: var(--cream); }
 
+/* --------------------------------- vault caption and external links */
+.vt-cap { margin: 0 0 16px; }
+
+.vt-cap__p { margin: 0 0 9px; color: var(--cream); font-size: 14px; line-height: 1.55; }
+
+.vt-cap__p:last-child { margin-bottom: 0; }
+
+.vt-links { margin: 0 0 18px; display: flex; flex-direction: column; gap: 12px; }
+
+.vt-link {
+  padding: 12px;
+  background: var(--warm-fill);
+  border: 1px solid var(--warm-edge);
+  border-left: 3px solid var(--gold-rule);
+  border-radius: 8px;
+}
+
+/* Full width on a phone so it is a thumb target rather than a word to aim at. */
+.vt-link__a { display: block; width: 100%; text-align: center; }
+
+.vt-link__n { margin: 8px 0 0; color: var(--dim); font-size: 12px; text-align: center; }
+
 /* ------------------------------------------ weather, one strip per day */
 /* Sits between the day note and the attire lines, because attire is the reason
    anybody reads the weather. A warm fill and a gold rule so it reads as its own
@@ -6905,7 +6927,12 @@ const VAULT_SECTIONS = [
      Thursday 10:30 as the reference. Anybody following the agenda finds it where the
      agenda says it is. Do not "fix" this by collapsing them. */
   { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "personas", drop: "scenarios" },
-  { key: "personas",     name: "Invitation Source Personas",  icon: "\u{1F465}", kind: "personas", drop: "personas" }
+  { key: "personas",     name: "Invitation Source Personas",  icon: "\u{1F465}", kind: "personas", drop: "personas" },
+
+  /* Jim, Aug 17 2026. Sets up the Wednesday afternoon segment The Missing Chapter.
+     No `drop`, so it is open the moment the wall goes live: the caption tells people
+     to read it before they arrive, and a padlock would defeat the point. */
+  { key: "story",        name: "The Medallion Club Story",    icon: "\u{1F4D6}", kind: "images" }
 ];
 
 /* These are the two times CLAUDE.md and the spec both give. August in Ohio is
@@ -7622,10 +7649,38 @@ function VaultImageSection({ section, manifest, onZoom }) {
   const items = (sec && sec.items) || [];
 
   const doc = sec && sec.document;
+  const links = (sec && sec.links) || [];
+  const caption = (sec && sec.caption) || [];
 
-  if (!items.length && !doc) {
+  if (!items.length && !doc && !links.length) {
     return <Empty>{VAULT_EMPTY[section.key] || "Nothing here yet."}</Empty>;
   }
+
+  /* The client's own words, printed as sent. Sits above everything else, because it
+     is the reason somebody opens the section at all. */
+  const captionRows = caption.length ? (
+    <div className="vt-cap">
+      {caption.map((t, i) => <p className="vt-cap__p" key={i}>{t}</p>)}
+    </div>
+  ) : null;
+
+  /* Somebody else's site, so `rel` is not optional and the button says out loud
+     that it leaves the wall. Nothing is mirrored into the repo, which means the club
+     can publish a new version of its own booklet without a commit here. */
+  const linkRows = links.length ? (
+    <div className="vt-links">
+      {links.map((l, i) => (
+        <div className="vt-link" key={l.url || i}>
+          <a className="btn btn--go vt-link__a"
+             href={l.url}
+             target="_blank" rel="noopener noreferrer">
+            {"\u2197"} {l.label || "Open the link"}
+          </a>
+          {l.note ? <p className="vt-link__n">{l.note}</p> : null}
+        </div>
+      ))}
+    </div>
+  ) : null;
 
   /* The original document the pages came from, offered whole. Rendered above the
      pages so somebody who just wants the file does not scroll 28 images to find
@@ -7651,6 +7706,8 @@ function VaultImageSection({ section, manifest, onZoom }) {
   if (sec && sec.layout === "pages") {
     return (
       <div className="vt-pages">
+        {captionRows}
+        {linkRows}
         {docRow}
         {items.map((item, i) => {
           const src = dir + "/" + item.file;
@@ -7673,6 +7730,8 @@ function VaultImageSection({ section, manifest, onZoom }) {
 
   return (
     <div className="vt-cards">
+      {captionRows}
+      {linkRows}
       {docRow}
       {items.map((item, i) => {
         const title = item.title || item.file;

@@ -6,7 +6,9 @@
     "title": "what the card is called. Falls back to the filename when missing.",
     "note": "optional one line under the title. Leave it out rather than padding it.",
     "layout": "optional on a section. \"pages\" renders the items as a continuous page flow with no per item chrome, for a document that was split into images. Anything else renders one titled card per item.",
-    "document": "optional on a section. The original file the images came from, offered as a download above the pages."
+    "document": "optional on a section. The original file the images came from, offered as a download above the pages.",
+    "links": "optional on a section. External links, each { url, label, note }. A section may hold only links and no files, which is how an off site booklet lives in the vault without anything being copied into the repo.",
+    "caption": "optional on a section. Paragraphs printed above the links and cards. The client's own wording, reproduced as sent."
   },
   "sections": {
     "fundamentals": {
@@ -144,6 +146,23 @@
       "items": []
     },
     "personas": {
+      "items": []
+    },
+    "story": {
+      "_note": "Jim, Aug 17 2026. Sets up the Wednesday afternoon segment The Missing Chapter. Hosted on simplebooklet, not copied into the repo, so the club keeps ownership of its own booklet and a new version needs no commit here. The #page=19 anchor is Jim's, left exactly as he sent it.",
+      "caption": [
+        "Every great club has a story. Yours has already had some incredible chapters.",
+        "On Wednesday, August 26th at 3:00 PM, we're turning the page together during the meeting segment \"The Missing Chapter.\"",
+        "Crack open “The Medallion Club Story” before you arrive. What's inside sets up everything.",
+        "See you there! The Missing Chapter… the gap between being invited and truly belonging."
+      ],
+      "links": [
+        {
+          "url": "https://simplebooklet.com/themedallionclubversion5#page=19",
+          "label": "Read The Medallion Club Story",
+          "note": "Opens in your browser. Nothing to download."
+        }
+      ],
       "items": []
     }
   }

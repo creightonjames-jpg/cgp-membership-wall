@@ -587,6 +587,38 @@ to its story and its closing question; crew see it with the "the room cannot see
 yet" badge; attendees see the padlock, "Opens Wednesday, August 26, 9:30 AM Eastern"
 and a live countdown; no console errors; no horizontal overflow.
 
+### Aug 17, The Medallion Club Story in the Vault
+**From:** Jim, who sent the link and then the caption to go with it.
+`https://simplebooklet.com/themedallionclubversion5#page=19`
+
+**Done.** A sixth Vault section, "The Medallion Club Story", holding his caption and
+one button out to the booklet. His wording is reproduced exactly as sent, curly
+quotes and ellipsis included, the same rule the personas follow. The `#page=19`
+anchor is his and was left alone.
+
+**Not open, not padlocked.** No `drop` on this section, so it is live the moment the
+wall is. The caption tells people to read it before they arrive, which a countdown
+would defeat.
+
+**Nothing was copied into the repo.** The section holds a link, not a mirror of the
+booklet. The club keeps ownership of its own document and can publish a new version
+without a commit here. `vault.json` sections now accept `links` and `caption`, so the
+next off site resource is a data edit and no code.
+
+**The page title was no help naming it.** simplebooklet reports "The Medallion Club
+Version 5", a working filename. The name in use, "The Medallion Club Story", came
+from Jim's caption.
+
+**One discrepancy for Jim, left as sent.** His caption says the Missing Chapter
+segment is Wednesday at 3:00 PM. Carol's agenda, applied Aug 13, puts it at 3:15 PM
+after a 3:00 break. Both are on the wall right now saying different things. Not
+guessed at either way.
+
+**Verified:** section renders unlocked with all four caption paragraphs and the link;
+`target="_blank"` with `rel="noopener noreferrer"`; full width thumb target at 390px,
+no horizontal overflow; underline matches the existing booklet PDF row; no console
+errors.
+
 ---
 
 ## PHASE 1: Static and text tabs
