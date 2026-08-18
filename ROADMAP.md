@@ -1055,6 +1055,24 @@ not a caveat.
 tab; the mission block and the eligibility line are unaffected; the crew panel
 shows the relabelled fund control; no console errors.
 
+### Aug 18, a QR code for the pledge link
+**From:** Jim, wanting a downloadable, shareable QR for
+`https://creightonjames-jpg.github.io/cgp-membership-wall/?go=cares-pledge`.
+
+**Generated with the same tool and the same recipe as the main wall QR,** not a
+new one-off. `tools/make-brand.py` generalized from one hardcoded QR to an
+`EXTRA_QR` dict of name to URL, so the next one is a line, not a new script. Same
+dark-on-cream palette, same error correction level, same quiet zone.
+
+**Decode verified, not eyeballed.** The tool reads its own PNG back with OpenCV and
+fails loudly if the decoded text does not match the URL exactly. That check already
+existed for the main QR because a QR encoding the wrong link looks perfect to a
+human and sends nobody anywhere. Ran it here too:
+`decode check: PASS, round-trips to https://creightonjames-jpg.github.io/cgp-membership-wall/?go=cares-pledge`
+
+**Files:** `assets/brand/qr-cares-pledge.png` and `.svg`. Confirmed the run touched
+only these two new files, nothing else in assets/brand regenerated differently.
+
 ---
 
 ## PHASE 1: Static and text tabs

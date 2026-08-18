@@ -30,6 +30,14 @@ BRAND = os.path.join(REPO, "assets", "brand")
 
 WALL_URL = "https://creightonjames-jpg.github.io/cgp-membership-wall/"
 
+# Every other QR the wall needs, name -> URL. Jim, Aug 18 2026, first one: a
+# direct link to the donation slip, ?go=cares-pledge, for texting or posting
+# rather than pointing a phone at the main wall QR and tapping through three
+# taps to get there.
+EXTRA_QR = {
+    "qr-cares-pledge": WALL_URL + "?go=cares-pledge"
+}
+
 SCARLET = (200, 16, 46)
 OXBLOOD = (122, 12, 27)
 GOLD = (217, 169, 76)
@@ -128,39 +136,42 @@ def write_icons():
         print("  %-24s %4dx%-4d %6d bytes" % (name, size, size, os.path.getsize(path)))
 
 
-def write_qr():
+def write_one_qr(stem, url):
+    """One QR, SVG and PNG, same dark-on-cream recipe every time. Returns the
+    PNG path so the caller can decode-check it."""
     try:
         import segno
     except ImportError:
-        print("  segno not installed, skipping the QR. "
-              "python3 -m pip install --user segno")
-        return
+        print("  segno not installed, skipping %s. "
+              "python3 -m pip install --user segno" % stem)
+        return None
 
     # Error correction M is the sane default for a screen and a table tent.
-    qr = segno.make(WALL_URL, error="m")
+    qr = segno.make(url, error="m")
 
-    svg_path = os.path.join(BRAND, "qr-wall.svg")
+    svg_path = os.path.join(BRAND, stem + ".svg")
     qr.save(svg_path, kind="svg", scale=10,
             border=3,             # quiet zone, scanners need it
             dark="#17161A",       # dark modules
             light="#F7F3EA")      # on a cream card, never inverted
 
-    png_path = os.path.join(BRAND, "qr-wall.png")
+    png_path = os.path.join(BRAND, stem + ".png")
     qr.save(png_path, kind="png", scale=16, border=3,
             dark="#17161A", light="#F7F3EA")
 
     print("  %-24s version %s, ecc %s, %d modules, %d bytes"
-          % ("qr-wall.svg", qr.version, qr.error.upper(),
+          % (stem + ".svg", qr.version, qr.error.upper(),
              qr.symbol_size(border=0)[0], os.path.getsize(svg_path)))
-    print("  %-24s %d bytes" % ("qr-wall.png", os.path.getsize(png_path)))
-    verify_qr(png_path)
+    print("  %-24s %d bytes" % (stem + ".png", os.path.getsize(png_path)))
+    return png_path
 
 
-def verify_qr(png_path):
+def verify_qr(png_path, expected):
     """Decode our own QR and confirm it points where we think it does.
 
     A QR that encodes the wrong URL looks completely fine to a human. This is
-    the one asset where a silent error means nobody reaches the wall at all.
+    the one asset where a silent error means nobody reaches the intended page
+    at all.
     """
     try:
         import cv2
@@ -171,10 +182,21 @@ def verify_qr(png_path):
     img = cv2.imread(png_path)
     decoded, _, _ = cv2.QRCodeDetector().detectAndDecode(img)
 
-    if decoded == WALL_URL:
+    if decoded == expected:
         print("  decode check: PASS, round-trips to %s" % decoded)
     else:
-        sys.exit("  decode check: FAIL. Expected %r, decoded %r" % (WALL_URL, decoded))
+        sys.exit("  decode check: FAIL. Expected %r, decoded %r" % (expected, decoded))
+
+
+def write_qr():
+    png_path = write_one_qr("qr-wall", WALL_URL)
+    if png_path:
+        verify_qr(png_path, WALL_URL)
+
+    for stem, url in EXTRA_QR.items():
+        png_path = write_one_qr(stem, url)
+        if png_path:
+            verify_qr(png_path, url)
 
 
 if __name__ == "__main__":
