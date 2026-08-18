@@ -1110,6 +1110,27 @@ body.display-mode .stubnote { font-size: 20px; }
 
 .attire__v { margin: 0; color: var(--cream); }
 
+/* ------------------------------ Cares Cup matchup poster, top of tab */
+/* The whole poster is the tap target, so it is a button. Strip the UA chrome and
+   let the image be the whole control. */
+.cares-hero {
+  display: block; width: 100%; padding: 0; margin: 0 0 16px;
+  background: none; border: 0; border-radius: 10px;
+  -webkit-appearance: none; appearance: none;
+  cursor: zoom-in; overflow: hidden;
+}
+
+.cares-hero:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* aspect-ratio is load bearing. A lazy image with no intrinsic size reserves no
+   space, so the row collapses and the browser never decides it is in view. Same
+   trap the Vault booklet pages hit. 1200 by 875 is the file. */
+.cares-hero__img {
+  display: block; width: 100%; height: auto;
+  aspect-ratio: 1200 / 875;
+  border: 1px solid var(--warm-edge); border-radius: 10px;
+}
+
 /* --------------------------------- vault caption and external links */
 .vt-cap { margin: 0 0 16px; }
 
@@ -11341,6 +11362,7 @@ function CaresFundForm({ total, goal, onSave, busy }) {
 
 function CaresCupTab({ isAdmin }) {
   const cup = useCaresCup();
+  const [hero, setHero] = useState(false);
   const [editing, setEditing] = useState(null);
   const [busy, setBusy] = useState(false);
 
@@ -11394,6 +11416,41 @@ function CaresCupTab({ isAdmin }) {
 
   return (
     <TabFrame tabKey="cares">
+      {/* The matchup poster, Jim Aug 17 2026, at the top of the page. Not the same
+          thing as the per team `art` background, which lies behind a score card at 30
+          percent as texture. This is the artwork shown as artwork. It is the first
+          thing on the tab because it is the reason anybody looks at this tab before a
+          single score is posted.
+
+          Tappable, opening the same zoom viewer the Vault uses, because the small
+          print on both posters is the joke and 358px wide on a phone is not enough to
+          read "if there's OB left, he's already there". */}
+      <button
+        type="button"
+        className="cares-hero"
+        onClick={() => setHero(true)}
+      >
+        <img
+          className="cares-hero__img"
+          src="assets/cares/shank-showdown-vs.jpg"
+          alt="Team Total Consciousness versus Spalding's Revenge Team, the Shank Showdown matchup posters"
+          loading="lazy"
+          decoding="async"
+        />
+        <span className="sr-only">Open the posters bigger</span>
+      </button>
+
+      {hero ? (
+        <VaultZoom
+          view={{
+            title: "The Shank Showdown matchup",
+            src: "assets/cares/shank-showdown-vs.jpg",
+            download: "shank-showdown-vs.jpg"
+          }}
+          onClose={() => setHero(false)}
+        />
+      ) : null}
+
       <CaresFund total={cup.total} goal={cup.goal} updated={cup.updated} />
 
       {isAdmin ? (

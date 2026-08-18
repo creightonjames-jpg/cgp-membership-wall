@@ -666,6 +666,40 @@ is a two line change.
 rows show two lines, no decimal handicap and no tee word anywhere on the tab; no
 console errors; no horizontal overflow at 390px.
 
+### Aug 17, matchup poster on the Cares Cup, awards line on Thursday
+**From:** Jim, the poster pair image and one line of copy.
+
+**The poster sits at the top of The Cares Cup,** directly under the tab heading and
+above the fundraising card. It is the reason anybody opens that tab before a single
+score exists, so it goes first.
+
+**This is not the `art` background.** That mechanism lays a per team image behind a
+score card at 30 percent as texture, and it stays exactly as it was, still off until
+the client answers on permission. The poster pair is artwork shown as artwork.
+
+**Tappable.** Opens the same zoom viewer the Vault uses, because the small print is
+the joke and 358px on a phone will not carry "if there's OB left, he's already there".
+
+**The file.** Pasted as a 1572 by 1147 webp, recovered from the session transcript.
+sips reads webp but will not write it, so it was normalised to PNG first, then cut to
+`assets/cares/shank-showdown-vs.jpg` at 1200 by 875 and 364KB. Quality was chosen by
+looking at the fine print at 68, 75 and 82 rather than by picking a number. The full
+resolution original is kept out of the repo at
+`incoming/cares/shank-showdown-vs-original.webp` for a future re-cut.
+
+`aspect-ratio: 1200 / 875` on the image is load bearing. A lazy image with no
+intrinsic size reserves no space and never enters the viewport, the same trap the
+Vault booklet pages hit.
+
+**Thursday 7:00 PM Awards Presentation** gains the flier's line, appended to the
+existing detail rather than replacing it: the practical instruction first, the payoff
+second. His curly quotes are reproduced as sent.
+
+**Verified:** poster renders first in the tab body at 358 by 261 with space reserved;
+file serves 200 and decodes at 1200 by 875; tap opens the zoom viewer titled "The
+Shank Showdown matchup" and Close returns; the awards card opens to both sentences; no
+console errors; no horizontal overflow at 390px.
+
 ---
 
 ## PHASE 1: Static and text tabs
