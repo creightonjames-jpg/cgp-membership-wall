@@ -575,12 +575,9 @@ and the Wednesday breakouts are what it is for. It opens Wednesday 9:30 AM Easte
 15 minutes before the breakouts start, and the crew override still beats the clock
 both ways.
 
-**Both sections stay. Jim's call, Aug 17.** The room meets the same six personas
-twice: Wednesday 9:30 as Core Fundamental Scenarios, Thursday 10:30 as Invitation
-Source Personas. Two padlocks, two unlock times, identical content. He was offered
-the choice of collapsing them and chose to keep both, so somebody following the
-agenda finds the material where the agenda says it is. This is settled. It is not
-drift to be tidied up later, and the note in `VAULT_SECTIONS` says so.
+**Superseded the same day. Core Fundamental Scenarios is gone.** Jim first chose to
+keep both sections, then cut the Scenarios one a few hours later. See the removal
+entry below. What stands: one section, Invitation Source Personas, Thursday 10:30.
 
 **Verified:** six persona cards render under Core Fundamental Scenarios; a card opens
 to its story and its closing question; crew see it with the "the room cannot see this
@@ -699,6 +696,38 @@ second. His curly quotes are reproduced as sent.
 file serves 200 and decodes at 1200 by 875; tap opens the zoom viewer titled "The
 Shank Showdown matchup" and Close returns; the awards card opens to both sentences; no
 console errors; no horizontal overflow at 390px.
+
+### Aug 17, Core Fundamental Scenarios removed
+**From:** Jim, with a screenshot of the nav button. "We can get rid of this."
+
+**Why it existed and why it does not.** Spec'd as its own timed drop expecting its
+own document. The document never arrived. Jim then said the breakout scenarios ARE
+the six personas, so for a few hours both sections rendered the same
+`data/personas.json` under two headings. Offered the choice, he kept both, then cut
+this one. One heading beats two showing the same six people.
+
+**Removed:** the `VAULT_SECTIONS` entry, its `VAULT_DROP_SCHEDULE` time, its
+`VAULT_EMPTY` copy, its `VAULT_DROPS` crew row, and `sections.scenarios` from
+`data/vault.json`. The leftover `settings/vaultDrops/scenarios` node was deleted from
+Firebase, so no phone carries a stale override for a section that is not there.
+
+**Copy that was quietly counting to two** got fixed with it: the crew panel said
+"These two fire on their own", the drop board header said "Six gated sections. The two
+Vault drops", `CLAUDE.md` listed two drops in the timed drop system and "two timed
+drops" in the tab table. All now say one, and CLAUDE.md records why rather than just
+dropping a line.
+
+**An old phone is fine.** A device with `mm26_vaultsection` set to "scenarios" falls
+back to the first section, because the picker validates the held value against
+`VAULT_SECTIONS` on every load. Tested by setting the dead value by hand and
+reloading: it landed on Core Fundamentals with no error.
+
+**The Vault is five sections now:** Core Fundamentals, Invitation Sources, Club
+Graphs, Invitation Source Personas (Thursday 10:30), The Medallion Club Story.
+
+**Verified:** no "scenarios" key anywhere in code or data; nav shows five buttons with
+no Scenarios; crew panel shows one clock drop and never says "two"; stale stored value
+recovers; no console errors.
 
 ---
 
