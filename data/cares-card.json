@@ -6,7 +6,6 @@
     "date": "Tuesday, August 25, 2026",
     "venue": "The Medallion Club",
     "benefiting": "Century Golf Cares",
-    "sortNote": "Sorted by handicap, low to high, as on the sheet.",
     "_sourceDateTypo": "Jim's sheet header reads August 25, 2025. The meeting is 2026, so the year is corrected here. Flagged to Jim rather than changed silently.",
     "_sourceVenueName": "The sheet says Medallion Country Club. The wall calls it The Medallion Club everywhere else, which is the name in the VENUES table, so that is used."
   },

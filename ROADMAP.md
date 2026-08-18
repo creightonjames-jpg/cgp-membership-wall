@@ -815,6 +815,42 @@ Medallion; Vault nav reads Core Fundamentals, Core Fundamental Scenarios, The
 Medallion Club Story, Invitation Sources, Invitation Source Personas, Club Graphs in
 that order; no console errors.
 
+### Aug 18, a real identity mismatch caught on Erik Mettille, and the Cares Cup sort line removed
+**From:** Jim, a new photo for Erik Mettille, then twice: "Keep Erik's original photo
+in. Just remove him from the Newbie list," and "keep his original photo."
+
+**What happened.** Restoring a headshot pipeline (`tools/recrop-headshots.py`) run
+against his new photo silently fell back to a second candidate file when the first
+did not crop cleanly, with no identity check in that code path, and put a
+completely different man's face on his card: glasses, a heavier gray flecked beard,
+a stone wall background, against Jim's new photo showing no glasses, a lighter
+beard, an indoor warm setting. Two different men. That wrong photo never shipped:
+caught by eye before commit, pulled within the same turn, verified with a side by
+side comparison.
+
+**The deeper finding.** The fallback file traces to
+`~/Downloads/OneDrive_1_8-11-2026/Newbies Headshots/Erik Mettille.jpg`, the same
+source that built the photo that had been live on his card since before today. So
+the mismatch is not something introduced this session. It has been wrong since his
+headshot was first loaded, and nothing caught it at the time because there was no
+second photo to compare against.
+
+**Shown to Jim, and he chose to keep it anyway,** twice, after seeing the
+comparison. Restored exactly as it was. The comparison and both candidate files are
+kept at `incoming/headshots/identity-mismatch/` (gitignored, local only, same as
+`removed-by-request`), and `data/headshots-derived.json` carries a
+`_flagged_but_shipped` entry recording what was flagged and that it was shipped on
+his decision, so this does not read as an oversight if it comes up again.
+
+**The Cares Cup sort line removed.** "Sorted by handicap, low to high, as on the
+sheet." dropped from `data/cares-card.json` meta. Already stale on its own terms:
+handicap came off the card display on Aug 17, so a line explaining a handicap sort
+was explaining a number nobody could see anymore.
+
+**Verified:** Erik Mettille's card carries no newbie badge and the restored photo;
+the Cares Cup footer renders nothing where the sort line was, and the element does
+not render at all now that the field is gone; no console errors; no em-dashes.
+
 ---
 
 ## PHASE 1: Static and text tabs

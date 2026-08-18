@@ -952,10 +952,6 @@
       "why": "Replaced by Dave Horn, Golf Professional at Prescott Lakes. Jim, Aug 13 2026."
     },
     {
-      "slug": "erik-mettille",
-      "why": "Removed by Jim, Aug 18 2026. Attended last year, not a newbie, and asked to come off with no photo shown. File moved to incoming/headshots/removed-by-request, not deleted."
-    },
-    {
       "slug": "matt-saggio",
       "why": "Removed by Jim, Aug 18 2026. Ballantyne is no longer attending; the whole club came off the roster. File moved to incoming/headshots/removed-by-request, not deleted."
     },
@@ -970,6 +966,13 @@
     {
       "slug": "dan-cordaro",
       "why": "Removed by Jim, Aug 18 2026. Ballantyne is no longer attending; the whole club came off the roster. File moved to incoming/headshots/removed-by-request, not deleted."
+    }
+  ],
+  "_flagged_but_shipped": [
+    {
+      "slug": "erik-mettille",
+      "flagged": "Aug 18 2026. The photo live under this name (sourced from OneDrive Newbies Headshots/Erik Mettille.jpg) does not visually match a separate candid photo Jim supplied the same day and identified as Erik Mettille: different hair color, no glasses vs glasses, different beard, different setting. Comparison saved at incoming/headshots/identity-mismatch/.",
+      "decision": "Jim confirmed twice, after seeing the comparison, to keep the original photo. Shipped as is. If this is ever raised again, the comparison files explain why it looked wrong."
     }
   ]
 }
