@@ -1095,6 +1095,70 @@ not each of the six matches individually.
 
 **Verified:** the fourth paragraph on the mission block reads the new sentence.
 
+### Aug 19, email alerts for new Soundcheck questions and Liner Notes takeaways
+**From:** Jim. "Is it possible to get an email alert every time someone posts a
+question or liner note on the soundcheck tab?"
+
+**The first server side piece this build has ever needed.** Everything else is a
+static file plus a wide open Firebase database, on purpose, per the data split. An
+alert that has to fire even when nobody has the wall open cannot be a browser tab,
+since a closed tab runs nothing. That needed a new `functions/` directory, Cloud
+Functions, and Jim's Firebase project moved onto the Blaze (pay-as-you-go) plan,
+a billing change only he could make.
+
+**Two triggers**, `onNewQuestion` on `questions/{id}` and `onNewTakeaway` on
+`takeaways/{id}`, both `onCreate`, both firing on Google's servers rather than in
+anyone's browser. v1 Cloud Functions on purpose, not v2: a v2 Realtime Database
+trigger has to be deployed to the same region as the database instance, which
+means knowing that region ahead of time or a deploy that fails opaquely. v1 attaches
+to the project's default database with no region to get wrong, and this project has
+two functions running a handful of times a day for one week in August. Simple and
+correct beat fashionable.
+
+**The send path changed once, for a real reason, not a style preference.** First
+built on Resend, a transactional email API. Deployed clean, and the first live test
+proved the actual failure: the function fired correctly, called Resend correctly,
+and Resend rejected it with "You can only send testing emails to your own email
+address," because its default sender only delivers to the account that signed up
+for it. Fixing that properly means verifying a domain, which means DNS access on
+centurygolf.com, which Jim does not have and could not get before the meeting. Told
+him plainly that the earlier claim "works everywhere with zero setup" was wrong
+rather than quietly working around it. Rebuilt on Gmail SMTP instead, signed in as
+Jim's own Gmail with an app password. No domain, no DNS, no IT ticket, and it
+proved out on the very next live test.
+
+**Recipients:** jcreighton@centurygolf.com, lhenrichsen@balconescountryclub.com,
+cruskowski@centurygolf.com, ddarville@centurygolf.com. Neither Lisa's nor Carol's
+email address was on file anywhere in this project before this task. Asked Jim for
+both rather than guessing, then checked both names against the roster before
+wiring them in. Donny Darville added Aug 19, also checked against the roster first.
+
+**The Resend API key and the Gmail app password were both handled the same
+careful way.** Piped directly into `firebase functions:secrets:set` from Bash,
+never written to a file, never appearing in a commit. Firebase stores each in
+Secret Manager and hands it to the function only at run time. The unused
+`RESEND_API_KEY` secret is still sitting in Secret Manager, costing nothing,
+documented in `functions/README.md` for whoever eventually decides to delete it.
+
+**Two blockers hit and fixed during deploy**, neither a code problem:
+1. The very first deploy attempt failed with a 403 on Artifact Registry
+   permissions, a known propagation delay right after a project's first Blaze
+   upgrade. Second attempt, no code changes, succeeded.
+2. Deploy warned no cleanup policy existed for build container images in
+   us-central1, which would have let small storage charges accumulate over every
+   future deploy. Set with `firebase functions:artifacts:setpolicy`.
+
+**Verified live, not just deployed.** A real test question and a real test
+takeaway were pushed to Firebase, both trigger logs read "finished with status:
+'ok'," and both test records were deleted immediately after. This is the only
+feature in the wall that cannot be verified in a browser at 390px, since it has no
+UI: the proof is the Cloud Functions log showing a real send succeeded.
+
+**What it does not do, on purpose:** no retry and no queue, so a Gmail outage in the
+exact second something posts loses that one alert. No alert for edits, votes, or
+pins, only new questions and new takeaways. Mail arrives from a personal Gmail, not
+a centurygolf.com address, which some inboxes may flag once.
+
 ---
 
 ## PHASE 1: Static and text tabs

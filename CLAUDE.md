@@ -63,6 +63,9 @@ These apply to every word that ships: interface copy, empty states, confirmation
 - Firebase Realtime Database for live state
 - GitHub Pages from repo root
 - Google Fonts: Anton, Alfa Slab One, Inter
+- `functions/`, Cloud Functions (Blaze plan). The one server side piece in the
+  whole build, added Aug 19 2026 for email alerts. See `functions/README.md`
+  before touching it.
 
 **File layout**
 ```

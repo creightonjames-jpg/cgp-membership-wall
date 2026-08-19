@@ -15,3 +15,9 @@ confidential/
 # Raw headshot drops. Only the processed 400x400 versions get committed.
 incoming/headshots/*
 !incoming/headshots/README.md
+
+# Cloud Functions. Dependencies are installed fresh on deploy, never committed.
+# Secrets (the Resend API key) live in Firebase Secret Manager, never in a file.
+functions/node_modules/
+functions/.env
+functions/.env.*
