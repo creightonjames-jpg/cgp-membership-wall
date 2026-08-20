@@ -1176,6 +1176,28 @@ it is inert either way and deleting rows is not what was asked.
 read `newbie: true` after a full regenerate; both cards show "First tour." on The
 Band; no console errors.
 
+### Aug 19, Match 6 answered: Bruce Gerlander, not Bruce Han or Jimmy Han
+**From:** Jim. "For the Century Cup match 6, replace Jimmy Han with Bruce
+Gerlander." This is the answer to the Aug 18 open question: the sheet's "Bruce
+Han" was neither a spelling variant nor Jimmy Han, it was a different person
+entirely, one who is on the roster as Bruce Gerlander.
+
+**Done.** Match 6's Spalding's Revenge side now reads Todd Keefer and Bruce
+Gerlander in `data/cares-card.json`, with his real slug and photo,
+`assets/attendees/gerlander.jpg`, already on file. The `asWritten: "Bruce Han"`
+note is gone, since this was not a spelling disagreement to preserve, it was a
+wrong identification now corrected.
+
+**Not touched, and worth a decision:** `teams[1].captains` still reads "Todd
+Keefer and Jimmy Han." Match 6 is the captains' match, both sides marked
+`handicap: "Captain"`, so the team meta and the match lineup now disagree about
+who Spalding's Revenge's co-captain is. Jim asked about the match specifically,
+not the captains line, so it was left alone rather than assumed. If Bruce
+Gerlander is the real co-captain, that is a one line fix.
+
+**Verified:** Match 6 card renders Bruce Gerlander with his photo; "Jimmy Han"
+no longer appears in the match lineup; no console errors.
+
 ---
 
 ## PHASE 1: Static and text tabs

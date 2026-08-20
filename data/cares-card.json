@@ -261,13 +261,12 @@
           "photo": "assets/attendees/todd-keefer.jpg"
         },
         {
-          "name": "Jimmy Han",
-          "asWritten": "Bruce Han",
-          "slug": "jimmy-han",
+          "name": "Bruce Gerlander",
+          "slug": "bruce-gerlander",
           "club": "Century",
           "handicap": "Captain",
           "tee": "Combo",
-          "photo": "assets/attendees/han.jpg"
+          "photo": "assets/attendees/gerlander.jpg"
         }
       ]
     }
