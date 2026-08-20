@@ -1159,6 +1159,23 @@ exact second something posts loses that one alert. No alert for edits, votes, or
 pins, only new questions and new takeaways. Mail arrives from a personal Gmail, not
 a centurygolf.com address, which some inboxes may flag once.
 
+### Aug 19, newbie tags for Andrew Montemayor and John Martus, and a duplicate row caught
+**From:** Jim. "Add a newbie tag to Andrew Montemayor and john Martus."
+
+**John Martus** got a straightforward NOTES edit in the TSV.
+
+**Andrew Montemayor turned up a real bug.** He is listed twice in
+`attendee-list-verified.tsv`, one row plain, one row already marked NEW. The
+reconciler's duplicate collapse keeps the first occurrence and drops the second,
+so his existing NEW tag has been silently inert since whoever entered it typed it
+on the row that never survives. Fixed by adding NEW to the row the reconciler
+actually keeps. The stale duplicate row was left alone rather than removed, since
+it is inert either way and deleting rows is not what was asked.
+
+**Verified:** roster newbie count 21 to 23, exactly the two added; both records
+read `newbie: true` after a full regenerate; both cards show "First tour." on The
+Band; no console errors.
+
 ---
 
 ## PHASE 1: Static and text tabs

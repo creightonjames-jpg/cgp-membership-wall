@@ -4,7 +4,7 @@
     "people": 117,
     "withPhoto": 117,
     "withoutPhoto": 0,
-    "newbie": 21,
+    "newbie": 23,
     "clubs": 26
   },
   "_openQuestions": [],
@@ -1087,7 +1087,7 @@
       "title": "VP Business Development",
       "club": "Century Golf",
       "region": "",
-      "newbie": false,
+      "newbie": true,
       "photo": "assets/attendees/andrew-montemayor.jpg",
       "note": "",
       "needsReview": false
@@ -1285,7 +1285,7 @@
       "title": "CFO",
       "club": "Century Golf",
       "region": "",
-      "newbie": false,
+      "newbie": true,
       "photo": "assets/attendees/johnmartus.jpg",
       "note": "",
       "needsReview": false
