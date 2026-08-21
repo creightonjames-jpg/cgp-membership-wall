@@ -2268,6 +2268,62 @@ body.display-mode .stubnote { font-size: 20px; }
   color: var(--cream); line-height: 1.5; max-width: var(--measure);
 }
 
+/* ---------------------------------------- Core Fundamental Scenarios */
+/* Three body shapes inside the same .pv-card shell: voices, a survey, an
+   interview. Only the body differs, so only the body gets its own classes. */
+
+.scn-voices { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+
+.scn-voice { padding-top: 12px; border-top: 1px solid var(--edge); }
+
+.scn-voice:first-child { padding-top: 0; border-top: 0; }
+
+.scn-voice__role {
+  margin: 0 0 4px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold);
+}
+
+.scn-voice__q { margin: 0; color: var(--cream); line-height: 1.55; max-width: var(--measure); }
+
+.scn-survey__label {
+  margin: 0 0 12px; font-size: 12px; color: var(--dim); font-style: italic;
+}
+
+.scn-stats { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+
+.scn-stat { display: flex; align-items: baseline; gap: 12px; }
+
+.scn-stat__pct { flex: 0 0 auto; min-width: 44px; font-size: 18px; color: var(--gold); }
+
+.scn-stat__q { color: var(--cream); line-height: 1.4; }
+
+.scn-survey__ck {
+  margin: 4px 0 8px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--dim);
+}
+
+.scn-comments { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+
+.scn-comment {
+  margin: 0; padding-left: 12px; border-left: 3px solid var(--edge);
+  color: var(--cream); font-style: italic; line-height: 1.5;
+}
+
+.scn-interviews { display: flex; flex-direction: column; gap: 18px; }
+
+.scn-iv__role {
+  margin: 0 0 8px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold);
+}
+
+.scn-qa { margin: 0 0 10px; }
+
+.scn-qa:last-child { margin-bottom: 0; }
+
+.scn-qa__q { margin: 0 0 4px; color: var(--dim); font-size: 13px; font-style: italic; }
+
+.scn-qa__a { margin: 0; color: var(--cream); line-height: 1.55; max-width: var(--measure); }
+
 /* ------------------------------------------------ a document as pages */
 /* A booklet split into page images. Reads as one continuous document rather than
    a stack of cards, so the gap is tight and there is no chrome between pages. */
@@ -7158,21 +7214,20 @@ function SoundcheckTab({ isAdmin, now }) {
 const VAULT_SECTIONS = [
   { key: "fundamentals", name: "Core Fundamentals",          icon: "\u{1F4D8}", kind: "images" },
 
-  /* Jim, Aug 17 2026: the breakout scenarios ARE the six personas. He sent the
-     personas document a second time to say so. So this section reads the same
-     data/personas.json rather than waiting on artwork that was never coming.
+  /* The real scenarios arrived Aug 21 2026, "FINAL Core Fundamental
+     Scenarios.docx". From Aug 17 to Aug 21 this section stood in for the six
+     Invitation Source Personas, on Jim's word that the breakout scenarios were
+     the personas, because no scenarios document had turned up yet and the
+     Wednesday breakout needed something. That was a real decision, kept
+     through one same-day removal and restoration, not a guess of mine.
 
-     `kind: "personas"` on both means one file, one component, no second copy of
-     the prose to drift.
-
-     Two sections is deliberate. The room meets the same six personas twice under two
-     headings: Wednesday 9:30 as the breakout material, Thursday 10:30 as the
-     reference. Anybody following the agenda finds it where the agenda says it is.
-
-     Do not "fix" this by collapsing them. On Aug 17 Jim kept both, then cut this one,
-     then put it back within the hour. It has been questioned and answered. If it
-     needs to go again he will say so. */
-  { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "personas", drop: "scenarios" },
+     It is superseded now, not still a live consideration. `kind: "scenarios"`
+     reads its own file, data/scenarios.json, six zones matching six of the
+     seven Wednesday breakout topics in data/agenda.json. The Invitation Source
+     Personas section is unaffected, still its own content, still Thursday
+     10:30. Do not re-merge them. That was only ever a placeholder for missing
+     content, and the content is no longer missing. */
+  { key: "scenarios",    name: "Core Fundamental Scenarios",  icon: "\u{1F3AD}", kind: "scenarios", drop: "scenarios" },
 
   /* Jim, Aug 17 2026. Sets up the Wednesday afternoon segment The Missing Chapter.
      No `drop`, so it is open the moment the wall goes live: the caption tells people
@@ -7216,9 +7271,6 @@ const VAULT_GRACE_MS = 8000;
 const VAULT_EMPTY = {
   fundamentals: "Empty shelf. The Core Fundamentals artwork has not turned up yet.",
   buckets:      "Empty shelf. Tyler is sending the Invitation Sources artwork.",
-  /* Unreachable while scenarios renders as personas. Kept because it is the copy
-     that ships the moment that section goes back to being artwork. */
-  scenarios:    "Open and empty. The scenarios have not turned up yet.",
   personas:     "Open and empty. The personas have not turned up yet."
 };
 
@@ -8109,6 +8161,131 @@ function VaultPersonas() {
   );
 }
 
+/* Core Fundamental Scenarios, from data/scenarios.json. Six zones, three
+   formats: anonymous voices, a survey with open ended comments, and one on one
+   interview snippets. A zone's format decides its body, everything else about
+   the card (the numbered accordion shell) is the same across all three, and
+   reuses the .pv-card classes VaultPersonas already built rather than a second
+   copy of the same shell.
+
+   Every quote, every number, every club name is reproduced exactly as Jim's
+   document had it, verified against the source docx string for string before
+   this shipped. The club names in here are not real CGP clubs, they read as
+   composite or fictionalized case study settings for the exercise. */
+function ScnVoices({ voices }) {
+  return (
+    <ul className="scn-voices">
+      {voices.map((v, i) => (
+        <li className="scn-voice" key={i}>
+          <p className="scn-voice__role">{v.role}</p>
+          <p className="scn-voice__q">{v.quote}</p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function ScnSurvey({ zone }) {
+  return (
+    <div className="scn-survey">
+      {zone.surveyLabel ? <p className="scn-survey__label">{zone.surveyLabel}</p> : null}
+      <ul className="scn-stats">
+        {(zone.stats || []).map((s, i) => (
+          <li className="scn-stat" key={i}>
+            <span className="scn-stat__pct t-display t-data">{s.pct}%</span>
+            <span className="scn-stat__q">{s.q}</span>
+          </li>
+        ))}
+      </ul>
+      {(zone.comments || []).length ? (
+        <React.Fragment>
+          <p className="scn-survey__ck">Open-ended comments</p>
+          <ul className="scn-comments">
+            {zone.comments.map((c, i) => <li key={i} className="scn-comment">{c}</li>)}
+          </ul>
+        </React.Fragment>
+      ) : null}
+    </div>
+  );
+}
+
+function ScnInterview({ interviews }) {
+  return (
+    <div className="scn-interviews">
+      {interviews.map((iv, i) => (
+        <div className="scn-iv" key={i}>
+          <p className="scn-iv__role">{iv.role}</p>
+          {iv.qa.map((qa, j) => (
+            <div className="scn-qa" key={j}>
+              <p className="scn-qa__q">{qa.q}</p>
+              <p className="scn-qa__a">{qa.a}</p>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function VaultScenarios() {
+  const file = useJsonFile("data/scenarios.json");
+  const [open, setOpen] = useState(null);
+
+  if (file.status === "loading") return <Empty>Reading the zones.</Empty>;
+  if (file.status === "failed") {
+    return (
+      <Empty>
+        The scenarios file did not load. {file.reason} Everything else on the
+        wall still works.
+      </Empty>
+    );
+  }
+
+  const d = file.data || {};
+  const zones = d.zones || [];
+
+  return (
+    <div className="pv">
+      <p className="pv__lede">{d.subtitle}</p>
+
+      {(d.howToUse || []).map((p, i) => (
+        <p className="pv__p" key={"h" + i}>{p}</p>
+      ))}
+
+      {zones.map((z) => {
+        const isOpen = open === z.n;
+        return (
+          <article className="pv-card glow-card grille" key={z.n}>
+            <button
+              type="button"
+              className="pv-card__head"
+              aria-expanded={isOpen}
+              onClick={() => setOpen(isOpen ? null : z.n)}
+            >
+              <span className="pv-card__n t-display">{z.n}</span>
+              <span className="pv-card__t">
+                <span className="pv-card__src">{z.club}</span>
+                <span className="pv-card__name t-display">{z.title}</span>
+              </span>
+              <span className="pv-card__more">{isOpen ? "Close ▴" : "Read ▾"}</span>
+            </button>
+
+            {z.formatNote ? <p className="pv-card__hook">{z.formatNote}</p> : null}
+
+            {isOpen ? (
+              <div className="pv-card__body">
+                {z.format === "voices" ? <ScnVoices voices={z.voices || []} /> : null}
+                {z.format === "survey" ? <ScnSurvey zone={z} /> : null}
+                {z.format === "interview" ? <ScnInterview interviews={z.interviews || []} /> : null}
+              </div>
+            ) : null}
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
 /* What an attendee sees on a section that has not opened. Greyed, padlocked,
    the time in plain language, and a countdown that moves. It does not repeat
    the section name: the heading directly above it already says it. */
@@ -8434,6 +8611,8 @@ function VaultTab({ isAdmin, now }) {
             <VaultGraphPicker onZoom={onZoom} />
           ) : section.kind === "personas" ? (
             <VaultPersonas />
+          ) : section.kind === "scenarios" ? (
+            <VaultScenarios />
           ) : (
             <VaultImageSection section={section} manifest={manifest} onZoom={onZoom} />
           )}

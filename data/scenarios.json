@@ -1,0 +1,261 @@
+{
+  "_note": "Core Fundamental Scenarios, from Jim's Aug 21 2026 docx, 'FINAL Core Fundamental Scenarios.docx'. Six zones, matching six of the seven Wednesday 9:45 breakout topics in data/agenda.json (wed-0945-breakouts items). The seventh item, 'Backstage Reality Check Scenarios', is the umbrella name for this whole exercise, not a missing seventh zone. Reproduced exactly as written: club names, quotes, survey numbers, all his. The club names (Brookhaven, Talon Ridge, Harrow Creek, Wexford Hills, Somerset Oaks, Cedar Point) do not match any real CGP club on the roster, so they read as composite or fictionalized case study settings rather than a specific member club, and are shown as written rather than second guessed.",
+  "title": "Core Fundamental Scenarios",
+  "subtitle": "Six breakout zones. Real voices, real numbers, no names attached to a real Club.",
+  "howToUse": [
+    "Each zone is a different Club, a different Core Fundamental, and a different way of listening: anonymous voices, a survey, or a one on one conversation.",
+    "Read the zone with your group. Find the exact moment the strategy broke down, or the exact place it worked. Come with one thing your Club would do differently."
+  ],
+  "zones": [
+    {
+      "n": 1,
+      "key": "friends-inviting-friends",
+      "title": "Friends Inviting Friends Environment",
+      "club": "Brookhaven Country Club",
+      "format": "voices",
+      "formatNote": "Anonymous voices, from one Club.",
+      "voices": [
+        {
+          "role": "Tenure Member, 15 Years",
+          "quote": "The first year the Club started Membership by Invitation strategy I was asked to be on the Ambassador Committee. The GM and team walked us through why it mattered and how to become a sponsor. I was so grateful to have received that information because if I had not been an Ambassador I would have never known!"
+        },
+        {
+          "role": "Golf Shop Assistant, 3 Year Team Member",
+          "quote": "Last week a guest of a Member asked me about membership. The Membership Director wasn’t at her desk. I didn’t know what to do so I gave them the membership pricing sheet and an application. I hope they join!"
+        },
+        {
+          "role": "Food & Beverage Director",
+          "quote": "We had our annual refresher on Membership by Invitation strategy and 'private Club language' again this spring. Our Membership Regional, General Manager, and Membership Enrollment Director lead the meetings. Problem is, I haven’t received many educational resources to use for new hires on my own team."
+        },
+        {
+          "role": "Membership Enrollment Director",
+          "quote": "We got the CRM set up a few years ago and I understand why it matters to track all leads in one place. I'll be honest though, I get in there when I have a quiet afternoon, so things go in whenever I catch up."
+        },
+        {
+          "role": "Board Member",
+          "quote": "We recently had a meeting with our GM to walk through the Club’s attrition history and what the enrollment goals are for the upcoming year. The financial importance of having a full dues line was explained really well. Though if you asked me our attrition number or how many Members we need to enroll for this year, I couldn't tell you."
+        },
+        {
+          "role": "Full Privilege Member, 6 Weeks",
+          "quote": "At my orientation, the Pro told me I have my own invitation now to give out to a friend. Two weeks later at a New Member mixer, I asked a new Tennis couple if they’d given their invitation to a friend yet. They weren’t sure what I was talking about. Does that mean only Full Privilege Members can invite their friends? I’m confused."
+        },
+        {
+          "role": "Future Member",
+          "quote": "The invitation that was emailed to me was beautiful. I loved the look of it and that it had me and my husband’s name on it. I already thanked my neighbors for thinking of me to invite to their Club!"
+        },
+        {
+          "role": "General Manager",
+          "quote": "When our Membership Enrollment Director is out, I don’t hesitate to make an invitation when asked. I can log onto their computer and print one out. It takes time but it gets done. I have the templates, but my printer isn’t set up for that."
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "key": "sponsorship-culture",
+      "title": "Sponsorship Culture",
+      "club": "Talon Ridge Country Club",
+      "format": "survey",
+      "formatNote": "Annual membership survey",
+      "surveyLabel": "Member Survey – All Member Sponsors (n=123, yes/no)",
+      "stats": [
+        { "q": "I know who the top sponsor on the Leaderboard is year-round.", "pct": 21 },
+        { "q": "I would sponsor another friend or neighbor to join the Club.", "pct": 76 },
+        { "q": "I have seen my name featured in Club Communications.", "pct": 38 },
+        { "q": "I’ve been recognized as a Sponsor publicly at major Club events.", "pct": 53 },
+        { "q": "As a Sponsor, have you been invited to attend a New Member Mixer with the person you asked to join the Club?", "pct": 27 },
+        { "q": "The Club has thanked me personally for a new Member I sponsored.", "pct": 52 },
+        { "q": "The Sponsor Club exclusive events, perks, and benefits feel planned, genuine, and inclusive.", "pct": 55 },
+        { "q": "The Team Members remind you of your benefit that month in person without you asking. (Example: complimentary mimosa at Brunch, extra discount in the Pro Shop, complimentary event pass, etc.)", "pct": 14 },
+        { "q": "You know when your sponsor benefits begin and end after being inducted into the Sponsor Club.", "pct": 68 },
+        { "q": "You feel valued as a Sponsor.", "pct": 79 },
+        { "q": "I know what the National Partners Invitational event is and why I am qualified to go.", "pct": 24 }
+      ],
+      "comments": [
+        "My colleague went to a New Member Mixer last month and said sponsors were in attendance as well but I never got an invite even though I sponsored her.",
+        "Saw a sponsor spotlight on the Club's social media last month. First one I've noticed all year, and I don't think most Members follow the Club.",
+        "I sponsored someone this spring and the thank-you note showed up at my house within the week. So nice!",
+        "The monthly perks are great but sometimes I miss the email about what’s upcoming. If there were more reminders or the Team Members knew I feel that would benefit a lot of Members."
+      ]
+    },
+    {
+      "n": 3,
+      "key": "enrollment-process",
+      "title": "Enrollment Process",
+      "club": "Harrow Creek Country Club",
+      "format": "interview",
+      "formatNote": "One-on-one conversation snippets with a visiting Membership Regional.",
+      "interviews": [
+        {
+          "role": "General Manager",
+          "qa": [
+            {
+              "q": "How do you know that a new Member is getting the welcome they were promised?",
+              "a": "I take the department heads' word for it, most of the time. I don't have a system where I'm going department by department confirming every new Member got connected and had an orientation. If something went wrong, I'd hear about it. That's kind of been the system."
+            },
+            {
+              "q": "Take me through what your sales meetings look like with your Membership Enrollment Director and Head Pro.",
+              "a": "I have a ten-minute check-in most mornings with my Membership Enrollment Director and I try to grab the Head Pro separately when he’s around. We’ll run through what Code Blues are coming up and where we stand for the week. It happens pretty consistently. We are in such constant communication that it doesn’t feel like we need to have an official sit-down sales meeting."
+            }
+          ]
+        },
+        {
+          "role": "Membership Enrollment Director",
+          "qa": [
+            {
+              "q": "A month in. Two months. Three months. Is anyone checking in on new Members, or does that fall through the cracks?",
+              "a": "We go over new Members that are hitting their thirty- and sixty-day marks in our weekly staff meetings. Some Department Heads say they check in on them, but we don’t have a way of tracking or validating that. Ninety-day, I am going to confidently say no, not happening."
+            },
+            {
+              "q": "If I asked you right now how many people are in your pipeline, could you tell me?",
+              "a": "Mostly, yeah. I keep the pipeline in the CRM and I get in there most days, so I could give you a rough number off the top of my head. Invitations and Code Blues go in, but the smaller conversations I catch up on when I get a chance. And a same-day response on an inquiry is the goal."
+            }
+          ]
+        },
+        {
+          "role": "Golf Pro",
+          "qa": [
+            {
+              "q": "Do you know anything about prospective Members before they show up, or are you just faking it well?",
+              "a": "Most of the time, no, I'm not faking it, I get the name, I get who's sponsoring them, what they are looking for in a Club so I can connect with them when they show up. Every once in a while, though, it's just a name and a time slot."
+            },
+            {
+              "q": "Do you understand how your world connects to the Ambassador Committee, the Board, all of it? Or is that just someone else's job?",
+              "a": "Generally, yeah, I get it. If someone new is really serious about golf, I know to connect them to the golf committee, no one has to tell me that. Where it gets fuzzy for me is the partnership I have with the Ambassador Committee. That’s always been our Membership Enrollment Director’s responsibility."
+            }
+          ]
+        },
+        {
+          "role": "FOH Team Member (4 months)",
+          "qa": [
+            {
+              "q": "How do you receive the New Member Profiles in your department?",
+              "a": "New Member Profile? My Department Head tells us the names of the new Members that have joined that week during our line-up, but I don’t see a profile for them. That would be a good resource though."
+            },
+            {
+              "q": "Do you know what a ‘Code Blue’ means and what your role in the process is?",
+              "a": "Kind of, I know that it’s when someone is touring the Club. I was told to smile and say hello if I can, but we are usually too busy to stop what we are doing. Nobody's ever explained what the phrase ‘Code Blue’ is though. I hear a lot of terms I don’t know here."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "key": "retention-strategy",
+      "title": "Retention Strategy",
+      "club": "Wexford Hills Country Club",
+      "format": "survey",
+      "formatNote": "Annual membership survey.",
+      "surveyLabel": "Member Survey — All Members (n=590, yes/no)",
+      "stats": [
+        { "q": "I have personally met all the General Manager and Department Heads at my Club.", "pct": 48 },
+        { "q": "Thank You for Being a Member events happen regularly.", "pct": 37 },
+        { "q": "When you first joined, did the Club help get you connected to different Committees?", "pct": 22 },
+        { "q": "When you first joined, did the Club help you get familiar with the Club?", "pct": 35 },
+        { "q": "As a Member, do you feel the Club does a good job recognizing Tenure Members?", "pct": 19 },
+        { "q": "I get the sense the Team here feels genuinely appreciated by Leadership, not just the Members.", "pct": 61 },
+        { "q": "I feel like the Club knows me personally.", "pct": 70 },
+        { "q": "I have been on the receiving end or witnessed the Club do something special for a Member.", "pct": 31 },
+        { "q": "When a Member leaves, I believe the Club understands why.", "pct": 24 }
+      ],
+      "comments": [
+        "I was contacted by the Head Pro and Member Relations Manager when I first joined. They helped me navigate tee times and the website. Really helpful.",
+        "The Thank You for Being a Member events are great when they happen. I think we've had two this year.",
+        "One of the servers told me they're expected to do the little personal touches for Members, but nobody does that sort of thing for them. Stuck with me.",
+        "A friend of mine resigned this year, and I don't think anyone ever asked her why. She told me she sent an email notification and never went back."
+      ]
+    },
+    {
+      "n": 5,
+      "key": "ambassador-committee",
+      "title": "Ambassador Committee",
+      "club": "Somerset Oaks Country Club",
+      "format": "voices",
+      "formatNote": "Anonymous voices, from one Club.",
+      "voices": [
+        {
+          "role": "New Member of 2 Months",
+          "quote": "I attended my first New Member Mixer last week. I was told my assigned Ambassador would be there, which I hadn’t met yet and was looking forward to connecting. Unfortunately, they didn’t show."
+        },
+        {
+          "role": "Outgoing Committee Member",
+          "quote": "My year on the committee just wrapped. Got a nice note thanking me for my time and letting me know I was done. It was nice getting to know new people but the meetings were a bit boring. I don’t think I would serve again if I was asked."
+        },
+        {
+          "role": "Membership Enrollment Director",
+          "quote": "I let the new Members know that an Ambassador will be reaching out to them. I will follow up with the Ambassador at the monthly meeting to see if they reached out. It usually takes a few months for them to connect."
+        },
+        {
+          "role": "General Manager",
+          "quote": "Our partnership with the Ambassador Committee is very important. That’s why I ask all of my Department Heads to attend the kickoff meeting if they want. The Membership Director gives us updates on how they’re doing throughout the year."
+        },
+        {
+          "role": "Concierge, Team Member for 3 Years",
+          "quote": "I haven’t ever ‘featured’ the Ambassadors in Club communications. But some of them are sponsors so their names are listed as a Member Sponsor. This might be my fault but I don’t even know who all the Ambassadors are."
+        },
+        {
+          "role": "Ambassador",
+          "quote": "We had our kickoff meeting a couple months ago. I was excited to see my name on the Invitation but the framed invitation up by the front desk had the last Committees’ names on it. I know it’s not a big deal but would have been neat to see."
+        },
+        {
+          "role": "Ambassador Committee Chairman",
+          "quote": "We have a meeting every other month. The Membership Director builds the agenda and emails it out, and honestly, she does most of the talking once we're in the room. I've never been asked to run it myself."
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "key": "operational-excellence",
+      "title": "Operational Excellence",
+      "club": "Cedar Point Golf Club",
+      "format": "interview",
+      "formatNote": "One-on-one conversation snippets with a visiting Regional VP.",
+      "interviews": [
+        {
+          "role": "General Manager",
+          "qa": [
+            {
+              "q": "Walk me through your morning. What happens between the time you arrive and the time the first Member walks in?",
+              "a": "I walk the property most mornings before we open. The clubhouse and dining for certain — I get to the pool and tennis when the morning allows. I keep notes on what I find and send them to the department heads, and most of it gets closed out that day."
+            },
+            {
+              "q": "Who sets the standard of Operational Excellence at this Club?",
+              "a": "I do, and the team knows the expectations. But when we get slammed with a big event, or short-staffed, or everything at once, standards slip, and I'm as guilty of letting it slide too. On those days survival wins and the standard takes a back seat. I know that's the part we haven't solved."
+            }
+          ]
+        },
+        {
+          "role": "Food & Beverage Director",
+          "qa": [
+            {
+              "q": "What does Show Ready mean in your department? Do you have examples?",
+              "a": "Tables set, music on, nothing on the floor, team is in position before we open. And it does matter, a Member shouldn't walk into a room that isn't ready. I'll be honest, though, we don't have a checklist for it in my department yet. It's more something I carry in my head and mention when I think of it. We've been short-staffed for months, so a checklist has felt like one more thing to hand the team when they’re already stretched thin."
+            },
+            {
+              "q": "Tell me about a Planned Personal Pleasant Surprise your team took initiative over that nobody assigned them.",
+              "a": "We do have them. We just have no way of tracking them. The other day though, my bartender comped a round of drinks for a group after their friend mentioned it was the Member’s birthday."
+            }
+          ]
+        },
+        {
+          "role": "Server, Team Member (5 months)",
+          "qa": [
+            {
+              "q": "Have you ever seen or heard of the Century Golf Culture Card?",
+              "a": "The Culture Card? I've heard the name, maybe once when I first started, but I couldn't tell you what's on it. I may recognize it if I saw it though."
+            }
+          ]
+        },
+        {
+          "role": "Full Privilege Member (9 years)",
+          "qa": [
+            {
+              "q": "How does the Club make you and your guests feel?",
+              "a": "Overall, I love this Club. I wouldn't be a Member otherwise. The Team Members who've been here for a while know a lot about me, and the newer faces are friendly too. The one thing I'd appreciate is a bag drop attendant helping more with getting my guests set up, I usually have to ask them."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

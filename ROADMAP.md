@@ -1242,6 +1242,51 @@ browser, `object-position` computed as `50% 12%` on the actual thumbnail; all si
 current photos checked by eye; no console errors; no horizontal overflow at
 390px.
 
+### Aug 21, the real Core Fundamental Scenarios arrived
+**From:** Jim, "FINAL Core Fundamental Scenarios.docx." The document this section
+has been waiting on since the build started.
+
+**What it is.** Six zones, each a different Club and a different way of
+listening: anonymous voices, an annual member survey with open ended comments, or
+one on one interview snippets with a Regional or VP. The six map directly to six
+of the seven Wednesday 9:45 breakout topics already sitting in
+`data/agenda.json`. The seventh, "Backstage Reality Check Scenarios," is the
+umbrella name for the whole exercise, not a missing zone.
+
+**The section is unhooked from Invitation Source Personas.** From Aug 17 to
+today it stood in on Jim's own instruction, because no scenarios document
+existed yet and the Wednesday breakout needed something. That was a real,
+considered decision, kept through one same day removal and restoration, not a
+placeholder guessed at. It is superseded now that the actual content exists.
+`kind: "scenarios"` on the section reads its own `data/scenarios.json` through a
+new `VaultScenarios` component. Invitation Source Personas is untouched, same
+file, same Thursday 10:30 unlock, unaffected by any of this.
+
+**Every word verified against the source before it shipped.** Every quote,
+every survey question, every percentage, every role title, checked
+programmatically against the extracted docx text, not eyeballed. Zero
+mismatches. The six club names in the document, Brookhaven, Talon Ridge, Harrow
+Creek, Wexford Hills, Somerset Oaks, Cedar Point, do not match any real CGP club
+on the roster, so they read as composite or fictionalized case study settings
+rather than a specific member's Club, and are shown exactly as written rather
+than second guessed or flagged as an error.
+
+**One component, three body shapes.** Voices, survey, and interview each get
+their own renderer, sharing the same numbered accordion shell `VaultPersonas`
+already built, `.pv-card`, rather than three separate card systems.
+
+**The unlock time is unchanged and was confirmed, not assumed.** Wednesday,
+August 26, 9:30 AM Eastern, same as it has been since the section existed.
+Verified as the actual attendee facing text and countdown, not just the
+constant in the source.
+
+**Verified:** all six zones render with a live countdown before Wednesday 9:30 for
+an attendee, and unlocked with the crew badge for admin; each of the three formats
+opened and checked (8 voices, 11 stats plus 4 comments, 4 interview roles across 8
+question and answer pairs); Invitation Source Personas independently confirmed
+still locked to Thursday 10:30 and unaffected; no console errors; no horizontal
+overflow at 390px.
+
 ---
 
 ## PHASE 1: Static and text tabs
