@@ -1198,6 +1198,50 @@ Gerlander is the real co-captain, that is a one line fix.
 **Verified:** Match 6 card renders Bruce Gerlander with his photo; "Jimmy Han"
 no longer appears in the match lineup; no console errors.
 
+### Aug 21, Yolanda Nuncio's photo replaced
+**From:** Jim, a new photo taken in front of a framed umbrella-golfers print.
+
+**Done.** Ran through the standard intake and it landed SMALL, face only 25
+percent of the frame, since the source is a wide environmental shot rather than
+a close portrait. `tools/recrop-headshots.py` fixed it against the single
+matching source file with no ambiguity to resolve, face now 40 percent of the
+frame. An older `Nuncio June 2023.jpg` also exists on disk and could have tied on
+the surname; the new file's mtime is newer and won correctly, checked rather than
+assumed after the Patrick Ryan near miss taught that lesson.
+
+**Verified:** the result opened and looked at, correct person, no head cut off;
+her card renders it on The Band under Century Golf.
+
+### Aug 21, Pit thumbnails were cropping heads off tall photos
+**From:** Jim, on the "Let's Get This Party Started" photo specifically: the
+thumbnail cut off the subject's head.
+
+**Root cause.** `.pit-shot__img` is a square crop, `object-fit: cover` at dead
+centre. That specific photo is 406 by 800, a tall phone shot with the subject's
+head near the top, so a centred crop kept rows 197 to 603 of 800 and lost the
+head above the shoulders entirely. Confirmed by pulling the actual bytes out of
+Firebase and simulating both crops locally before touching any code, rather than
+guessing from the CSS alone.
+
+**The exact same shape of problem was already solved once in this codebase,**
+on the masthead band strip, with `object-position: center 12%` and a comment
+reading "stops the crop cutting the tops of heads." Reused that value rather
+than inventing a new number. It only moves anything for a photo taller than the
+square crop; a wider photo is already cropped on the sides with no vertical
+slack to bias, so this cannot make a landscape photo worse.
+
+**This is a live gallery with no review step,** so there is no per photo fix
+available, only a better default for whatever anyone uploads all week. Checked
+all six photos currently in The Pit after the change: the fix helps the one
+complained about and does not regress the other five, including two other tall
+portrait shots.
+
+**Verified:** simulated crop before and after with the real image bytes, head
+fully visible with headroom to spare in the new version; confirmed live in the
+browser, `object-position` computed as `50% 12%` on the actual thumbnail; all six
+current photos checked by eye; no console errors; no horizontal overflow at
+390px.
+
 ---
 
 ## PHASE 1: Static and text tabs

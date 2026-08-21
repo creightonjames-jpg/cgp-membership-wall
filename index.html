@@ -3509,7 +3509,15 @@ body.display-mode .cv-new { display: none; }
 
 .pit-shot__hit:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
-.pit-shot__img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Jim, Aug 19 2026: a tall phone photo ("Let's Get This Party Started") lost the
+   subject's head to a dead centre square crop. Same shape of problem the
+   masthead band strip already solved, same fix reused rather than a new
+   number invented: bias the crop toward the top of the source. This only
+   moves anything for a photo taller than the square, since a wider one is
+   already cropped on the sides with no vertical slack to bias. Cannot be
+   tuned per photo, since these are uploaded live during the meeting with no
+   review step, so one default has to work across whatever shows up. */
+.pit-shot__img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 12%; }
 
 /* Lit state is the scarlet gradient with a gold ring, the same two states the
    tab bar and the day pills use. */
