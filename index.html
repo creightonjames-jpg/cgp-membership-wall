@@ -2324,6 +2324,29 @@ body.display-mode .stubnote { font-size: 20px; }
 
 .scn-qa__a { margin: 0; color: var(--cream); line-height: 1.55; max-width: var(--measure); }
 
+/* Shared between Core Fundamental Scenarios and Invitation Source Personas,
+   the breakout room rotation table and the room map. */
+.scn-rooms { margin: 0 0 18px; }
+
+.scn-rooms__k {
+  margin: 0 0 9px;
+  font-family: var(--font-display); text-transform: uppercase;
+  font-size: 11px; letter-spacing: 0.14em; color: var(--gold);
+}
+
+.scn-rooms__g { display: flex; flex-direction: column; gap: 10px; }
+
+.scn-rooms__shot {
+  display: block; width: 100%; padding: 0; margin: 0;
+  background: none; border: 1px solid var(--warm-edge); border-radius: 10px;
+  -webkit-appearance: none; appearance: none;
+  cursor: zoom-in; overflow: hidden;
+}
+
+.scn-rooms__shot:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+.scn-rooms__shot img { display: block; width: 100%; height: auto; }
+
 /* ------------------------------------------------ a document as pages */
 /* A booklet split into page images. Reads as one continuous document rather than
    a stack of cards, so the gap is tight and there is no chrome between pages. */
@@ -8089,6 +8112,71 @@ function useJsonFile(path) {
   return state;
 }
 
+/* Two static images, shared by Core Fundamental Scenarios and Invitation Source
+   Personas. Jim, Aug 25 2026: the same breakout logistics apply to both days'
+   breakout rotations, so the same two pictures go on both pages rather than
+   duplicating the component per page. Self contained, owns its own zoom state,
+   so a page using this needs nothing wired in beyond dropping it in.
+
+   Tappable into the same pinch and zoom viewer the rest of the Vault uses,
+   because the rotation table is small print and dense numbers, exactly the
+   case a phone screen cannot show full size and legible at once.
+
+   aspect-ratio on each image is load bearing, matching the Vault booklet pages
+   and the Cares Cup poster before it: a lazy image with no intrinsic size
+   reserves no space, so the row never enters the viewport and the image never
+   loads. Learned that once already, not repeating it. */
+const BREAKOUT_ROOM_IMAGES = {
+  rotation: {
+    title: "Breakout room rotation, Round 1 to 6",
+    src: "assets/resources/breakout-room-rotation.jpg",
+    download: "breakout-room-rotation.jpg",
+    ratio: "1400 / 1204",
+    alt: "Table of every Club and staff member's assigned breakout room number, one column per round, six rounds"
+  },
+  map: {
+    title: "Where the breakout rooms are",
+    src: "assets/resources/breakout-room-map.jpg",
+    download: "breakout-room-map.jpg",
+    ratio: "1388 / 819",
+    alt: "Floor plan of the six breakout rooms, the Gold, Silver and Bronze Rooms, the Parlor, the Nicklaus Room, and the Ladies Card Room, near the clubhouse main entrance"
+  }
+};
+
+function BreakoutRooms() {
+  const [zoom, setZoom] = useState(null);
+  return (
+    <div className="scn-rooms">
+      <p className="scn-rooms__k">Which room, which round</p>
+      <div className="scn-rooms__g">
+        {Object.keys(BREAKOUT_ROOM_IMAGES).map((k) => {
+          const im = BREAKOUT_ROOM_IMAGES[k];
+          return (
+            <button
+              type="button"
+              className="scn-rooms__shot"
+              key={k}
+              onClick={() => setZoom(k)}
+            >
+              <img
+                src={im.src}
+                alt={im.alt}
+                loading="lazy"
+                decoding="async"
+                style={{ aspectRatio: im.ratio }}
+              />
+              <span className="sr-only">Open bigger</span>
+            </button>
+          );
+        })}
+      </div>
+      {zoom ? (
+        <VaultZoom view={BREAKOUT_ROOM_IMAGES[zoom]} onClose={() => setZoom(null)} />
+      ) : null}
+    </div>
+  );
+}
+
 function VaultPersonas() {
   const file = useJsonFile("data/personas.json");
   const [open, setOpen] = useState(null);
@@ -8113,6 +8201,8 @@ function VaultPersonas() {
       {(d.howToUse || []).map((p, i) => (
         <p className="pv__p" key={"h" + i}>{p}</p>
       ))}
+
+      <BreakoutRooms />
 
       {(d.mission || []).length ? (
         <div className="pv__mission glow-card grille">
@@ -8251,6 +8341,8 @@ function VaultScenarios() {
       {(d.howToUse || []).map((p, i) => (
         <p className="pv__p" key={"h" + i}>{p}</p>
       ))}
+
+      <BreakoutRooms />
 
       {zones.map((z) => {
         const isOpen = open === z.n;
@@ -8627,12 +8719,8 @@ function VaultTab({ isAdmin, now }) {
         Lock state is derived from the server corrected clock on every tick, so
         it fires with no refresh. A section stays shut until this device has
         talked to the server and the override state has arrived, with an eight
-        second grace before it gives up and uses this phone's clock. Artwork
-        comes from data/vault.json, which is empty for all four image sections
-        until T3.3. Graphs come from data/graphs.json, 29 clubs and 2 rollups.
-        The two unlock times are not yet confirmed in writing. T4.5 closes that.
-        Membership Buckets reads Invitation Sources since Aug 12, per Lisa. The
-        key in data/vault.json is still buckets, so drop Tyler's files there.
+        second grace before it gives up and uses this phone's clock. The two
+        unlock times are not yet confirmed in writing. T4.5 closes that.
       </BuildNote>
     </TabFrame>
   );

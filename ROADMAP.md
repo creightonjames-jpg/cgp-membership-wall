@@ -1287,6 +1287,37 @@ question and answer pairs); Invitation Source Personas independently confirmed
 still locked to Thursday 10:30 and unaffected; no console errors; no horizontal
 overflow at 390px.
 
+### Aug 25, breakout room logistics on both breakout pages, and a stale build note trimmed
+**From:** Jim, a screenshot of the room rotation table and "Breakout Diagram.pdf,"
+for both Core Fundamental Scenarios and Invitation Source Personas.
+
+**Two new images, one shared component.** `assets/resources/breakout-room-rotation.jpg`
+(every Club and staff member's room number for each of six rounds) and
+`assets/resources/breakout-room-map.jpg` (where the six rooms physically are,
+rasterized from the PDF with the existing `tools/pdfpages`, whitespace trimmed).
+Built once as `BreakoutRooms`, a self contained component that owns its own zoom
+state, and dropped into both `VaultPersonas` and `VaultScenarios` rather than
+duplicating the markup, since the same rotation applies to both days' breakouts.
+Tappable into the same pinch and zoom viewer the rest of the Vault uses, because
+the rotation table is small print that a phone cannot show full size and legible
+at once. `aspect-ratio` set explicitly on both images, the same lesson the Vault
+booklet pages and the Cares Cup poster already taught about a lazy image with no
+reserved space never entering the viewport.
+
+**A stale crew only build note trimmed, on Jim's question rather than my own
+initiative.** The Vault's bottom note (task T2.1 to T2.3) claimed artwork "is empty
+for all four image sections until T3.3," which is no longer true: Core
+Fundamentals has 28 booklet pages and The Medallion Club Story has its link.
+Checked `data/vault.json` directly rather than assuming. Also cut an internal file
+naming reminder about Tyler's Invitation Sources files and a graphs count that
+told crew nothing they could act on. Kept the lock mechanism explanation and "the
+two unlock times are not yet confirmed in writing," both still true, the second
+confirmed against ROADMAP's still open T4.5 rather than assumed resolved.
+
+**Verified:** both images render on both pages at the correct aspect ratio; tap to
+zoom opens and closes on the rotation table; no horizontal overflow at 390px; the
+trimmed build note reads correctly with the stale claims gone; no console errors.
+
 ---
 
 ## PHASE 1: Static and text tabs
