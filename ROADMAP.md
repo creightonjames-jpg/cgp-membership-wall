@@ -1318,6 +1318,39 @@ confirmed against ROADMAP's still open T4.5 rather than assumed resolved.
 zoom opens and closes on the rotation table; no horizontal overflow at 390px; the
 trimmed build note reads correctly with the stale claims gone; no console errors.
 
+### Aug 27, the rotation table replaced with a fuller version
+**From:** Jim, a corrected rotation table, asked for under Core Fundamental
+Scenarios specifically.
+
+**Replaced on both pages, not just the one named.** The new table adds six
+Clubs the old one was missing entirely: Anthem, Balcones, Bear Creek, Canyon
+Oaks, Chenal, Citrus Club. Since `BreakoutRooms` is one component shared by both
+Core Fundamental Scenarios and Invitation Source Personas by design, both
+pages show the same real world rotation fact, updating only one page would have
+left Personas showing a table missing six Clubs while Scenarios showed the
+correct one. Flagged rather than silently assumed: Jim named the page he was
+looking at when he found the image, which is not necessarily the same as
+wanting a second, diverging copy on the other page.
+
+**One thing worth knowing, not fixed:** the new source image is native 490 by
+510, well under the 1400 by 1204 it replaced. It reads fine at rest. Pinch and
+zoom on it, which matters for exactly this table since it is small print and
+dense numbers, will show more blur than the old file did. `aspect-ratio`
+updated to match the new file's real proportions so the reserved space is still
+correct, not stretched or squashed.
+
+**A tooling detour, not a code problem.** The Browser pane's viewport briefly
+reported 0 by 0 on a fresh load, collapsing every element on the page to a
+2px box, screenshot included. Traced to the actual `window.innerWidth`, not the
+markup: a real environment glitch, confirmed by the same collapse happening on
+a brand new tab before a size was set explicitly. An explicit resize fixed it.
+Recorded here so a future 2px report gets checked against the viewport before
+anyone goes looking for a CSS bug that is not there.
+
+**Verified:** both images resize to the exact aspect ratio of the new 490 by 510
+file on both pages (848x883 desktop, 358x373 phone width, both matching 490:510
+within rounding); no console errors; no horizontal overflow at 390px.
+
 ---
 
 ## PHASE 1: Static and text tabs
