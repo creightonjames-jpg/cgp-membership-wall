@@ -7267,7 +7267,14 @@ const VAULT_SECTIONS = [
 
   { key: "personas",     name: "Invitation Source Personas",  icon: "\u{1F465}", kind: "personas", drop: "personas" },
 
-  { key: "graphs",       name: "Club Graphs",                icon: "\u{1F4C8}", kind: "graphs" }
+  { key: "graphs",       name: "Club Graphs",                icon: "\u{1F4C8}", kind: "graphs" },
+
+  /* Jim, Aug 27 2026. Like Club Graphs, no session anywhere in data/agenda.json
+     to order it against: a PGA pro signs up whenever it is convenient over the
+     four days, not at a moment the agenda names. Goes last for the same reason
+     Club Graphs does. No `drop`: open the moment the wall goes live, since
+     credit sign up is not something to gate behind a countdown. */
+  { key: "pgaCredit",    name: "PGA Credit",                 icon: "\u{1F393}", kind: "pgaCredit" }
 ];
 
 /* These are the two times CLAUDE.md and the spec both give. August in Ohio is
@@ -8385,6 +8392,189 @@ function VaultScenarios() {
   );
 }
 
+/* ==========================================================================
+   PGA CREDIT. Jim, Aug 27 2026: "add a section in the vault for our attending
+   PGA pros to post their Name and PGA Membership Number. We will be giving
+   them credit for attending this conference."
+
+   Open the moment the wall goes live, no drop, no lock. This is an
+   administrative sign up a PGA pro does on their own schedule sometime over
+   four days, not something tied to a session on the agenda.
+
+   Home Club added on top of what was asked, matching the one field every
+   other form on this wall already asks for (the pledge slip, Soundcheck,
+   Liner Notes, The Pit) because two pros can share a first and last name and
+   a Club is the fastest way to tell them apart on the list Century Golf
+   actually uses. Optional, so nobody is blocked from submitting without it.
+
+   Privacy follows the same rule the donation slip already set: the room sees
+   that the feature exists and a plain thank you on submit, nothing else.
+   Crew see the full list with the real membership numbers, because they are
+   the ones sending it to whoever CGP reports attendance credit through. A
+   PGA membership number next to a name is not something for 119 phones to
+   see, the same reasoning that already kept pledge email addresses and
+   pledge names off the public board. */
+
+function usePgaCredit() {
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    if (!FB.ok) return;
+    const ref = FB.db.ref("pgaCredit/entries");
+    const handler = (snap) => {
+      const v = snap.val() || {};
+      const out = Object.keys(v).map((id) => Object.assign({ id: id }, v[id]));
+      out.sort((a, b) => (b.ts || 0) - (a.ts || 0));
+      setList(out);
+    };
+    ref.on("value", handler);
+    return () => ref.off("value", handler);
+  }, []);
+  return list;
+}
+
+function PgaCreditForm() {
+  const [name, setName] = useState("");
+  const [pgaNumber, setPgaNumber] = useState("");
+  const [club, setClub] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const [done, setDone] = useState(null);
+
+  const submit = (e) => {
+    e.preventDefault();
+    setErr("");
+    if (!name.trim()) { setErr("The sheet needs your name."); return; }
+    if (!pgaNumber.trim()) { setErr("The sheet needs your PGA Membership Number."); return; }
+
+    const body = {
+      name: name.trim().slice(0, 60),
+      pgaNumber: pgaNumber.trim().slice(0, 30),
+      club: club.trim().slice(0, 60),
+      ts: wallStamp()
+    };
+
+    if (!FB.ok) { setErr("The wall cannot reach the database right now. Try again in a minute."); return; }
+    setBusy(true);
+    FB.db.ref("pgaCredit/entries").push(body)
+      .then(() => {
+        setBusy(false);
+        setDone(body.name);
+        setName(""); setPgaNumber(""); setClub("");
+      })
+      .catch(() => { setBusy(false); setErr("That did not save. Try again."); });
+  };
+
+  if (done) {
+    return (
+      <div className="pl-done glow-card grille">
+        <p className="pl-done__big t-display">On the sheet.</p>
+        <p className="pl-done__p">
+          Thanks, {done.split(" ")[0]}. You are on the list for credit.
+        </p>
+        <button type="button" className="btn" onClick={() => setDone(null)}>
+          Add another pro
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <form className="pl-form glow-card grille" onSubmit={submit}>
+      <div className="tf__row">
+        <label className="tf__l" style={{ flex: "1 1 150px", margin: 0 }}>
+          <span>Your name</span>
+          <input className="tf__in" value={name} maxLength={60}
+                 autoComplete="name" onChange={(e) => setName(e.target.value)} />
+        </label>
+        <label className="tf__l" style={{ flex: "1 1 170px", margin: 0 }}>
+          <span>PGA Membership Number</span>
+          <input className="tf__in t-data" value={pgaNumber} maxLength={30}
+                 inputMode="numeric" onChange={(e) => setPgaNumber(e.target.value)} />
+        </label>
+        <label className="tf__l" style={{ flex: "1 1 130px", margin: 0 }}>
+          <span>Home club</span>
+          <input className="tf__in" value={club} maxLength={60}
+                 onChange={(e) => setClub(e.target.value)} />
+        </label>
+      </div>
+
+      {err ? <p className="pl-form__err">{err}</p> : null}
+
+      <button type="submit" className="btn btn--go pl-form__go" disabled={busy}>
+        {busy ? "Signing" : "Sign the sheet"}
+      </button>
+    </form>
+  );
+}
+
+function PgaCreditLedger({ entries }) {
+  const remove = (row) => {
+    if (!FB.ok) return;
+    if (!window.confirm("Take " + (row.name || "this entry") + " off the sheet? It does not come back.")) return;
+    FB.db.ref("pgaCredit/entries/" + row.id).remove();
+  };
+
+  const csv = () => {
+    const rows = [["Name", "PGA Membership Number", "Home club"]];
+    entries.forEach((row) => rows.push([row.name || "", row.pgaNumber || "", row.club || ""]));
+    const text = rows.map((r) =>
+      r.map((c) => '"' + String(c).replace(/"/g, '""') + '"').join(",")
+    ).join("\n");
+    const url = URL.createObjectURL(new Blob([text], { type: "text/csv" }));
+    const a = document.createElement("a");
+    a.href = url; a.download = "pga-credit.csv";
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  };
+
+  return (
+    <div className="cares-crew">
+      <p className="cares-crew__k">The PGA credit sheet, crew only</p>
+      {!entries.length ? (
+        <p className="pl-ledger__none">Nobody has signed up yet.</p>
+      ) : (
+        <React.Fragment>
+          <ul className="pl-ledger">
+            {entries.map((row) => (
+              <li className="pl-ledger__i" key={row.id}>
+                <div className="pl-ledger__who">
+                  <span className="pl-ledger__n">{row.name || "No name"}</span>
+                  {row.club ? <span className="pl-ledger__c">{row.club}</span> : null}
+                  <span className="pl-ledger__t t-data">{row.pgaNumber}</span>
+                  <button type="button" className="btn btn--tiny btn--kill" onClick={() => remove(row)}>
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <button type="button" className="btn" onClick={csv}>Download the sheet as CSV</button>
+        </React.Fragment>
+      )}
+    </div>
+  );
+}
+
+function VaultPgaCredit({ isAdmin }) {
+  const entries = usePgaCredit();
+  return (
+    <div className="pv">
+      <p className="pv__lede">
+        Attending PGA professionals, sign in here for continuing education
+        credit.
+      </p>
+      <p className="pv__p">
+        Century Golf reports this list to give you credit for attending. Add
+        your name and PGA Membership Number once, no need to find anyone at
+        the registration desk.
+      </p>
+      <PgaCreditForm />
+      {isAdmin ? <PgaCreditLedger entries={entries} /> : null}
+    </div>
+  );
+}
+
 /* What an attendee sees on a section that has not opened. Greyed, padlocked,
    the time in plain language, and a countdown that moves. It does not repeat
    the section name: the heading directly above it already says it. */
@@ -8712,6 +8902,8 @@ function VaultTab({ isAdmin, now }) {
             <VaultPersonas />
           ) : section.kind === "scenarios" ? (
             <VaultScenarios />
+          ) : section.kind === "pgaCredit" ? (
+            <VaultPgaCredit isAdmin={isAdmin} />
           ) : (
             <VaultImageSection section={section} manifest={manifest} onZoom={onZoom} />
           )}

@@ -102,7 +102,7 @@ committed, and silently reverted an hour later.
 | Per device vote and like history | Local storage, `mm26_` prefix |
 | Videos | YouTube or Vimeo unlisted embeds |
 
-**Firebase nodes:** `settings/`, `announcements/`, `questions/`, `polls/`, `takeaways/`, `photos/`, `photoComments/`, `reactions/`, `caresCup/` (scores, fundraising, and `pledges/`), `encore/`, `weather/`
+**Firebase nodes:** `settings/`, `announcements/`, `questions/`, `polls/`, `takeaways/`, `photos/`, `photoComments/`, `reactions/`, `caresCup/` (scores, fundraising, and `pledges/`), `pgaCredit/` (`entries/`), `encore/`, `weather/`
 
 **Local storage keys:** `mm26_voted`, `mm26_reacted`, `mm26_pollvotes`, `mm26_liked`, `mm26_entered`
 

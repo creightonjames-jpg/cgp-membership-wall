@@ -1351,6 +1351,46 @@ anyone goes looking for a CSS bug that is not there.
 file on both pages (848x883 desktop, 358x373 phone width, both matching 490:510
 within rounding); no console errors; no horizontal overflow at 390px.
 
+### Aug 27, a new Vault section: PGA Credit
+**From:** Jim. "Add a section in the vault for our attending PGA pros to post
+their Name and PGA Membership Number. We will be giving them credit for
+attending this conference."
+
+**A seventh Vault section, last in the list, next to Club Graphs' reasoning for
+being there.** No session on the agenda anchors a PGA pro's sign up, they do it
+whenever it suits them over four days, so it goes last rather than being wedged
+into the Wednesday and Thursday order the other sections follow. No `drop`,
+open the moment the wall goes live: gating a credit sign up behind a countdown
+would help nobody.
+
+**Third field added on top of what was asked: Home Club, optional.** Every other
+form on this wall (the donation slip, Soundcheck, Liner Notes, The Pit) asks for
+one, and two pros can share a name. Not asked for, but a small, consistent
+addition rather than a scope decision, flagged here in case Jim wants it gone.
+
+**Privacy follows the donation slip's own rule, not a new one.** The room sees
+the form and a plain thank you on submit. Crew see the full list with real PGA
+numbers, and only crew, because a PGA Membership Number next to a name is not
+something for 119 phones to see, the same reasoning that already kept pledge
+emails and pledge names off the public board. Crew get a delete for a
+fat-fingered duplicate and a CSV download, since somebody has to actually hand
+this list to whoever CGP reports attendance credit through.
+
+**Built from the donation slip's own components, not from scratch.** The form
+shell, the ledger, the CSV export, the confirmation screen: all reuse the exact
+CSS classes `CaresPledgeForm` and `CaresPledgeLedger` already established
+(`.pl-form`, `.pl-done`, `.pl-ledger`, `.cares-crew`), so no new CSS was needed
+at all for this feature, checked class by class before writing a line of it.
+
+**Verified end to end with a real Firebase round trip:** blank submit blocked on
+name, name-only submit blocked on PGA number naming which field, a complete
+submission wrote to `pgaCredit/entries` and showed the confirmation; the crew
+ledger showed the same entry with its real number; an attendee reload confirmed
+no ledger, no number, and no other submitter's name anywhere on the page;
+delete asked for confirmation by name and cleared Firebase; a real CSV download
+was captured and its contents checked; PGA Credit sits last in the section nav
+with no padlock; no console errors; no horizontal overflow at 390px.
+
 ---
 
 ## PHASE 1: Static and text tabs
